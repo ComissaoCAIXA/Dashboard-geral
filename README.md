@@ -11,10 +11,12 @@ qualquer outro dado pessoal **não** ficam neste repositório.
 | Arquivo | O que é |
 |---|---|
 | `index.html` | O painel (página única, abre no navegador e no GitHub Pages) |
+| `supabase/migrations/` | Estrutura do banco de dados no Supabase (tabelas, regras de acesso, automações) |
+| `docs/guia-da-comissao.md` | Como a comissão consulta, inclui e corrige dados no Supabase |
 
 Em construção:
 
-- Banco de dados no Supabase, que substituirá as planilhas como fonte única dos dados.
+- Ligar o painel ao banco de dados no Supabase (fonte única dos dados, no lugar das planilhas).
 - Formulário para os aprovados informarem convocação, posse ou desistência
   (os envios ficam pendentes até a comissão aprovar).
 
