@@ -16,15 +16,20 @@ qualquer outro dado pessoal **não** ficam neste repositório.
 
 Em construção:
 
-- Ligar o painel ao banco de dados no Supabase (fonte única dos dados, no lugar das planilhas).
 - Formulário para os aprovados informarem convocação, posse ou desistência
-  (os envios ficam pendentes até a comissão aprovar).
+  (os envios ficam pendentes até a comissão aprovar), com aviso à comissão.
 
 ## Fonte dos dados
 
-Até a ligação com o banco de dados, o painel usa uma cópia dos dados embutida no
-`index.html`, gerada em 12/10/2026 a partir da planilha da comissão, contendo só as
-iniciais.
+O painel lê o banco de dados no Supabase a cada acesso e consulta de novo a cada
+2 minutos enquanto a página está aberta. Ele só recebe as colunas liberadas ao público
+(iniciais, cargo, UF, cota, situação, nota, classificação e convocação): nome e inscrição
+são bloqueados pelo próprio banco.
+
+Se o banco não responder, o painel mostra uma cópia dos dados embutida no `index.html`
+(só iniciais) e avisa a data dessa cópia.
+
+Médico do Trabalho não faz parte do painel nem do banco, por decisão da comissão.
 
 ## O que nunca deve entrar aqui
 
