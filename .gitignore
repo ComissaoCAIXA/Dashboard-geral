@@ -1,0 +1,12 @@
+# Dados brutos e exportações nunca vão para o repositório público
+dados/
+*.csv
+*.xlsx
+*.pdf
+.env
+.env.*
+
+# Arquivos locais
+.claude/
+.DS_Store
+Thumbs.db
