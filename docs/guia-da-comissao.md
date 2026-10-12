@@ -20,7 +20,7 @@ Acesse em supabase.com/dashboard → projeto → **Table Editor** (ícone de tab
 | `inscricao` | Só números (6 a 12 dígitos) |
 | `nome` | Nome completo |
 | `iniciais` | **Automático** a partir do nome. Não dá para editar |
-| `cargo` | Escolha na lista |
+| `cargo` | Escolha na lista. **Médico do Trabalho** aparece no menu, mas o banco recusa: por decisão da comissão, esse cargo fica fora do painel |
 | `uf` | Escolha na lista |
 | `macropolo` | **Automático** a partir da UF (pode deixar qualquer valor; é corrigido ao salvar) |
 | `cota` | AC, PcD, PN, PI ou PQ (PN = pessoas negras, antigo "PPP/PN") |
