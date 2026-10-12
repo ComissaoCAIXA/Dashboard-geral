@@ -249,6 +249,30 @@ footer .autor .ic svg{width:18px;height:18px}
 .exreal ul{margin:6px 0 0;padding-left:18px}
 .exreal li{margin:3px 0}
 
+/* ---------- Ajuda ("?") ---------- */
+.ajuda{display:inline-grid;place-items:center;width:18px;height:18px;flex:none;margin-left:2px;padding:0;border-radius:50%;border:1.5px solid var(--muted);background:none;color:var(--muted);font:700 11px/1 system-ui,sans-serif;cursor:help;text-transform:none;letter-spacing:0;vertical-align:middle}
+.ajuda:hover,.ajuda:focus-visible{border-color:var(--s1);color:var(--s1);outline:none}
+.kpi .l{display:inline-flex;align-items:center;gap:6px}
+#ajudaPop{position:fixed;z-index:30;max-width:340px;background:var(--surface);color:var(--ink);border:1px solid var(--border);border-left:3px solid var(--s1);border-radius:10px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.2);font-size:13px;line-height:1.5}
+#ajudaPop b{display:block;font-size:13.5px;margin-bottom:4px}
+#ajudaPop p{margin:0;color:var(--ink2)}
+@media (max-width:620px){#ajudaPop{max-width:calc(100vw - 24px)}}
+
+/* ---------- Visão objetiva × detalhada ---------- */
+body.resumo [data-det]{display:none!important}
+body:not(.resumo) [data-resumo]{display:none!important}
+body.resumo .row.r-3{grid-template-columns:minmax(0,1fr)}
+body.resumo .kpis{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+body.resumo .col>.card:first-child{flex:1}
+body.resumo .col .scroll{max-height:none}
+/* mesma caixa das abas: altura, borda, cantos e peso da fonte iguais */
+.det-tgl{align-self:stretch;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0 16px;font-size:14px;font-weight:600;color:var(--ink2)}
+.det-tgl:hover{color:var(--ink)}
+.det-tgl:has(input:checked){border-color:var(--s1);background:var(--wash)}
+.mais-det{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;font:inherit;font-weight:600;font-size:13.5px;color:var(--s1);background:var(--surface);border:1px dashed var(--s1);border-radius:12px;padding:14px;cursor:pointer}
+.mais-det:hover{background:var(--wash)}
+.mais-det svg{width:16px;height:16px}
+
 /* ---------- Responsivo ---------- */
 #map1,#map2{max-height:min(76vh,780px);margin:0 auto}
 .filtbtn{display:none;align-items:center;gap:6px;font:inherit;font-weight:600;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 12px;cursor:pointer}
@@ -308,7 +332,7 @@ footer .autor .ic svg{width:18px;height:18px}
 [hidden]{display:none!important}
 </style>
 </head>
-<body>
+<body class="resumo">
 <main>
   <header>
     <div class="logo" data-i="award"></div>
@@ -324,6 +348,7 @@ footer .autor .ic svg{width:18px;height:18px}
       <button role="tab" data-tab="panorama" aria-selected="true"><span data-i="chart"></span>Panorama<span class="lg">e notas</span></button>
       <button role="tab" data-tab="conv" aria-selected="false"><span data-i="userCheck"></span>Convocações</button>
     </div>
+    <label class="tgl det-tgl" title="Mostra todas as análises: notas, cotas, regiões e destaques"><input type="checkbox" id="detalhe"><span class="trk"></span><span class="ti" data-i="layers"></span><span>Visão detalhada</span></label>
     <button class="filtbtn" id="filtbtn" type="button" aria-expanded="false"><span data-i="filter"></span>Filtros</button>
     <span id="ufChip" class="chip" hidden></span>
     <div class="filters">
@@ -333,7 +358,7 @@ footer .autor .ic svg{width:18px;height:18px}
     </div>
   </div>
 
-  <div id="load">Carregando dados da planilha…</div>
+  <div id="load">Carregando dados…</div>
 
   <!-- ABA 1 -->
   <section id="tab-panorama" hidden>
@@ -346,15 +371,15 @@ footer .autor .ic svg{width:18px;height:18px}
       </div>
       <div class="col">
         <div class="card"><div class="hd"><h2 id="rk1t">Estados</h2></div><div class="scroll" id="rk1"></div></div>
-        <div class="card"><div class="hd"><h2>Maiores notas</h2></div><div id="top1"></div></div>
+        <div class="card" data-det><div class="hd"><h2>Maiores notas</h2></div><div id="top1"></div></div>
       </div>
     </div>
     <div class="row r-3">
-      <div class="card"><div class="hd"><h2>Por macrorregião</h2></div><div id="macro1"></div><div class="legend"><span><i style="background:var(--s1)"></i>Vaga imediata</span><span><i style="background:var(--s2)"></i>Cadastro reserva</span></div></div>
+      <div class="card" data-det><div class="hd"><h2>Por macrorregião</h2></div><div id="macro1"></div><div class="legend"><span><i style="background:var(--s1)"></i>Vaga imediata</span><span><i style="background:var(--s2)"></i>Cadastro reserva</span></div></div>
       <div class="card"><div class="hd"><h2>Por cargo</h2></div><div id="cargo1"></div><div class="legend"><span><i style="background:var(--s1)"></i>Vaga imediata</span><span><i style="background:var(--s2)"></i>Cadastro reserva</span></div></div>
-      <div class="card"><div class="hd"><div><h2>Por cota</h2><p class="note">Modalidade de concorrência em que a pessoa foi classificada</p></div></div><div id="lista1"></div></div>
+      <div class="card" data-det><div class="hd"><div><h2>Por cota</h2><p class="note">Modalidade de concorrência em que a pessoa foi classificada</p></div></div><div id="lista1"></div></div>
     </div>
-    <div class="card" style="margin-bottom:12px">
+    <div class="card" data-det style="margin-bottom:12px">
       <div class="hd"><div><h2>Cotas: edital × resultado</h2><p class="note">Vagas previstas no Anexo I do edital comparadas com quem foi classificado em cada cota, respeitando os filtros de cargo, região e estado.</p></div></div>
       <div id="cotaTbl"></div>
       <details class="regras"><summary>Como ler esta tabela e como funcionam as cotas</summary><div>
@@ -378,13 +403,14 @@ footer .autor .ic svg{width:18px;height:18px}
         <p class="note" style="margin:0">Fonte: Edital nº 01/2025/NS da CAIXA, itens 2.12, 2.13 e 4, e Anexo I (retificado em 18/11/2025).</p>
       </div></details>
     </div>
-    <div class="row r-2">
+    <div class="row r-2" data-det>
       <div class="card"><div class="hd"><h2>Distribuição das notas</h2></div><div id="hist1"></div>
         <div class="legend"><span><i style="background:var(--s1)"></i>Vaga imediata</span><span><i style="background:var(--s2)"></i>Cadastro reserva</span></div></div>
       <div class="card"><div class="hd"><div><h2>Notas por cargo</h2><p class="note">Cada ponto é uma pessoa · traço = mediana</p></div></div><div id="strip1"></div>
         <div class="legend"><span><i style="background:var(--s1)"></i>Vaga imediata</span><span><i style="background:var(--s2)"></i>Cadastro reserva</span></div></div>
     </div>
     <div class="card"><div class="hd"><h2>Lista de aprovados</h2></div><div id="tbl1"></div></div>
+    <button class="mais-det" type="button" data-resumo><span data-i="layers"></span>Ver análises detalhadas: notas, cotas do edital, regiões e destaques</button>
   </section>
 
   <!-- ABA 2 -->
@@ -399,22 +425,23 @@ footer .autor .ic svg{width:18px;height:18px}
       </div>
       <div class="col">
         <div class="card"><div class="hd"><h2 id="rk2t">Estados</h2></div><div class="scroll" id="rk2"></div></div>
-        <div class="card"><div class="hd"><h2>Maiores notas convocadas</h2></div><div id="top2"></div></div>
+        <div class="card" data-det><div class="hd"><h2>Maiores notas convocadas</h2></div><div id="top2"></div></div>
       </div>
     </div>
     <div class="row r-3">
       <div class="card"><div class="hd"><h2>Andamento por cargo</h2></div><div id="cargo2"></div>
         <div class="legend"><span><i style="background:var(--s3)"></i>Convocado</span><span><i style="background:var(--s1)"></i>Vaga imediata aguardando</span><span><i style="background:var(--neutral)"></i>Cadastro reserva</span></div></div>
-      <div class="card"><div class="hd"><h2>Andamento por macrorregião</h2></div><div id="macro2"></div>
+      <div class="card" data-det><div class="hd"><h2>Andamento por macrorregião</h2></div><div id="macro2"></div>
         <div class="legend"><span><i style="background:var(--s3)"></i>Convocado</span><span><i style="background:var(--s1)"></i>Vaga imediata aguardando</span><span><i style="background:var(--neutral)"></i>Cadastro reserva</span></div></div>
-      <div class="card"><div class="hd"><div><h2>Andamento por cota</h2><p class="note">Ordem prevista: PcD → AC → PN/PI/PQ, alternando</p></div></div><div id="cota2"></div>
+      <div class="card" data-det><div class="hd"><div><h2>Andamento por cota</h2><p class="note">Ordem prevista: PcD → AC → PN/PI/PQ, alternando</p></div></div><div id="cota2"></div>
         <div class="legend"><span><i style="background:var(--s3)"></i>Convocado</span><span><i style="background:var(--s1)"></i>Vaga imediata aguardando</span><span><i style="background:var(--neutral)"></i>Cadastro reserva</span></div></div>
     </div>
-    <div class="card" style="margin-bottom:12px"><div class="hd"><div><h2>Notas de quem já foi convocado</h2><p class="note">Cada ponto é uma pessoa · só cargos com informação de convocação</p></div></div><div id="strip2"></div>
+    <div class="card" data-det style="margin-bottom:12px"><div class="hd"><div><h2>Notas de quem já foi convocado</h2><p class="note">Cada ponto é uma pessoa · só cargos com informação de convocação</p></div></div><div id="strip2"></div>
       <div class="legend"><span><i style="background:var(--s3)"></i>Convocado</span><span><i style="background:var(--s1)"></i>Vaga imediata aguardando</span><span><i style="background:var(--neutral)"></i>Cadastro reserva</span></div></div>
     <div class="card"><div class="hd"><h2>Quem foi e quem não foi convocado</h2>
       <div class="seg" id="t2seg"><button data-v="sim" aria-pressed="true">Convocados</button><button data-v="aguard">Vaga imediata aguardando</button><button data-v="cr">Cadastro reserva</button></div></div>
       <div id="tbl2"></div></div>
+    <button class="mais-det" type="button" data-resumo><span data-i="layers"></span>Ver análises detalhadas: andamento por região e cota, notas e destaques</button>
   </section>
 
   <footer>
@@ -423,6 +450,7 @@ footer .autor .ic svg{width:18px;height:18px}
   </footer>
 </main>
 <div id="tip"></div>
+<div id="ajudaPop" role="tooltip" hidden></div>
 
 <script>
 /* ---------- Configuração ----------
@@ -498,6 +526,69 @@ document.querySelectorAll('.card h2').forEach(h=>{const m=H2ICON.find(([t])=>h.t
 // Os títulos de ranking mudam de texto: guardar o rótulo num span
 ['rk1t','rk2t'].forEach(id=>{const h=document.getElementById(id);h.innerHTML=`<span class="ic">${ico('list')}</span><span class="t"></span>`});
 
+/* ---------- Ajuda ("?") de cada card e indicador ---------- */
+const NOTA_TXT='A nota é a pontuação final de cada pessoa no resultado homologado (Diário Oficial de 26/05/2026).';
+const AJUDA={
+  // Panorama
+  mapa1:['Mapa dos aprovados','Cada estado é pintado conforme o indicador escolhido nos botões acima do mapa. <b>Aprovados</b>: quantas pessoas foram classificadas para aquele polo, somando vaga imediata e cadastro reserva. <b>Nota média</b>: média das notas dessas pessoas. <b>Maior nota</b>: a nota mais alta do estado. Quanto mais escuro o azul, maior o valor. Cinza indica que não há ninguém no filtro atual. Clique num estado para filtrar o painel inteiro por ele e clique de novo para desfazer. Embaixo do mapa dá para ligar o contorno das macrorregiões e o marcador da maior nota.'],
+  rk1:['Ranking dos estados','Lista os estados do maior para o menor, usando o mesmo indicador escolhido no mapa. Na visão de aprovados, a barra azul é a parte em vaga imediata e a laranja é a parte em cadastro reserva; o número é o total, seguido da nota média. Clique numa linha para filtrar pelo estado.'],
+  top1:['Maiores notas','As cinco maiores notas dentro dos filtros escolhidos, com as iniciais, o cargo, o estado e a situação de cada pessoa. '+NOTA_TXT+' Clique numa pessoa para filtrar pelo estado dela.'],
+  macro1:['Por macrorregião','Quantos aprovados há em cada macropolo do edital (Norte, Nordeste, Centro-Oeste, Sudeste e Sul). Azul é vaga imediata, laranja é cadastro reserva. O número ao lado é o total, seguido da nota média. Clique numa macrorregião para filtrar o painel e aproximar o mapa.'],
+  cargo1:['Por cargo','Quantos aprovados há em cada cargo, separando vaga imediata (azul) e cadastro reserva (laranja). O número ao lado é o total, seguido da nota média do cargo. Clique num cargo para filtrar o painel.'],
+  lista1:['Por cota','Em qual modalidade de concorrência cada pessoa foi classificada: <b>AC</b> ampla concorrência, <b>PcD</b> pessoas com deficiência, <b>PN</b> pessoas negras, <b>PI</b> pessoas indígenas e <b>PQ</b> pessoas quilombolas. O percentual é a fatia do total. Clique numa cota para filtrar.'],
+  cotaTbl:['Cotas: edital × resultado','Compara as vagas que o Anexo I do edital reservou para cada cota com quantas pessoas de fato foram classificadas nela, respeitando os filtros de cargo, região e estado. Quando sobram vagas numa cota por falta de aprovados, elas passam para outra modalidade (aparece como "revertida" numa e "recebida" na outra). <b>Corte VI</b> é a menor nota que garantiu vaga imediata naquela cota. Abra "Como ler esta tabela" logo abaixo para ver exemplos.'],
+  hist1:['Distribuição das notas','Quantas pessoas tiraram cada faixa de nota, de 2 em 2 pontos. Cada coluna soma vaga imediata (azul) e cadastro reserva (laranja). Ajuda a ver onde se concentram as notas e a partir de que ponto começam as vagas imediatas. '+NOTA_TXT],
+  strip1:['Notas por cargo','Cada ponto é uma pessoa, posicionada pela nota. Azul é vaga imediata e laranja é cadastro reserva. O traço vertical marca a mediana do cargo: metade das pessoas tirou nota acima dele e metade abaixo. Passe o mouse sobre um ponto para ver os detalhes.'],
+  tbl1:['Lista de aprovados','Todas as pessoas dentro dos filtros, identificadas só pelas iniciais. <b>Posição na UF</b>: classificação no polo do estado. <b>Class. macro</b>: classificação no macropolo dentro da própria cota. <b>Convocado</b>: se a pessoa já foi chamada. Clique no título de uma coluna para ordenar.'],
+  // Convocações
+  mapa2:['Mapa das convocações','Cada estado é pintado conforme o indicador escolhido. <b>Convocados</b>: quantas pessoas do estado já foram chamadas. <b>% das vagas imediatas</b>: dentre as vagas imediatas do estado, quantas já tiveram a pessoa convocada. <b>Aguardando</b>: pessoas em vaga imediata que ainda não foram chamadas. Clique num estado para filtrar o painel.'],
+  rk2:['Ranking dos estados','Lista os estados pelo indicador escolhido no mapa. A barra mostra, para cada estado, convocados (verde), vagas imediatas ainda aguardando (azul) e cadastro reserva (cinza). Clique numa linha para filtrar pelo estado.'],
+  top2:['Maiores notas convocadas','As cinco maiores notas entre as pessoas que já foram convocadas, dentro dos filtros. '+NOTA_TXT],
+  cargo2:['Andamento por cargo','Para cada cargo: quantos já foram convocados (verde), quantos estão em vaga imediata e ainda aguardam (azul) e quantos estão no cadastro reserva sem convocação (cinza). O percentual mostra quanto das vagas imediatas do cargo já foi chamado.'],
+  macro2:['Andamento por macrorregião','O mesmo acompanhamento do quadro por cargo, agora por macropolo: convocados (verde), vagas imediatas aguardando (azul) e cadastro reserva (cinza), com o percentual das vagas imediatas já chamadas.'],
+  cota2:['Andamento por cota','Convocações por modalidade de concorrência. Pelo edital (item 2.13), a convocação começa por uma pessoa com deficiência, segue com uma da ampla concorrência e depois com uma de PN, PI ou PQ, alternando nessa proporção.'],
+  strip2:['Notas de quem já foi convocado','Cada ponto é uma pessoa, posicionada pela nota. Verde é quem já foi convocado, azul é vaga imediata aguardando e cinza é cadastro reserva. O traço vertical é a mediana do cargo.'],
+  tbl2:['Quem foi e quem não foi convocado','Use as abas para alternar entre quem já foi convocado, quem está em vaga imediata aguardando e quem está no cadastro reserva. A data é a da convocação informada à comissão.'],
+  // Indicadores
+  kAprov:['Aprovados','Total de pessoas classificadas (vaga imediata + cadastro reserva) dentro dos filtros. A barra mostra a fatia em relação ao total do concurso.'],
+  kVI:['Vagas imediatas','Pessoas classificadas dentro do número de vagas imediatas do edital, ou seja, as primeiras da fila para convocação. O anel mostra a fatia em relação a todos os aprovados.'],
+  kCR:['Cadastro reserva','Pessoas classificadas na lista de espera. Só são chamadas depois das vagas imediatas, conforme a necessidade da CAIXA. O edital prevê 3 pessoas no cadastro para cada vaga imediata.'],
+  kMedia:['Nota média','Média das notas dentro dos filtros. Com algum filtro ativo, a seta compara com a média geral do concurso. '+NOTA_TXT],
+  kMax:['Maior nota','A nota mais alta dentro dos filtros, com as iniciais, o cargo e o estado da pessoa.'],
+  kCorte:['Nota de corte da vaga imediata','A menor nota entre as pessoas que ficaram com vaga imediata dentro dos filtros. Com filtro ativo, a seta compara com o corte geral. Atenção: o corte varia muito entre cargos, estados e cotas.'],
+  kConv:['Convocados','Quantas pessoas já foram chamadas pela CAIXA dentro dos filtros, conforme as informações recebidas pela comissão.'],
+  kVIConv:['Vagas imediatas chamadas','Percentual das pessoas em vaga imediata que já foram convocadas. 100% significa que todas as vagas imediatas do filtro já foram chamadas.'],
+  kAguard:['Aguardando','Pessoas em vaga imediata que ainda não foram convocadas.'],
+  kCRConv:['Chamados do reserva','Pessoas do cadastro reserva que já foram convocadas, ou seja, chamadas além das vagas imediatas.'],
+  kMediaConv:['Nota média dos convocados','Média das notas de quem já foi convocado. A seta compara com a média de todos os aprovados do mesmo filtro.'],
+  kMinConv:['Menor nota convocada','A menor nota entre as pessoas já convocadas, com as iniciais, o cargo e o estado.']
+};
+const botaoAjuda=k=>AJUDA[k]?`<button type="button" class="ajuda" data-ajuda="${k}" aria-label="O que é: ${AJUDA[k][0]}">?</button>`:'';
+// Coloca o "?" no título de cada card, identificando o card pelo elemento de dados que ele contém
+['mapa1:map1','rk1:rk1','top1:top1','macro1:macro1','cargo1:cargo1','lista1:lista1','cotaTbl:cotaTbl','hist1:hist1','strip1:strip1','tbl1:tbl1',
+ 'mapa2:map2','rk2:rk2','top2:top2','cargo2:cargo2','macro2:macro2','cota2:cota2','strip2:strip2','tbl2:tbl2'].forEach(p=>{
+  const [k,id]=p.split(':');const h=document.getElementById(id)?.closest('.card')?.querySelector('h2');
+  if(h)h.insertAdjacentHTML('beforeend',botaoAjuda(k));
+});
+// Balão: abre ao passar o mouse ou focar; um toque/clique fixa; fecha ao clicar fora, rolar ou apertar Esc
+const pop=document.getElementById('ajudaPop');let fixo=null;
+function mostrarAjuda(b){
+  const [t,txt]=AJUDA[b.dataset.ajuda];pop.innerHTML=`<b>${t}</b><p>${txt}</p>`;pop.hidden=false;
+  const r=b.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;
+  let x=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8),y=r.bottom+8;if(y+h>innerHeight-8)y=Math.max(8,r.top-h-8);
+  pop.style.left=x+'px';pop.style.top=y+'px';
+}
+const esconderAjuda=()=>{pop.hidden=true;fixo=null};
+document.addEventListener('mouseover',e=>{const b=e.target.closest('.ajuda');if(b&&!fixo)mostrarAjuda(b)});
+document.addEventListener('mouseout',e=>{if(e.target.closest('.ajuda')&&!fixo)pop.hidden=true});
+document.addEventListener('focusin',e=>{const b=e.target.closest('.ajuda');if(b)mostrarAjuda(b)});
+document.addEventListener('focusout',e=>{if(e.target.closest('.ajuda')&&!fixo)pop.hidden=true});
+document.addEventListener('click',e=>{const b=e.target.closest('.ajuda');
+  if(b){e.stopPropagation();if(fixo===b){esconderAjuda()}else{fixo=b;mostrarAjuda(b)}return}
+  if(!e.target.closest('#ajudaPop'))esconderAjuda()},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')esconderAjuda()});
+addEventListener('scroll',()=>{if(!pop.hidden)esconderAjuda()},{passive:true});
+
 /* ---------- Cards de indicadores ---------- */
 // k = {tone, icon, label, value, unit, sub, delta:{v, fmt, ref}, bar:0..1, ring:0..1}
 function kpis(el,list){
@@ -508,8 +599,8 @@ function kpis(el,list){
       delta=`<span class="delta ${dir}">${ico(dir)}${k.delta.fmt(Math.abs(v))}</span><span>${k.delta.ref}</span>`;
     }
     const ring=k.ring!=null?(()=>{const r=22,c=2*Math.PI*r;return `<svg class="ring" width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="${r}" stroke="var(--empty)"/><circle cx="28" cy="28" r="${r}" stroke="var(--tone)" stroke-linecap="round" stroke-dasharray="${c*k.ring} ${c}" transform="rotate(-90 28 28)"/></svg>`})():'';
-    return `<div class="card kpi${k.ring!=null?' has-ring':''}" style="--tone:var(${k.tone})">
-      <div class="top"><span class="l">${k.label}</span><span class="badge">${ico(k.icon)}</span></div>
+    return `<div class="card kpi${k.ring!=null?' has-ring':''}"${k.det?' data-det':''} style="--tone:var(${k.tone})">
+      <div class="top"><span class="l">${k.label}${k.aj?botaoAjuda(k.aj):''}</span><span class="badge">${ico(k.icon)}</span></div>
       <div class="v">${k.value}${k.unit?`<small>${k.unit}</small>`:''}</div>
       ${delta||k.sub?`<div class="s">${delta}${k.sub?`<span>${k.sub}</span>`:''}</div>`:''}
       ${k.bar!=null?`<div class="mini"><span style="width:${Math.max(0,Math.min(1,k.bar))*100}%"></span></div>`:''}${ring}</div>`;
@@ -762,14 +853,14 @@ function renderPanorama(){
   const media=d3.mean(R,d=>d.nota),corte=d3.min(R.filter(d=>d.sit==='VI'),d=>d.nota),top=d3.greatest(R,d=>d.nota);
   const pts=v=>nota(v)+' pts';
   kpis('#k1',[
-    {tone:'--s4',icon:'users',label:'Aprovados',value:nf(R.length),
+    {tone:'--s4',icon:'users',label:'Aprovados',aj:'kAprov',value:nf(R.length),
      sub:f?`${pct(R.length/DATA.length)} do total de ${nf(DATA.length)}`:`${new Set(R.map(d=>d.uf)).size} estados · ${new Set(R.map(d=>d.cargo)).size} cargos`,bar:R.length/DATA.length},
-    {tone:'--s1',icon:'check',label:'Vagas imediatas',value:nf(vi),sub:`${pct(R.length?vi/R.length:NaN)} dos aprovados`,ring:R.length?vi/R.length:0},
-    {tone:'--s2',icon:'clock',label:'Cadastro reserva',value:nf(R.length-vi),sub:`${pct(R.length?(R.length-vi)/R.length:NaN)} dos aprovados`,bar:R.length?(R.length-vi)/R.length:0},
-    {tone:'--s3',icon:'chart',label:'Nota média',value:nota(media),
+    {tone:'--s1',icon:'check',label:'Vagas imediatas',aj:'kVI',value:nf(vi),sub:`${pct(R.length?vi/R.length:NaN)} dos aprovados`,ring:R.length?vi/R.length:0},
+    {tone:'--s2',icon:'clock',label:'Cadastro reserva',aj:'kCR',value:nf(R.length-vi),sub:`${pct(R.length?(R.length-vi)/R.length:NaN)} dos aprovados`,bar:R.length?(R.length-vi)/R.length:0},
+    {tone:'--s3',icon:'chart',label:'Nota média',det:1,aj:'kMedia',value:nota(media),
      delta:f?{v:media-gMedia,fmt:pts,ref:'vs. geral'}:null,sub:f?'':'mediana '+nota(d3.median(R,d=>d.nota))},
-    {tone:'--s5',icon:'trophy',label:'Maior nota',value:nota(top?.nota),sub:top?`${top.ini} · ${curto(top.cargo)} · ${top.uf}`:''},
-    {tone:'--s1',icon:'target',label:'Corte da vaga imediata',value:nota(corte),
+    {tone:'--s5',icon:'trophy',label:'Maior nota',det:1,aj:'kMax',value:nota(top?.nota),sub:top?`${top.ini} · ${curto(top.cargo)} · ${top.uf}`:''},
+    {tone:'--s1',icon:'target',label:'Corte da vaga imediata',aj:'kCorte',value:nota(corte),
      delta:f&&corte!=null?{v:corte-gCorte,fmt:pts,ref:'vs. geral'}:null,sub:f?'':'menor nota que garantiu vaga'}
   ]);
 
@@ -810,12 +901,12 @@ function renderConv(){
   const conv=R.filter(d=>d.conv),vi=R.filter(d=>d.sit==='VI'),aguard=vi.filter(d=>!d.conv),convCR=conv.filter(d=>d.sit==='CR');
   const viConv=vi.filter(d=>d.conv).length,mConv=d3.mean(conv,d=>d.nota),mGeral=d3.mean(R,d=>d.nota);
   kpis('#k2',[
-    {tone:'--s3',icon:'userCheck',label:'Convocados',value:nf(conv.length),sub:`${new Set(conv.map(d=>d.uf)).size} estados · de ${nf(R.length)} aprovados`,bar:R.length?conv.length/R.length:0},
-    {tone:'--s3',icon:'check',label:'Vagas imediatas chamadas',value:pct(vi.length?viConv/vi.length:NaN),sub:`${viConv} de ${vi.length} vagas`,ring:vi.length?viConv/vi.length:0},
-    {tone:'--s1',icon:'hourglass',label:'Aguardando',value:nf(aguard.length),unit:'vagas imediatas',sub:`${pct(vi.length?aguard.length/vi.length:NaN)} ainda sem convocação`,bar:vi.length?aguard.length/vi.length:0},
-    {tone:'--s4',icon:'jump',label:'Chamados do reserva',value:nf(convCR.length),sub:'convocados além das vagas imediatas'},
-    {tone:'--s5',icon:'star',label:'Nota média convocados',value:nota(mConv),delta:conv.length?{v:mConv-mGeral,fmt:v=>nota(v)+' pts',ref:'vs. todos os aprovados'}:null},
-    {tone:'--s2',icon:'flag',label:'Menor nota convocada',value:nota(d3.min(conv,d=>d.nota)),sub:(()=>{const t=d3.least(conv,d=>d.nota);return t?`${t.ini} · ${curto(t.cargo)} · ${t.uf}`:''})()}
+    {tone:'--s3',icon:'userCheck',label:'Convocados',aj:'kConv',value:nf(conv.length),sub:`${new Set(conv.map(d=>d.uf)).size} estados · de ${nf(R.length)} aprovados`,bar:R.length?conv.length/R.length:0},
+    {tone:'--s3',icon:'check',label:'Vagas imediatas chamadas',aj:'kVIConv',value:pct(vi.length?viConv/vi.length:NaN),sub:`${viConv} de ${vi.length} vagas`,ring:vi.length?viConv/vi.length:0},
+    {tone:'--s1',icon:'hourglass',label:'Aguardando',aj:'kAguard',value:nf(aguard.length),unit:'vagas imediatas',sub:`${pct(vi.length?aguard.length/vi.length:NaN)} ainda sem convocação`,bar:vi.length?aguard.length/vi.length:0},
+    {tone:'--s4',icon:'jump',label:'Chamados do reserva',det:1,aj:'kCRConv',value:nf(convCR.length),sub:'convocados além das vagas imediatas'},
+    {tone:'--s5',icon:'star',label:'Nota média convocados',det:1,aj:'kMediaConv',value:nota(mConv),delta:conv.length?{v:mConv-mGeral,fmt:v=>nota(v)+' pts',ref:'vs. todos os aprovados'}:null},
+    {tone:'--s2',icon:'flag',label:'Menor nota convocada',det:1,aj:'kMinConv',value:nota(d3.min(conv,d=>d.nota)),sub:(()=>{const t=d3.least(conv,d=>d.nota);return t?`${t.ini} · ${curto(t.cargo)} · ${t.uf}`:''})()}
   ]);
 
   const porUF=d3.rollup(RM,rs=>{const vi=rs.filter(d=>d.sit==='VI');const c=rs.filter(d=>d.conv).length;
@@ -876,6 +967,19 @@ fCargo.onchange=()=>{S.cargo=fCargo.value;S.p1=S.p2=0;render()};
 fMacro.onchange=()=>{S.macro=fMacro.value;S.uf='';S.p1=S.p2=0;render()};
 // Redesenha só quando a largura muda (no celular a barra do navegador muda a altura ao rolar)
 let rt,larg=innerWidth;addEventListener('resize',()=>{if(innerWidth===larg)return;larg=innerWidth;clearTimeout(rt);rt=setTimeout(()=>{if(DATA.length)render()},150)});
+
+/* ---------- Visão objetiva × detalhada ---------- */
+// Padrão: visão objetiva. A escolha fica salva no navegador de quem visita.
+const detalhe=document.getElementById('detalhe');
+function aplicarDetalhe(on){
+  document.body.classList.toggle('resumo',!on);detalhe.checked=on;
+  try{localStorage.setItem('detalhe',on?'1':'0')}catch(e){}
+  if(DATA.length)render(); // gráficos que estavam escondidos precisam medir a largura de novo
+}
+let detIni=false;try{detIni=localStorage.getItem('detalhe')==='1'}catch(e){}
+document.body.classList.toggle('resumo',!detIni);detalhe.checked=detIni;
+detalhe.onchange=()=>aplicarDetalhe(detalhe.checked);
+document.querySelectorAll('.mais-det').forEach(b=>b.onclick=()=>{aplicarDetalhe(true);window.scrollBy({top:200,behavior:'smooth'})});
 
 /* ---------- Tema claro/escuro ---------- */
 const mq=matchMedia('(prefers-color-scheme: dark)');
