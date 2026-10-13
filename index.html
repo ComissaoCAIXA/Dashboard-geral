@@ -274,6 +274,13 @@ body.sobrio header .tema .knob,header .tema .knob{background:none;width:auto;hei
   .acoes-topo{order:3;width:100%}
   .acao{flex:1;justify-content:center;padding:9px 8px}
 }
+/* ---------- Botão de PDF das listas ---------- */
+.pdfbtn{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:12.5px;font-weight:600;padding:6px 11px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink2);cursor:pointer;white-space:nowrap}
+.pdfbtn:hover{border-color:var(--s1);color:var(--ink)}
+.pdfbtn svg{width:14px;height:14px}
+.pdfbtn[disabled]{opacity:.6;cursor:progress}
+.hd-acoes{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
 /* ---------- Vagas e regras: simulador da fila ---------- */
 #tab-vagas{display:flex;flex-direction:column;gap:12px}
 #tab-vagas[hidden]{display:none}
@@ -725,7 +732,7 @@ body.sobrio .tw tr{border-radius:6px}
       <div class="card"><div class="hd"><div><h2>Notas por cargo</h2><p class="note">Cada ponto é uma pessoa · traço = mediana</p></div></div><div id="strip1"></div>
         <div class="legend"><span><i style="background:var(--s1)"></i>Vaga imediata</span><span><i style="background:var(--s2)"></i>Cadastro reserva</span></div></div>
     </div>
-    <div class="card"><div class="hd"><h2>Lista de aprovados</h2></div><div id="tbl1"></div></div>
+    <div class="card"><div class="hd"><h2>Lista de aprovados</h2><button class="pdfbtn" type="button" data-pdf="tbl1" title="Baixar a lista em PDF (A4 paisagem), com os filtros escolhidos"><span data-i="baixar"></span>PDF</button></div><div id="tbl1"></div></div>
     <button class="mais-det" type="button" data-resumo><span data-i="layers"></span>Ver análises detalhadas: notas, cotas do edital, regiões e destaques</button>
   </section>
 
@@ -755,7 +762,8 @@ body.sobrio .tw tr{border-radius:6px}
     <div class="card" data-det style="margin-bottom:12px"><div class="hd"><div><h2>Notas de quem já foi convocado</h2><p class="note">Cada ponto é uma pessoa · só cargos com informação de convocação</p></div></div><div id="strip2"></div>
       <div class="legend"><span><i style="background:var(--s3)"></i>Convocado</span><span><i style="background:var(--s1)"></i>Vaga imediata aguardando</span><span><i style="background:var(--neutral)"></i>Cadastro reserva</span></div></div>
     <div class="card"><div class="hd"><h2>Quem foi e quem não foi convocado</h2>
-      <div class="seg" id="t2seg"><button data-v="sim" aria-pressed="true">Convocados</button><button data-v="aguard">Vaga imediata aguardando</button><button data-v="cr">Cadastro reserva</button></div></div>
+      <div class="seg" id="t2seg"><button data-v="sim" aria-pressed="true">Convocados</button><button data-v="aguard">Vaga imediata aguardando</button><button data-v="cr">Cadastro reserva</button></div>
+      <button class="pdfbtn" type="button" data-pdf="tbl2" title="Baixar a lista em PDF (A4 paisagem), com os filtros escolhidos"><span data-i="baixar"></span>PDF</button></div>
       <div id="tbl2"></div></div>
     <button class="mais-det" type="button" data-resumo><span data-i="layers"></span>Ver análises detalhadas: andamento por região e cota, notas e destaques</button>
   </section>
@@ -790,6 +798,7 @@ body.sobrio .tw tr{border-radius:6px}
         <button class="btn sec" type="button" id="filaPasso">Próxima chamada<span data-i="avancar"></span></button>
         <button class="btn sec" type="button" id="filaTudo">Mostrar tudo</button>
         <span class="note" id="filaConta"></span>
+        <button class="pdfbtn" type="button" data-pdf="fila" title="Baixar a fila simulada deste cargo e estado em PDF (A4 paisagem)"><span data-i="baixar"></span>PDF da fila</button>
         <div class="seg vista" id="filaVista" role="group" aria-label="Forma de ver a fila"><button data-v="lista" aria-pressed="false">Lista</button><button data-v="pistas" aria-pressed="true">Pistas</button></div>
       </div>
       <div class="pistas" id="pistas"></div>
@@ -830,7 +839,8 @@ body.sobrio .tw tr{border-radius:6px}
 
     <div class="card">
       <div class="hd"><div><h2>Quadro de vagas do edital</h2><p class="note">Anexo I do edital. O cadastro reserva tem o triplo de cada coluna.</p></div>
-        <select id="quadroCargo" aria-label="Cargo do quadro de vagas"></select></div>
+        <div class="hd-acoes"><select id="quadroCargo" aria-label="Cargo do quadro de vagas"></select>
+          <button class="pdfbtn" type="button" data-pdf="quadro" title="Baixar o quadro de vagas deste cargo em PDF (A4 paisagem)"><span data-i="baixar"></span>PDF</button></div></div>
       <div class="tw" id="quadro"></div>
     </div>
   </section>
@@ -965,6 +975,7 @@ const ICONS={
   mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
   fila:'<circle cx="5" cy="7" r="2"/><circle cx="12" cy="7" r="2"/><circle cx="19" cy="7" r="2"/><path d="M2 17a3 3 0 0 1 6 0M9 17a3 3 0 0 1 6 0M16 17a3 3 0 0 1 6 0"/>',
   play:'<path d="m7 4 13 8-13 8z"/>',
+  baixar:'<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
   avancar:'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
   novid:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/>',
   x:'<path d="M18 6 6 18M6 6l12 12"/>'
@@ -1219,9 +1230,11 @@ function strip(el,rows,cor,rot){
 }
 
 /* ---------- Tabela ---------- */
+const TABS={};
 function tabela(el,rows,cols,sortKey,pageKey){
   const box=d3.select(el),st=S[sortKey],PS=20;
   const sorted=[...rows].sort((a,b)=>{const va=a[st.k],vb=b[st.k];return (va>vb?1:va<vb?-1:0)*st.d});
+  TABS[el]={rows:sorted,cols}; // lista completa (todas as páginas) para o PDF
   const pages=Math.max(1,Math.ceil(sorted.length/PS));S[pageKey]=Math.min(S[pageKey],pages-1);const pg=S[pageKey];
   box.html(`<label class="msort">Ordenar por <select>${cols.map(c=>[1,-1].map(d=>`<option value="${c.k}|${d}"${st.k===c.k&&st.d===d?' selected':''}>${c.t} ${d>0?'(crescente)':'(decrescente)'}</option>`).join('')).join('')}</select></label>
     <div class="tw"><table><thead><tr>${cols.map(c=>`<th data-k="${c.k}" class="${c.num?'num':''}">${c.t}${st.k===c.k?(st.d>0?' ▲':' ▼'):''}</th>`).join('')}</tr></thead>
@@ -1908,11 +1921,108 @@ function desenharQuadro(cargo){
     document.querySelector('.fila-card').scrollIntoView({behavior:'smooth',block:'start'})});
 }
 
+/* ---------- PDF das listas (A4 paisagem, quantas páginas forem precisas) ---------- */
+// As bibliotecas só são baixadas quando alguém pede um PDF.
+const PDF_LIBS=['https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js','https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js'];
+let pdfPronto=null;
+const carregarPDF=()=>pdfPronto||(pdfPronto=PDF_LIBS.reduce((p,src)=>p.then(()=>new Promise((ok,erro)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{pdfPronto=null;erro(new Error('Não foi possível carregar o gerador de PDF. Verifique a internet e tente de novo.'))};document.head.appendChild(s)})),Promise.resolve()));
+// Texto simples a partir do HTML das células (sem símbolos que a fonte do PDF não tem)
+const textoPDF=h=>{const d=document.createElement('div');d.innerHTML=String(h??'–');return d.textContent.replace(/→/g,'->').replace(/[✓✔]/g,'').replace(/\s+/g,' ').trim()||'–'};
+const COR_MOD={AC:[37,106,191],PcD:[74,58,167],PN:[196,77,30],PI:[20,130,90],PQ:[190,70,120]};
+function descFiltros(){
+  const f=[];
+  f.push(S.cargo?`Cargo: ${S.cargo}`:'Todos os cargos');
+  if(S.macro)f.push(`Macrorregião: ${cap(S.macro)}`);
+  if(S.uf)f.push(`Estado: ${S.uf}`);
+  if(S.lista)f.push(S.lista==='COTAS'?'Só cotas':`Cota: ${(COTAS.find(c=>c.k===S.lista)||{nome:S.lista}).nome}`);
+  return f.join(' · ');
+}
+function pdfDocumento({titulo,subtitulo,aviso,head,body,arquivo,colMod=[],colStatus=-1,colunas={},rodapeTabela,compacto=false}){
+  const {jsPDF}=window.jspdf;const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  const W=doc.internal.pageSize.getWidth(),H=doc.internal.pageSize.getHeight(),M=12;
+  const quando=new Date().toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+  doc.setFontSize(8.5);const subL=doc.splitTextToSize(subtitulo,W-2*M-50),avL=aviso?doc.splitTextToSize(aviso,W-2*M):[];
+  const topo=M+8+subL.length*4+(avL.length?avL.length*3.6+3:0)+3;
+  const cabecalho=()=>{
+    doc.setFillColor(42,120,214);doc.rect(0,0,W,3,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(20);doc.text(titulo,M,M+3);
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(90);doc.text(subL,M,M+8.5);
+    doc.text(`Gerado em ${quando}`,W-M,M+3,{align:'right'});
+    if(avL.length){doc.setFontSize(7.8);doc.setTextColor(130,90,0);doc.text(avL,M,M+8.5+subL.length*4+1.5)}
+  };
+  doc.autoTable({head:[head],body,startY:topo,margin:{top:topo,left:M,right:M,bottom:14},theme:'grid',
+    styles:{font:'helvetica',fontSize:8,cellPadding:compacto?1.15:1.6,lineColor:[225,224,217],lineWidth:.1,textColor:30,overflow:'linebreak'},
+    headStyles:{fillColor:[42,120,214],textColor:255,fontStyle:'bold'},alternateRowStyles:{fillColor:[246,248,251]},
+    columnStyles:colunas,
+    didParseCell:d=>{if(d.section!=='body')return;
+      if(colMod.includes(d.column.index)){const c=COR_MOD[String(d.cell.raw).split(' ')[0]];if(c){d.cell.styles.textColor=c;d.cell.styles.fontStyle='bold'}}
+      if(d.column.index===colStatus){const v=String(d.cell.raw);if(/^(Convocado|Empossado)/.test(v)){d.cell.styles.textColor=[0,110,0];d.cell.styles.fontStyle='bold'}else if(/Desistente/.test(v))d.cell.styles.textColor=[190,40,40]}
+      if(d.row.raw&&d.row.raw._total){d.cell.styles.fontStyle='bold';d.cell.styles.fillColor=[232,238,247]}},
+    didDrawPage:()=>{cabecalho();
+      doc.setFontSize(7.5);doc.setTextColor(120);doc.setDrawColor(225,224,217);doc.line(M,H-10,W-M,H-10);
+      doc.text('Comissão de Aprovados · Concurso CAIXA 2026 · comissaocaixa.github.io/Dashboard-geral',M,H-6);
+      doc.text(`Página ${doc.internal.getNumberOfPages()} de {total}`,W-M,H-6,{align:'right'})}});
+  if(rodapeTabela){const y=doc.lastAutoTable.finalY+5;if(y<H-16){doc.setFontSize(7.8);doc.setTextColor(90);doc.text(doc.splitTextToSize(rodapeTabela,W-2*M),M,y)}}
+  doc.putTotalPages('{total}');
+  doc.save(arquivo);
+}
+const hojeArq=()=>new Date().toISOString().slice(0,10);
+const ordemSimuladaUF=(cargo,v,soImediatas=true)=>{const vi={};MOD_F.forEach((m,i)=>vi[m]=v.vi[[1,0,2,3,4][i]]);
+  const rs=DATA.filter(d=>d.cargo===cargo&&d.uf===v.uf);const l={};MOD_F.forEach(m=>l[m]=rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF));
+  return montarFila(vi,l).filter(x=>!soImediatas||x.vi)};
+const AVISO_SIM='Simulação feita pela Comissão de Aprovados com base no edital (itens 2.8, 2.12 e 2.13) e conferida com as convocações registradas. Não é a lista oficial: quem define a ordem e o momento de cada convocação é a CAIXA. A simulação pode mudar com novas convocações.';
+async function gerarPDF(tipo,btn){
+  const txt0=btn.lastChild.textContent;btn.disabled=true;btn.lastChild.textContent='Gerando…';
+  try{
+    await carregarPDF();
+    if(tipo==='tbl1'||tipo==='tbl2'){
+      const t=TABS['#'+tipo];if(!t||!t.rows.length)throw new Error('Não há ninguém nesta lista com os filtros escolhidos.');
+      const sub2={sim:'Convocados',aguard:'Vaga imediata aguardando convocação',cr:'Cadastro reserva'}[S.t2];
+      const ordem=t.cols.find(c=>c.k===S[tipo==='tbl1'?'sort1':'sort2'].k);
+      pdfDocumento({
+        titulo:tipo==='tbl1'?'Lista de aprovados · Concurso CAIXA 2026':`Convocações · ${sub2}`,
+        subtitulo:`${descFiltros()} · ${nf(t.rows.length)} pessoa(s)${ordem?` · ordenado por ${ordem.t.toLowerCase()}`:''}. Dados do painel dos aprovados (resultado homologado no DOU de 26/05/2026 e convocações registradas pela comissão).`,
+        head:['Nº',...t.cols.map(c=>c.t)],
+        body:t.rows.map((r,i)=>[String(i+1),...t.cols.map(c=>{let v=textoPDF(c.f?c.f(r):r[c.k]);return c.k==='conv'?v.replace(/ presumida$/,' (presumida)'):v})]),
+        colMod:[t.cols.findIndex(c=>c.k==='lista')+1],colStatus:t.cols.findIndex(c=>c.k==='conv')+1,
+        colunas:{0:{halign:'right',cellWidth:9}},
+        arquivo:`aprovados-caixa-2026-${tipo==='tbl1'?'lista':'convocacoes-'+S.t2}-${hojeArq()}.pdf`});
+    }else if(tipo==='quadro'){
+      const cargo=document.getElementById('quadroCargo').value,linhas=VAGAS.filter(v=>v.cargo===cargo);
+      const mac=uf=>{const d=DATA.find(x=>x.uf===uf);return d?cap(d.macro):''};
+      const ord=[...linhas].sort((a,b)=>MACROS.indexOf(mac(a.uf).toUpperCase())-MACROS.indexOf(mac(b.uf).toUpperCase())||a.uf.localeCompare(b.uf));
+      const sum=a=>a.reduce((s,x)=>s+x,0),tot=[0,1,2,3,4].map(i=>sum(linhas.map(v=>v.vi[i])));
+      const body=ord.map(v=>[mac(v.uf),v.uf,...v.vi.map(String),String(sum(v.vi)),String(sum(v.vi)*3),
+        ordemSimuladaUF(cargo,v).map(x=>sigla(x.lista||x.slot)+(x.rev?'*':'')).join(' ')]);
+      const linhaTot=['Total','',...tot.map(String),String(sum(tot)),String(sum(tot)*3),''];linhaTot._total=true;body.push(linhaTot);
+      pdfDocumento({titulo:`Quadro de vagas · ${cargo}`,subtitulo:'Edital nº 01/2025/NS, Anexo I. Vagas imediatas por modalidade; o cadastro reserva tem o triplo de cada coluna. A última coluna é a ordem simulada de convocação das vagas imediatas de cada estado.',
+        aviso:AVISO_SIM,head:['Macrorregião','Estado','AC','PcD','PN','PI','PQ','Total imediatas','Cadastro reserva','Ordem simulada (vagas imediatas)'],body,
+        colunas:{2:{halign:'center'},3:{halign:'center'},4:{halign:'center'},5:{halign:'center'},6:{halign:'center'},7:{halign:'center',fontStyle:'bold'},8:{halign:'center'},9:{cellWidth:95}},
+        rodapeTabela:'* vaga que passou de uma cota para outra por falta de aprovados (item 2.12 do edital).',compacto:true,arquivo:`quadro-de-vagas-${cargo.toLowerCase().replace(/\s+/g,'-')}-${hojeArq()}.pdf`});
+    }else if(tipo==='fila'){
+      if(!filaAtual.length)throw new Error('Escolha um cargo e um estado com vagas.');
+      const real=FS.modo==='real';
+      const body=filaAtual.map(x=>{const p=x.pessoa,m=x.lista||x.slot,st=statusPessoa(p);
+        return [`${x.k}ª`,x.vi?'Imediata':'Reserva',sigla(m)+(x.rev?` (vaga de ${sigla(x.slot)})`:''),p?(p.ficticio?p.ini:p.ini):'sem candidato aprovado',
+          p&&!p.ficticio?`${p.rankUF}º`:'–',st.txt||'–',textoPDF(porQue(x))]});
+      pdfDocumento({titulo:real?`Fila simulada de convocação · ${FS.cargo} · ${FS.uf}`:'Fila simulada de convocação · cenário montado',
+        subtitulo:real?`${filaAtual.filter(x=>x.vi).length} vaga(s) imediata(s) e ${filaAtual.filter(x=>!x.vi).length} no cadastro reserva, com os aprovados do resultado homologado.`
+          :`Cenário: vagas imediatas ${MOD_F.filter(m=>FS.cen.vi[m]).map(m=>`${sigla(m)} ${FS.cen.vi[m]}`).join(', ')||'nenhuma'}; aprovados ${MOD_F.filter(m=>FS.cen.ap[m]).map(m=>`${sigla(m)} ${FS.cen.ap[m]}`).join(', ')||'nenhum'}.`,
+        aviso:AVISO_SIM,head:['Chamada','Bloco','Modalidade','Pessoa','Posição no estado','Situação','Por que nesta posição'],body,
+        colMod:[2],colStatus:5,colunas:{0:{cellWidth:16,halign:'right'},1:{cellWidth:18},2:{cellWidth:28},3:{cellWidth:62},4:{cellWidth:20,halign:'center'},5:{cellWidth:32}},
+        arquivo:`fila-simulada-${real?(FS.cargo.toLowerCase().replace(/\s+/g,'-')+'-'+FS.uf.toLowerCase()):'cenario'}-${hojeArq()}.pdf`});
+    }
+  }catch(e){alert(e.message)}
+  finally{btn.disabled=false;btn.lastChild.textContent=txt0}
+}
+document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)gerarPDF(b.dataset.pdf,b)});
+
 /* ---------- Novidades (histórico de atualizações) ---------- */
 // Para publicar uma novidade, acrescente uma linha NO TOPO da lista: [data e hora de Brasília, tipo, título, descrição].
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-13 14:35','novo','Listas em PDF','Botão "PDF" na lista de aprovados, na lista de convocações, no quadro de vagas e na fila simulada. Gera um arquivo em A4 paisagem com todas as pessoas do filtro escolhido, em quantas folhas forem precisas.'],
   ['2026-10-13 14:05','novo','Informe o horário da sua convocação','Já foi convocado(a)? Em "Informar convocação", escolha "Quero informar o horário da minha convocação". Como muitas convocações saem no mesmo dia, o horário ajuda a comissão a entender a ordem real das chamadas.'],
   ['2026-10-13 14:00','novo','Aba "Vagas e regras"','Quadro de vagas do edital por estado, as regras de convocação explicadas com os itens do edital e um simulador animado da fila de convocação de cada cargo e estado. É uma simulação da comissão, conferida com a convocação de 08/10, e não a lista oficial.'],
   ['2026-10-13 09:30','novo','Convocação confirmada ou presumida','Convocações deduzidas pela ordem de classificação (alguém atrás na mesma lista já foi chamado) aparecem com a marca "presumida" até a comissão confirmar com a pessoa.'],
