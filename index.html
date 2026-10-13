@@ -903,7 +903,7 @@ body.sobrio .tw tr{border-radius:6px}
       <div class="hd"><div><h2>Documentos para a comprovação de requisitos</h2>
         <p class="note">Monte o seu checklist com os documentos que a CAIXA pede a quem foi convocado. Responda às perguntas e a lista se ajusta ao seu caso.</p></div></div>
       <div class="aviso-topo">
-        <p><b>Esta relação é só para quem foi efetivamente convocado.</b> Os documentos devem ser enviados <b>até a data indicada no e-mail de convocação</b>. O conteúdo abaixo segue a <a href="https://www.caixa.gov.br/Downloads/concurso-publico-documentacao-candidatos/Relacao_de_Documentos_Etapa_Comprovacao_de_Requisitos_Atualizado_Concurso_2025_2026.pdf" target="_blank" rel="noopener">Relação de Documentos oficial da CAIXA</a>; em caso de diferença, valem o documento oficial e as instruções do seu e-mail de convocação. Suas respostas e marcações ficam salvas só neste aparelho.</p>
+        <p><b>Esta relação é só para quem foi efetivamente convocado.</b> Os documentos devem ser enviados <b>até a data indicada no e-mail de convocação</b>. O conteúdo abaixo segue a <i>Relação de Documentos – Etapa Comprovação de Requisitos</i> da CAIXA (documento público), disponível na <a href="https://www.caixa.gov.br/site/Paginas/downloads.aspx#categoria_533" target="_blank" rel="noopener">área de downloads do site da CAIXA</a> (Concurso Público – Documentação dos Candidatos); em caso de diferença, valem o documento oficial e as instruções do seu e-mail de convocação. Suas respostas e marcações ficam salvas só neste aparelho.</p>
       </div>
     </div>
 
@@ -918,9 +918,9 @@ body.sobrio .tw tr{border-radius:6px}
           <button class="pdfbtn" type="button" id="docLimpar">Desmarcar tudo</button></div></div>
       <div class="doc-prog"><span id="docBarra"></span></div>
       <div id="docLista"></div>
-      <p class="doc-fonte"><b>Fonte:</b> CAIXA, <i>Relação de Documentos – Etapa Comprovação de Requisitos</i> (Concurso 2025/2026), disponível em
-        <a href="https://www.caixa.gov.br/Downloads/concurso-publico-documentacao-candidatos/Relacao_de_Documentos_Etapa_Comprovacao_de_Requisitos_Atualizado_Concurso_2025_2026.pdf" target="_blank" rel="noopener">caixa.gov.br</a>
-        (consultada em 13/10/2026). Os números entre parênteses (ex.: <i>item 13</i>) são os itens desse documento. As explicações de cada documento são da Comissão de Aprovados, para ajudar; não substituem a relação oficial nem o seu e-mail de convocação.</p>
+      <p class="doc-fonte"><b>Fonte:</b> CAIXA, <i>Relação de Documentos – Etapa Comprovação de Requisitos</i> (Concurso 2025/2026, documento público), publicada em 28/08/2026 na
+        <a href="https://www.caixa.gov.br/site/Paginas/downloads.aspx#categoria_533" target="_blank" rel="noopener">área de downloads do site da CAIXA</a>,
+        seção Concurso Público – Documentação dos Candidatos (consultada em 13/10/2026). Os números entre parênteses (ex.: <i>item 13</i>) são os itens desse documento. As explicações de cada documento são da Comissão de Aprovados, para ajudar; não substituem a relação oficial nem o seu e-mail de convocação.</p>
     </div>
   </section>
 
@@ -2031,8 +2031,7 @@ function desenharQuadro(cargo){
 /* ---------- Documentos: checklist da etapa de comprovação de requisitos ---------- */
 // Fonte: CAIXA, "Relação de Documentos – Etapa Comprovação de Requisitos" (Concurso 2025/2026).
 // Os números de item seguem esse documento. As explicações são da comissão.
-const DOC_URL='https://www.caixa.gov.br/Downloads/concurso-publico-documentacao-candidatos/Relacao_de_Documentos_Etapa_Comprovacao_de_Requisitos_Atualizado_Concurso_2025_2026.pdf';
-const CX_DOWN='https://www.caixa.gov.br/Downloads/concurso-publico-documentacao-candidatos/';
+const DOC_AREA='https://www.caixa.gov.br/site/Paginas/downloads.aspx#categoria_533';
 const UFS_BR=['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
 const VAL6='Validade: dentro do prazo do documento ou emitida há no máximo 6 meses';
 const DP={perfil:{cargo:'',masc:'',nac:'br',civil:'',pis:'',cpfDoc:'',ufs:[],curitiba:'',rj:[]},ok:{}};
@@ -2091,10 +2090,10 @@ function itensDocs(){
   G.push({t:'Antecedentes criminais',sub:ufs.length?`estados nos últimos 5 anos: ${ufs.join(', ')}`:'',itens:g4,vazio:ufs.length?'':'Marque acima os estados onde você morou nos últimos 5 anos para ver as certidões estaduais e federais de cada um (itens 14, 15 e 16).'});
   // 5. Formulários da CAIXA
   G.push({t:'Formulários da CAIXA (preencher e assinar)',itens:[
-    it('i17-acum','Declaração de acumulação de cargos','17',`<p>Formulário da CAIXA em que você declara se tem ou não outro cargo, emprego ou função pública. <a href="${CX_DOWN}Formulario_Declaracao_Acumulo_de_Cargos.dot" target="_blank" rel="noopener">Baixar o formulário</a>.</p>`),
-    it('i17-bons','Declaração de bons antecedentes','17',`<p>Formulário da CAIXA de declaração de bons antecedentes. <a href="${CX_DOWN}Formulario_Declaracao_Bons_Antecedentes.dot" target="_blank" rel="noopener">Baixar o formulário</a>.</p>`),
-    it('i17-dados','Formulário de dados cadastrais','17',`<p>Formulário da CAIXA com os seus dados cadastrais. <a href="${CX_DOWN}Formulario_Dados_Cadastrais.dot" target="_blank" rel="noopener">Baixar o formulário</a>.</p>`)
-  ],nota:`Preencha e assine os três seguindo as <a href="${CX_DOWN}INSTRUCOES_DE_PREENCHIMENTO.pdf" target="_blank" rel="noopener">instruções de preenchimento da CAIXA</a>.`});
+    it('i17-acum','Declaração de acumulação de cargos','17',`<p>Formulário da CAIXA em que você declara se tem ou não outro cargo, emprego ou função pública. Disponível na área de downloads da CAIXA.</p>`),
+    it('i17-bons','Declaração de bons antecedentes','17',`<p>Formulário da CAIXA de declaração de bons antecedentes. Disponível na área de downloads da CAIXA.</p>`),
+    it('i17-dados','Formulário de dados cadastrais','17',`<p>Formulário da CAIXA com os seus dados cadastrais. Disponível na área de downloads da CAIXA.</p>`)
+  ],nota:`Os três devem ser anexados preenchidos e assinados. Eles ficam na <a href="${DOC_AREA}" target="_blank" rel="noopener">área de downloads da CAIXA</a> (Concurso Público – Documentação dos Candidatos).`});
   return G;
 }
 function desenharPerfilDocs(){
@@ -2225,7 +2224,7 @@ async function gerarPDF(tipo,btn){
         arquivo:`fila-simulada-${real?(FS.cargo.toLowerCase().replace(/\s+/g,'-')+'-'+FS.uf.toLowerCase()):'cenario'}-${hojeArq()}.pdf`});
     }else if(tipo==='docs'){
       const G=itensDocs(),p=DP.perfil,body=[];
-      G.forEach(g=>g.itens.forEach(i=>body.push([DP.ok[i.id]?'[X]':'[  ]',g.t,i.t,textoPDF(i.d).replace('Baixar o formulário.','Baixe no site da CAIXA (endereço no rodapé).'),i.item,i.tags.some(x=>x.c==='val')?'Até 6 meses':''])));
+      G.forEach(g=>g.itens.forEach(i=>body.push([DP.ok[i.id]?'[X]':'[  ]',g.t,i.t,textoPDF(i.d),i.item,i.tags.some(x=>x.c==='val')?'Até 6 meses':''])));
       const feitos=body.filter(r=>r[0]==='[X]').length;
       const perfil=[p.cargo||'cargo não informado',p.ufs.length?`morou em ${p.ufs.join(', ')} nos últimos 5 anos`:'estados de residência não informados'].join(' · ');
       pdfDocumento({titulo:'Checklist de documentos · Comprovação de requisitos',
@@ -2233,7 +2232,7 @@ async function gerarPDF(tipo,btn){
         aviso:'Montado pelo painel da Comissão de Aprovados a partir da Relação de Documentos oficial da CAIXA. Em caso de diferença, valem o documento oficial e as instruções do seu e-mail de convocação.',
         head:['','Grupo','Documento','O que é / observações','Item','Validade'],body,
         colunas:{0:{cellWidth:10,halign:'center',fontStyle:'bold'},1:{cellWidth:38},2:{cellWidth:58,fontStyle:'bold'},4:{cellWidth:14,halign:'center'},5:{cellWidth:22}},
-        rodapeTabela:`Fonte: CAIXA, Relação de Documentos - Etapa Comprovação de Requisitos (Concurso 2025/2026): ${DOC_URL}\nFormulários e instruções de preenchimento (item 17): ${CX_DOWN}`,
+        rodapeTabela:`Fonte: CAIXA, Relação de Documentos - Etapa Comprovação de Requisitos (Concurso 2025/2026, documento público), publicada em 28/08/2026 na área de downloads do site da CAIXA (Concurso Público - Documentação dos Candidatos): ${DOC_AREA}`,
         arquivo:`checklist-documentos-caixa-${hojeArq()}.pdf`});
     }
   }catch(e){alert(e.message)}
