@@ -1312,15 +1312,14 @@ document.getElementById('fProt').onsubmit=async e=>{e.preventDefault();const out
 };
 
 /* ---------- Visão objetiva × detalhada ---------- */
-// Padrão: visão objetiva. A escolha fica salva no navegador de quem visita.
+// O painel sempre abre na visão objetiva (chave desligada); a escolha não fica salva.
 const detalhe=document.getElementById('detalhe');
 function aplicarDetalhe(on){
   document.body.classList.toggle('resumo',!on);detalhe.checked=on;
-  try{localStorage.setItem('detalhe',on?'1':'0')}catch(e){}
   if(DATA.length)render(); // gráficos que estavam escondidos precisam medir a largura de novo
 }
-let detIni=false;try{detIni=localStorage.getItem('detalhe')==='1'}catch(e){}
-document.body.classList.toggle('resumo',!detIni);detalhe.checked=detIni;
+try{localStorage.removeItem('detalhe')}catch(e){} // limpa a escolha salva por versões anteriores
+document.body.classList.add('resumo');detalhe.checked=false;
 detalhe.onchange=()=>aplicarDetalhe(detalhe.checked);
 document.querySelectorAll('.mais-det').forEach(b=>b.onclick=()=>{aplicarDetalhe(true);window.scrollBy({top:200,behavior:'smooth'})});
 
