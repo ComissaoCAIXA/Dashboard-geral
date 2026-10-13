@@ -110,6 +110,13 @@ tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
         <div class="acoes"><button class="btn" type="submit" id="bLogin">Enviar link de acesso</button></div>
       </form>
       <div id="loginMsg"></div>
+      <form id="fCodigo" autocomplete="off" hidden>
+        <label class="rot" for="codigo">Ou digite o código que veio no e-mail</label>
+        <p class="note" style="margin:0 0 6px">Útil se o link abrir em outro aparelho ou navegador.</p>
+        <div class="linha"><input type="text" id="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456" style="font:600 18px ui-monospace,Consolas,monospace;letter-spacing:.2em">
+          <button class="btn" type="submit" id="bCodigo">Entrar</button></div>
+      </form>
+      <div id="codigoMsg"></div>
     </div>
   </section>
 
@@ -126,6 +133,7 @@ tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
   <section id="vArea" hidden>
     <div class="tabs" role="tablist">
       <button data-v="pend" aria-selected="true">Pedidos pendentes<b id="nPend" hidden></b></button>
+      <button data-v="msgs">Mensagens<b id="nMsgs" hidden></b></button>
       <button data-v="grupo">Grupo de WhatsApp</button>
       <button data-v="aprov">Aprovados</button>
       <button data-v="hist">Histórico</button>
@@ -137,6 +145,14 @@ tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
         <button class="btn sec" type="button" id="recarregar">Atualizar</button>
       </div>
       <div id="listaPend"></div>
+    </div>
+
+    <div id="pMsgs" hidden>
+      <div class="linha" style="justify-content:space-between;align-items:center;margin-bottom:10px">
+        <p class="note" style="margin:0">Mensagens do "Fale com a comissão". Cada uma também chega no e-mail da comissão: responda por lá e marque aqui como respondida.</p>
+        <select id="mFiltro" style="width:auto"><option value="Nova">Não respondidas</option><option value="Respondida">Respondidas</option><option value="">Todas</option></select>
+      </div>
+      <div id="listaMsgs"></div>
     </div>
 
     <div id="pGrupo" hidden>
@@ -200,7 +216,19 @@ $('fLogin').onsubmit=async e=>{e.preventDefault();const email=$('email').value.t
   const {error}=await SB.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+location.pathname}});
   $('bLogin').disabled=false;
   if(error)msg($('loginMsg'),'erro','Não foi possível enviar o link: '+error.message);
-  else msg($('loginMsg'),'ok','Pronto! Se o e-mail estiver cadastrado, o link chega em instantes. Abra-o neste mesmo navegador. Confira também o spam.');
+  else{msg($('loginMsg'),'ok','Pronto! O e-mail chega em instantes (confira também o spam). Clique no link ou digite abaixo o código que veio junto.');
+    $('fCodigo').hidden=false;$('codigo').focus()}
+};
+// Entrar com o código do e-mail (o mesmo e-mail traz o link e o código)
+$('fCodigo').onsubmit=async e=>{e.preventDefault();
+  const email=$('email').value.trim().toLowerCase(),token=$('codigo').value.replace(/\D/g,'');
+  if(token.length<6){msg($('codigoMsg'),'erro','Digite o código de números que veio no e-mail.');return}
+  $('bCodigo').disabled=true;
+  let {error}=await SB.auth.verifyOtp({email,token,type:'email'});
+  if(error)({error}=await SB.auth.verifyOtp({email,token,type:'signup'})); // primeiro acesso
+  $('bCodigo').disabled=false;
+  if(error)msg($('codigoMsg'),'erro','Código inválido ou vencido. Peça um novo link e use o código do e-mail mais recente.');
+  else $('codigoMsg').innerHTML='';
 };
 $('sair').onclick=async()=>{await SB.auth.signOut();location.replace(location.pathname)};
 
@@ -210,17 +238,52 @@ async function entrar(sessao){
   const {data,error}=await SB.rpc('comissao_eu');
   if(error||!data||!data.ok){$('negEmail').textContent=sessao.user.email;mostrar('vNegado');return}
   if(data.nome)$('quem').textContent=data.nome+' · '+data.email;
-  mostrar('vArea');carregarPend();
+  mostrar('vArea');carregarPend();contarMsgs();
 }
 SB.auth.onAuthStateChange((ev,sessao)=>{if(ev==='INITIAL_SESSION'||ev==='SIGNED_IN'||ev==='SIGNED_OUT')entrar(sessao)});
 
 /* ---------- Abas ---------- */
-const PAINEIS={pend:'pPend',grupo:'pGrupo',aprov:'pAprov',hist:'pHist'};
+const PAINEIS={pend:'pPend',msgs:'pMsgs',grupo:'pGrupo',aprov:'pAprov',hist:'pHist'};
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
   Object.entries(PAINEIS).forEach(([k,id])=>$(id).hidden=k!==b.dataset.v);
-  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();
+  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();if(b.dataset.v==='msgs')carregarMsgs();
 });
+
+/* ---------- Mensagens (Fale com a comissão) ---------- */
+async function contarMsgs(){
+  const {count}=await SB.from('mensagens').select('id',{count:'exact',head:true}).eq('status','Nova');
+  $('nMsgs').hidden=!count;$('nMsgs').textContent=count||'';
+}
+async function carregarMsgs(){
+  const el=$('listaMsgs');el.innerHTML='<p class="vazio">Carregando…</p>';
+  let q=SB.from('mensagens').select('*').order('criado_em',{ascending:false}).limit(100);
+  if($('mFiltro').value)q=q.eq('status',$('mFiltro').value);
+  const {data,error}=await q;if(error){msg(el,'erro',error.message);return}
+  contarMsgs();
+  if(!data.length){el.innerHTML=`<p class="vazio">${$('mFiltro').value==='Nova'?'Nenhuma mensagem esperando resposta. 🎉':'Nenhuma mensagem.'}</p>`;return}
+  el.innerHTML=data.map(m=>{
+    const resp=`mailto:${encodeURIComponent(m.email)}?subject=${encodeURIComponent('Re: '+m.assunto)}`;
+    return `<div class="pedido" data-id="${m.id}">
+    <div class="topo"><span class="tipo">${esc(m.assunto)}</span><span class="quando">recebida em ${dhBR(m.criado_em)}</span><span class="pill ${m.status==='Respondida'?'Aprovado':''}">${esc(m.status==='Nova'?'Não respondida':'Respondida')}</span></div>
+    <div class="nome">${esc(m.nome)}</div>
+    <p style="margin:0 0 6px"><a href="${resp}">${esc(m.email)}</a></p>
+    <div class="obs">${esc(m.mensagem)}</div>
+    ${m.status==='Respondida'?`<p class="note">Marcada como respondida por ${esc(m.respondida_por||'–')} em ${dhBR(m.respondida_em)}.</p>`:''}
+    ${!m.aviso_enviado&&m.status==='Nova'?`<div class="alerta">⚠ O aviso desta mensagem não chegou ao e-mail da comissão${m.aviso_erro?` (${esc(m.aviso_erro)})`:''}. Responda pelo botão abaixo.</div>`:''}
+    <div class="acoes"><button class="btn nao" data-a="apagar">Apagar</button>
+      ${m.status==='Nova'?`<a class="btn sec" style="text-decoration:none" href="${resp}">Responder por e-mail</a><button class="btn ok" data-a="Respondida">Marcar como respondida</button>`:'<button class="btn sec" data-a="Nova">Voltar para não respondida</button>'}</div>
+    <div class="ret"></div></div>`}).join('');
+  el.querySelectorAll('button[data-a]').forEach(b=>b.onclick=async()=>{
+    const card=b.closest('.pedido'),a=b.dataset.a;
+    if(a==='apagar'&&!confirm('Apagar esta mensagem de vez? Não dá para desfazer.'))return;
+    card.querySelectorAll('button').forEach(x=>x.disabled=true);
+    const {data,error}=await SB.rpc('comissao_mensagem',{p_id:+card.dataset.id,p_acao:a});
+    if(error||!data.ok){msg(card.querySelector('.ret'),'erro',error?error.message:data.erro);card.querySelectorAll('button').forEach(x=>x.disabled=false);return}
+    carregarMsgs();
+  });
+}
+$('mFiltro').onchange=carregarMsgs;
 
 /* ---------- Pendentes ---------- */
 async function carregarPend(){

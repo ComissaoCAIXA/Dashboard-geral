@@ -1,27 +1,38 @@
 <!-- Modelo "Magic Link" do Supabase (Authentication > Emails > Templates > Magic Link)
-     Assunto: Seu acesso à área da comissão · Aprovados CAIXA 2026 -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f2;padding:32px 12px;font-family:Segoe UI,Helvetica,Arial,sans-serif;color:#0b0b0b">
+     Assunto: Seu acesso à área da comissão · Aprovados CAIXA 2026
+     Traz o link e o código: o código serve quando o link abre em outro aparelho ou navegador. -->
+<div style="display:none;max-height:0;overflow:hidden;opacity:0">Seu link e código para entrar na área da comissão. Válidos por 1 hora.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#f4f4f2" style="background:#f4f4f2;padding:32px 12px;font-family:Segoe UI,Helvetica,Arial,sans-serif;color:#0b0b0b">
   <tr><td align="center">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:1px solid #e1e0d9;border-radius:8px">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="max-width:520px;background:#ffffff;border:1px solid #e1e0d9;border-radius:8px">
       <tr><td style="padding:24px 28px 8px">
         <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-          <td style="width:36px;height:36px;background:#2a78d6;border-radius:8px;color:#ffffff;font-weight:700;font-size:16px;text-align:center;vertical-align:middle">C</td>
+          <td width="36" height="36" bgcolor="#2a78d6" style="width:36px;height:36px;background:#2a78d6;border-radius:8px;color:#ffffff;font-weight:700;font-size:16px;text-align:center;vertical-align:middle">C</td>
           <td style="padding-left:12px">
             <div style="font-size:16px;font-weight:700">Área da comissão</div>
-            <div style="font-size:12px;color:#6b6a66">Aprovados · Concurso CAIXA 2026</div>
+            <div style="font-size:12px;color:#6b6a66">Comissão de Aprovados · Concurso CAIXA 2026</div>
           </td>
         </tr></table>
       </td></tr>
       <tr><td style="padding:16px 28px 0;font-size:15px;line-height:1.55">
         <p style="margin:0 0 12px">Olá!</p>
-        <p style="margin:0 0 20px">Recebemos um pedido para entrar na área da comissão com o e-mail <b>{{ .Email }}</b>. Clique no botão abaixo para acessar:</p>
+        <p style="margin:0 0 20px">Recebemos um pedido para entrar na área da comissão com o e-mail <b>{{ .Email }}</b>. Clique no botão para entrar:</p>
       </td></tr>
-      <tr><td align="center" style="padding:0 28px 20px">
+      <tr><td align="center" style="padding:0 28px 22px">
         <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#2a78d6;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:12px 28px;border-radius:6px">Entrar na área da comissão</a>
       </td></tr>
+      <tr><td style="padding:0 28px 22px">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#f4f4f2" style="background:#f4f4f2;border-radius:6px">
+          <tr><td style="padding:14px 16px;font-size:13px;color:#52514e;line-height:1.5">
+            Abriu este e-mail no celular, mas quer entrar pelo computador? Digite este código na tela de entrada:
+            <div style="font:700 26px Consolas,Menlo,monospace;letter-spacing:6px;color:#0b0b0b;margin-top:8px">{{ .Token }}</div>
+          </td></tr>
+        </table>
+      </td></tr>
       <tr><td style="padding:0 28px 24px;font-size:13px;line-height:1.55;color:#52514e">
-        <p style="margin:0 0 10px">O link vale por pouco tempo e só pode ser usado uma vez. Abra-o no mesmo navegador em que você pediu o acesso.</p>
-        <p style="margin:0">Se não foi você, pode ignorar este e-mail: ninguém entra sem clicar no link.</p>
+        <p style="margin:0 0 10px">O link e o código valem por <b>1 hora</b> e só podem ser usados uma vez. Pediu de novo? Use sempre o e-mail mais recente.</p>
+        <p style="margin:0 0 10px">Se não foi você, ignore este e-mail: ninguém entra sem o link ou o código.</p>
+        <p style="margin:0;font-size:12px;color:#898781">O botão não funciona? Copie e cole este endereço no navegador:<br><span style="word-break:break-all">{{ .ConfirmationURL }}</span></p>
       </td></tr>
       <tr><td style="padding:14px 28px;border-top:1px solid #e1e0d9;font-size:12px;color:#898781">
         Comissão de Aprovados CAIXA 2026 · <a href="https://comissaocaixa.github.io/Dashboard-geral/" style="color:#898781">painel dos aprovados</a>

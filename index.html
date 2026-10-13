@@ -285,8 +285,8 @@ body.aba-form .filters,body.aba-form .det-tgl,body.aba-form .filtbtn,body.aba-fo
 .campo{margin-top:14px}
 .campo label,.campo .rot{display:block;font-weight:600;font-size:13.5px;margin-bottom:6px}
 .campo small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
-.campo input[type=text],.campo input[type=date],.campo textarea,.linha input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink)}
-.campo input:focus,.campo textarea:focus,.linha input:focus{outline:2px solid var(--s1);outline-offset:-1px}
+.campo input[type=text],.campo input[type=email],.campo input[type=date],.campo select,.campo textarea,.linha input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink)}
+.campo input:focus,.campo select:focus,.campo textarea:focus,.linha input:focus{outline:2px solid var(--s1);outline-offset:-1px}
 .campo textarea{min-height:84px;resize:vertical}
 .btns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
 .btn{font:inherit;font-weight:600;font-size:14px;padding:10px 18px;border-radius:6px;border:1px solid var(--s1);background:var(--s1);color:#fff;cursor:pointer}
@@ -584,12 +584,27 @@ body.sobrio .tw tr{border-radius:6px}
         </form>
         <div id="protRes"></div>
       </div>
+      <p class="note privacidade">Dúvida que não é sobre convocação ou grupo? Use o <a href="#contato" class="ir-contato">Fale com a comissão</a>.</p>
       <p class="note privacidade">Privacidade: o formulário não pede e-mail nem documentos. Ele usa o número de inscrição para localizar seus dados (os mesmos do painel). O WhatsApp só é pedido para entrar no grupo e é apagado automaticamente após a análise, ou em no máximo 24 horas. Se você não quiser seu nome completo no painel, peça à comissão.</p>
     </div>
   </section>
 
+  <!-- Fale com a comissão -->
+  <section id="tab-contato" hidden>
+    <div class="form-wrap">
+      <button class="voltar-painel" type="button" id="voltarPainel2"><span data-i="voltar"></span>Voltar ao painel</button>
+      <div class="card">
+        <div class="hd"><div><h2>Fale com a comissão</h2>
+          <p class="note">Dúvidas, sugestões, imprensa ou qualquer outro assunto. A mensagem chega no e-mail da Comissão de Aprovados e a resposta vai para o e-mail que você informar.</p></div></div>
+        <div id="contatoCorpo"></div>
+      </div>
+      <p class="note privacidade">Para informar convocação, posse ou desistência, ou para entrar no grupo de WhatsApp, use os botões no topo da página: assim o pedido já chega no lugar certo.<br>
+        Privacidade: seu nome, e-mail e mensagem ficam visíveis apenas para os membros da comissão, que os usam só para responder a você.</p>
+    </div>
+  </section>
+
   <footer>
-    <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026. · <a class="acesso-comissao" href="comissao.html">Acesso da comissão</a></span></div></div>
+    <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026. · <a class="acesso-comissao ir-contato" href="#contato">Fale com a comissão</a> · <a class="acesso-comissao" href="comissao.html">Acesso da comissão</a></span></div></div>
     <div id="foot"></div>
   </footer>
 </main>
@@ -1106,9 +1121,10 @@ function render(){
   d3.select('#tab-panorama').attr('hidden',S.tab==='panorama'?null:true);
   d3.select('#tab-conv').attr('hidden',S.tab==='conv'?null:true);
   d3.select('#tab-form').attr('hidden',S.tab==='form'?null:true);
-  document.body.classList.toggle('aba-form',S.tab==='form');
+  d3.select('#tab-contato').attr('hidden',S.tab==='contato'?null:true);
+  document.body.classList.toggle('aba-form',S.tab==='form'||S.tab==='contato');
   document.querySelectorAll('.acao[data-acao]').forEach(b=>b.setAttribute('aria-pressed',S.tab==='form'&&F.intencao===b.dataset.acao));
-  if(S.tab==='form'){hideTip();return} // o formulário tem o próprio controle (não é redesenhado a cada atualização)
+  if(S.tab==='form'||S.tab==='contato'){hideTip();return} // os formulários têm o próprio controle (não são redesenhados a cada atualização)
   const chip=d3.select('#ufChip');
   if(S.uf){const nome=(GEO.find(f=>f.properties.SIGLA===S.uf)||{properties:{}}).properties.Estado||S.uf;
     chip.attr('hidden',null).html(`Estado: ${nome}<button aria-label="Limpar estado">×</button>`);chip.select('button').on('click',()=>{S.uf='';render()})}
@@ -1131,14 +1147,23 @@ d3.selectAll('.tabs button').on('click',function(){
 // Links diretos: .../Dashboard-geral/#informar  e  .../Dashboard-geral/#grupo
 let abaAnterior='panorama';
 function abrirForm(intencao){
-  if(S.tab!=='form')abaAnterior=S.tab;
+  if(S.tab!=='form'&&S.tab!=='contato')abaAnterior=S.tab;
   S.tab='form';
   Object.assign(F,{passo:1,insc:F.intencao===intencao?F.insc:'',pessoa:null,tipo:null,tit:'',data:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',intencao});
   history.replaceState(null,'',intencao==='grupo'?'#grupo':'#informar');
   render();desenharForm();window.scrollTo({top:0});
 }
 document.querySelectorAll('.acao[data-acao]').forEach(b=>b.onclick=()=>abrirForm(b.dataset.acao));
-document.getElementById('voltarPainel').onclick=()=>{S.tab=abaAnterior;history.replaceState(null,'',location.pathname+location.search);render()};
+const voltarAoPainel=()=>{S.tab=abaAnterior;history.replaceState(null,'',location.pathname+location.search);render()};
+document.getElementById('voltarPainel').onclick=voltarAoPainel;
+document.getElementById('voltarPainel2').onclick=voltarAoPainel;
+// "Fale com a comissão" (link no rodapé; link direto: .../Dashboard-geral/#contato)
+function abrirContato(){
+  if(S.tab!=='form'&&S.tab!=='contato')abaAnterior=S.tab;
+  S.tab='contato';history.replaceState(null,'','#contato');
+  render();desenharContato();window.scrollTo({top:0});
+}
+document.querySelectorAll('.ir-contato').forEach(a=>a.onclick=e=>{e.preventDefault();abrirContato()});
 d3.selectAll('#m1seg button').on('click',function(){S.m1=this.dataset.v;render()});
 d3.selectAll('#m2seg button').on('click',function(){S.m2=this.dataset.v;render()});
 d3.selectAll('#t2seg button').on('click',function(){S.t2=this.dataset.v;S.p2=0;render()});
@@ -1311,6 +1336,53 @@ document.getElementById('fProt').onsubmit=async e=>{e.preventDefault();const out
   }catch(err){out.innerHTML=`<div class="erro" role="alert">${ico('flag')}<span>${esc(err.message)}</span></div>`}
 };
 
+/* ---------- Fale com a comissão ---------- */
+// Grava a mensagem no banco (enviar_mensagem) e pede o aviso por e-mail à função avisar-mensagem.
+// O campo "site" fica invisível: só robôs o preenchem.
+const ASSUNTOS=['Dúvida sobre o painel','Dúvida sobre o concurso ou a convocação','Correção de dados no painel','Sugestão','Imprensa','Outro assunto'];
+const C={nome:'',email:'',assunto:'',msg:'',ok:false,erro:'',enviando:false,feito:false,aberto:0};
+function desenharContato(){
+  const el=document.getElementById('contatoCorpo');
+  if(C.feito){
+    el.innerHTML=`<p class="ok-titulo">Mensagem enviada!</p>
+      <div class="aviso-form">A comissão recebeu sua mensagem e vai responder no e-mail <b>${esc(C.email)}</b>. Confira também a caixa de spam nos próximos dias.</div>
+      <div class="btns"><button class="btn sec" type="button" id="cNova">Enviar outra mensagem</button></div>`;
+    document.getElementById('cNova').onclick=()=>{Object.assign(C,{assunto:'',msg:'',ok:false,feito:false});desenharContato()};
+    return;
+  }
+  if(!C.aberto)C.aberto=Date.now();
+  el.innerHTML=`<form id="fCont" autocomplete="on" novalidate>
+    <div class="campo"><label for="cNome">Seu nome</label><input type="text" id="cNome" maxlength="120" autocomplete="name" value="${esc(C.nome)}"></div>
+    <div class="campo"><label for="cEmail">Seu e-mail</label><input type="email" id="cEmail" maxlength="200" autocomplete="email" inputmode="email" placeholder="nome@exemplo.com" value="${esc(C.email)}">
+      <small>A resposta da comissão vai para este e-mail.</small></div>
+    <div class="campo"><label for="cAss">Assunto</label><select id="cAss"><option value="">Escolha…</option>${ASSUNTOS.map(a=>`<option ${a===C.assunto?'selected':''}>${a}</option>`).join('')}</select></div>
+    <div class="campo"><label for="cMsg">Mensagem</label><textarea id="cMsg" maxlength="4000" rows="6">${esc(C.msg)}</textarea></div>
+    <div class="campo" style="position:absolute;left:-9999px" aria-hidden="true"><label for="cSite">Não preencha</label><input type="text" id="cSite" tabindex="-1" autocomplete="off"></div>
+    <label class="check"><input type="checkbox" id="cOk" ${C.ok?'checked':''}><span>Autorizo a comissão a usar meu nome e e-mail apenas para responder a esta mensagem.</span></label>
+    ${C.erro?`<div class="erro" role="alert">${ico('flag')}<span>${esc(C.erro)}</span></div>`:''}
+    <div class="btns"><button class="btn" type="submit" ${C.enviando?'disabled':''}>${C.enviando?'Enviando…':'Enviar mensagem'}</button></div></form>`;
+  const g=id=>document.getElementById(id);
+  const guardar=()=>Object.assign(C,{nome:g('cNome').value,email:g('cEmail').value,assunto:g('cAss').value,msg:g('cMsg').value,ok:g('cOk').checked});
+  g('fCont').onsubmit=async e=>{e.preventDefault();guardar();C.erro='';
+    if(C.nome.trim().length<2)C.erro='Informe seu nome.';
+    else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(C.email.trim()))C.erro='Confira o e-mail: é por ele que a comissão vai responder.';
+    else if(!C.assunto)C.erro='Escolha o assunto.';
+    else if(C.msg.trim().length<10)C.erro='Escreva a mensagem (pelo menos 10 caracteres).';
+    else if(!C.ok)C.erro='Marque a autorização para enviar.';
+    if(C.erro)return desenharContato();
+    // robô: finge que deu certo e não grava nada
+    if(g('cSite').value||Date.now()-C.aberto<3000){C.feito=true;return desenharContato()}
+    C.enviando=true;desenharContato();
+    try{const r=await rpc('enviar_mensagem',{p_nome:C.nome,p_email:C.email,p_assunto:C.assunto,p_mensagem:C.msg});
+      if(!r.ok)C.erro=r.erro;
+      else{C.feito=true;
+        // aviso por e-mail para a comissão (se falhar, a mensagem continua salva na área da comissão)
+        fetch(`${DB.url}/functions/v1/avisar-mensagem`,{method:'POST',headers:{apikey:DB.chave,'Content-Type':'application/json'},body:JSON.stringify({id:r.id}),keepalive:true}).catch(()=>{});
+      }}
+    catch(err){C.erro=err.message}
+    C.enviando=false;desenharContato()};
+}
+
 /* ---------- Visão objetiva × detalhada ---------- */
 // O painel sempre abre na visão objetiva (chave desligada); a escolha não fica salva.
 const detalhe=document.getElementById('detalhe');
@@ -1394,8 +1466,10 @@ function rodape(quando,copia){
     rodape(quando,copia);
     // Links diretos: #solicitacoes (ou o antigo #informar) e #grupo (já abre o pedido de entrada no grupo)
     if(['#informar','#solicitacoes','#grupo'].includes(location.hash)){S.tab='form';F.intencao=location.hash==='#grupo'?'grupo':'convocacao'}
+    if(location.hash==='#contato')S.tab='contato';
     render();
     if(S.tab==='form')iniciarForm();
+    if(S.tab==='contato')desenharContato();
     // Atualização automática com a página aberta
     if(!copia){
       let ass=assinatura(DATA);

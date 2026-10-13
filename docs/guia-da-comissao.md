@@ -4,8 +4,14 @@
 
 Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
 
-- **Entrar:** digite seu e-mail e clique no link que chega por e-mail (sem senha).
+- **Entrar:** digite seu e-mail e clique no link que chega por e-mail (sem senha), ou digite o
+  código de números que vem no mesmo e-mail (útil quando o link abre em outro aparelho).
   Só entra quem está na tabela `comissao` com `ativo` marcado.
+- **Mensagens:** o que chega pelo **Fale com a comissão** (link no rodapé do painel, ou
+  `.../Dashboard-geral/#contato`). Cada mensagem também chega no e-mail da comissão; use
+  **Responder** no e-mail (a resposta vai direto para a pessoa) e depois clique em
+  **Marcar como respondida**. Se aparecer o alerta "o aviso não chegou ao e-mail", responda pelo botão
+  **Responder por e-mail** da própria mensagem. Limite: 3 mensagens por visitante a cada hora.
 - **Pedidos pendentes:** cada pedido mostra protocolo, o que a pessoa informou, os dados completos
   dela e alertas automáticos. Confira pelo WhatsApp e clique em **Aprovar** ou **Não aprovar**
   (a resposta opcional aparece para o aprovado na consulta do protocolo).
@@ -39,6 +45,7 @@ Acesse em supabase.com/dashboard → projeto → **Table Editor** (ícone de tab
 | `aprovados` | A base oficial: nome, inscrição, cargo, UF, cota, nota, situação e convocação | O site mostra nome (ou iniciais, se `ocultar_nome`), cargo, UF, cota, nota e situação. Inscrição e observação ficam só com a comissão |
 | `envios` | O que chega pelo formulário do site | Só a comissão |
 | `historico` | Registro automático de toda inclusão, alteração e exclusão | Só a comissão |
+| `mensagens` | Mensagens do Fale com a comissão (nome, e-mail, assunto, texto) | Só a comissão |
 
 ## Campos da tabela `aprovados`
 
@@ -107,6 +114,20 @@ visitante (20 buscas a cada 10 min e 5 envios por hora).
 Table Editor → `historico`. Cada linha mostra a tabela, a ação, os dados antes e depois e
 quando foi feito. Alterações feitas pelo painel do Supabase aparecem como `postgres`;
 as que vêm do formulário aparecem como `formulário`.
+
+## E-mail (SMTP)
+
+Os e-mails saem pelo Gmail da comissão, com uma **senha de app** (myaccount.google.com/apppasswords,
+exige verificação em duas etapas). A senha é colada em dois lugares do Supabase e em nenhum outro:
+
+1. **Authentication → Emails → SMTP Settings** (e-mails de login): host `smtp.gmail.com`, porta `465`,
+   usuário = Gmail da comissão, senha = senha de app.
+2. **Edge Functions → Secrets** (avisos do Fale com a comissão): `SMTP_USER` = Gmail da comissão,
+   `SMTP_PASS` = senha de app. Opcional: `CONTATO_PARA` para receber os avisos em outro e-mail.
+
+Os modelos dos e-mails de login ficam em `docs/emails/` (colar em **Authentication → Emails → Templates**:
+`login.html` em *Magic Link* e `primeiro-acesso.html` em *Confirm signup*; o assunto está no comentário
+do topo de cada arquivo). Se trocar a senha do Gmail ou revogar a senha de app, atualize os dois lugares.
 
 ## Cuidados
 
