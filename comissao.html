@@ -17,7 +17,7 @@
 html{scrollbar-gutter:stable}
 @supports not (scrollbar-gutter:stable){html{overflow-y:scroll}}
 body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:980px;margin:0 auto;padding:24px 16px 56px}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 56px}
 header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
 header h1{font-size:21px;margin:0}
 header .sub{color:var(--ink2);margin:2px 0 0;font-size:13px}
@@ -61,7 +61,7 @@ th{color:var(--ink2);font-weight:600}
 tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
 .tw{overflow-x:auto}
 .vazio{color:var(--muted);text-align:center;padding:24px}
-.pill{display:inline-block;padding:1px 7px;border-radius:4px;font-size:12px;font-weight:600;background:var(--empty);color:var(--ink2)}
+.pill{display:inline-block;white-space:nowrap;padding:1px 7px;border-radius:4px;font-size:12px;font-weight:600;background:var(--empty);color:var(--ink2)}
 .pill.Convocado,.pill.Aprovado{background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--good)}
 .pill.Desistente,.pill.Rejeitado{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
 .pill.Empossado{background:var(--wash);color:var(--s1)}
