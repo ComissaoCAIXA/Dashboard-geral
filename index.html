@@ -273,7 +273,24 @@ body.sobrio header .tema .knob,header .tema .knob{background:none;width:auto;hei
   .acoes-topo{order:3;width:100%}
   .acao{flex:1;justify-content:center;padding:9px 8px}
 }
-@media (max-width:620px){.acao{font-size:12.5px;white-space:normal;text-align:left;line-height:1.25}}
+/* Celular: um único botão "Solicitações" abre a lista de opções */
+.menu-acoes{display:none;position:relative;flex:1}
+.menu-acoes>.acao{width:100%}
+.menu-acoes .seta{margin-left:auto;display:inline-flex;transition:transform .15s}
+.menu-acoes .seta svg{color:var(--ink2)}
+#menuBtn[aria-expanded="true"] .seta{transform:rotate(180deg)}
+.menu-lista{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:30;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px;box-shadow:0 8px 24px rgba(0,0,0,.14)}
+.menu-lista button{display:flex;align-items:center;gap:12px;width:100%;font:inherit;text-align:left;color:var(--ink);background:none;border:0;border-radius:6px;padding:11px 12px;cursor:pointer}
+.menu-lista button:hover,.menu-lista button:focus-visible{background:var(--wash);outline:none}
+.menu-lista button+button{border-top:1px solid var(--grid);border-radius:0}
+.menu-lista svg{width:18px;height:18px;flex:none;color:var(--s1)}
+.menu-lista b{display:block;font-size:14px;font-weight:600}
+.menu-lista small{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+@media (max-width:620px){
+  .acoes-topo>.acao{display:none}
+  .menu-acoes{display:block}
+  .menu-acoes>.acao{justify-content:flex-start;padding:9px 12px}
+}
 
 /* ---------- Formulário "Informar convocação" ---------- */
 body.aba-form .filters,body.aba-form .det-tgl,body.aba-form .filtbtn,body.aba-form #ufChip{display:none!important}
@@ -461,6 +478,15 @@ body.sobrio .tw tr{border-radius:6px}
     <div class="acoes-topo">
       <button class="acao" type="button" data-acao="convocacao"><span data-i="edit"></span><span>Informar convocação</span></button>
       <button class="acao" type="button" data-acao="grupo"><span data-i="chat"></span><span>Participar do grupo de WhatsApp</span></button>
+      <!-- No celular, os botões acima viram este menu -->
+      <div class="menu-acoes">
+        <button class="acao" type="button" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="menuLista"><span data-i="menu"></span><span>Solicitações</span><span class="seta" data-i="chev"></span></button>
+        <div class="menu-lista" id="menuLista" role="menu" hidden>
+          <button type="button" role="menuitem" data-ir="convocacao"><span data-i="edit"></span><span><b>Informar convocação</b><small>Convocação, posse ou desistência</small></span></button>
+          <button type="button" role="menuitem" data-ir="grupo"><span data-i="chat"></span><span><b>Participar do grupo de WhatsApp</b><small>Grupo exclusivo dos aprovados</small></span></button>
+          <button type="button" role="menuitem" data-ir="contato"><span data-i="mail"></span><span><b>Fale com a comissão</b><small>Dúvidas, sugestões e imprensa</small></span></button>
+        </div>
+      </div>
       <button class="tema" id="tema" type="button"><span class="knob"></span><span class="txt"></span></button>
     </div>
   </header>
@@ -680,7 +706,10 @@ const ICONS={
   chat:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.9-.9L3 20l1.1-4.7A8.4 8.4 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z"/>',
   voltar:'<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>',
   edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
-  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'
+  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+  chev:'<path d="m6 9 6 6 6-6"/>',
+  mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>'
 };
 const ico=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
 document.querySelectorAll('[data-i]').forEach(e=>e.innerHTML=ico(e.dataset.i));
@@ -1164,6 +1193,13 @@ function abrirContato(){
   render();desenharContato();window.scrollTo({top:0});
 }
 document.querySelectorAll('.ir-contato').forEach(a=>a.onclick=e=>{e.preventDefault();abrirContato()});
+// Menu "Solicitações" (celular)
+const menuBtn=document.getElementById('menuBtn'),menuLista=document.getElementById('menuLista');
+function menu(aberto){menuLista.hidden=!aberto;menuBtn.setAttribute('aria-expanded',aberto)}
+menuBtn.onclick=e=>{e.stopPropagation();menu(menuLista.hidden);if(!menuLista.hidden)menuLista.querySelector('button').focus()};
+menuLista.querySelectorAll('button[data-ir]').forEach(b=>b.onclick=()=>{menu(false);b.dataset.ir==='contato'?abrirContato():abrirForm(b.dataset.ir)});
+document.addEventListener('click',e=>{if(!menuLista.hidden&&!e.target.closest('.menu-acoes'))menu(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!menuLista.hidden){menu(false);menuBtn.focus()}});
 d3.selectAll('#m1seg button').on('click',function(){S.m1=this.dataset.v;render()});
 d3.selectAll('#m2seg button').on('click',function(){S.m2=this.dataset.v;render()});
 d3.selectAll('#t2seg button').on('click',function(){S.t2=this.dataset.v;S.p2=0;render()});
