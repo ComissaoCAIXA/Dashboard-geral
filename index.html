@@ -249,6 +249,58 @@ footer .autor .ic svg{width:18px;height:18px}
 .exreal ul{margin:6px 0 0;padding-left:18px}
 .exreal li{margin:3px 0}
 
+/* ---------- Formulário "Informar convocação" ---------- */
+body.aba-form .filters,body.aba-form .det-tgl,body.aba-form .filtbtn,body.aba-form #ufChip{display:none!important}
+.form-wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.passos{display:flex;gap:6px;list-style:none;padding:0;margin:4px 0 18px}
+.passos li{flex:1;font-size:12px;color:var(--muted);border-top:3px solid var(--grid);padding-top:6px}
+.passos li.feito{border-color:var(--s1);color:var(--ink2)}
+.passos li.agora{border-color:var(--s1);color:var(--ink);font-weight:650}
+.campo{margin-top:14px}
+.campo label,.campo .rot{display:block;font-weight:600;font-size:13.5px;margin-bottom:6px}
+.campo small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.campo input[type=text],.campo input[type=date],.campo textarea,.linha input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink)}
+.campo input:focus,.campo textarea:focus,.linha input:focus{outline:2px solid var(--s1);outline-offset:-1px}
+.campo textarea{min-height:84px;resize:vertical}
+.btns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
+.btn{font:inherit;font-weight:600;font-size:14px;padding:10px 18px;border-radius:6px;border:1px solid var(--s1);background:var(--s1);color:#fff;cursor:pointer}
+.btn.sec{background:none;color:var(--ink2);border-color:var(--border)}
+.btn.sec:hover{color:var(--ink);border-color:var(--ink2)}
+.btn:disabled{opacity:.5;cursor:default}
+.erro{display:flex;gap:8px;align-items:flex-start;color:var(--bad);font-size:13.5px;margin-top:12px}
+.aviso-form{background:var(--wash);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:13.5px;color:var(--ink2);margin-top:12px}
+.pessoa{border:1px solid var(--border);border-radius:8px;padding:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px;margin:0}
+.pessoa .quem{grid-column:1/-1;font-size:24px;font-weight:700;letter-spacing:.02em}
+.pessoa dt{font-size:12px;color:var(--muted)}
+.pessoa dd{margin:2px 0 0;font-weight:600}
+.opcoes{display:grid;gap:8px}
+.opcao{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer}
+.opcao:hover{border-color:var(--ink2)}
+.opcao:has(input:checked){border-color:var(--s1);background:var(--wash)}
+.opcao input{margin-top:3px;accent-color:var(--s1)}
+.opcao b{display:block;font-size:14.5px}
+.opcao small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink2);margin-top:16px;cursor:pointer}
+.check input{margin-top:3px;accent-color:var(--s1)}
+.protocolo{display:flex;align-items:center;justify-content:center;gap:12px;font:700 34px/1 ui-monospace,Consolas,monospace;letter-spacing:.08em;padding:20px;border:1px dashed var(--s1);border-radius:8px;margin:14px 0;color:var(--ink)}
+.protocolo button{font:600 12px system-ui,sans-serif;letter-spacing:0;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink2);cursor:pointer}
+.protocolo button svg{width:14px;height:14px}
+.ok-titulo{font-size:18px;font-weight:700;margin:0}
+.linha{display:flex;gap:8px}
+.linha input{text-transform:uppercase;letter-spacing:.06em}
+.status{display:inline-block;padding:2px 10px;border-radius:4px;font-weight:700;font-size:13px}
+.status.Pendente{color:#8a5a00;background:color-mix(in srgb,var(--s5) 22%,transparent)}
+.status.Aprovado{color:var(--good);background:color-mix(in srgb,var(--good) 13%,transparent)}
+.status.Rejeitado{color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+:root[data-theme="dark"] .status.Pendente{color:#f1c25a}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .status.Pendente{color:#f1c25a}}
+.res-prot{margin-top:14px;border:1px solid var(--border);border-radius:8px;padding:14px}
+.res-prot dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:10px 0 0;font-size:13.5px}
+.res-prot dt{color:var(--muted)}
+.res-prot dd{margin:0}
+.privacidade{text-align:center;padding:0 8px}
+@media (max-width:620px){.pessoa{grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:14px}.pessoa .quem{font-size:20px}.protocolo{font-size:28px;flex-direction:column}.btns .btn{flex:1}}
+
 /* ---------- Ajuda ("?") ---------- */
 .ajuda{display:inline-grid;place-items:center;width:18px;height:18px;flex:none;margin-left:2px;padding:0;border-radius:50%;border:1.5px solid var(--muted);background:none;color:var(--muted);font:700 11px/1 system-ui,sans-serif;cursor:help;text-transform:none;letter-spacing:0;vertical-align:middle}
 .ajuda:hover,.ajuda:focus-visible{border-color:var(--s1);color:var(--s1);outline:none}
@@ -386,6 +438,7 @@ body.sobrio .tw tr{border-radius:6px}
     <div class="tabs" role="tablist">
       <button role="tab" data-tab="panorama" aria-selected="true"><span data-i="chart"></span>Panorama<span class="lg">e notas</span></button>
       <button role="tab" data-tab="conv" aria-selected="false"><span data-i="userCheck"></span>Convocações</button>
+      <button role="tab" data-tab="form" aria-selected="false"><span data-i="edit"></span>Informar<span class="lg">convocação</span></button>
     </div>
     <label class="tgl det-tgl" title="Mostra todas as análises: notas, cotas, regiões e destaques"><input type="checkbox" id="detalhe"><span class="trk"></span><span class="ti" data-i="layers"></span><span>Visão detalhada</span></label>
     <button class="filtbtn" id="filtbtn" type="button" aria-expanded="false"><span data-i="filter"></span>Filtros</button>
@@ -483,6 +536,27 @@ body.sobrio .tw tr{border-radius:6px}
     <button class="mais-det" type="button" data-resumo><span data-i="layers"></span>Ver análises detalhadas: andamento por região e cota, notas e destaques</button>
   </section>
 
+  <!-- ABA 3: formulário -->
+  <section id="tab-form" hidden>
+    <div class="form-wrap">
+      <div class="card">
+        <div class="hd"><div><h2>Informar convocação</h2>
+          <p class="note">Foi convocado(a), tomou posse ou desistiu da vaga? Informe aqui. A comissão confirma com você pelo grupo de WhatsApp dos aprovados antes de atualizar o painel.</p></div></div>
+        <ol class="passos" id="passos"><li>Inscrição</li><li>Confirmação</li><li>O que aconteceu</li><li>Protocolo</li></ol>
+        <div id="formCorpo"></div>
+      </div>
+      <div class="card">
+        <div class="hd"><div><h2>Acompanhar meu pedido</h2><p class="note">Digite o protocolo que você recebeu ao enviar o pedido.</p></div></div>
+        <form id="fProt" class="linha" autocomplete="off">
+          <input id="protIn" placeholder="Ex.: K7P-4QX" maxlength="7" aria-label="Protocolo" autocapitalize="characters">
+          <button class="btn" type="submit">Consultar</button>
+        </form>
+        <div id="protRes"></div>
+      </div>
+      <p class="note privacidade">Privacidade: o formulário não pede nome, e-mail, telefone ou documentos. Ele usa só o número de inscrição para localizar seus dados públicos (os mesmos do painel). A comprovação é feita pessoalmente com a comissão.</p>
+    </div>
+  </section>
+
   <footer>
     <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026.</span></div></div>
     <div id="foot"></div>
@@ -556,11 +630,13 @@ const ICONS={
   up:'<path d="m5 12 7-7 7 7M12 19V5"/>',
   down:'<path d="m19 12-7 7-7-7M12 5v14"/>',
   flat:'<path d="M5 12h14"/>',
-  filter:'<path d="M22 3H2l8 9.5V19l4 2v-8.5z"/>'
+  filter:'<path d="M22 3H2l8 9.5V19l4 2v-8.5z"/>',
+  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'
 };
 const ico=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
 document.querySelectorAll('[data-i]').forEach(e=>e.innerHTML=ico(e.dataset.i));
-const H2ICON=[['Maiores notas','trophy'],['cota','layers'],['Cotas','layers'],['Mapa','map'],['Estados','list'],['macrorregião','globe'],['Por cargo','briefcase'],['Andamento por cargo','briefcase'],['lista de origem','layers'],['Distribuição','bars'],['Notas','dots'],['Lista de aprovados','table'],['Quem foi','table']];
+const H2ICON=[['Informar convocação','edit'],['Acompanhar meu pedido','hourglass'],['Maiores notas','trophy'],['cota','layers'],['Cotas','layers'],['Mapa','map'],['Estados','list'],['macrorregião','globe'],['Por cargo','briefcase'],['Andamento por cargo','briefcase'],['lista de origem','layers'],['Distribuição','bars'],['Notas','dots'],['Lista de aprovados','table'],['Quem foi','table']];
 document.querySelectorAll('.card h2').forEach(h=>{const m=H2ICON.find(([t])=>h.textContent.includes(t));if(m)h.insertAdjacentHTML('afterbegin',`<span class="ic">${ico(m[1])}</span>`)});
 // Os títulos de ranking mudam de texto: guardar o rótulo num span
 ['rk1t','rk2t'].forEach(id=>{const h=document.getElementById(id);h.innerHTML=`<span class="ic">${ico('list')}</span><span class="t"></span>`});
@@ -994,6 +1070,9 @@ function render(){
   d3.selectAll('.tabs button').attr('aria-selected',function(){return this.dataset.tab===S.tab});
   d3.select('#tab-panorama').attr('hidden',S.tab==='panorama'?null:true);
   d3.select('#tab-conv').attr('hidden',S.tab==='conv'?null:true);
+  d3.select('#tab-form').attr('hidden',S.tab==='form'?null:true);
+  document.body.classList.toggle('aba-form',S.tab==='form');
+  if(S.tab==='form'){hideTip();return} // o formulário tem o próprio controle (não é redesenhado a cada atualização)
   const chip=d3.select('#ufChip');
   if(S.uf){const nome=(GEO.find(f=>f.properties.SIGLA===S.uf)||{properties:{}}).properties.Estado||S.uf;
     chip.attr('hidden',null).html(`Estado: ${nome}<button aria-label="Limpar estado">×</button>`);chip.select('button').on('click',()=>{S.uf='';render()})}
@@ -1007,7 +1086,12 @@ function render(){
   chipsCota();
   if(S.tab==='panorama')renderPanorama();else renderConv();
 }
-d3.selectAll('.tabs button').on('click',function(){S.tab=this.dataset.tab;render()});
+d3.selectAll('.tabs button').on('click',function(){
+  S.tab=this.dataset.tab;
+  // Link direto para o formulário: .../Dashboard-geral/#informar
+  history.replaceState(null,'',S.tab==='form'?'#informar':location.pathname+location.search);
+  render();if(S.tab==='form')iniciarForm();
+});
 d3.selectAll('#m1seg button').on('click',function(){S.m1=this.dataset.v;render()});
 d3.selectAll('#m2seg button').on('click',function(){S.m2=this.dataset.v;render()});
 d3.selectAll('#t2seg button').on('click',function(){S.t2=this.dataset.v;S.p2=0;render()});
@@ -1016,6 +1100,113 @@ fCargo.onchange=()=>{S.cargo=fCargo.value;S.p1=S.p2=0;render()};
 fMacro.onchange=()=>{S.macro=fMacro.value;S.uf='';S.p1=S.p2=0;render()};
 // Redesenha só quando a largura muda (no celular a barra do navegador muda a altura ao rolar)
 let rt,larg=innerWidth;addEventListener('resize',()=>{if(innerWidth===larg)return;larg=innerWidth;clearTimeout(rt);rt=setTimeout(()=>{if(DATA.length)render()},150)});
+
+/* ---------- Formulário "Informar convocação" ---------- */
+// Usa só as três funções públicas do banco (buscar_inscricao, enviar_pedido, consultar_protocolo).
+// Nada muda no painel até a comissão aprovar o pedido.
+async function rpc(fn,args){
+  const r=await fetch(`${DB.url}/rest/v1/rpc/${fn}`,{method:'POST',headers:{apikey:DB.chave,'Content-Type':'application/json'},body:JSON.stringify(args)});
+  const j=await r.json().catch(()=>null);
+  if(!r.ok)throw new Error((j&&j.message)||'Não foi possível falar com o banco agora. Tente de novo em instantes.');
+  return j;
+}
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dataBR=d=>d?new Date(d.length===10?d+'T12:00:00':d).toLocaleDateString('pt-BR'):'–';
+const hoje=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const NOME_COTA={AC:'Ampla concorrência',PcD:'Pessoas com deficiência',PN:'Pessoas negras',PI:'Pessoas indígenas',PQ:'Pessoas quilombolas'};
+// Opções conforme a situação atual da pessoa: [tipo enviado ao banco, título, explicação]
+const OPCOES={
+  Aguardando:[['Convocação','Fui convocado(a)','Recebi a convocação da CAIXA.'],['Desistência','Desisti da vaga','Não vou assumir o cargo.'],['Correção de dados','Algum dado meu está errado','Cargo, estado, cota, nota ou posição.']],
+  Convocado:[['Posse','Tomei posse','Já fui contratado(a) e assumi o cargo.'],['Convocação','A data da minha convocação está errada','Vou informar a data correta.'],['Desistência','Desisti da vaga','Não vou assumir o cargo.'],['Correção de dados','Outro dado meu está errado','Cargo, estado, cota, nota ou posição.']],
+  Empossado:[['Desistência','Desisti / saí do cargo',''],['Correção de dados','Algum dado meu está errado','']],
+  Desistente:[['Correção de dados','Algum dado meu está errado','Inclusive se a desistência foi registrada por engano.']]
+};
+OPCOES['Sem informação']=OPCOES.Aguardando;
+const ROTULO_DATA={Convocação:'Data da convocação',Posse:'Data da posse',Desistência:'Data da desistência (opcional)'};
+const F={passo:1,insc:'',pessoa:null,tipo:null,data:'',obs:'',ok:false,protocolo:'',erro:'',carregando:false};
+const erroHTML=()=>F.erro?`<div class="erro" role="alert">${ico('flag')}<span>${esc(F.erro)}</span></div>`:'';
+function passosHTML(){document.querySelectorAll('#passos li').forEach((li,i)=>{li.className=i+1<F.passo?'feito':i+1===F.passo?'agora':''})}
+function iniciarForm(){if(!document.getElementById('formCorpo').innerHTML)desenharForm()}
+function desenharForm(){
+  passosHTML();const el=document.getElementById('formCorpo');const p=F.pessoa;
+  if(F.passo===1){
+    el.innerHTML=`<form id="f1" autocomplete="off">
+      <div class="campo"><label for="insc">Número de inscrição</label>
+        <input type="text" id="insc" inputmode="numeric" placeholder="Ex.: 2500123456" value="${esc(F.insc)}" maxlength="14">
+        <small>Está no seu cartão de confirmação e no resultado publicado no Diário Oficial.</small></div>
+      ${erroHTML()}
+      <div class="btns"><button class="btn" type="submit" ${F.carregando?'disabled':''}>${F.carregando?'Buscando…':'Continuar'}</button></div></form>`;
+    const i=document.getElementById('insc');if(!F.carregando)i.focus();
+    document.getElementById('f1').onsubmit=async e=>{e.preventDefault();F.insc=i.value.trim();F.erro='';
+      if(!/\d{6,}/.test(F.insc.replace(/\D/g,''))){F.erro='Digite os números da sua inscrição.';return desenharForm()}
+      F.carregando=true;desenharForm();
+      try{const r=await rpc('buscar_inscricao',{p_inscricao:F.insc});
+        if(!r.ok){F.erro=r.erro}else{F.pessoa=r;F.passo=2}}
+      catch(err){F.erro=err.message}
+      F.carregando=false;desenharForm()};
+  }
+  else if(F.passo===2){
+    el.innerHTML=`<p class="rot" style="font-weight:600;margin:0 0 10px">É você?</p>
+      <dl class="pessoa"><dd class="quem">${esc(p.iniciais)}</dd>
+        <div><dt>Cargo</dt><dd>${esc(p.cargo)}</dd></div><div><dt>Polo (UF)</dt><dd>${esc(p.uf)}</dd></div>
+        <div><dt>Cota</dt><dd>${esc(p.cota)} · ${esc(NOME_COTA[p.cota]||'')}</dd></div><div><dt>Classificação</dt><dd>${p.posicao_uf}º no estado · ${esc(p.situacao)}</dd></div>
+        <div><dt>Situação no painel</dt><dd>${esc(p.convocacao)}${p.data_convocacao?' em '+dataBR(p.data_convocacao):''}</dd></div></dl>
+      ${p.pendente?`<div class="aviso-form">Já existe um pedido desta inscrição <b>em análise</b>. Aguarde a comissão entrar em contato pelo grupo de WhatsApp, ou acompanhe pelo protocolo no quadro abaixo.</div>`:''}
+      <div class="btns"><button class="btn sec" type="button" id="nao">Não sou eu</button>
+        ${p.pendente?'':'<button class="btn" type="button" id="sim">Sou eu, continuar</button>'}</div>`;
+    document.getElementById('nao').onclick=()=>{F.passo=1;F.pessoa=null;F.erro='';desenharForm()};
+    const s=document.getElementById('sim');if(s)s.onclick=()=>{F.passo=3;F.tipo=null;F.data='';F.obs='';F.ok=false;F.erro='';desenharForm()};
+  }
+  else if(F.passo===3){
+    const ops=OPCOES[p.convocacao]||OPCOES.Aguardando;
+    const precisaData=F.tipo==='Convocação'||F.tipo==='Posse', mostraData=F.tipo&&F.tipo!=='Correção de dados';
+    el.innerHTML=`<form id="f3"><div class="campo" style="margin-top:0"><span class="rot">O que aconteceu?</span>
+        <div class="opcoes">${ops.map(([t,tit,sub],i)=>`<label class="opcao"><input type="radio" name="tipo" value="${i}" ${F.tipo===t&&F.tit===tit?'checked':''}><span><b>${tit}</b>${sub?`<small>${sub}</small>`:''}</span></label>`).join('')}</div></div>
+      ${mostraData?`<div class="campo"><label for="dt">${ROTULO_DATA[F.tipo]}</label><input type="date" id="dt" min="2026-05-26" max="${hoje()}" value="${esc(F.data)}" ${precisaData?'required':''}></div>`:''}
+      ${F.tipo?`<div class="campo"><label for="obs">${F.tipo==='Correção de dados'?'O que está errado?':'Observação (opcional)'}</label>
+        <textarea id="obs" maxlength="1000" placeholder="${F.tipo==='Correção de dados'?'Ex.: minha nota correta é 72,50':'Algo que a comissão deva saber'}">${esc(F.obs)}</textarea></div>
+      <label class="check"><input type="checkbox" id="conf" ${F.ok?'checked':''}><span>Confirmo que as informações são verdadeiras e sei que a comissão vai conferir comigo pelo WhatsApp antes de atualizar o painel.</span></label>`:''}
+      ${erroHTML()}
+      <div class="btns"><button class="btn sec" type="button" id="volta">Voltar</button>
+        <button class="btn" type="submit" ${F.carregando||!F.tipo?'disabled':''}>${F.carregando?'Enviando…':'Enviar'}</button></div></form>`;
+    const guardar=()=>{const d=document.getElementById('dt'),o=document.getElementById('obs'),c=document.getElementById('conf');if(d)F.data=d.value;if(o)F.obs=o.value;if(c)F.ok=c.checked};
+    el.querySelectorAll('input[name=tipo]').forEach(r=>r.onchange=()=>{guardar();const [t,tit]=ops[+r.value];F.tipo=t;F.tit=tit;F.erro='';desenharForm()});
+    document.getElementById('volta').onclick=()=>{F.passo=2;F.erro='';desenharForm()};
+    document.getElementById('f3').onsubmit=async e=>{e.preventDefault();guardar();F.erro='';
+      if(precisaData&&!F.data)F.erro='Informe a data.';
+      else if(F.tipo==='Correção de dados'&&!F.obs.trim())F.erro='Conte o que está errado no campo acima.';
+      else if(!F.ok)F.erro='Marque a confirmação para enviar.';
+      if(F.erro)return desenharForm();
+      F.carregando=true;desenharForm();
+      try{const r=await rpc('enviar_pedido',{p_inscricao:F.insc,p_tipo:F.tipo,p_data:F.data||null,p_observacao:F.obs||null});
+        if(!r.ok)F.erro=r.erro;else{F.protocolo=r.protocolo;F.passo=4}}
+      catch(err){F.erro=err.message}
+      F.carregando=false;desenharForm()};
+  }
+  else{
+    el.innerHTML=`<p class="ok-titulo">Pedido enviado!</p>
+      <p class="note" style="margin:6px 0 0">Este é o seu protocolo. Anote ou tire um print:</p>
+      <div class="protocolo"><span id="protTxt">${esc(F.protocolo)}</span><button type="button" id="copiar">${ico('copy')}Copiar</button></div>
+      <div class="aviso-form"><b>E agora?</b> A comissão vai procurar você no grupo de WhatsApp dos aprovados para confirmar as informações. O painel só muda depois dessa confirmação. Se você ainda não está no grupo, procure a comissão e informe este protocolo.</div>
+      <p class="note">Para ver o andamento, use o quadro <b>Acompanhar meu pedido</b>, logo abaixo.</p>
+      <div class="btns"><button class="btn sec" type="button" id="novo">Informar outra coisa</button></div>`;
+    document.getElementById('copiar').onclick=async function(){try{await navigator.clipboard.writeText(F.protocolo);this.innerHTML=ico('check')+'Copiado'}catch(e){}};
+    document.getElementById('novo').onclick=()=>{Object.assign(F,{passo:1,insc:'',pessoa:null,tipo:null,data:'',obs:'',ok:false,protocolo:'',erro:''});desenharForm()};
+  }
+}
+// Acompanhar pedido pelo protocolo
+document.getElementById('fProt').onsubmit=async e=>{e.preventDefault();const out=document.getElementById('protRes'),cod=document.getElementById('protIn').value;
+  out.innerHTML='<p class="note">Consultando…</p>';
+  try{const r=await rpc('consultar_protocolo',{p_codigo:cod});
+    if(!r.ok){out.innerHTML=`<div class="erro" role="alert">${ico('flag')}<span>${esc(r.erro)}</span></div>`;return}
+    const txt={Pendente:'Em análise: a comissão ainda vai confirmar com você.',Aprovado:'Aprovado: o painel já foi atualizado.',Rejeitado:'Não aprovado.'}[r.status]||r.status;
+    out.innerHTML=`<div class="res-prot"><span class="status ${esc(r.status)}">${esc(r.status==='Pendente'?'Em análise':r.status==='Rejeitado'?'Não aprovado':r.status)}</span>
+      <p style="margin:8px 0 0">${esc(txt)}</p>
+      <dl><dt>Protocolo</dt><dd>${esc(r.protocolo)}</dd><dt>Pedido</dt><dd>${esc(r.tipo)}${r.data_evento?' em '+dataBR(r.data_evento):''}</dd>
+        <dt>Enviado em</dt><dd>${dataBR(r.enviado_em)}</dd>${r.revisado_em?`<dt>Revisado em</dt><dd>${dataBR(r.revisado_em)}</dd>`:''}
+        ${r.resposta?`<dt>Resposta da comissão</dt><dd>${esc(r.resposta)}</dd>`:''}</dl></div>`;
+  }catch(err){out.innerHTML=`<div class="erro" role="alert">${ico('flag')}<span>${esc(err.message)}</span></div>`}
+};
 
 /* ---------- Visão objetiva × detalhada ---------- */
 // Padrão: visão objetiva. A escolha fica salva no navegador de quem visita.
@@ -1099,7 +1290,9 @@ function rodape(quando,copia){
     if(copia)d3.select('main').insert('div','.bar + *').attr('class','aviso copia')
       .html(`${ico('clock')}<span><b>Mostrando a cópia dos dados de ${quando.toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}.</b> Não foi possível consultar o banco de dados agora (sem internet ou banco fora do ar), então o painel usa a cópia salva dentro deste arquivo. Recarregue a página mais tarde para ver os dados atualizados.</span>`);
     rodape(quando,copia);
+    if(location.hash==='#informar')S.tab='form'; // link direto para o formulário
     render();
+    if(S.tab==='form')iniciarForm();
     // Atualização automática com a página aberta
     if(!copia){
       let ass=assinatura(DATA);

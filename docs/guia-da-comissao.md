@@ -56,13 +56,25 @@ exatamente como nas listas (com acentos e maiúsculas). Se algum estiver errado,
 Supabase mostra o erro e nada é importado.
 
 ### Revisar o que chegou pelo formulário
+O aprovado preenche a aba **Informar convocação** do site (link direto: `.../Dashboard-geral/#informar`)
+e recebe um **protocolo** de 6 caracteres (ex.: `K7P-4QX`). O formulário não pede nome, e-mail
+nem documentos: a comissão confere pessoalmente, pelo grupo de WhatsApp.
+
 1. Table Editor → `envios`, filtre `status` = **Pendente**.
-2. Confira a informação (a coluna `aprovado_id` aponta para a pessoa em `aprovados`).
+2. Use o `protocolo` e a `inscricao` para achar a pessoa no grupo e conferir com ela
+   (a coluna `aprovado_id` aponta para a pessoa em `aprovados`).
 3. Mude `status` para:
    - **Aprovado**: a informação é aplicada sozinha em `aprovados`
      (Convocação → Convocado + data; Posse → Empossado + data; Desistência → Desistente).
      "Correção de dados" não é aplicada sozinha: corrija à mão em `aprovados`.
    - **Rejeitado**: nada muda. Se quiser, explique em `resposta_comissao`.
+4. O aprovado acompanha o andamento no quadro **Acompanhar meu pedido**, digitando o protocolo.
+   Ele vê "Em análise", "Aprovado" ou "Não aprovado" e o texto de `resposta_comissao`, se houver.
+
+Regras automáticas do formulário: só aceita inscrição existente; as opções dependem da situação
+atual (ex.: só quem já está Convocado pode informar Posse); data obrigatória para convocação e posse,
+entre 26/05/2026 e hoje; um pedido em análise por vez para cada inscrição; limite de tentativas por
+visitante (20 buscas a cada 10 min e 5 envios por hora).
 
 ### Ver quem mudou o quê
 Table Editor → `historico`. Cada linha mostra a tabela, a ação, os dados antes e depois e
