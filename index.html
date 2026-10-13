@@ -214,6 +214,13 @@ footer .acesso-comissao:hover{color:var(--s1)}
 footer .autor span:not(.ic){display:block;color:var(--ink2);font-size:12.5px}
 footer .autor .ic{width:34px;height:34px;border-radius:10px}
 footer .autor .ic svg{width:18px;height:18px}
+footer .membros{flex-basis:100%;border-top:1px solid var(--grid);padding-top:14px;margin-top:2px}
+footer .membros h3{font-size:12.5px;font-weight:700;color:var(--ink2);margin:0 0 10px;text-transform:uppercase;letter-spacing:.05em}
+footer .membros ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px 18px}
+footer .membros li{display:flex;flex-direction:column;line-height:1.3}
+footer .membros b{color:var(--ink);font-weight:600;font-size:12.5px}
+footer .membros span{color:var(--muted);font-size:11.5px}
+@media (max-width:620px){footer .membros ul{grid-template-columns:1fr 1fr}}
 #foot{max-width:520px}
 @media (min-width:1100px){#foot{text-align:right}}
 
@@ -895,6 +902,31 @@ body.sobrio .tw tr{border-radius:6px}
   <footer>
     <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026. · <a class="acesso-comissao ir-contato" href="#contato">Fale com a comissão</a> · <a class="acesso-comissao" href="comissao.html">Acesso da comissão</a></span></div></div>
     <div id="foot"></div>
+    <section class="membros" aria-labelledby="membrosTit">
+      <h3 id="membrosTit">Membros da Comissão de Aprovados</h3>
+      <ul>
+        <li><b>Felipe Almeida</b><span>Arquiteto · AP</span></li>
+        <li><b>João Von Paumgartten</b><span>Eng. Civil · MA</span></li>
+        <li><b>Fernanda Santos Goulart</b><span>Eng. Civil · SP</span></li>
+        <li><b>Ágatha Souto</b><span>Arquiteto · GO</span></li>
+        <li><b>Amanda Lacerda</b><span>Arquiteto · SP</span></li>
+        <li><b>Clecia Carvalho</b><span>Arquiteto · PB</span></li>
+        <li><b>Gustavo Correia</b><span>Eng. Civil · MG</span></li>
+        <li><b>Gabriel Dobbro</b><span>Eng. Civil · MS</span></li>
+        <li><b>Matheus dos Santos</b><span>Arquiteto · PE</span></li>
+        <li><b>Tito Balabuch</b><span>Eng. Civil · MG</span></li>
+        <li><b>Gabriel Rigonato</b><span>Eng. Civil · AC</span></li>
+        <li><b>Vitor Takahashi</b><span>Arquiteto · PR</span></li>
+        <li><b>Amanda Balby</b><span>Arquiteto · MA</span></li>
+        <li><b>Suelen Souza</b><span>Arquiteto · RJ</span></li>
+        <li><b>Giovanna Verussa</b><span>Arquiteto · PR</span></li>
+        <li><b>Herick Silva</b><span>Eng. Civil · RO</span></li>
+        <li><b>Juarez Neto</b><span>Eng. Mecânico · DF</span></li>
+        <li><b>Matheus Leal</b><span>Eng. Mecânico · DF</span></li>
+        <li><b>Carolaine Cruz</b><span>Eng. Civil · CE</span></li>
+        <li><b>Davi Matheus</b><span>Arquiteto · AP</span></li>
+      </ul>
+    </section>
   </footer>
 </main>
 <div id="tip"></div>
@@ -2022,6 +2054,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-13 14:50','melhoria','Membros da comissão no rodapé','O rodapé do painel agora mostra os membros da Comissão de Aprovados, com o cargo e o polo de cada um.'],
   ['2026-10-13 14:35','novo','Listas em PDF','Botão "PDF" na lista de aprovados, na lista de convocações, no quadro de vagas e na fila simulada. Gera um arquivo em A4 paisagem com todas as pessoas do filtro escolhido, em quantas folhas forem precisas.'],
   ['2026-10-13 14:05','novo','Informe o horário da sua convocação','Já foi convocado(a)? Em "Informar convocação", escolha "Quero informar o horário da minha convocação". Como muitas convocações saem no mesmo dia, o horário ajuda a comissão a entender a ordem real das chamadas.'],
   ['2026-10-13 14:00','novo','Aba "Vagas e regras"','Quadro de vagas do edital por estado, as regras de convocação explicadas com os itens do edital e um simulador animado da fila de convocação de cada cargo e estado. É uma simulação da comissão, conferida com a convocação de 08/10, e não a lista oficial.'],
