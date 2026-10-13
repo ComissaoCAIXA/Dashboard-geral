@@ -111,6 +111,37 @@ tr.marcado{background:var(--wash)}
 @media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.duas{grid-template-columns:minmax(0,1fr)}.filtros-g{grid-template-columns:1fr 1fr}.filtros-g input{grid-column:1/-1}}
 [hidden]{display:none!important}
 @media (max-width:620px){main{padding:16px 12px 40px}.acoes .btn{flex:1}}
+/* Notícias */
+.n-g2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media (max-width:620px){.n-g2{grid-template-columns:1fr}}
+.n-ferr{display:flex;flex-wrap:wrap;gap:4px;padding:6px;border:1px solid var(--border);border-bottom:0;border-radius:6px 6px 0 0;background:var(--page)}
+.n-ferr button{height:32px;min-width:32px;padding:0 8px;border:1px solid transparent;border-radius:4px;background:none;cursor:pointer;color:var(--ink2);font:inherit;font-weight:600;font-size:13px}
+.n-ferr button:hover{border-color:var(--border);color:var(--ink)}
+.n-ferr .sep{width:1px;background:var(--grid);margin:4px 2px}
+#nTexto{min-height:260px;border-radius:0 0 6px 6px;line-height:1.55}
+.n-emojis{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;padding:6px;border:1px solid var(--border);border-radius:6px;background:var(--surface);margin-top:4px}
+.n-emojis[hidden]{display:none}
+.n-emojis button{font-size:20px;height:36px;border:0;background:none;border-radius:4px;cursor:pointer}
+.n-emojis button:hover{background:var(--wash)}
+.n-dica{font-size:12px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.n-prev{border:1px dashed var(--grid);border-top:4px solid var(--n-cor,var(--s1));border-radius:8px;padding:14px 16px;min-height:200px;margin-top:10px}
+.n-prev h3{margin:6px 0 2px;font-size:18px}
+.n-prev .quando{margin-bottom:10px}
+.n-tags{display:flex;gap:6px;flex-wrap:wrap}
+.ntc-imp{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.ntc-imp.Importante{background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad)}
+.ntc-imp.Aviso{background:var(--wash);color:var(--s1)}
+.ntc-imp.Informativo{background:var(--empty);color:var(--ink2)}
+.ntc-cat{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:4px;border:1px solid var(--border);color:var(--ink2);white-space:nowrap}
+.ntc-txt{font-size:14.5px;line-height:1.6}
+.ntc-txt p{margin:0 0 10px}.ntc-txt h3{font-size:15.5px;margin:14px 0 6px}
+.ntc-txt ul,.ntc-txt ol{margin:0 0 10px;padding-left:22px}.ntc-txt li{margin:2px 0}
+.ntc-txt blockquote{margin:0 0 10px;padding:8px 12px;border-left:3px solid var(--s5,#eda100);background:var(--warnbg);border-radius:0 6px 6px 0}
+.n-mini{display:flex;gap:6px;flex-wrap:wrap}
+.n-mini button{height:30px;padding:0 10px;border:1px solid var(--border);border-radius:5px;background:none;cursor:pointer;font:inherit;font-size:12.5px;color:var(--ink2)}
+.n-mini button:hover{border-color:var(--s1);color:var(--ink)}
+.n-mini button.apagar:hover{border-color:var(--bad);color:var(--bad)}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -160,6 +191,7 @@ tr.marcado{background:var(--wash)}
       <button data-v="msgs">Mensagens<b id="nMsgs" hidden></b></button>
       <button data-v="grupo">Grupo de WhatsApp</button>
       <button data-v="aprov">Aprovados</button>
+      <button data-v="ntc">Notícias</button>
       <button data-v="hist">Histórico</button>
     </div>
 
@@ -238,6 +270,58 @@ tr.marcado{background:var(--wash)}
       </div>
     </div>
 
+    <div id="pNtc" hidden>
+      <div class="duas">
+        <div class="card">
+          <h2 id="nEdTit">Nova notícia</h2>
+          <p class="note">Escreva o aviso para os aprovados. Ao publicar, ele aparece no painel na hora.</p>
+          <label class="rot" for="nTitulo">Título</label>
+          <input type="text" id="nTitulo" maxlength="120" placeholder="Ex.: CAIXA divulgou nova rodada de convocações">
+          <div class="n-g2">
+            <label class="rot">Importância<select id="nImp">
+              <option>Importante</option>
+              <option selected>Aviso</option>
+              <option>Informativo</option></select></label>
+            <label class="rot">Tag<select id="nCat"><option>Convocações</option><option>Documentos</option><option>Melhorias do painel</option><option>Comissão</option><option selected>Geral</option></select></label>
+          </div>
+          <p class="note">Importante: todos precisam ver (ex.: nova rodada de convocações). Aviso: notícia relevante. Informativo: melhorias do painel e recados, normalmente fora do destaque.</p>
+          <label class="rot" for="nTexto">Texto</label>
+          <div class="n-ferr" role="toolbar" aria-label="Formatação">
+            <button type="button" data-f="b" title="Negrito"><b>N</b></button>
+            <button type="button" data-f="i" title="Itálico"><i>I</i></button>
+            <button type="button" data-f="h" title="Subtítulo">T</button>
+            <span class="sep"></span>
+            <button type="button" data-f="ul" title="Lista com marcadores">• Lista</button>
+            <button type="button" data-f="ol" title="Lista numerada">1. Lista</button>
+            <button type="button" data-f="q" title="Destaque (caixa amarela)">❝ Destaque</button>
+            <button type="button" data-f="a" title="Link">🔗 Link</button>
+            <span class="sep"></span>
+            <button type="button" id="nBtnEmoji" title="Emojis" aria-expanded="false">😀 Emoji</button>
+          </div>
+          <textarea id="nTexto" maxlength="4000" placeholder="Escreva aqui. Pode usar emojis 😀 e a barra acima para formatar."></textarea>
+          <div class="n-emojis" id="nEmojis" hidden></div>
+          <div class="n-dica"><span>Atalhos: **negrito**, *itálico*, ## subtítulo, - lista, &gt; destaque</span><span id="nConta">0 / 4000</span></div>
+          <label class="check" style="align-items:flex-start"><input type="checkbox" id="nDestaque" checked style="margin-top:3px"><span><b>Mostrar em destaque ao abrir o painel</b><br><small class="note">Quem ainda não viu esta notícia vai vê-la numa janela no meio da tela ao entrar. Só a mais recente em destaque aparece.</small></span></label>
+          <div id="nRet"></div>
+          <div class="acoes" style="justify-content:flex-start">
+            <button class="btn" type="button" id="nPublicar">Publicar</button>
+            <button class="btn sec" type="button" id="nRascunho">Salvar como rascunho</button>
+            <button class="btn sec" type="button" id="nCancelar" hidden>Cancelar edição</button>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Como vai aparecer</h2>
+          <p class="note">Prévia ao vivo, igual à janela que o público vê.</p>
+          <div class="n-prev"><div class="n-tags" id="nPvTags"></div><h3 id="nPvTit"></h3><div class="quando" id="nPvQuando"></div><div class="ntc-txt" id="nPvCorpo"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Notícias</h2>
+        <p class="note">A mais recente publicada com destaque é a que aparece no meio da tela. "Visualizações" conta uma vez por navegador que abriu a notícia.</p>
+        <div id="nLista"></div>
+      </div>
+    </div>
+
     <div id="pHist" hidden>
       <div class="card"><p class="note" style="margin:0">Últimas 100 alterações. Mostra quem fez (e-mail do membro, "formulário" ou "postgres" quando feito direto no Supabase).</p></div>
       <div id="listaHist"></div>
@@ -291,12 +375,112 @@ async function entrar(sessao){
 SB.auth.onAuthStateChange((ev,sessao)=>{if(ev==='INITIAL_SESSION'||ev==='SIGNED_IN'||ev==='SIGNED_OUT')entrar(sessao)});
 
 /* ---------- Abas ---------- */
-const PAINEIS={pend:'pPend',msgs:'pMsgs',grupo:'pGrupo',aprov:'pAprov',hist:'pHist'};
+const PAINEIS={pend:'pPend',msgs:'pMsgs',grupo:'pGrupo',aprov:'pAprov',ntc:'pNtc',hist:'pHist'};
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
   Object.entries(PAINEIS).forEach(([k,id])=>$(id).hidden=k!==b.dataset.v);
-  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();if(b.dataset.v==='msgs')carregarMsgs();if(b.dataset.v==='aprov')carregarAprov();
+  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();if(b.dataset.v==='msgs')carregarMsgs();if(b.dataset.v==='aprov')carregarAprov();if(b.dataset.v==='ntc')carregarNtc();
 });
+
+/* ---------- Notícias (aparecem no painel público) ---------- */
+// O texto usa uma formatação simples (**negrito**, *itálico*, ## subtítulo, - lista, 1. lista, > destaque, [link](https://…)).
+// A mesma função existe no index.html: as duas precisam continuar iguais.
+function formatarNoticia(txt){
+  const inl=s=>esc(s)
+    .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
+    .replace(/(^|[^*])\*([^*\n]+?)\*/g,'$1<i>$2</i>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g,'$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+  const out=[];let lista=null,par=[];
+  const fechaPar=()=>{if(par.length){out.push('<p>'+par.map(inl).join('<br>')+'</p>');par=[]}};
+  const fechaLista=()=>{if(lista){out.push(`<${lista.t}>${lista.i.map(x=>'<li>'+inl(x)+'</li>').join('')}</${lista.t}>`);lista=null}};
+  for(const l of String(txt||'').split('\n')){
+    let m;
+    if(!l.trim()){fechaPar();fechaLista();continue}
+    if((m=l.match(/^\s*[-•]\s+(.*)/))){fechaPar();if(!lista||lista.t!=='ul'){fechaLista();lista={t:'ul',i:[]}}lista.i.push(m[1]);continue}
+    if((m=l.match(/^\s*\d+[.)]\s+(.*)/))){fechaPar();if(!lista||lista.t!=='ol'){fechaLista();lista={t:'ol',i:[]}}lista.i.push(m[1]);continue}
+    fechaLista();
+    if((m=l.match(/^##\s+(.*)/))){fechaPar();out.push('<h3>'+inl(m[1])+'</h3>');continue}
+    if((m=l.match(/^>\s?(.*)/))){fechaPar();out.push('<blockquote>'+inl(m[1])+'</blockquote>');continue}
+    par.push(l);
+  }
+  fechaPar();fechaLista();return out.join('');
+}
+const COR_IMP={Importante:'var(--bad)',Aviso:'var(--s1)',Informativo:'var(--muted)'};
+const tagsNtc=(imp,cat)=>`<span class="ntc-imp ${esc(imp)}">${esc(imp)}</span><span class="ntc-cat">${esc(cat)}</span>`;
+let NTC=[],nEditando=null;
+const EMOJIS='📢 📌 ✅ ⚠️ ❗ ℹ️ 🔔 🚨 📄 📝 🗓️ ⏰ 📍 🏦 💼 🎉 👏 🙌 💬 👉 ⭐ 🔥 💙 🤝 📊 🧾 ✉️ 📞 🕐 ❓ 🆕 🛠️'.split(' ');
+$('nEmojis').innerHTML=EMOJIS.map(e=>`<button type="button">${e}</button>`).join('');
+$('nBtnEmoji').onclick=()=>{$('nEmojis').hidden=!$('nEmojis').hidden;$('nBtnEmoji').setAttribute('aria-expanded',!$('nEmojis').hidden)};
+$('nEmojis').onclick=e=>{if(e.target.tagName==='BUTTON')nInserir(e.target.textContent,'')};
+function nInserir(antes,depois,linha){
+  const t=$('nTexto'),a=t.selectionStart,b=t.selectionEnd,sel=t.value.slice(a,b);let novo;
+  if(linha){const ls=(sel||'texto').split('\n').map((x,i)=>(typeof antes==='function'?antes(i):antes)+x).join('\n');novo=(a&&t.value[a-1]!=='\n'?'\n':'')+ls}
+  else novo=antes+(sel||(depois?'texto':''))+depois;
+  t.setRangeText(novo,a,b,'end');t.focus();nPrever();
+}
+document.querySelectorAll('.n-ferr [data-f]').forEach(b=>b.onclick=()=>{
+  const f=b.dataset.f;
+  if(f==='b')nInserir('**','**');else if(f==='i')nInserir('*','*');
+  else if(f==='h')nInserir('## ','',true);else if(f==='ul')nInserir('- ','',true);
+  else if(f==='ol')nInserir(i=>(i+1)+'. ','',true);else if(f==='q')nInserir('> ','',true);
+  else if(f==='a'){const u=prompt('Endereço do link (começando com https://)','https://');if(u&&/^https?:\/\/\S+$/.test(u))nInserir('[',`](${u})`)}
+});
+// Importância sugere o destaque: Informativo normalmente não abre a janela no meio da tela
+$('nImp').onchange=()=>{$('nDestaque').checked=$('nImp').value!=='Informativo';nPrever()};
+function nPrever(){
+  $('nPvTags').innerHTML=tagsNtc($('nImp').value,$('nCat').value);
+  document.querySelector('.n-prev').style.setProperty('--n-cor',COR_IMP[$('nImp').value]);
+  $('nPvTit').textContent=$('nTitulo').value||'Título da notícia';
+  $('nPvQuando').textContent=(nEditando&&nEditando.publicado_em?dhBR(nEditando.publicado_em):'Agora')+' · Comissão de Aprovados';
+  $('nPvCorpo').innerHTML=formatarNoticia($('nTexto').value)||'<p class="note">O texto aparece aqui enquanto você escreve.</p>';
+  $('nConta').textContent=$('nTexto').value.length+' / 4000';
+}
+['nTitulo','nTexto'].forEach(id=>$(id).addEventListener('input',nPrever));$('nCat').onchange=nPrever;
+function nLimpar(){nEditando=null;$('nTitulo').value='';$('nTexto').value='';$('nImp').value='Aviso';$('nCat').value='Geral';$('nDestaque').checked=true;
+  $('nEdTit').textContent='Nova notícia';$('nCancelar').hidden=true;$('nPublicar').textContent='Publicar';$('nRascunho').hidden=false;nPrever()}
+async function nGravar(publicar){
+  const titulo=$('nTitulo').value.trim(),texto=$('nTexto').value.trim();
+  if(titulo.length<3){msg($('nRet'),'erro','Escreva um título.');return}
+  if(texto.length<3){msg($('nRet'),'erro','Escreva o texto da notícia.');return}
+  const jaPub=nEditando&&nEditando.publicada;
+  if(publicar&&!jaPub&&!confirm(`Publicar "${titulo}"?\n\nEla aparece no painel na hora${$('nDestaque').checked?' e em destaque para quem ainda não viu':''}.`))return;
+  $('nPublicar').disabled=$('nRascunho').disabled=true;
+  const {data,error}=await SB.rpc('comissao_noticia_salvar',{p_id:nEditando?nEditando.id:null,p_titulo:titulo,p_texto:texto,
+    p_importancia:$('nImp').value,p_categoria:$('nCat').value,p_destaque:$('nDestaque').checked,p_publicar:!!publicar});
+  $('nPublicar').disabled=$('nRascunho').disabled=false;
+  if(error||!data.ok){msg($('nRet'),'erro',error?error.message:data.erro);return}
+  msg($('nRet'),'ok',publicar?(jaPub?'Alterações salvas: já aparecem no painel.':'Notícia publicada no painel.'):'Rascunho salvo. Ele não aparece no painel até ser publicado.');
+  nLimpar();carregarNtc();
+}
+$('nPublicar').onclick=()=>nGravar(true);$('nRascunho').onclick=()=>nGravar(false);$('nCancelar').onclick=()=>{nLimpar();$('nRet').innerHTML=''};
+async function carregarNtc(){
+  nPrever();
+  const el=$('nLista');el.innerHTML='<p class="vazio">Carregando…</p>';
+  const {data,error}=await SB.from('noticias').select('*').order('publicado_em',{ascending:false,nullsFirst:true}).order('criado_em',{ascending:false});
+  if(error){msg(el,'erro',error.message);return}
+  NTC=data;
+  if(!data.length){el.innerHTML='<p class="vazio">Nenhuma notícia ainda. Escreva a primeira acima.</p>';return}
+  const topo=data.find(n=>n.publicada&&n.destaque);
+  el.innerHTML=`<div class="tw"><table><thead><tr><th>Título</th><th>Situação</th><th>Publicada em</th><th>Visualizações</th><th></th></tr></thead><tbody>${data.map(n=>`<tr>
+    <td><div class="n-tags" style="margin-bottom:4px">${tagsNtc(n.importancia,n.categoria)}${n===topo?' <span class="pill pres">em destaque agora</span>':''}</div><b>${esc(n.titulo)}</b>
+      <div class="note">${n.destaque?'Abre em destaque':'Só na lista'} · por ${esc(n.atualizado_por||n.criado_por||'–')}</div></td>
+    <td>${n.publicada?'<span class="pill Aprovado">Publicada</span>':'<span class="pill">Rascunho</span>'}</td>
+    <td class="num">${n.publicado_em?dhBR(n.publicado_em):'–'}</td><td class="num">${n.publicada||n.visualizacoes?n.visualizacoes:'–'}</td>
+    <td><div class="n-mini"><button type="button" data-a="ed" data-id="${n.id}">Editar</button><button type="button" data-a="${n.publicada?'despublicar':'publicar'}" data-id="${n.id}">${n.publicada?'Despublicar':'Publicar'}</button><button type="button" class="apagar" data-a="apagar" data-id="${n.id}">Apagar</button></div></td></tr>`).join('')}</tbody></table></div>`;
+}
+$('nLista').onclick=async e=>{
+  const b=e.target.closest('button[data-a]');if(!b)return;const n=NTC.find(x=>x.id===+b.dataset.id);if(!n)return;
+  if(b.dataset.a==='ed'){nEditando=n;$('nTitulo').value=n.titulo;$('nTexto').value=n.texto;$('nImp').value=n.importancia;$('nCat').value=n.categoria;$('nDestaque').checked=n.destaque;
+    $('nEdTit').textContent='Editando notícia';$('nCancelar').hidden=false;$('nPublicar').textContent=n.publicada?'Salvar alterações':'Publicar';$('nRascunho').hidden=n.publicada;
+    $('nRet').innerHTML='';nPrever();scrollTo({top:0,behavior:'smooth'});return}
+  const txt={publicar:`Publicar "${n.titulo}" agora? Ela passa a ser a mais recente.`,despublicar:`Tirar "${n.titulo}" do painel? Ela volta a ser rascunho.`,apagar:`Apagar "${n.titulo}"? Não dá para desfazer (fica registrado no Histórico).`}[b.dataset.a];
+  if(!confirm(txt))return;
+  const {data,error}=await SB.rpc('comissao_noticia_acao',{p_id:n.id,p_acao:b.dataset.a});
+  if(error||!data.ok){alert(error?error.message:data.erro);return}
+  if(nEditando&&nEditando.id===n.id)nLimpar();
+  carregarNtc();
+};
 
 /* ---------- Mensagens (Fale com a comissão) ---------- */
 async function contarMsgs(){

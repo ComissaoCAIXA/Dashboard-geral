@@ -22,6 +22,9 @@ Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 202
   edital e simulador animado da fila de convocação por cargo e estado. A regra da simulação está descrita
   em `montarFila()` no `index.html` e é conferida ao vivo com as convocações registradas.
 - Visão objetiva (padrão) e visão detalhada; ajuda "?" em cada card; modo claro e escuro; celular.
+- **Notícias da comissão** (botão no topo): avisos escritos na área da comissão, com importância e tag.
+  A notícia em destaque mais recente aparece no meio da tela para quem ainda não a viu (controle no navegador).
+- **Tour** (botão no topo): passeio guiado pelos recursos do painel, oferecido na primeira visita.
 - **Novidades**: histórico público de atualizações (ícone de relógio no topo).
 - Dados ao vivo do banco, com nova consulta a cada 2 minutos. Se o banco não responder,
   usa a cópia de reserva embutida no `index.html` e avisa a data dela.
@@ -37,7 +40,7 @@ Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 202
 **Para a comissão** (área restrita, login por link ou código enviado por e-mail)
 - Pedidos pendentes (aprovar / não aprovar), mensagens do Fale com a comissão,
   acompanhamento do grupo de WhatsApp, lista completa de aprovados com filtros,
-  edição individual e em lote, sugestões de convocação presumida e histórico de alterações.
+  edição individual e em lote, sugestões de convocação presumida, notícias para o painel e histórico de alterações.
 - Passo a passo em [`docs/guia-da-comissao.md`](docs/guia-da-comissao.md).
 
 ## Como funciona
@@ -45,7 +48,7 @@ Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 202
 | Peça | Onde |
 |---|---|
 | Páginas (HTML, CSS e JS, sem etapa de build) | `index.html` (painel) e `comissao.html` (área da comissão), publicadas pelo GitHub Pages |
-| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 015, aplicadas em ordem) |
+| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 016, aplicadas em ordem) |
 | Aviso por e-mail do Fale com a comissão | Função `supabase/functions/avisar-mensagem` (Supabase Edge Functions) |
 | Modelos dos e-mails de login | `docs/emails/` (colados em Authentication → Emails → Templates) |
 

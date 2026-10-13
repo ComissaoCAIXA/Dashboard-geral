@@ -42,6 +42,19 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
     clique em **Marcar selecionadas como convocação presumida** (usa a data da pessoa de referência).
   - **Editar tudo de uma pessoa:** clique no nome para alterar situação, datas, observação interna,
     **ocultar o nome** no painel ou marcar se está no grupo.
+- **Notícias:** avisos que aparecem no painel público (botão "Notícias" no topo).
+  - Escreva o **título** e o **texto**. A barra de formatação tem negrito, itálico, subtítulo, listas,
+    destaque (caixa amarela), link e emojis; à direita aparece a prévia de como fica.
+  - **Importância:** *Importante* (todos precisam ver, ex.: nova rodada de convocações), *Aviso* (notícia
+    relevante) ou *Informativo* (melhorias do painel e recados). **Tag:** Convocações, Documentos,
+    Melhorias do painel, Comissão ou Geral.
+  - **Mostrar em destaque ao abrir o painel:** quem ainda não viu a notícia a vê numa janela no meio da tela
+    ao entrar. Só a notícia em destaque mais recente aparece assim; as outras ficam na lista. Ao escolher
+    *Informativo*, essa opção é desmarcada (dá para marcar de novo).
+  - **Publicar** coloca no painel na hora; **Salvar como rascunho** guarda sem mostrar. Na tabela embaixo:
+    Editar, Publicar/Despublicar e Apagar. Publicar de novo uma notícia despublicada faz dela a mais recente.
+  - **Visualizações:** uma por navegador que abriu a notícia. O painel não guarda IP nem dados de quem leu;
+    o "já vi" fica no próprio navegador da pessoa.
 - **Histórico:** as últimas 100 alterações, com o e-mail de quem fez.
 - **Exportar CSV:** baixa a base completa (guarde como cópia de segurança).
 

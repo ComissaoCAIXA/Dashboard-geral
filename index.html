@@ -739,6 +739,79 @@ main .card .seg button{padding-top:0;padding-bottom:0;display:inline-flex;align-
 /* no celular, seletores com texto em duas linhas crescem o necessário (mínimo 36px) */
 @media (max-width:620px){main .card .seg{height:auto;min-height:var(--ctl-sm)}main .card .seg button{padding:5px 6px;line-height:1.25}}
 [hidden]{display:none!important}
+/* Notícias da comissão */
+.ntc-btn{position:relative}
+.ntc-n{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center;box-shadow:0 0 0 2px var(--page)}
+.ntc-fundo{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:62;backdrop-filter:blur(2px)}
+.ntc-destaque{position:fixed;z-index:63;left:50%;top:50%;transform:translate(-50%,-50%);width:min(580px,calc(100vw - 32px));max-height:calc(100vh - 48px);display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--ntc-cor,var(--s1));border-radius:12px;box-shadow:0 24px 60px rgba(0,0,0,.35);animation:ntcSurge .25s ease}
+@keyframes ntcSurge{from{opacity:0;transform:translate(-50%,-46%)}}
+.ntc-destaque .nd-topo{display:flex;align-items:center;gap:8px;padding:16px 20px 0;flex-wrap:wrap}
+.ntc-destaque .nd-rot{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1)}
+.ntc-destaque .nd-rot svg{width:16px;height:16px}
+.ntc-destaque .novid-fechar{margin-left:auto}
+.ntc-destaque h2{margin:10px 20px 2px;font-size:20px;line-height:1.3}
+.ntc-destaque .nd-quando{margin:0 20px;color:var(--muted);font-size:12.5px}
+.ntc-destaque .nd-corpo{padding:12px 20px 4px;overflow-y:auto}
+.ntc-destaque .nd-pe{display:flex;gap:8px;justify-content:flex-end;align-items:center;padding:14px 20px 16px;border-top:1px solid var(--grid);margin-top:10px;flex-wrap:wrap}
+.ntc-destaque .nd-pe .nd-outras{margin-right:auto;color:var(--muted);font-size:12.5px}
+.ntc-destaque .nd-pe button{height:var(--ctl-sm);padding:0 14px;border-radius:6px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:none;color:var(--ink2)}
+.ntc-destaque .nd-pe button.ok{background:var(--s1);border-color:var(--s1);color:#fff}
+.ntc-imp{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.ntc-imp.Importante{background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad)}
+.ntc-imp.Aviso{background:var(--wash);color:var(--s1)}
+.ntc-imp.Informativo{background:var(--empty);color:var(--ink2)}
+.ntc-cat{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:4px;border:1px solid var(--border);color:var(--ink2);white-space:nowrap}
+.ntc-nova{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--s1);color:#fff}
+.ntc-filtros{display:flex;flex-wrap:wrap;gap:6px;padding:12px 20px 4px}
+.ntc-filtros button{height:30px;padding:0 10px;border-radius:999px;border:1px solid var(--border);background:none;color:var(--ink2);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+.ntc-filtros button[aria-pressed="true"]{background:var(--s1);border-color:var(--s1);color:#fff}
+.ntc-item{border-bottom:1px solid var(--grid);padding:14px 0}
+.ntc-item summary{list-style:none;cursor:pointer}
+.ntc-item summary::-webkit-details-marker{display:none}
+.ntc-item .ni-tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:5px}
+.ntc-item summary>b{font-size:15px;line-height:1.35;display:block}
+.ntc-item .ni-data{color:var(--muted);font-size:12px;margin-top:2px}
+.ntc-item .ni-resumo{margin:4px 0 0;color:var(--ink2);font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ntc-item[open] .ni-resumo{display:none}
+.ntc-item .ntc-txt{margin-top:10px}
+.ntc-vazio{color:var(--muted);text-align:center;padding:40px 0}
+.ntc-txt{font-size:14.5px;line-height:1.6;color:var(--ink)}
+.ntc-txt p{margin:0 0 10px}
+.ntc-txt h3{font-size:15.5px;margin:14px 0 6px}
+.ntc-txt ul,.ntc-txt ol{margin:0 0 10px;padding-left:22px}
+.ntc-txt li{margin:2px 0}
+.ntc-txt a{color:var(--s1)}
+.ntc-txt blockquote{margin:0 0 10px;padding:8px 12px;border-left:3px solid var(--s5);background:color-mix(in srgb,var(--s5) 12%,transparent);border-radius:0 6px 6px 0}
+
+/* Tour guiado pelo painel */
+body.sobrio header .tema.rot-btn,header .tema.rot-btn,body.sobrio header .tema.tour-btn,header .tema.tour-btn{width:auto;padding:0 12px 0 10px;gap:6px;font-size:13.5px;color:var(--ink2)}
+header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);color:var(--ink)}
+@media (max-width:1279px){body.sobrio header .tema.rot-btn,header .tema.rot-btn,body.sobrio header .tema.tour-btn,header .tema.tour-btn{width:40px;padding:0}header .tema.rot-btn .rot,header .tema.tour-btn .rot{display:none}}
+.tour-bloq{position:fixed;inset:0;z-index:70;background:transparent}
+.tour-luz{position:fixed;z-index:71;border-radius:10px;box-shadow:0 0 0 9999px rgba(0,0,0,.55);outline:2px solid var(--s1);outline-offset:2px;pointer-events:none;transition:left .3s ease,top .3s ease,width .3s ease,height .3s ease}
+.tour-luz.centro{outline:none;width:0!important;height:0!important;left:50%!important;top:50%!important}
+.tour-pop{position:fixed;z-index:72;width:min(380px,calc(100vw - 32px));background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 36px rgba(0,0,0,.28);padding:16px 18px 14px;transition:left .3s ease,top .3s ease}
+.tour-pop .tp-passo{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1)}
+.tour-pop h3{margin:4px 0 6px;font-size:16px;line-height:1.3}
+.tour-pop p{margin:0 0 6px;font-size:13.5px;line-height:1.55;color:var(--ink2)}
+.tour-pop p:last-of-type{margin-bottom:0}
+.tour-pop .tp-barra{height:3px;border-radius:2px;background:var(--grid);margin:12px 0 12px;overflow:hidden}
+.tour-pop .tp-barra i{display:block;height:100%;background:var(--s1);transition:width .3s ease}
+.tour-pop .tp-acoes{display:flex;align-items:center;gap:8px}
+.tour-pop .tp-acoes .esp{flex:1}
+.tour-pop button{height:var(--ctl-sm);padding:0 14px;border-radius:6px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:none;color:var(--ink2)}
+.tour-pop button.prox{background:var(--s1);border-color:var(--s1);color:#fff}
+.tour-pop button.sair{border:none;padding:0 4px;color:var(--muted)}
+.tour-pop button:disabled{opacity:.4;cursor:default}
+@media (max-width:620px){.tour-pop{left:16px!important;right:16px;width:auto;top:auto!important;bottom:16px}}
+.tour-convite{position:fixed;z-index:65;right:16px;bottom:16px;width:min(340px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.2);padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start}
+.tour-convite .ic{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:var(--wash);color:var(--s1);grid-row:span 2}
+.tour-convite .ic svg{width:20px;height:20px}
+.tour-convite b{font-size:14px}
+.tour-convite p{margin:0;font-size:13px;line-height:1.5;color:var(--ink2)}
+.tour-convite .tc-acoes{grid-column:2;display:flex;gap:8px;margin-top:8px}
+.tour-convite button{height:var(--ctl-sm);padding:0 12px;border-radius:6px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:none;color:var(--ink2)}
+.tour-convite button.sim{background:var(--s1);border-color:var(--s1);color:#fff}
 </style>
 </head>
 <body class="resumo sobrio">
@@ -761,6 +834,8 @@ main .card .seg button{padding-top:0;padding-bottom:0;display:inline-flex;align-
           <button type="button" role="menuitem" data-ir="contato"><span data-i="mail"></span><span><b>Fale com a comissão</b><small>Dúvidas, sugestões e imprensa</small></span></button>
         </div>
       </div>
+      <button class="tema rot-btn ntc-btn" id="ntcBtn" type="button" aria-label="Notícias da comissão" title="Notícias da comissão" aria-haspopup="dialog"><span class="knob" data-i="mega"></span><span class="rot">Notícias</span><span class="ntc-n" hidden></span></button>
+      <button class="tema tour-btn" id="tourBtn" type="button" aria-label="Fazer o tour pelo painel" title="Tour pelo painel: conheça os recursos"><span class="knob" data-i="tour"></span><span class="rot">Tour</span></button>
       <button class="tema novid-btn" id="novidBtn" type="button" aria-label="Novidades do painel" title="Novidades do painel" aria-haspopup="dialog"><span class="knob" data-i="novid"></span><span class="ponto" hidden></span></button>
       <button class="tema" id="tema" type="button"><span class="knob"></span><span class="txt"></span></button>
     </div>
@@ -1024,6 +1099,17 @@ main .card .seg button{padding-top:0;padding-bottom:0;display:inline-flex;align-
     <div class="novid-corpo" id="novidCorpo"></div>
   </aside>
 
+  <!-- Notícias da comissão (escritas na área da comissão) -->
+  <div class="novid-fundo" id="ntcFundo" hidden></div>
+  <aside class="novid" id="ntcLista" role="dialog" aria-modal="true" aria-labelledby="ntcTit" hidden>
+    <div class="novid-topo">
+      <div><h2 id="ntcTit">Notícias da comissão</h2><p class="note">Avisos publicados pela Comissão de Aprovados.</p></div>
+      <button type="button" class="novid-fechar" id="ntcFechar" aria-label="Fechar"><span data-i="x"></span></button>
+    </div>
+    <div class="ntc-filtros" id="ntcFiltros" role="group" aria-label="Filtrar por tag"></div>
+    <div class="novid-corpo" id="ntcCorpo"></div>
+  </aside>
+
   <footer>
     <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026. · <a class="acesso-comissao ir-contato" href="#contato">Fale com a comissão</a> · <a class="acesso-comissao" href="comissao.html">Acesso da comissão</a></span></div></div>
     <div id="foot"></div>
@@ -1136,6 +1222,8 @@ const ICONS={
   doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/>',
   avancar:'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
   novid:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/>',
+  mega:'<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+  tour:'<circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/>',
   x:'<path d="M18 6 6 18M6 6l12 12"/>'
 };
 const ico=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
@@ -2308,6 +2396,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-13 23:00','novo','Notícias da comissão','Novo botão "Notícias" no topo: avisos publicados pela Comissão de Aprovados, com a importância e o assunto de cada um. Os avisos importantes aparecem no meio da tela na primeira vez que você abre o painel depois da publicação.'],
+  ['2026-10-13 22:30','novo','Tour pelo painel','Novo botão "Tour" no topo: um passeio guiado, passo a passo, por todos os recursos do painel. Na primeira visita, o painel oferece o tour.'],
   ['2026-10-13 21:00','dados','Convocações conferidas com o relatório oficial da CAIXA','As convocações foram conferidas com o relatório de convocações por polo e macropolo divulgado pela CAIXA em 13/10, cruzado com a classificação da homologação. As convocações que o relatório indica e que ainda não tinham sido informadas entraram como "presumidas" até a comissão confirmar com cada pessoa.'],
   ['2026-10-13 19:10','melhoria','Botões e filtros do mesmo tamanho','Abas, filtros, botões de PDF, seletores e menus agora têm alturas padronizadas em todo o painel, para uma leitura mais limpa.'],
   ['2026-10-13 16:00','novo','Checklist de documentos','Nova aba "Documentos": responda algumas perguntas e monte o seu checklist dos documentos pedidos pela CAIXA na comprovação de requisitos, com a explicação de cada um, as certidões de cada estado onde morou e PDF para imprimir. Baseado na relação oficial da CAIXA.'],
@@ -2363,6 +2453,233 @@ novidBtn.onclick=()=>novidades(true);
 document.getElementById('novidFechar').onclick=()=>novidades(false);
 novidFundo.onclick=()=>novidades(false);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!novid.hidden)novidades(false)});
+
+/* ---------- Notícias da comissão ---------- */
+// Escritas na área da comissão (tabela noticias). "Já vi" fica só neste navegador;
+// o banco soma uma visualização por navegador (ver_noticia), sem guardar nada da pessoa.
+let NOTICIAS=[],ntcFiltro='';
+let NTC_VISTAS;try{NTC_VISTAS=new Set(JSON.parse(localStorage.getItem('noticiasVistas')||'[]'))}catch(e){NTC_VISTAS=new Set()}
+const ntcBtn=document.getElementById('ntcBtn'),ntcLista=document.getElementById('ntcLista'),ntcFundo=document.getElementById('ntcFundo');
+// Formatação simples e segura: o texto é escapado antes de virar HTML
+function formatarNoticia(txt){
+  const inl=s=>esc(s)
+    .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
+    .replace(/(^|[^*])\*([^*\n]+?)\*/g,'$1<i>$2</i>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g,'$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+  const out=[];let lista=null,par=[];
+  const fechaPar=()=>{if(par.length){out.push('<p>'+par.map(inl).join('<br>')+'</p>');par=[]}};
+  const fechaLista=()=>{if(lista){out.push(`<${lista.t}>${lista.i.map(x=>'<li>'+inl(x)+'</li>').join('')}</${lista.t}>`);lista=null}};
+  for(const l of String(txt||'').split('\n')){
+    let m;
+    if(!l.trim()){fechaPar();fechaLista();continue}
+    if((m=l.match(/^\s*[-•]\s+(.*)/))){fechaPar();if(!lista||lista.t!=='ul'){fechaLista();lista={t:'ul',i:[]}}lista.i.push(m[1]);continue}
+    if((m=l.match(/^\s*\d+[.)]\s+(.*)/))){fechaPar();if(!lista||lista.t!=='ol'){fechaLista();lista={t:'ol',i:[]}}lista.i.push(m[1]);continue}
+    fechaLista();
+    if((m=l.match(/^##\s+(.*)/))){fechaPar();out.push('<h3>'+inl(m[1])+'</h3>');continue}
+    if((m=l.match(/^>\s?(.*)/))){fechaPar();out.push('<blockquote>'+inl(m[1])+'</blockquote>');continue}
+    par.push(l);
+  }
+  fechaPar();fechaLista();return out.join('');
+}
+const resumoNoticia=t=>String(t||'').replace(/\]\(https?:[^)]+\)/g,']').replace(/[#>*\[\]]/g,'').replace(/^\s*[-•]\s+/gm,'').replace(/\s+/g,' ').trim();
+const dataNoticia=iso=>new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+const COR_IMP={Importante:'var(--bad)',Aviso:'var(--s1)',Informativo:'var(--muted)'};
+const tagsNoticia=n=>`<span class="ntc-imp ${esc(n.importancia)}">${esc(n.importancia)}</span><span class="ntc-cat">${esc(n.categoria)}</span>`;
+async function carregarNoticias(){
+  try{
+    const r=await fetch(`${DB.url}/rest/v1/noticias?select=id,titulo,texto,importancia,categoria,destaque,publicado_em&publicada=eq.true&order=publicado_em.desc&limit=60`,{headers:{apikey:DB.chave},cache:'no-store'});
+    if(!r.ok)throw new Error('notícias '+r.status);
+    NOTICIAS=await r.json();
+  }catch(e){console.warn('Notícias indisponíveis',e);NOTICIAS=[]}
+  ntcBtn.hidden=false;contarNoticias();
+  if(!ntcLista.hidden)desenharNoticias();
+}
+function contarNoticias(){const k=NOTICIAS.filter(n=>!NTC_VISTAS.has(n.id)).length,b=ntcBtn.querySelector('.ntc-n');b.hidden=!k;b.textContent=k}
+function noticiaVista(id){
+  if(NTC_VISTAS.has(id))return;NTC_VISTAS.add(id);
+  try{localStorage.setItem('noticiasVistas',JSON.stringify([...NTC_VISTAS]))}catch(e){}
+  rpc('ver_noticia',{p_id:id}).catch(()=>{});contarNoticias();
+}
+// Ao abrir o painel: só a notícia em destaque mais recente, e só se este navegador ainda não a viu
+function destacarNoticia(){
+  const n=NOTICIAS.find(x=>x.destaque);
+  if(!n||NTC_VISTAS.has(n.id)||S.tab==='form'||S.tab==='contato'||TU.ativo)return false;
+  const outras=NOTICIAS.filter(x=>x.id!==n.id&&!NTC_VISTAS.has(x.id)).length;
+  const f=document.createElement('div');f.className='ntc-fundo';
+  const d=document.createElement('div');d.className='ntc-destaque';d.style.setProperty('--ntc-cor',COR_IMP[n.importancia]||'var(--s1)');
+  d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-labelledby','ndTit');
+  d.innerHTML=`<div class="nd-topo"><span class="nd-rot">${ico('mega')}Notícia da comissão</span>${tagsNoticia(n)}<button type="button" class="novid-fechar" aria-label="Fechar">${ico('x')}</button></div>
+    <h2 id="ndTit">${esc(n.titulo)}</h2><p class="nd-quando">${dataNoticia(n.publicado_em)} · Comissão de Aprovados</p>
+    <div class="nd-corpo ntc-txt">${formatarNoticia(n.texto)}</div>
+    <div class="nd-pe">${outras?`<span class="nd-outras">+${outras} notícia(s) que você ainda não viu</span>`:''}<button type="button" class="todas">Ver todas as notícias</button><button type="button" class="ok">Entendi</button></div>`;
+  document.body.append(f,d);document.body.classList.add('novid-aberto');noticiaVista(n.id);
+  const fechar=(lista)=>{f.remove();d.remove();document.removeEventListener('keydown',tecla);document.body.classList.remove('novid-aberto');
+    if(lista)abrirNoticias(true);else{ntcBtn.focus({preventScroll:true});setTimeout(convidarTour,800)}};
+  const tecla=e=>{if(e.key==='Escape')fechar()};
+  document.addEventListener('keydown',tecla);
+  f.onclick=()=>fechar();d.querySelector('.novid-fechar').onclick=()=>fechar();d.querySelector('.ok').onclick=()=>fechar();
+  d.querySelector('.todas').onclick=()=>fechar(true);
+  d.querySelector('.ok').focus({preventScroll:true});
+  return true;
+}
+function desenharNoticias(){
+  const cats=[...new Set(NOTICIAS.map(n=>n.categoria))];
+  if(ntcFiltro&&!cats.includes(ntcFiltro))ntcFiltro='';
+  const fl=document.getElementById('ntcFiltros');
+  fl.hidden=cats.length<2;
+  fl.innerHTML=['',...cats].map(c=>`<button type="button" data-c="${esc(c)}" aria-pressed="${c===ntcFiltro}">${c?esc(c):'Todas'}</button>`).join('');
+  fl.querySelectorAll('button').forEach(b=>b.onclick=()=>{ntcFiltro=b.dataset.c;desenharNoticias()});
+  const L=NOTICIAS.filter(n=>!ntcFiltro||n.categoria===ntcFiltro);
+  const corpo=document.getElementById('ntcCorpo');
+  corpo.innerHTML=L.length?L.map((n,i)=>`<details class="ntc-item" data-id="${n.id}" ${i===0?'open':''}><summary>
+      <div class="ni-tags">${!NTC_VISTAS.has(n.id)?'<span class="ntc-nova">nova</span>':''}${tagsNoticia(n)}</div>
+      <b>${esc(n.titulo)}</b><div class="ni-data">${dataNoticia(n.publicado_em)}</div><p class="ni-resumo">${esc(resumoNoticia(n.texto))}</p></summary>
+      <div class="ntc-txt">${formatarNoticia(n.texto)}</div></details>`).join('')
+    :'<p class="ntc-vazio">Nenhuma notícia publicada ainda.</p>';
+  corpo.querySelectorAll('.ntc-item').forEach(it=>{const id=+it.dataset.id;if(it.open)noticiaVista(id);it.addEventListener('toggle',()=>{if(it.open)noticiaVista(+it.dataset.id)})});
+}
+function abrirNoticias(abrir){
+  if(abrir&&!novid.hidden)novidades(false);
+  ntcLista.hidden=ntcFundo.hidden=!abrir;document.body.classList.toggle('novid-aberto',abrir);
+  if(abrir){ntcFiltro='';desenharNoticias();document.getElementById('ntcCorpo').scrollTop=0;document.getElementById('ntcFechar').focus()}
+  else ntcBtn.focus({preventScroll:true});
+}
+ntcBtn.onclick=()=>abrirNoticias(true);
+document.getElementById('ntcFechar').onclick=()=>abrirNoticias(false);
+ntcFundo.onclick=()=>abrirNoticias(false);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!ntcLista.hidden)abrirNoticias(false)});
+
+/* ---------- Tour guiado ---------- */
+// Cada passo: aba (opcional), alvos (lista de seletores; usa o primeiro que estiver visível, e
+// todos os elementos dele juntos), "card" (destaca o card que contém o alvo), título e texto.
+const TOUR=[
+  {t:'Tour pelo painel',x:['Em cerca de 1 minuto, mostramos o que dá para fazer aqui.','Use <b>Próximo</b> e <b>Anterior</b> (ou as setas do teclado). Para sair, clique em <b>Fechar</b> ou aperte Esc.']},
+  {s:['.tabs'],t:'As abas do painel',x:['<b>Panorama</b>: os aprovados, notas e rankings. <b>Convocações</b>: quem já foi chamado e quem aguarda. <b>Vagas e regras</b>: o simulador da fila e o quadro de vagas. <b>Documentos</b>: o checklist para a comprovação de requisitos.']},
+  {aba:'panorama',s:['.filters','#filtbtn'],t:'Filtros',x:['Escolha a cota, o cargo e a macrorregião. Os filtros valem para o mapa, os gráficos e as listas, no Panorama e nas Convocações.']},
+  {aba:'panorama',s:['.det-tgl'],t:'Visão detalhada',x:['Desligada, o painel mostra só o essencial. Ligada, aparecem as análises completas: distribuição das notas, cotas do edital × resultado, regiões e destaques.']},
+  {aba:'panorama',s:['#k1'],t:'Números principais',x:['O resumo do que está filtrado. Onde aparecer o botão <b>?</b>, clique para ver o que o número significa.']},
+  {aba:'panorama',s:['#map1'],card:1,t:'Mapa dos estados',x:['Clique num estado para filtrar o painel inteiro por ele. Os botões acima do mapa trocam o que ele mostra: aprovados, nota média ou maior nota.','Para voltar ao Brasil inteiro, clique no × do selo do estado, logo abaixo da barra.']},
+  {aba:'panorama',s:['#rk1'],card:1,t:'Ranking',x:['Os estados (ou os cargos, quando um estado está escolhido) em ordem. Também dá para clicar para filtrar.']},
+  {aba:'panorama',s:['#tbl1'],card:1,t:'Lista de aprovados',x:['A lista com nota, posição no estado, cota e situação. Clique no título de uma coluna para ordenar e use <b>PDF</b> para baixar a lista com os filtros escolhidos.']},
+  {aba:'conv',s:['#k2'],t:'Convocações',x:['Quantas pessoas já foram convocadas e quantas aguardam. As convocações chegam pelos próprios aprovados e são conferidas pela comissão.','A marca <b>presumida</b> indica uma convocação deduzida pela ordem de classificação, que a comissão ainda vai confirmar.']},
+  {aba:'conv',s:['#tbl2'],card:1,t:'Quem foi e quem não foi convocado',x:['Alterne entre os convocados (com a data), quem tem vaga imediata e aguarda, e o cadastro reserva. Também pode ser baixado em PDF.']},
+  {aba:'vagas',s:['.fila-ctl'],t:'Simulador da fila',x:['Escolha o cargo e o estado para ver uma estimativa, chamada a chamada, da ordem de convocação, com as cotas e as vagas que passam de uma cota para outra.','É uma simulação da comissão, não a lista oficial: quem define a ordem é a CAIXA.']},
+  {aba:'vagas',s:['.fila-play'],t:'Veja a fila andar',x:['<b>Animar a fila</b> mostra as chamadas uma a uma. Use <b>Anterior</b> e <b>Próxima chamada</b> para ir no seu ritmo, ou troque entre <b>Pistas</b> e <b>Lista</b>.']},
+  {aba:'vagas',s:['.regras-grid'],t:'Como funciona a convocação',x:['As regras do edital resumidas: quem é chamado primeiro, a proporção das cotas e para onde vai a vaga quando falta gente numa cota. Mais abaixo está o quadro de vagas do Anexo I.']},
+  {aba:'docs',s:['#docPerfil'],card:1,t:'Checklist de documentos',x:['Para quem foi convocado: responda às perguntas e a lista de documentos se ajusta ao seu caso, com a explicação de cada um e PDF para imprimir.','Suas respostas ficam salvas só neste aparelho.']},
+  {aba:'docs',s:['#docLista'],card:1,t:'Seu checklist',x:['A lista montada para o seu caso, com a explicação de cada documento e de onde ele vem (edital ou Relação da CAIXA). Marque o que já separou: a barra mostra quanto falta.','Use <b>PDF do checklist</b> para imprimir e <b>Desmarcar tudo</b> para recomeçar.']},
+  {s:['.acoes-topo>.acao[data-acao]','#menuBtn'],t:'Informe sua convocação',x:['Foi convocado, tomou posse ou desistiu? Avise por aqui, só com o número de inscrição. Também dá para pedir entrada no grupo de WhatsApp dos aprovados.','Nada muda no painel sem a comissão conferir com você.']},
+  {s:['#ntcBtn'],t:'Notícias da comissão',x:['Avisos publicados pela comissão, como novas rodadas de convocação, com a importância e o assunto de cada um. O número vermelho mostra quantas você ainda não leu.','Os avisos importantes aparecem sozinhos no meio da tela quando você abre o painel.']},
+  {s:['#novidBtn'],t:'Novidades',x:['O histórico de atualizações do painel. O ponto azul aparece quando há novidade que você ainda não viu.']},
+  {s:['#tema'],t:'Modo claro e escuro',x:['Troque a aparência do painel quando quiser.']},
+  {s:['footer .autor'],t:'Fale com a comissão',x:['No rodapé fica o contato com a Comissão de Aprovados, para dúvidas, sugestões e correções.']},
+  {s:['footer .membros'],t:'Quem faz o painel',x:['Estes são os membros da Comissão de Aprovados, todos aprovados no concurso, com o cargo e o polo de cada um. São eles que conferem as convocações e mantêm o painel atualizado.','Pronto! Sempre que quiser rever, clique em <b>Tour</b> no topo da página.']}
+];
+const TU={i:0,ativo:false,abaIni:'panorama',luz:null,pop:null,bloq:null};
+const visivel=e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&getComputedStyle(e).visibility!=='hidden'};
+function alvosTour(p){
+  for(const s of p.s||[]){
+    let els=[...document.querySelectorAll(s)].filter(visivel);
+    if(p.card)els=els.map(e=>e.closest('.card')||e);
+    if(els.length)return els;
+  }
+  return null;
+}
+function irAbaTour(aba){if(aba&&S.tab!==aba){S.tab=aba;history.replaceState(null,'',location.pathname+location.search);render()}}
+function passoTour(n){
+  // Pula passos cujo alvo não existe nesta tela (ex.: algo que só aparece no computador)
+  const dir=n>=TU.i?1:-1;
+  while(n>0&&n<TOUR.length){const p=TOUR[n];irAbaTour(p.aba);if(!p.s||alvosTour(p))break;n+=dir}
+  n=Math.max(0,Math.min(TOUR.length-1,n));TU.i=n;
+  const p=TOUR[n];irAbaTour(p.aba);
+  TU.pop.innerHTML=`<div class="tp-passo">${n?`Passo ${n} de ${TOUR.length-1}`:'Bem-vindo'}</div><h3>${p.t}</h3>${p.x.map(t=>`<p>${t}</p>`).join('')}
+    <div class="tp-barra"><i style="width:${Math.round(n/(TOUR.length-1)*100)}%"></i></div>
+    <div class="tp-acoes"><button type="button" class="sair">Fechar</button><span class="esp"></span>
+      <button type="button" class="ant" ${n?'':'disabled'}>Anterior</button>
+      <button type="button" class="prox">${n===TOUR.length-1?'Concluir':n?'Próximo':'Começar'}</button></div>`;
+  TU.pop.querySelector('.sair').onclick=()=>fecharTour();
+  TU.pop.querySelector('.ant').onclick=()=>passoTour(TU.i-1);
+  TU.pop.querySelector('.prox').onclick=()=>TU.i===TOUR.length-1?fecharTour():passoTour(TU.i+1);
+  // Espera a aba desenhar antes de medir e rolar até o alvo
+  setTimeout(()=>{
+    const els=alvosTour(p);
+    if(els){
+      // Alvos no topo (cabeçalho e barra fixa): volta ao início da página. Os demais: logo abaixo da barra.
+      const bar=document.getElementById('bar'),noTopo=els.some(e=>bar.contains(e)||e.closest('header'));
+      const destino=noTopo?0:caixaTour(els).top+scrollY-bar.offsetHeight-16;
+      window.scrollTo({top:Math.max(0,destino),behavior:'smooth'});
+    }
+    posicionarTour();setTimeout(posicionarTour,420);
+    TU.pop.querySelector('.prox').focus({preventScroll:true});
+  },60);
+}
+function caixaTour(els){
+  const rs=els.map(e=>e.getBoundingClientRect());
+  const l=Math.min(...rs.map(r=>r.left)),t=Math.min(...rs.map(r=>r.top)),rr=Math.max(...rs.map(r=>r.right)),b=Math.max(...rs.map(r=>r.bottom));
+  return {left:l,top:t,width:rr-l,height:b-t,right:rr,bottom:b};
+}
+function posicionarTour(){
+  if(!TU.ativo)return;
+  const p=TOUR[TU.i],els=p.s&&alvosTour(p),L=TU.luz,P=TU.pop,m=6;
+  L.classList.toggle('centro',!els);
+  if(!els){P.style.left=Math.max(16,(innerWidth-P.offsetWidth)/2)+'px';P.style.top=Math.max(16,(innerHeight-P.offsetHeight)/2)+'px';return}
+  const r=caixaTour(els);
+  // O destaque não passa das bordas da tela (cards altos)
+  // Alvos abaixo da barra fixa não podem ficar "atrás" dela; os do cabeçalho e da própria barra, sim
+  const bar=document.getElementById('bar'),acima=els.some(e=>bar.contains(e)||e.closest('header'))?4:bar.getBoundingClientRect().bottom+4;
+  const top=Math.max(acima,r.top-m),bot=Math.min(innerHeight-4,r.bottom+m);
+  Object.assign(L.style,{left:(r.left-m)+'px',top:top+'px',width:(r.width+2*m)+'px',height:Math.max(0,bot-top)+'px'});
+  if(innerWidth<=620)return; // no celular o quadro fica fixo embaixo
+  const w=P.offsetWidth,h=P.offsetHeight;
+  let x=Math.min(Math.max(16,r.left),innerWidth-w-16),y;
+  if(bot+12+h<=innerHeight-12)y=bot+12;               // embaixo do alvo
+  else if(top-12-h>=12)y=top-12-h;                      // em cima
+  else{y=Math.min(Math.max(12,innerHeight-h-16),innerHeight-h-16); // ao lado, se couber
+    if(r.right+16+w<=innerWidth-16)x=r.right+16;else if(r.left-16-w>=16)x=r.left-16-w;}
+  P.style.left=x+'px';P.style.top=y+'px';
+}
+function abrirTour(){
+  if(TU.ativo)return;
+  if(document.getElementById('load'))return; // dados ainda carregando
+  fecharConvite();if(!novid.hidden)novidades(false);if(!ntcLista.hidden)abrirNoticias(false);
+  TU.ativo=true;TU.abaIni=['panorama','conv','vagas','docs'].includes(S.tab)?S.tab:'panorama';
+  TU.bloq=Object.assign(document.createElement('div'),{className:'tour-bloq'});
+  TU.luz=Object.assign(document.createElement('div'),{className:'tour-luz centro'});
+  TU.pop=Object.assign(document.createElement('div'),{className:'tour-pop'});
+  TU.pop.setAttribute('role','dialog');TU.pop.setAttribute('aria-modal','true');TU.pop.setAttribute('aria-live','polite');
+  document.body.append(TU.bloq,TU.luz,TU.pop);
+  TU.i=0;passoTour(0);
+  try{localStorage.setItem('tourVisto','1')}catch(e){}
+}
+function fecharTour(){
+  if(!TU.ativo)return;TU.ativo=false;
+  [TU.bloq,TU.luz,TU.pop].forEach(e=>e.remove());
+  irAbaTour(TU.abaIni);window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('tourBtn').focus({preventScroll:true});
+}
+document.getElementById('tourBtn').onclick=abrirTour;
+addEventListener('resize',()=>posicionarTour());
+addEventListener('scroll',()=>posicionarTour(),{passive:true});
+document.addEventListener('keydown',e=>{
+  if(!TU.ativo)return;
+  if(e.key==='Escape')fecharTour();
+  else if(e.key==='ArrowRight'){e.preventDefault();TU.i===TOUR.length-1?fecharTour():passoTour(TU.i+1)}
+  else if(e.key==='ArrowLeft'){e.preventDefault();passoTour(TU.i-1)}
+});
+// Convite discreto na primeira visita
+function fecharConvite(){const c=document.querySelector('.tour-convite');if(c)c.remove()}
+function convidarTour(){
+  try{if(localStorage.getItem('tourVisto'))return}catch(e){return}
+  if(document.querySelector(".ntc-destaque")||TU.ativo)return;
+  if(S.tab!=='panorama'&&S.tab!=='conv')return;
+  const c=document.createElement('div');c.className='tour-convite';c.setAttribute('role','dialog');c.setAttribute('aria-label','Convite para o tour');
+  c.innerHTML=`<span class="ic">${ico('tour')}</span><b>Primeira vez por aqui?</b><p>Faça um tour rápido e conheça tudo o que o painel oferece.</p>
+    <div class="tc-acoes"><button type="button" class="sim">Fazer o tour</button><button type="button" class="nao">Agora não</button></div>`;
+  c.querySelector('.sim').onclick=abrirTour;
+  c.querySelector('.nao').onclick=()=>{fecharConvite();try{localStorage.setItem('tourVisto','1')}catch(e){}};
+  document.body.append(c);
+}
 
 /* ---------- Fale com a comissão ---------- */
 // Grava a mensagem no banco (enviar_mensagem) e pede o aviso por e-mail à função avisar-mensagem.
@@ -2498,12 +2815,14 @@ function rodape(quando,copia){
     if(location.hash==='#vagas')S.tab='vagas';
     if(location.hash==='#documentos')S.tab='docs';
     render();
+    carregarNoticias().then(()=>{if(!destacarNoticia())setTimeout(convidarTour,1500)});
     if(S.tab==='form')iniciarForm();
     if(S.tab==='contato')desenharContato();
     // Atualização automática com a página aberta
     if(!copia){
       let ass=assinatura(DATA);
       const atualizar=async()=>{
+        carregarNoticias();
         try{const novos=await lerBanco();const a=assinatura(novos);
           if(a!==ass){ass=a;DATA=novos;exemplosCotas();render();if(vagasPronta){conferirFila();if(FS.modo==='real'&&!FS.timer)desenharFila(false)}}
           rodape(new Date(),false);
