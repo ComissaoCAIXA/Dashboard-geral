@@ -216,6 +216,8 @@ footer .autor span:not(.ic){display:block;color:var(--ink2);font-size:12.5px}
 footer .autor .ic{width:34px;height:34px;border-radius:10px}
 footer .autor .ic svg{width:18px;height:18px}
 footer .membros{flex-basis:100%;border-top:1px solid var(--grid);padding-top:14px;margin-top:2px}
+footer .aviso-legal{flex-basis:100%;margin:0;padding:10px 12px;border-radius:8px;background:var(--empty);color:var(--ink2);font-size:12.5px;line-height:1.55}
+footer .aviso-legal b{display:inline;color:var(--ink);font-size:inherit}
 footer .membros h3{font-size:12.5px;font-weight:700;color:var(--ink2);margin:0 0 10px;text-transform:uppercase;letter-spacing:.05em}
 footer .membros ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px 18px}
 footer .membros li{display:flex;flex-direction:column;line-height:1.3}
@@ -1113,6 +1115,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
   <footer>
     <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026. · <a class="acesso-comissao ir-contato" href="#contato">Fale com a comissão</a> · <a class="acesso-comissao" href="comissao.html">Acesso da comissão</a></span></div></div>
     <div id="foot"></div>
+    <p class="aviso-legal"><b>Iniciativa independente, sem caráter oficial.</b> Este painel é organizado voluntariamente pela Comissão de Aprovados e não tem vínculo com a CAIXA nem com a banca do concurso. Os dados vêm de fontes públicas (o Edital nº 01/2025/NS, a homologação do resultado no Diário Oficial da União e os relatórios de convocação da CAIXA) e de informações dos próprios aprovados, reunidas no grupo de WhatsApp e conferidas pela comissão. Podem conter erros ou atrasos, e as simulações e os materiais de apoio são interpretações da comissão. Nada aqui substitui as publicações oficiais nem gera direito a convocação, e a comissão não se responsabiliza por decisões tomadas com base no painel. Confira sempre os documentos oficiais da CAIXA.</p>
     <section class="membros" aria-labelledby="membrosTit">
       <h3 id="membrosTit">Membros da Comissão de Aprovados</h3>
       <ul>
@@ -2396,6 +2399,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-14 00:10','melhoria','De onde vêm os dados','O rodapé agora explica que o painel é uma iniciativa independente da Comissão de Aprovados, sem vínculo com a CAIXA, e de onde vêm as informações: edital, homologação, relatórios da CAIXA e o grupo dos aprovados.'],
   ['2026-10-13 23:00','novo','Notícias da comissão','Novo botão "Notícias" no topo: avisos publicados pela Comissão de Aprovados, com a importância e o assunto de cada um. Os avisos importantes aparecem no meio da tela na primeira vez que você abre o painel depois da publicação.'],
   ['2026-10-13 22:30','novo','Tour pelo painel','Novo botão "Tour" no topo: um passeio guiado, passo a passo, por todos os recursos do painel. Na primeira visita, o painel oferece o tour.'],
   ['2026-10-13 21:00','dados','Convocações conferidas com o relatório oficial da CAIXA','As convocações foram conferidas com o relatório de convocações por polo e macropolo divulgado pela CAIXA em 13/10, cruzado com a classificação da homologação. As convocações que o relatório indica e que ainda não tinham sido informadas entraram como "presumidas" até a comissão confirmar com cada pessoa.'],
