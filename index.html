@@ -191,6 +191,7 @@ tbody tr:hover{background:var(--wash)}
 .p-vi{background:color-mix(in srgb,var(--s1) 16%,transparent);color:var(--s1)}
 .p-cr{background:color-mix(in srgb,var(--s2) 14%,transparent);color:var(--s2)}
 .p-ok{background:color-mix(in srgb,var(--s3) 16%,transparent);color:var(--s3)}
+.p-pres{background:none;border:1px dashed color-mix(in srgb,var(--ink2) 55%,transparent);color:var(--ink2);margin-left:4px;cursor:help}
 .p-na{background:var(--empty);color:var(--muted)}
 .pager{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:8px;color:var(--ink2);font-size:13px}
 .pager button{font:inherit;border:1px solid var(--border);background:var(--surface);color:var(--ink);border-radius:6px;padding:4px 10px;cursor:pointer}
@@ -782,7 +783,7 @@ const AJUDA={
   macro2:['Andamento por macrorregião','O mesmo acompanhamento do quadro por cargo, agora por macropolo: convocados (verde), vagas imediatas aguardando (azul) e cadastro reserva (cinza), com o percentual das vagas imediatas já chamadas.'],
   cota2:['Andamento por cota','Convocações por modalidade de concorrência. Pelo edital (item 2.13), a convocação começa por uma pessoa com deficiência, segue com uma da ampla concorrência e depois com uma de PN, PI ou PQ, alternando nessa proporção.'],
   strip2:['Notas de quem já foi convocado','Cada ponto é uma pessoa, posicionada pela nota. Verde é quem já foi convocado, azul é vaga imediata aguardando e cinza é cadastro reserva. O traço vertical é a mediana do cargo.'],
-  tbl2:['Quem foi e quem não foi convocado','Use as abas para alternar entre quem já foi convocado, quem está em vaga imediata aguardando e quem está no cadastro reserva. A data é a da convocação informada à comissão.'],
+  tbl2:['Quem foi e quem não foi convocado','Use as abas para alternar entre quem já foi convocado, quem está em vaga imediata aguardando e quem está no cadastro reserva. A data é a da convocação informada à comissão.<br><br><b>Convocado · presumida</b>: a comissão ainda não conseguiu falar com a pessoa, mas alguém classificado depois dela na mesma lista (mesmo cargo, estado e cota) já foi convocado, então pela ordem ela também foi. Quando a comissão confirma com a pessoa, a marca "presumida" sai.'],
   // Indicadores
   kAprov:['Aprovados','Total de pessoas classificadas (vaga imediata + cadastro reserva) dentro dos filtros. A barra mostra a fatia em relação ao total do concurso.'],
   kVI:['Vagas imediatas','Pessoas classificadas dentro do número de vagas imediatas do edital, ou seja, as primeiras da fila para convocação. O anel mostra a fatia em relação a todos os aprovados.'],
@@ -1016,7 +1017,8 @@ function tabela(el,rows,cols,sortKey,pageKey){
   box.selectAll('.pager button').on('click',function(){S[pageKey]+=+this.dataset.p;render()});
 }
 const sitPill=r=>r.sit==='VI'?'<span class="pill p-vi">Vaga imediata</span>':'<span class="pill p-cr">Cadastro reserva</span>';
-const convPill=r=>r.conv===null?'<span class="pill p-na">Sem informação</span>':r.conv?'<span class="pill p-ok">Convocado</span>':'<span class="pill p-na">Não</span>';
+const PRESUMIDA_TXT='Convocação presumida: a comissão ainda não falou com esta pessoa, mas alguém classificado depois dela na mesma lista (cargo, estado e cota) já foi convocado.';
+const convPill=r=>r.conv===null?'<span class="pill p-na">Sem informação</span>':r.conv?'<span class="pill p-ok">Convocado</span>'+(r.presumida?`<span class="pill p-pres" title="${PRESUMIDA_TXT}">presumida</span>`:''):'<span class="pill p-na">Não</span>';
 
 /* ---------- Ranking de estados ---------- */
 function rankEstados(el,tEl,titulo,porUF,fmtv,parts,tipFn){
@@ -1419,6 +1421,7 @@ document.getElementById('fProt').onsubmit=async e=>{e.preventDefault();const out
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-13 09:30','novo','Convocação confirmada ou presumida','Convocações deduzidas pela ordem de classificação (alguém atrás na mesma lista já foi chamado) aparecem com a marca "presumida" até a comissão confirmar com a pessoa.'],
   ['2026-10-13 08:50','novo','Novidades do painel','Este histórico: tudo o que muda no painel passa a ser registrado aqui. O ponto azul no ícone indica que há novidade que você ainda não viu.'],
   ['2026-10-13 08:39','melhoria','Menu "Solicitações" no celular','Os formulários agora ficam reunidos num único botão no topo, com uma explicação curta de cada opção.'],
   ['2026-10-13 08:05','novo','Fale com a comissão','Envie dúvidas, sugestões ou contato de imprensa pelo link no rodapé ou pelo menu. A resposta chega no e-mail que você informar.'],
@@ -1555,7 +1558,7 @@ const SNAPSHOT=/*SNAPSHOT*/{"em":"2026-10-13T02:13:26.002Z","data":[{"cargo":"Ar
 const DB={
   url:'https://ssgtryzcesgyuiltovmu.supabase.co',
   chave:'sb_publishable_cTwDqwQkTA8sJsMbuAIXRA_oCKeeaLU',
-  colunas:'id,nome_publico,cargo,uf,macropolo,cota,situacao,nota,posicao_uf,class_macro,convocacao,data_convocacao,atualizado_em',
+  colunas:'id,nome_publico,cargo,uf,macropolo,cota,situacao,nota,posicao_uf,class_macro,convocacao,validacao,data_convocacao,atualizado_em',
   intervalo:2*60*1000 // nova consulta a cada 2 minutos com a página aberta
 };
 const COTA_DB={AC:'AC',PcD:'PCD',PN:'PPP/PN',PI:'PI',PQ:'PQ'};
@@ -1567,7 +1570,7 @@ async function lerBanco(){
     sit:a.situacao==='Vaga imediata'?'VI':'CR',lista:COTA_DB[a.cota],listas:[COTA_DB[a.cota]],
     rankUF:a.posicao_uf,classMacro:a.class_macro,
     conv:a.convocacao==='Sem informação'?null:(a.convocacao==='Convocado'||a.convocacao==='Empossado'),
-    situacaoConv:a.convocacao,dataConv:a.data_convocacao,atualizado:a.atualizado_em
+    situacaoConv:a.convocacao,dataConv:a.data_convocacao,atualizado:a.atualizado_em,presumida:a.validacao==='Presumida'
   }));
 }
 // Muda sempre que alguém inclui, altera ou exclui um registro

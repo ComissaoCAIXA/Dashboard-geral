@@ -82,10 +82,20 @@ tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
 .hb .vl{font-variant-numeric:tabular-nums;white-space:nowrap}.hb .vl small{color:var(--muted)}
 .rolagem{max-height:360px;overflow:auto;padding-right:4px}
 .filtros-g{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:8px;margin:12px 0}
-.filtros-a{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:8px;margin:12px 0}
-.lote{position:sticky;top:8px;z-index:5;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;background:var(--s1);color:#fff;border-radius:8px;padding:10px 12px;margin-bottom:10px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
-.lote select,.lote input{width:auto;padding:6px 8px;font-size:14px}
-.lote .lData{display:inline-flex;align-items:center;gap:6px}
+.filtros-a{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+.filtros-a input{grid-column:span 1}
+.lote{position:sticky;top:8px;z-index:5;background:var(--s1);color:#fff;border-radius:8px;padding:12px 14px;margin-bottom:10px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.lote-topo,.lote-pe{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between}
+.lote-pe small{flex:1;min-width:220px;opacity:.85;font-size:12px}
+.lote-campos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 12px;margin:10px 0}
+.lote-campos label{display:flex;flex-direction:column;gap:3px;font-size:12px;font-weight:600}
+.lote select,.lote input{padding:6px 8px;font-size:14px}
+.lote .ld{display:flex;gap:6px}.lote .ld select{flex:1}.lote .ld input{flex:1;min-width:0}
+@media (max-width:760px){.lote-campos{grid-template-columns:1fr 1fr}}
+.pill.pres{background:var(--warnbg);color:var(--warn)}
+.sug{border:1px solid var(--warn);border-radius:8px;padding:14px;margin-bottom:12px;background:var(--surface)}
+.sug summary{cursor:pointer;font-weight:700}
+.sug table{margin-top:8px}
 .lote .btn.sec{color:#fff;border-color:rgba(255,255,255,.6)}
 .lote .btn.ok{background:#fff;color:var(--s1);border-color:#fff}
 td.sel,th.sel{width:34px;text-align:center}
@@ -194,6 +204,7 @@ tr.marcado{background:var(--wash)}
 
     <div id="pAprov" hidden>
       <div class="kpis" id="aKpis"></div>
+      <div id="aSug"></div>
       <div class="card">
         <div class="linha" style="justify-content:space-between;align-items:baseline"><h2>Todos os aprovados</h2>
           <button class="btn sec" type="button" id="exportar" style="padding:6px 12px;font-size:13px">Exportar CSV</button></div>
@@ -205,13 +216,21 @@ tr.marcado{background:var(--wash)}
           <select id="aCota"><option value="">Todas as cotas</option></select>
           <select id="aSit"><option value="">Vaga imediata e reserva</option><option>Vaga imediata</option><option>Cadastro reserva</option></select>
           <select id="aConv"><option value="">Todas as situações</option><option>Aguardando</option><option>Convocado</option><option>Empossado</option><option>Desistente</option><option>Sem informação</option></select>
+          <select id="aVal"><option value="">Confirmadas e presumidas</option><option>Confirmada</option><option>Presumida</option></select>
         </div>
         <div class="lote" id="aLote" hidden>
-          <span><b id="aNSel">0</b> selecionado(s)</span>
-          <select id="lSit"><option>Convocado</option><option>Empossado</option><option>Desistente</option><option value="Aguardando">Aguardando (desfazer)</option></select>
-          <label class="lData" id="lDataRot">em <input type="date" id="lData"></label>
-          <button class="btn ok" type="button" id="lAplicar">Aplicar</button>
-          <button class="btn sec" type="button" id="lLimpar">Limpar seleção</button>
+          <div class="lote-topo"><span><b id="aNSel">0</b> selecionado(s) · escolha só o que quer mudar; o resto fica como está</span>
+            <button class="btn sec" type="button" id="lLimpar">Limpar seleção</button></div>
+          <div class="lote-campos">
+            <label>Situação<select id="lConv"><option value="">Não alterar</option><option>Convocado</option><option>Empossado</option><option>Desistente</option><option>Aguardando</option><option>Sem informação</option></select></label>
+            <label>Validação<select id="lVal"><option value="">Não alterar</option><option>Confirmada</option><option>Presumida</option></select></label>
+            <label>Data da convocação<span class="ld"><select id="lDcModo"><option value="">Não alterar</option><option value="d">Definir</option><option value="x">Apagar</option></select><input type="date" id="lDc" hidden></span></label>
+            <label>Data da posse<span class="ld"><select id="lDpModo"><option value="">Não alterar</option><option value="d">Definir</option><option value="x">Apagar</option></select><input type="date" id="lDp" hidden></span></label>
+            <label>Grupo de WhatsApp<select id="lGrupo"><option value="">Não alterar</option><option value="1">Está no grupo</option><option value="0">Fora do grupo</option></select></label>
+            <label>Nome no painel<select id="lNome"><option value="">Não alterar</option><option value="0">Nome completo</option><option value="1">Só iniciais</option></select></label>
+          </div>
+          <div class="lote-pe"><small>"Aguardando" ou "Sem informação" apaga as datas e a validação, a menos que você defina as datas. A observação interna não é alterada em lote.</small>
+            <button class="btn ok" type="button" id="lAplicar">Aplicar aos selecionados</button></div>
         </div>
         <div id="aRet"></div>
         <div id="listaAprov"></div>
@@ -351,14 +370,14 @@ function desenharPend(lista){
 $('recarregar').onclick=carregarPend;
 
 /* ---------- Aprovados ---------- */
-const COLS='id,nome,inscricao,cargo,uf,cota,situacao,posicao_uf,nota,convocacao,data_convocacao,data_posse,observacao,ocultar_nome,no_grupo,no_grupo_em';
+const COLS='id,nome,inscricao,cargo,uf,cota,situacao,posicao_uf,nota,convocacao,validacao,data_convocacao,data_posse,observacao,ocultar_nome,no_grupo,no_grupo_em';
 // Lista completa com filtros; seleção de várias pessoas para registrar convocação em lote
 let A=[],aSel=new Set(),aLimite=100,ultimaData='2026-10-08';
 async function carregarAprov(){
   $('listaAprov').innerHTML='<p class="vazio">Carregando…</p>';
   const {data,error}=await SB.from('aprovados').select(COLS).order('cargo').order('uf').order('posicao_uf');
   if(error){msg($('listaAprov'),'erro',error.message);return}
-  A=data;
+  A=data;carregarSugestoes();
   if($('aCargo').options.length===1){
     const op=(id,vals)=>[...new Set(vals)].sort().forEach(v=>$(id).add(new Option(v,v)));
     op('aCargo',A.map(r=>r.cargo));op('aUF',A.map(r=>r.uf));op('aCota',A.map(r=>r.cota));
@@ -366,13 +385,13 @@ async function carregarAprov(){
   desenharAprov();
 }
 function filtradosAprov(){
-  const q=$('aBusca').value.trim().toLowerCase(),c=$('aCargo').value,u=$('aUF').value,co=$('aCota').value,s=$('aSit').value,cv=$('aConv').value;
-  return A.filter(r=>(!c||r.cargo===c)&&(!u||r.uf===u)&&(!co||r.cota===co)&&(!s||r.situacao===s)&&(!cv||r.convocacao===cv)&&
+  const q=$('aBusca').value.trim().toLowerCase(),c=$('aCargo').value,u=$('aUF').value,co=$('aCota').value,s=$('aSit').value,cv=$('aConv').value,va=$('aVal').value;
+  return A.filter(r=>(!c||r.cargo===c)&&(!u||r.uf===u)&&(!co||r.cota===co)&&(!s||r.situacao===s)&&(!cv||r.convocacao===cv)&&(!va||r.validacao===va)&&
     (!q||r.nome.toLowerCase().includes(q)||r.inscricao.startsWith(q)));
 }
 function desenharAprov(){
-  const conta=k=>A.filter(r=>r.convocacao===k).length;
-  $('aKpis').innerHTML=[['Aprovados',A.length,'base completa'],['Convocados',conta('Convocado'),'aguardando posse'],['Empossados',conta('Empossado'),'já tomaram posse'],['Aguardando',conta('Aguardando')+conta('Sem informação'),`${conta('Desistente')} desistente(s)`]]
+  const conta=k=>A.filter(r=>r.convocacao===k).length,pres=A.filter(r=>r.validacao==='Presumida').length;
+  $('aKpis').innerHTML=[['Aprovados',A.length,'base completa'],['Convocados',conta('Convocado'),pres?`${pres} presumida(s), a confirmar`:'todas confirmadas'],['Empossados',conta('Empossado'),'já tomaram posse'],['Aguardando',conta('Aguardando')+conta('Sem informação'),`${conta('Desistente')} desistente(s)`]]
     .map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join('');
   const rows=filtradosAprov(),vis=rows.slice(0,aLimite),el=$('listaAprov');
   $('aLote').hidden=!aSel.size;$('aNSel').textContent=aSel.size;
@@ -382,7 +401,7 @@ function desenharAprov(){
     <div class="tw"><table><thead><tr><th class="sel"><input type="checkbox" id="aTodos" ${todos?'checked':''} title="Selecionar todos os mostrados"></th><th>Nome</th><th>Inscrição</th><th>Cargo</th><th>UF</th><th>Cota</th><th>Classificação</th><th>Convocação</th><th>Grupo</th></tr></thead>
     <tbody>${vis.map(r=>`<tr data-id="${r.id}" class="${aSel.has(r.id)?'marcado':''}"><td class="sel"><input type="checkbox" ${aSel.has(r.id)?'checked':''}></td>
       <td><button type="button" class="nomelink">${esc(r.nome)}</button>${r.ocultar_nome?' <span class="pill">nome oculto</span>':''}</td><td>${esc(r.inscricao)}</td><td>${esc(r.cargo)}</td><td>${esc(r.uf)}</td><td>${esc(r.cota)}</td><td>${r.posicao_uf}º · ${esc(r.situacao)}</td>
-      <td><span class="pill ${esc(r.convocacao)}">${esc(r.convocacao)}</span>${r.convocacao==='Empossado'&&r.data_posse?' '+dBR(r.data_posse):r.data_convocacao&&r.convocacao!=='Aguardando'?' '+dBR(r.data_convocacao):''}</td>
+      <td><span class="pill ${esc(r.convocacao)}">${esc(r.convocacao)}</span>${r.convocacao==='Empossado'&&r.data_posse?' '+dBR(r.data_posse):r.data_convocacao&&r.convocacao!=='Aguardando'?' '+dBR(r.data_convocacao):''}${r.validacao==='Presumida'?' <span class="pill pres" title="Deduzida pela ordem de classificação; a comissão ainda não falou com a pessoa">presumida</span>':''}</td>
       <td>${r.no_grupo?'<span class="pill Convocado">no grupo</span>':'<span class="pill">fora</span>'}</td></tr>
       <tr hidden data-ed="${r.id}"><td colspan="9"></td></tr>`).join('')}</tbody></table></div>
     ${rows.length>vis.length?`<button class="btn sec mais" type="button" id="aMais">Mostrar mais ${Math.min(100,rows.length-vis.length)}</button>`:''}`;
@@ -393,24 +412,65 @@ function desenharAprov(){
     $('aTodos').checked=vis.every(r=>aSel.has(r.id))});
   el.querySelectorAll('.nomelink').forEach(b=>b.onclick=()=>abrirEdicao(+b.closest('tr').dataset.id));
 }
-['aBusca','aCargo','aUF','aCota','aSit','aConv'].forEach(id=>$(id).addEventListener(id==='aBusca'?'input':'change',()=>{aLimite=100;desenharAprov()}));
-// Barra de ação em lote
-const lDataVis=()=>{const s=$('lSit').value;$('lDataRot').hidden=!(s==='Convocado'||s==='Empossado')};
-$('lSit').onchange=lDataVis;$('lData').value=ultimaData;$('lData').max=new Date().toISOString().slice(0,10);
-$('lLimpar').onclick=()=>{aSel.clear();desenharAprov()};
-$('lAplicar').onclick=async()=>{
-  const s=$('lSit').value,d=$('lData').value||null,ids=[...aSel],n=ids.length;
-  const nomes=A.filter(r=>aSel.has(r.id)).slice(0,8).map(r=>'• '+r.nome).join('\n')+(n>8?`\n… e mais ${n-8}`:'');
-  const txt=s==='Aguardando'?`Voltar ${n} pessoa(s) para "Aguardando" e apagar as datas?`:`Marcar ${n} pessoa(s) como "${s}"${d&&s!=='Desistente'?' em '+dBR(d):''}?`;
-  if(!confirm(txt+'\n\n'+nomes+'\n\nO painel público é atualizado na hora.'))return;
-  $('lAplicar').disabled=true;
-  const {data,error}=await SB.rpc('comissao_convocar',{p_ids:ids,p_convocacao:s,p_data:(s==='Convocado'||s==='Empossado')?d:null});
-  $('lAplicar').disabled=false;
-  if(error||!data.ok){msg($('aRet'),'erro',error?error.message:data.erro);return}
-  if(d)ultimaData=d;aSel.clear();msg($('aRet'),'ok',`Pronto: ${data.alterados} registro(s) atualizado(s). O painel público já mostra a mudança.`);
+['aBusca','aCargo','aUF','aCota','aSit','aConv','aVal'].forEach(id=>$(id).addEventListener(id==='aBusca'?'input':'change',()=>{aLimite=100;desenharAprov()}));
+// Edição em lote: cada campo começa em "Não alterar"; só vai para o banco o que foi escolhido
+const hojeStr=()=>new Date().toISOString().slice(0,10);
+['lDc','lDp'].forEach(id=>{$(id).value=ultimaData;$(id).max=hojeStr()});
+['Dc','Dp'].forEach(k=>$('l'+k+'Modo').onchange=()=>{$('l'+k).hidden=$('l'+k+'Modo').value!=='d'});
+// Ao escolher Convocado/Empossado, já sugere definir a data correspondente
+$('lConv').onchange=()=>{const v=$('lConv').value,k=v==='Convocado'?'Dc':v==='Empossado'?'Dp':null;
+  if(k&&!$('l'+k+'Modo').value){$('l'+k+'Modo').value='d';$('l'+k).hidden=false}};
+function resetLote(){['lConv','lVal','lDcModo','lDpModo','lGrupo','lNome'].forEach(id=>$(id).value='');$('lDc').hidden=$('lDp').hidden=true}
+$('lLimpar').onclick=()=>{aSel.clear();resetLote();desenharAprov()};
+async function editarLote(ids,campos,resumo){
+  const n=ids.length,nomes=A.filter(r=>ids.includes(r.id)).slice(0,8).map(r=>'• '+r.nome).join('\n')+(n>8?`\n… e mais ${n-8}`:'');
+  if(!confirm(`Alterar ${n} pessoa(s):\n${resumo}\n\n${nomes}\n\nO painel público é atualizado na hora.`))return false;
+  const {data,error}=await SB.rpc('comissao_editar_lote',{p_ids:ids,p_campos:campos});
+  if(error||!data.ok){msg($('aRet'),'erro',error?error.message:data.erro);return false}
+  msg($('aRet'),'ok',`Pronto: ${data.alterados} registro(s) atualizado(s). O painel público já mostra a mudança.`);
   setTimeout(()=>{$('aRet').innerHTML=''},6000);
-  carregarAprov();
+  carregarAprov();return true;
+}
+$('lAplicar').onclick=async()=>{
+  const c={},txt=[];
+  if($('lConv').value){c.convocacao=$('lConv').value;txt.push('Situação → '+c.convocacao)}
+  if($('lVal').value){c.validacao=$('lVal').value;txt.push('Validação → '+c.validacao)}
+  for(const [k,campo,rot] of [['Dc','data_convocacao','Data da convocação'],['Dp','data_posse','Data da posse']]){
+    const m=$('l'+k+'Modo').value;
+    if(m==='d'){if(!$('l'+k).value){msg($('aRet'),'erro','Informe a '+rot.toLowerCase()+'.');return}c[campo]=$('l'+k).value;txt.push(rot+' → '+dBR(c[campo]))}
+    if(m==='x'){c[campo]=null;txt.push(rot+' → apagar')}
+  }
+  if($('lGrupo').value){c.no_grupo=$('lGrupo').value==='1';txt.push('Grupo → '+(c.no_grupo?'está no grupo':'fora do grupo'))}
+  if($('lNome').value){c.ocultar_nome=$('lNome').value==='1';txt.push('Nome no painel → '+(c.ocultar_nome?'só iniciais':'completo'))}
+  if(!txt.length){msg($('aRet'),'erro','Escolha pelo menos um campo para alterar.');return}
+  $('lAplicar').disabled=true;
+  const ok=await editarLote([...aSel],c,txt.map(t=>'  '+t).join('\n'));
+  $('lAplicar').disabled=false;
+  if(ok){if(c.data_convocacao)ultimaData=c.data_convocacao;aSel.clear();resetLote()}
 };
+
+// Sugestões de convocação presumida (pela ordem de classificação)
+async function carregarSugestoes(){
+  const {data,error}=await SB.rpc('comissao_sugestoes_presumidas');
+  const el=$('aSug');if(error||!data||!data.length){el.innerHTML='';return}
+  el.innerHTML=`<details class="sug" open><summary>${data.length} convocação(ões) presumida(s) sugerida(s)</summary>
+    <p class="note">Estas pessoas ainda aparecem como "Aguardando", mas alguém classificado <b>atrás delas na mesma lista</b> (mesmo cargo, estado e cota) já foi convocado. Pela ordem, elas também devem ter sido. Confira e marque como convocação <b>presumida</b>; quando a comissão falar com a pessoa, mude para confirmada.</p>
+    <div class="tw"><table><thead><tr><th class="sel"><input type="checkbox" id="sTodos" checked></th><th>Quem</th><th>Lista</th><th>Por quê</th></tr></thead><tbody>
+    ${data.map(s=>`<tr><td class="sel"><input type="checkbox" value="${s.id}" checked></td><td><b>${esc(s.nome)}</b><br><span class="note">${s.posicao_uf}º · ${esc(s.situacao)}</span></td>
+      <td>${esc(s.cargo)} · ${esc(s.uf)} · ${esc(s.cota)}</td>
+      <td>${esc(s.ref_nome)} (${s.ref_posicao}º) está como <b>${esc(s.ref_convocacao)}</b>${s.ref_validacao==='Presumida'?' (presumida)':''}${s.ref_data?' desde '+dBR(s.ref_data):''}</td></tr>`).join('')}
+    </tbody></table></div>
+    <div class="acoes"><button class="btn" type="button" id="sAplicar">Marcar selecionadas como convocação presumida</button></div></details>`;
+  const cbs=()=>[...el.querySelectorAll('tbody input')];
+  $('sTodos').onchange=e=>cbs().forEach(cb=>cb.checked=e.target.checked);
+  $('sAplicar').onclick=async()=>{
+    const marc=cbs().filter(cb=>cb.checked),ids=marc.map(cb=>+cb.value);if(!ids.length)return;
+    // data = a da pessoa de referência (mesma rodada); se não houver, a última usada
+    const datas=[...new Set(data.filter(s=>ids.includes(s.id)).map(s=>s.ref_data||ultimaData))];
+    for(const d of datas){const grupo=data.filter(s=>ids.includes(s.id)&&(s.ref_data||ultimaData)===d).map(s=>s.id);
+      if(!await editarLote(grupo,{convocacao:'Convocado',validacao:'Presumida',data_convocacao:d},`  Situação → Convocado (presumida)\n  Data da convocação → ${dBR(d)}`))return}
+  };
+}
 // Edição completa de uma pessoa (abre abaixo da linha)
 function abrirEdicao(id){
   const el=$('listaAprov'),ed=el.querySelector(`tr[data-ed="${id}"]`);
@@ -419,7 +479,9 @@ function abrirEdicao(id){
     ed.firstElementChild.innerHTML=`<div class="edit"><div class="g2">
       <div><label class="rot">Situação da convocação</label><select class="e-conv">${['Aguardando','Convocado','Empossado','Desistente','Sem informação'].map(o=>`<option ${o===r.convocacao?'selected':''}>${o}</option>`).join('')}</select></div>
       <div><label class="rot">Data da convocação</label><input type="date" class="e-dc" value="${r.data_convocacao||''}"></div>
-      <div><label class="rot">Data da posse</label><input type="date" class="e-dp" value="${r.data_posse||''}"></div></div>
+      <div><label class="rot">Data da posse</label><input type="date" class="e-dp" value="${r.data_posse||''}"></div>
+      <div><label class="rot">Validação da convocação</label><select class="e-val">${['Confirmada','Presumida'].map(o=>`<option ${o===(r.validacao||'Confirmada')?'selected':''}>${o}</option>`).join('')}</select></div></div>
+      <p class="note" style="margin:4px 0 0">Confirmada: a comissão falou com a pessoa. Presumida: deduzida pela ordem de classificação. Não vale para "Aguardando".</p>
       <label class="rot">Observação interna (só a comissão vê)</label><textarea class="e-obs">${esc(r.observacao||'')}</textarea>
       <label class="check"><input type="checkbox" class="e-oc" ${r.ocultar_nome?'checked':''}> Ocultar o nome completo no painel público (mostra só as iniciais)</label>
       <label class="check"><input type="checkbox" class="e-gr" ${r.no_grupo?'checked':''}> Verificado e está no grupo de WhatsApp${r.no_grupo_em?` (desde ${dBR(r.no_grupo_em)})`:''}</label>
@@ -428,11 +490,12 @@ function abrirEdicao(id){
     box.querySelector('.e-sal').onclick=async function(){this.disabled=true;
       const {data,error}=await SB.rpc('comissao_atualizar',{p_id:r.id,p_convocacao:box.querySelector('.e-conv').value,
         p_data_convocacao:box.querySelector('.e-dc').value||null,p_data_posse:box.querySelector('.e-dp').value||null,
-        p_observacao:box.querySelector('.e-obs').value,p_ocultar_nome:box.querySelector('.e-oc').checked,p_no_grupo:box.querySelector('.e-gr').checked});
+        p_observacao:box.querySelector('.e-obs').value,p_ocultar_nome:box.querySelector('.e-oc').checked,p_no_grupo:box.querySelector('.e-gr').checked,
+        p_validacao:box.querySelector('.e-val').value});
       this.disabled=false;
       if(error||!data.ok){msg(box.querySelector('.ret'),'erro',error?error.message:data.erro);return}
       msg(box.querySelector('.ret'),'ok','Salvo. O painel público já reflete a mudança.');
-      Object.assign(r,{convocacao:box.querySelector('.e-conv').value,data_convocacao:box.querySelector('.e-dc').value||null,data_posse:box.querySelector('.e-dp').value||null,
+      Object.assign(r,{convocacao:box.querySelector('.e-conv').value,validacao:['Aguardando','Sem informação'].includes(box.querySelector('.e-conv').value)?null:box.querySelector('.e-val').value,data_convocacao:box.querySelector('.e-dc').value||null,data_posse:box.querySelector('.e-dp').value||null,
         observacao:box.querySelector('.e-obs').value,ocultar_nome:box.querySelector('.e-oc').checked,no_grupo:box.querySelector('.e-gr').checked});
       setTimeout(desenharAprov,1200);
     };

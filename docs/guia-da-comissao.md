@@ -24,10 +24,17 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
   (o pedido vira "Expirado"). O número nunca vai para o histórico.
 - **Aprovados:** a lista completa, com totais (convocados, empossados, aguardando) e filtros por
   nome/inscrição, cargo, estado, cota, vaga imediata/reserva e situação.
-  - **Registrar convocação (uma ou várias pessoas):** marque as caixinhas, escolha na barra azul
-    *Convocado*, *Empossado* ou *Desistente* e a data, e clique em **Aplicar**. *Aguardando (desfazer)*
-    volta a pessoa para aguardando e apaga as datas. Dica: filtre por cargo e estado e use a caixinha
-    do cabeçalho para marcar todos os mostrados.
+  - **Editar várias pessoas de uma vez:** marque as caixinhas (a do cabeçalho marca todos os
+    mostrados). Na barra azul, cada campo começa em *Não alterar*; escolha só o que quer mudar —
+    situação, validação, data da convocação, data da posse (definir ou apagar), grupo de WhatsApp e
+    nome no painel — e clique em **Aplicar aos selecionados**. A observação interna não muda em lote.
+    Voltar para *Aguardando* apaga as datas e a validação.
+  - **Validação da convocação:** *Confirmada* = a comissão falou com a pessoa (pedidos aprovados no
+    formulário viram Confirmada sozinhos). *Presumida* = deduzida pela ordem de classificação; no painel
+    público aparece com a marca "presumida". Quando encontrar a pessoa, mude para Confirmada.
+  - **Convocações presumidas sugeridas:** quadro amarelo no topo da aba. Lista quem ainda está
+    "Aguardando" mas tem alguém **atrás na mesma lista** (cargo + estado + cota) já convocado. Confira e
+    clique em **Marcar selecionadas como convocação presumida** (usa a data da pessoa de referência).
   - **Editar tudo de uma pessoa:** clique no nome para alterar situação, datas, observação interna,
     **ocultar o nome** no painel ou marcar se está no grupo.
 - **Histórico:** as últimas 100 alterações, com o e-mail de quem fez.
