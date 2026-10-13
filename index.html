@@ -273,6 +273,35 @@ body.sobrio header .tema .knob,header .tema .knob{background:none;width:auto;hei
   .acoes-topo{order:3;width:100%}
   .acao{flex:1;justify-content:center;padding:9px 8px}
 }
+/* ---------- Novidades ---------- */
+.novid-btn{position:relative}
+.novid-btn .ponto{position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--s1);box-shadow:0 0 0 2px var(--surface)}
+.novid-fundo{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:60}
+.novid{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);z-index:61;background:var(--page);border-left:1px solid var(--border);display:flex;flex-direction:column;box-shadow:-12px 0 32px rgba(0,0,0,.18)}
+.novid-topo{display:flex;align-items:flex-start;gap:12px;padding:18px 20px 14px;border-bottom:1px solid var(--grid);background:var(--surface)}
+.novid-topo>div{flex:1}
+.novid-topo h2{font-size:17px;margin:0}
+.novid-topo .note{margin:3px 0 0}
+.novid-fechar{flex:none;width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--border);border-radius:6px;background:none;color:var(--ink2);cursor:pointer}
+.novid-fechar:hover{border-color:var(--s1);color:var(--ink)}
+.novid-fechar svg{width:18px;height:18px}
+.novid-corpo{flex:1;overflow-y:auto;padding:6px 20px 28px;overscroll-behavior:contain}
+.novid-dia{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--s1);margin:22px 0 2px;position:sticky;top:-6px;background:var(--page);padding:8px 0 6px;z-index:1}
+.novid-per{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--muted);margin:12px 0 6px}
+.novid-per::after{content:"";flex:1;border-top:1px solid var(--grid)}
+.novid-item{display:grid;grid-template-columns:44px 1fr;gap:2px 10px;padding:9px 0}
+.novid-item+.novid-item{border-top:1px dashed var(--grid)}
+.novid-hora{font:600 12px ui-monospace,Consolas,monospace;color:var(--muted);padding-top:2px}
+.novid-item b{font-size:14px;font-weight:650;line-height:1.35}
+.novid-item p{margin:3px 0 0;font-size:13px;line-height:1.5;color:var(--ink2)}
+.novid-tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:4px;margin-right:6px;vertical-align:1px}
+.novid-tag.novo{background:var(--wash);color:var(--s1)}
+.novid-tag.melhoria{background:color-mix(in srgb,var(--good) 12%,transparent);color:var(--good)}
+.novid-tag.correcao{background:color-mix(in srgb,var(--s5) 16%,transparent);color:color-mix(in srgb,var(--s5) 75%,var(--ink))}
+.novid-tag.dados{background:var(--empty,rgba(127,127,127,.14));color:var(--ink2)}
+body.novid-aberto{overflow:hidden}
+@media (max-width:620px){.novid{border-left:0}.novid-topo{padding:14px 16px 12px}.novid-corpo{padding:4px 16px 24px}}
+
 /* Celular: um único botão "Solicitações" abre a lista de opções */
 .menu-acoes{display:none;position:relative;flex:1}
 .menu-acoes>.acao{width:100%}
@@ -487,6 +516,7 @@ body.sobrio .tw tr{border-radius:6px}
           <button type="button" role="menuitem" data-ir="contato"><span data-i="mail"></span><span><b>Fale com a comissão</b><small>Dúvidas, sugestões e imprensa</small></span></button>
         </div>
       </div>
+      <button class="tema novid-btn" id="novidBtn" type="button" aria-label="Novidades do painel" title="Novidades do painel" aria-haspopup="dialog"><span class="knob" data-i="novid"></span><span class="ponto" hidden></span></button>
       <button class="tema" id="tema" type="button"><span class="knob"></span><span class="txt"></span></button>
     </div>
   </header>
@@ -629,6 +659,16 @@ body.sobrio .tw tr{border-radius:6px}
     </div>
   </section>
 
+  <!-- Novidades (histórico de atualizações) -->
+  <div class="novid-fundo" id="novidFundo" hidden></div>
+  <aside class="novid" id="novid" role="dialog" aria-modal="true" aria-labelledby="novidTit" hidden>
+    <div class="novid-topo">
+      <div><h2 id="novidTit">Novidades do painel</h2><p class="note">O que mudou desde o lançamento. Horários de Brasília.</p></div>
+      <button type="button" class="novid-fechar" id="novidFechar" aria-label="Fechar"><span data-i="x"></span></button>
+    </div>
+    <div class="novid-corpo" id="novidCorpo"></div>
+  </aside>
+
   <footer>
     <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026. · <a class="acesso-comissao ir-contato" href="#contato">Fale com a comissão</a> · <a class="acesso-comissao" href="comissao.html">Acesso da comissão</a></span></div></div>
     <div id="foot"></div>
@@ -709,7 +749,9 @@ const ICONS={
   copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
   menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
   chev:'<path d="m6 9 6 6 6-6"/>',
-  mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>'
+  mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
+  novid:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>'
 };
 const ico=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
 document.querySelectorAll('[data-i]').forEach(e=>e.innerHTML=ico(e.dataset.i));
@@ -1371,6 +1413,59 @@ document.getElementById('fProt').onsubmit=async e=>{e.preventDefault();const out
         ${r.resposta?`<dt>Resposta da comissão</dt><dd>${esc(r.resposta)}</dd>`:''}</dl></div>`;
   }catch(err){out.innerHTML=`<div class="erro" role="alert">${ico('flag')}<span>${esc(err.message)}</span></div>`}
 };
+
+/* ---------- Novidades (histórico de atualizações) ---------- */
+// Para publicar uma novidade, acrescente uma linha NO TOPO da lista: [data e hora de Brasília, tipo, título, descrição].
+// Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
+// Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
+const NOVIDADES=[
+  ['2026-10-13 08:50','novo','Novidades do painel','Este histórico: tudo o que muda no painel passa a ser registrado aqui. O ponto azul no ícone indica que há novidade que você ainda não viu.'],
+  ['2026-10-13 08:39','melhoria','Menu "Solicitações" no celular','Os formulários agora ficam reunidos num único botão no topo, com uma explicação curta de cada opção.'],
+  ['2026-10-13 08:05','novo','Fale com a comissão','Envie dúvidas, sugestões ou contato de imprensa pelo link no rodapé ou pelo menu. A resposta chega no e-mail que você informar.'],
+  ['2026-10-13 07:58','dados','Convocações conferidas','A lista de convocados foi conferida com a planilha da comissão: 57 convocações registradas, todas com data de 08/10/2026.'],
+  ['2026-10-13 01:15','melhoria','Painel abre sempre na visão objetiva','A visão detalhada continua disponível na chave "Visão detalhada", mas começa desligada.'],
+  ['2026-10-13 01:13','novo','Pedido de entrada no grupo de WhatsApp','Aprovados podem pedir para entrar no grupo informando a inscrição e o WhatsApp. O número é apagado logo após a análise, ou em no máximo 24 horas.'],
+  ['2026-10-13 01:13','melhoria','Convocação informada pelo grupo','Para informar convocação, posse ou desistência é preciso estar no grupo de WhatsApp dos aprovados, onde a comissão confirma cada informação.'],
+  ['2026-10-13 00:55','correcao','Abas sem "pulo" na tela','O conteúdo não se desloca mais para os lados ao trocar de aba.'],
+  ['2026-10-12 23:16','melhoria','Nome completo dos aprovados','O painel mostra o nome completo de cada aprovado. Quem preferir aparecer só com as iniciais pode pedir à comissão.'],
+  ['2026-10-12 23:02','novo','Informar convocação, posse ou desistência','Formulário com número de inscrição, sem pedir documentos. Cada pedido gera um protocolo para acompanhar a análise da comissão.'],
+  ['2026-10-12 22:48','melhoria','Visual mais limpo e mapa ajustado','Cards e cores mais sóbrios. O mapa deixou de mostrar as ilhas oceânicas, que poluíam o contorno dos estados.'],
+  ['2026-10-12 19:41','novo','Visão objetiva e visão detalhada','A visão objetiva traz o essencial; a detalhada mostra as análises por região, cota e notas. Cada card ganhou um botão "?" com a explicação.'],
+  ['2026-10-12 19:26','novo','Dados ao vivo','O painel passou a ler um banco de dados próprio e se atualiza sozinho a cada 2 minutos. Se o banco estiver fora do ar, mostra a última cópia salva.'],
+  ['2026-10-12 tarde','dados','Base conferida com o resultado oficial','Notas, classificações e cotas conferidas com o resultado homologado publicado no Diário Oficial de 26/05/2026.'],
+  ['2026-10-12 16:15','novo','Lançamento do painel','Mapa do Brasil por estado, ranking por cargo, estado e macrorregião, filtros por cota, aba de convocações, modo claro e escuro e versão para celular.'],
+  ['2026-10-12 manha','novo','Início do projeto','Primeiros protótipos do mapa e dos indicadores, a partir da planilha de acompanhamento da comissão.']
+];
+const TIPO_NOVID={novo:'Novo',melhoria:'Melhoria',correcao:'Correção',dados:'Dados'};
+const periodo=h=>h<6?'Madrugada':h<12?'Manhã':h<18?'Tarde':'Noite';
+function desenharNovidades(){
+  const hoje=hojeISO(),ontem=hojeISO(-1);let html='',dia='',per='';
+  NOVIDADES.forEach(([quando,tipo,tit,desc])=>{
+    const [d,hm]=quando.split(' '),exato=/^\d/.test(hm);
+    const p=exato?periodo(+hm.slice(0,2)):{madrugada:'Madrugada',manha:'Manhã',tarde:'Tarde',noite:'Noite'}[hm];
+    if(d!==dia){dia=d;per='';const dt=new Date(d+'T12:00:00');
+      const nome=dt.toLocaleDateString('pt-BR',{day:'numeric',month:'long'});
+      html+=`<div class="novid-dia">${d===hoje?'Hoje · ':d===ontem?'Ontem · ':''}${nome}</div>`}
+    if(p!==per){per=p;html+=`<div class="novid-per">${p}</div>`}
+    html+=`<div class="novid-item"><span class="novid-hora">${exato?hm:'·'}</span><div><b><span class="novid-tag ${tipo}">${TIPO_NOVID[tipo]}</span>${esc(tit)}</b><p>${esc(desc)}</p></div></div>`;
+  });
+  document.getElementById('novidCorpo').innerHTML=html;
+}
+function hojeISO(delta=0){const d=new Date(Date.now()+delta*864e5);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+const novid=document.getElementById('novid'),novidFundo=document.getElementById('novidFundo'),novidBtn=document.getElementById('novidBtn');
+// Ponto azul no ícone enquanto houver novidade que o visitante ainda não viu
+const ultimaNovid=NOVIDADES[0][0];
+try{if(localStorage.getItem('novidVista')!==ultimaNovid)novidBtn.querySelector('.ponto').hidden=false}catch(e){}
+function novidades(abrir){
+  novid.hidden=novidFundo.hidden=!abrir;document.body.classList.toggle('novid-aberto',abrir);
+  if(abrir){desenharNovidades();document.getElementById('novidFechar').focus();novidBtn.querySelector('.ponto').hidden=true;
+    try{localStorage.setItem('novidVista',ultimaNovid)}catch(e){}}
+  else novidBtn.focus();
+}
+novidBtn.onclick=()=>novidades(true);
+document.getElementById('novidFechar').onclick=()=>novidades(false);
+novidFundo.onclick=()=>novidades(false);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!novid.hidden)novidades(false)});
 
 /* ---------- Fale com a comissão ---------- */
 // Grava a mensagem no banco (enviar_mensagem) e pede o aviso por e-mail à função avisar-mensagem.
