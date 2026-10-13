@@ -13,6 +13,9 @@
 @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#fff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--border:rgba(255,255,255,.12);--empty:#262624;--s1:#3987e5;--wash:rgba(57,135,229,.14);--good:#0ca30c;--bad:#e66767;--warn:#f1c25a;--warnbg:rgba(201,133,0,.18)}}
 :root[data-theme="dark"]{color-scheme:dark;--page:#0d0d0d;--surface:#1a1a19;--ink:#fff;--ink2:#c3c2b7;--muted:#898781;--grid:#2c2c2a;--border:rgba(255,255,255,.12);--empty:#262624;--s1:#3987e5;--wash:rgba(57,135,229,.14);--good:#0ca30c;--bad:#e66767;--warn:#f1c25a;--warnbg:rgba(201,133,0,.18)}
 *{box-sizing:border-box}
+/* Reserva sempre o espaço da barra de rolagem: trocar de aba não desloca o conteúdo */
+html{scrollbar-gutter:stable}
+@supports not (scrollbar-gutter:stable){html{overflow-y:scroll}}
 body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
 main{max-width:980px;margin:0 auto;padding:24px 16px 56px}
 header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
