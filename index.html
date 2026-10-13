@@ -322,6 +322,7 @@ body.sobrio header .tema .knob,header .tema .knob{background:none;width:auto;hei
 .doc.ok .t{text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--good) 60%,transparent);color:var(--ink2)}
 .doc a{color:var(--s1)}
 .doc-vazio{font-size:13px;color:var(--muted);padding:10px 12px;border:1px dashed var(--border);border-radius:8px}
+.doc-resp{margin:12px 0 0;padding:12px 14px;border:1px solid color-mix(in srgb,var(--bad) 45%,transparent);background:color-mix(in srgb,var(--bad) 7%,transparent);border-radius:8px;font-size:13px;line-height:1.55;color:var(--ink)}
 .doc-fonte{margin:16px 0 0;font-size:12.5px;line-height:1.55;color:var(--ink2);border-top:1px solid var(--grid);padding-top:12px}
 @media (max-width:620px){.tabs .lg-only{display:none}.tabs .sm-only{display:inline}}
 
@@ -903,7 +904,8 @@ body.sobrio .tw tr{border-radius:6px}
       <div class="hd"><div><h2>Documentos para a comprovação de requisitos</h2>
         <p class="note">Monte o seu checklist com os documentos que a CAIXA pede a quem foi convocado. Responda às perguntas e a lista se ajusta ao seu caso.</p></div></div>
       <div class="aviso-topo">
-        <p><b>Esta relação é só para quem foi efetivamente convocado.</b> Os documentos devem ser enviados <b>no prazo definido pela CAIXA</b>. A lista se baseia no <b>Edital nº 01/2025/NS, item 11.4</b>, que traz os documentos exigidos para a contratação, e na <i>Relação de Documentos – Etapa Comprovação de Requisitos</i> da CAIXA (documento público), que detalha o que enviar nessa etapa. A Relação e os formulários da CAIXA também devem estar disponíveis na <a href="https://www.caixa.gov.br/site/Paginas/downloads.aspx#categoria_533" target="_blank" rel="noopener">área de downloads do site da CAIXA</a> (Concurso Público – Documentação dos Candidatos). Em caso de diferença, valem o edital, os documentos oficiais e as orientações da CAIXA. Suas respostas e marcações ficam salvas só neste aparelho.</p>
+        <p><b>Esta relação é só para quem foi efetivamente convocado.</b> Os documentos devem ser enviados <b>no prazo definido pela CAIXA</b>. A lista se baseia no <b>Edital nº 01/2025/NS, item 11.4</b>, que traz os documentos exigidos para a contratação, e na <i>Relação de Documentos – Etapa Comprovação de Requisitos</i> da CAIXA (documento público), que detalha o que enviar nessa etapa. A Relação também deve estar disponível na <a href="https://www.caixa.gov.br/site/Paginas/downloads.aspx#categoria_533" target="_blank" rel="noopener">área de downloads do site da CAIXA</a> (Concurso Público – Documentação dos Candidatos). Em caso de diferença, valem o edital, os documentos oficiais e as orientações da CAIXA. Suas respostas e marcações ficam salvas só neste aparelho.</p>
+        <div class="doc-resp"><b>Material de apoio, sem caráter oficial.</b> Este checklist e as explicações de cada documento foram feitos pela Comissão de Aprovados apenas como <b>ajuda</b> aos aprovados. Eles <b>não substituem</b> o edital, a Relação de Documentos da CAIXA nem as orientações da CAIXA, e a <b>comissão não se responsabiliza</b> por erros, omissões ou mudanças nas exigências. Confira sempre os documentos oficiais.</div>
       </div>
     </div>
 
@@ -918,9 +920,10 @@ body.sobrio .tw tr{border-radius:6px}
           <button class="pdfbtn" type="button" id="docLimpar">Desmarcar tudo</button></div></div>
       <div class="doc-prog"><span id="docBarra"></span></div>
       <div id="docLista"></div>
-      <p class="doc-fonte"><b>Fontes:</b> (1) <b>Edital nº 01/2025/NS</b> do Concurso Público CAIXA, item 11.4 (documentos exigidos para a contratação). (2) CAIXA, <i>Relação de Documentos – Etapa Comprovação de Requisitos</i> (Concurso 2025/2026, documento público, publicada em 28/08/2026). A Relação e os formulários também devem estar na
+      <p class="doc-fonte"><b>Fontes:</b> (1) <b>Edital nº 01/2025/NS</b> do Concurso Público CAIXA, item 11.4 (documentos exigidos para a contratação). (2) CAIXA, <i>Relação de Documentos – Etapa Comprovação de Requisitos</i> (Concurso 2025/2026, documento público, publicada em 28/08/2026). A Relação também deve estar na
         <a href="https://www.caixa.gov.br/site/Paginas/downloads.aspx#categoria_533" target="_blank" rel="noopener">área de downloads do site da CAIXA</a>,
-        seção Concurso Público – Documentação dos Candidatos (consultada em 13/10/2026). Entre parênteses, ao lado de cada documento, está de onde ele vem: <i>Relação, item 13</i> ou <i>Edital, item 11.4 j</i>, por exemplo. As explicações de cada documento são da Comissão de Aprovados, para ajudar; não substituem o edital, a Relação nem as orientações da CAIXA.</p>
+        seção Concurso Público – Documentação dos Candidatos (consultada em 13/10/2026). Entre parênteses, ao lado de cada documento, está de onde ele vem: <i>Relação, item 13</i> ou <i>Edital, item 11.4 j</i>, por exemplo.</p>
+      <div class="doc-resp"><b>Material de apoio, sem caráter oficial.</b> Este checklist e as explicações de cada documento foram feitos pela Comissão de Aprovados apenas como <b>ajuda</b> aos aprovados. Eles <b>não substituem</b> o edital, a Relação de Documentos da CAIXA nem as orientações da CAIXA, e a <b>comissão não se responsabiliza</b> por erros, omissões ou mudanças nas exigências. Confira sempre os documentos oficiais.</div>
     </div>
   </section>
 
@@ -2098,10 +2101,10 @@ function itensDocs(){
     it('e-decl','Declarações do item 11.4 r','11.4 r','<p>Declarações assinadas por você: (1) de não ter sofrido penalidade disciplinar nem condenação por crime ou contravenção; (2) de não haver processo que impeça a posse; (3) de não ter conduta incompatível com a atividade bancária (crimes da Lei nº 9.613/1998, de lavagem de dinheiro, e contra o Sistema Financeiro); (4) de não ter condenação por crimes contra a vida ou a integridade física; e (5) autorização para a CAIXA verificar as informações. Parte disso está nos formulários da CAIXA (Relação, item 17).</p>')
   ],nota:'O edital pede os documentos da contratação em <b>original e cópia</b>. Estes itens não aparecem na Relação da etapa de comprovação de requisitos e podem ser pedidos na admissão.'});
   G.push({t:'Formulários da CAIXA (preencher e assinar)',itens:[
-    it('i17-acum','Declaração de acumulação de cargos','17',`<p>Formulário da CAIXA em que você declara se tem ou não outro cargo, emprego ou função pública. Disponível na área de downloads da CAIXA.</p>`),
-    it('i17-bons','Declaração de bons antecedentes','17',`<p>Formulário da CAIXA de declaração de bons antecedentes. Disponível na área de downloads da CAIXA.</p>`),
-    it('i17-dados','Formulário de dados cadastrais','17',`<p>Formulário da CAIXA com os seus dados cadastrais. Disponível na área de downloads da CAIXA.</p>`)
-  ],nota:`Os três devem ser anexados preenchidos e assinados. Eles ficam na <a href="${DOC_AREA}" target="_blank" rel="noopener">área de downloads da CAIXA</a> (Concurso Público – Documentação dos Candidatos).`});
+    it('i17-acum','Declaração de acumulação de cargos','17',`<p>Formulário da CAIXA em que você declara se tem ou não outro cargo, emprego ou função pública.</p>`),
+    it('i17-bons','Declaração de bons antecedentes','17',`<p>Formulário da CAIXA de declaração de bons antecedentes.</p>`),
+    it('i17-dados','Formulário de dados cadastrais','17',`<p>Formulário da CAIXA com os seus dados cadastrais.</p>`)
+  ],nota:'São formulários da CAIXA, para preencher e assinar. As declarações do candidato são exigidas pelo edital no item 11.4 r.'});
   return G;
 }
 // "13" → "Relação, item 13"; "11.4 j" → "Edital, item 11.4 j"
@@ -2239,10 +2242,10 @@ async function gerarPDF(tipo,btn){
       const perfil=[p.cargo||'cargo não informado',p.ufs.length?`morou em ${p.ufs.join(', ')} nos últimos 5 anos`:'estados de residência não informados'].join(' · ');
       pdfDocumento({titulo:'Checklist de documentos · Comprovação de requisitos',
         subtitulo:`${perfil} · ${feitos} de ${body.length} documento(s) separados ([X] = já separado). Envie no prazo definido pela CAIXA.`,
-        aviso:'Montado pelo painel da Comissão de Aprovados a partir do Edital nº 01/2025/NS (item 11.4) e da Relação de Documentos - Etapa Comprovação de Requisitos da CAIXA. Em caso de diferença, valem o edital, os documentos oficiais e as orientações da CAIXA.',
+        aviso:'MATERIAL DE APOIO, SEM CARÁTER OFICIAL. Feito pela Comissão de Aprovados apenas como ajuda, a partir do Edital nº 01/2025/NS (item 11.4) e da Relação de Documentos - Etapa Comprovação de Requisitos da CAIXA. Não substitui o edital, a Relação nem as orientações da CAIXA, e a comissão não se responsabiliza por erros, omissões ou mudanças nas exigências. Confira sempre os documentos oficiais.',
         head:['','Grupo','Documento','O que é / observações','Origem','Validade'],body,
         colunas:{0:{cellWidth:10,halign:'center',fontStyle:'bold'},1:{cellWidth:38},2:{cellWidth:58,fontStyle:'bold'},4:{cellWidth:26},5:{cellWidth:20}},
-        rodapeTabela:`Fontes: Edital nº 01/2025/NS do Concurso Público CAIXA, item 11.4; CAIXA, Relação de Documentos - Etapa Comprovação de Requisitos (Concurso 2025/2026, documento público, publicada em 28/08/2026). A Relação e os formulários também devem estar na área de downloads do site da CAIXA (Concurso Público - Documentação dos Candidatos): ${DOC_AREA}`,
+        rodapeTabela:`Fontes: Edital nº 01/2025/NS do Concurso Público CAIXA, item 11.4; CAIXA, Relação de Documentos - Etapa Comprovação de Requisitos (Concurso 2025/2026, documento público, publicada em 28/08/2026). A Relação também deve estar na área de downloads do site da CAIXA (Concurso Público - Documentação dos Candidatos): ${DOC_AREA}`,
         arquivo:`checklist-documentos-caixa-${hojeArq()}.pdf`});
     }
   }catch(e){alert(e.message)}
