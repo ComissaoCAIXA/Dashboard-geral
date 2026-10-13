@@ -695,10 +695,21 @@ body.sobrio .tw tr{border-radius:6px}
 :root{--ctl:40px;--ctl-sm:36px}
 #bar .tabs{height:var(--ctl);padding:3px;align-items:stretch}
 #bar .tabs button{padding-top:0;padding-bottom:0;display:inline-flex;align-items:center}
-#bar .det-tgl,#bar .filtbtn{height:var(--ctl);padding-top:0;padding-bottom:0;display:inline-flex;align-items:center}
+#bar .det-tgl{height:var(--ctl);padding-top:0;padding-bottom:0;display:inline-flex;align-items:center}
+/* o botão Filtros só aparece em telas estreitas (regra própria mais acima); aqui só a altura */
+#bar .filtbtn{height:var(--ctl);padding-top:0;padding-bottom:0}
 #bar .cotas{height:var(--ctl);align-items:stretch}
 #bar .cotas button{padding-top:0;padding-bottom:0;display:inline-flex;align-items:center;justify-content:center}
 #bar .filters select{height:var(--ctl)}
+/* computador: abas, visão detalhada e filtros numa linha só; os menus encolhem até um mínimo */
+@media (min-width:1180px){
+  #bar{flex-wrap:nowrap}
+  #bar .filters{flex-wrap:nowrap;min-width:0;flex:0 1 auto}
+  #bar .filters select{flex:0 1 auto;min-width:128px;max-width:215px;text-overflow:ellipsis}
+  #bar .tabs,#bar .det-tgl,#bar .cotas{flex-shrink:0;white-space:nowrap}
+  #bar .tabs button,#bar .cotas button,#bar .det-tgl span{white-space:nowrap}
+}
+@media (min-width:621px) and (max-width:1500px){#bar .tabs .lg{display:none}}
 main .card .seg{height:var(--ctl-sm);display:inline-flex;align-items:stretch}
 main .card .seg button{padding-top:0;padding-bottom:0;display:inline-flex;align-items:center;justify-content:center}
 .pdfbtn{height:var(--ctl-sm);padding:0 12px}
