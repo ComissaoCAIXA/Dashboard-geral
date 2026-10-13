@@ -77,6 +77,7 @@ header p{margin:2px 0 0;color:var(--ink2)}
 select{font:inherit;padding:7px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);max-width:100%}
 .chip{display:inline-flex;align-items:center;gap:6px;background:var(--wash);color:var(--ink);border:1px solid var(--border);border-radius:999px;padding:5px 6px 5px 12px;font-weight:600}
 .chip button{border:0;background:none;color:var(--ink2);cursor:pointer;font-size:16px;line-height:1;padding:0 4px}
+#ufChip{white-space:nowrap;margin:0 0 12px;font-size:13px}
 .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}
 @media (min-width:1180px){.kpis{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media (max-width:620px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi .v{font-size:24px}}
@@ -774,13 +775,14 @@ main .card .seg button{padding-top:0;padding-bottom:0;display:inline-flex;align-
     </div>
     <label class="tgl det-tgl" title="Mostra todas as análises: notas, cotas, regiões e destaques"><input type="checkbox" id="detalhe"><span class="trk"></span><span class="ti" data-i="layers"></span><span>Visão detalhada</span></label>
     <button class="filtbtn" id="filtbtn" type="button" aria-expanded="false"><span data-i="filter"></span>Filtros</button>
-    <span id="ufChip" class="chip" hidden></span>
     <div class="filters">
       <div class="cotas" id="fCota" role="group" aria-label="Filtrar por cota"></div>
       <select id="fCargo" aria-label="Cargo"><option value="">Todos os cargos</option></select>
       <select id="fMacro" aria-label="Macrorregião"><option value="">Todas as macrorregiões</option></select>
     </div>
   </div>
+  <!-- Estado escolhido no mapa: fica fora da barra para não deslocar os botões -->
+  <span id="ufChip" class="chip" hidden></span>
 
   <div id="load">Carregando dados…</div>
 
