@@ -65,6 +65,13 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
 Supabase → Table Editor → tabela **`comissao`** → Insert row: preencha `email` (e, se quiser, `nome`).
 Para tirar o acesso, desmarque `ativo`. Não é preciso mais nada: a pessoa já pode entrar pela área.
 
+Só e-mails desta tabela conseguem criar conta: a função `hook_so_comissao` (ligada em
+Authentication → Hooks → *Before User Created*) recusa qualquer outro e-mail na tela de login.
+
+### Mensagens antigas
+As mensagens do Fale com a comissão são apagadas do banco 6 meses depois de recebidas. O aviso
+que chegou no e-mail da comissão continua lá.
+
 ## Direto no Supabase (para administradores)
 
 Como consultar, incluir e corrigir os dados dos aprovados direto no Supabase.
