@@ -142,6 +142,10 @@ tr.marcado{background:var(--wash)}
 .n-mini button:hover{border-color:var(--s1);color:var(--ink)}
 .n-mini button.apagar:hover{border-color:var(--bad);color:var(--bad)}
 .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.n-ia{margin-top:12px;border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:var(--wash)}
+.n-ia summary{cursor:pointer;font-weight:600;font-size:13.5px}
+.n-ia ol{margin:10px 0 6px;padding-left:20px;font-size:13px;line-height:1.55}
+.n-ia #nPrompt{font:12.5px/1.5 ui-monospace,Consolas,monospace;min-height:160px;margin-top:8px;background:var(--page)}
 </style>
 </head>
 <body>
@@ -301,6 +305,18 @@ tr.marcado{background:var(--wash)}
           <textarea id="nTexto" maxlength="4000" placeholder="Escreva aqui. Pode usar emojis 😀 e a barra acima para formatar."></textarea>
           <div class="n-emojis" id="nEmojis" hidden></div>
           <div class="n-dica"><span>Atalhos: **negrito**, *itálico*, ## subtítulo, - lista, &gt; destaque</span><span id="nConta">0 / 4000</span></div>
+          <details class="n-ia">
+            <summary>✨ Escrever com IA (ChatGPT, Claude, Gemini…)</summary>
+            <ol>
+              <li>Clique em <b>Copiar prompt</b> e cole na IA que preferir.</li>
+              <li>No fim do prompt, troque o trecho entre colchetes pelas informações da notícia (o que aconteceu, datas, números, o que os aprovados devem fazer).</li>
+              <li>Copie a resposta inteira da IA e <b>cole no campo Texto</b> acima. O título, a importância e a tag são preenchidos sozinhos, e a formatação já aparece na prévia.</li>
+              <li>Revise antes de publicar: a IA pode errar ou inventar detalhes.</li>
+            </ol>
+            <p class="note">Se a IA responder em HTML (com &lt;b&gt;, &lt;ul&gt;, &lt;p&gt;…), pode colar mesmo assim: o editor converte para o formato do painel.</p>
+            <textarea id="nPrompt" readonly rows="8"></textarea>
+            <div class="acoes" style="justify-content:flex-start"><button class="btn sec" type="button" id="nCopiarPrompt">Copiar prompt</button><span class="note" id="nCopiado" style="align-self:center"></span></div>
+          </details>
           <label class="check" style="align-items:flex-start"><input type="checkbox" id="nDestaque" checked style="margin-top:3px"><span><b>Mostrar em destaque ao abrir o painel</b><br><small class="note">Quem ainda não viu esta notícia vai vê-la numa janela no meio da tela ao entrar. Só a mais recente em destaque aparece.</small></span></label>
           <div id="nRet"></div>
           <div class="acoes" style="justify-content:flex-start">
@@ -425,6 +441,88 @@ document.querySelectorAll('.n-ferr [data-f]').forEach(b=>b.onclick=()=>{
   else if(f==='h')nInserir('## ','',true);else if(f==='ul')nInserir('- ','',true);
   else if(f==='ol')nInserir(i=>(i+1)+'. ','',true);else if(f==='q')nInserir('> ','',true);
   else if(f==='a'){const u=prompt('Endereço do link (começando com https://)','https://');if(u&&/^https?:\/\/\S+$/.test(u))nInserir('[',`](${u})`)}
+});
+/* Escrever com IA: prompt pronto e leitura automática da resposta colada no campo Texto */
+const PROMPT_IA=`Escreva uma notícia curta para o painel dos aprovados do concurso CAIXA 2026 (Edital nº 01/2025/NS), publicada pela Comissão de Aprovados.
+
+Regras:
+- Tom claro, cordial e objetivo, em português do Brasil. Frases curtas.
+- Pode usar alguns emojis, sem exagero.
+- Use SOMENTE as informações dos dados abaixo. Não invente datas, números, nomes ou regras.
+- Não use HTML nem tabelas.
+
+Formatação permitida no texto:
+- **negrito** e *itálico*
+- ## Subtítulo (linha começando com ##)
+- Listas: linhas começando com "- " ou "1. "
+- > Destaque (linha começando com >; aparece numa caixa amarela)
+- Links no formato [texto](https://endereço)
+Deixe uma linha em branco entre os parágrafos. No máximo 4000 caracteres.
+
+Responda exatamente neste formato, sem nada antes nem depois:
+TÍTULO: (até 120 caracteres; pode começar com 1 emoji)
+IMPORTÂNCIA: (Importante, Aviso ou Informativo)
+TAG: (Convocações, Documentos, Melhorias do painel, Comissão ou Geral)
+TEXTO:
+(o texto da notícia)
+
+Como escolher a importância: "Importante" para o que todos precisam ver (ex.: nova rodada de convocações, prazos); "Aviso" para notícias relevantes; "Informativo" para melhorias do painel e recados.
+
+Dados da notícia:
+[escreva aqui o que aconteceu, as datas, os números e o que os aprovados devem fazer]`;
+$('nPrompt').value=PROMPT_IA;
+$('nCopiarPrompt').onclick=async()=>{
+  try{await navigator.clipboard.writeText(PROMPT_IA)}catch(e){$('nPrompt').select();document.execCommand('copy')}
+  $('nCopiado').textContent='Prompt copiado ✔';setTimeout(()=>$('nCopiado').textContent='',3000);
+};
+// Se a IA responder em HTML, converte para o formato simples do painel
+function htmlParaTexto(h){
+  const d=new DOMParser().parseFromString(h,'text/html');
+  const anda=n=>{
+    if(n.nodeType===3)return n.textContent.replace(/\s+/g,' ');
+    if(n.nodeType!==1)return '';
+    const t=n.tagName.toLowerCase(),f=()=>[...n.childNodes].map(anda).join('');
+    if(t==='b'||t==='strong')return '**'+f().trim()+'**';
+    if(t==='i'||t==='em')return '*'+f().trim()+'*';
+    if(/^h[1-6]$/.test(t))return '\n\n## '+f().trim()+'\n\n';
+    if(t==='br')return '\n';
+    if(t==='p'||t==='div')return '\n\n'+f().trim()+'\n\n';
+    if(t==='blockquote')return '\n\n> '+f().trim().replace(/\n+/g,' ')+'\n\n';
+    if(t==='a'){const u=n.getAttribute('href')||'';return /^https?:\/\//.test(u)?`[${f().trim()}](${u})`:f()}
+    if(t==='ul'||t==='ol'){let i=0;return '\n\n'+[...n.children].filter(c=>c.tagName==='LI').map(li=>(t==='ol'?(++i)+'. ':'- ')+anda(li).trim()).join('\n')+'\n\n'}
+    if(t==='li')return f();
+    if(t==='script'||t==='style')return '';
+    return f();
+  };
+  return anda(d.body).replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+}
+const OPC_IMP=['Importante','Aviso','Informativo'],OPC_CAT=['Convocações','Documentos','Melhorias do painel','Comissão','Geral'];
+const semAcento=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+function lerRespostaIA(txt){
+  txt=txt.replace(/\r/g,'');
+  if(/<(p|ul|ol|li|b|strong|h[1-6]|br|em|div)\b/i.test(txt))txt=htmlParaTexto(txt);
+  const m=txt.match(/^\s*\**t[ií]tulo\**\s*:\s*(.+)$/im);
+  const corpo=txt.match(/^\s*\**texto\**\s*:\s*\n?([\s\S]*)$/im);
+  if(!m||!corpo)return null;
+  const imp=(txt.match(/^\s*\**import[aâ]ncia\**\s*:\s*(.+)$/im)||[])[1]||'';
+  const cat=(txt.match(/^\s*\**tag\**\s*:\s*(.+)$/im)||[])[1]||'';
+  return {titulo:m[1].replace(/\*\*/g,'').trim(),texto:corpo[1].trim(),
+    imp:OPC_IMP.find(o=>semAcento(imp).startsWith(semAcento(o))),cat:OPC_CAT.find(o=>semAcento(cat).startsWith(semAcento(o)))};
+}
+$('nTexto').addEventListener('paste',e=>{
+  const dt=e.clipboardData;if(!dt)return;
+  const html=dt.getData('text/html'),txt=dt.getData('text/plain');
+  let r=lerRespostaIA(txt)||(html&&lerRespostaIA(htmlParaTexto(html)));
+  if(r){
+    e.preventDefault();
+    $('nTitulo').value=r.titulo.slice(0,120);$('nTexto').value=r.texto.slice(0,4000);
+    if(r.imp){$('nImp').value=r.imp;$('nDestaque').checked=r.imp!=='Informativo'}
+    if(r.cat)$('nCat').value=r.cat;
+    nPrever();msg($('nRet'),'info','Resposta da IA lida: título, importância e tag preenchidos. Revise antes de publicar.');
+  }else if(/<(p|ul|ol|li|b|strong|h[1-6]|br)\b/i.test(txt)){
+    // HTML solto (sem o formato TÍTULO/TEXTO): só converte a formatação
+    e.preventDefault();$('nTexto').setRangeText(htmlParaTexto(txt),$('nTexto').selectionStart,$('nTexto').selectionEnd,'end');nPrever();
+  }
 });
 // Importância sugere o destaque: Informativo normalmente não abre a janela no meio da tela
 $('nImp').onchange=()=>{$('nDestaque').checked=$('nImp').value!=='Informativo';nPrever()};

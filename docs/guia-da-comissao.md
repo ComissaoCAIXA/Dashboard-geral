@@ -51,6 +51,9 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
   - **Mostrar em destaque ao abrir o painel:** quem ainda não viu a notícia a vê numa janela no meio da tela
     ao entrar. Só a notícia em destaque mais recente aparece assim; as outras ficam na lista. Ao escolher
     *Informativo*, essa opção é desmarcada (dá para marcar de novo).
+  - **Escrever com IA:** abra "✨ Escrever com IA" embaixo do texto, copie o prompt, cole na IA (ChatGPT,
+    Claude, Gemini…) com as informações da notícia no fim e cole a resposta inteira no campo Texto: título,
+    importância e tag são preenchidos sozinhos. Resposta em HTML também é convertida. Revise sempre.
   - **Publicar** coloca no painel na hora; **Salvar como rascunho** guarda sem mostrar. Na tabela embaixo:
     Editar, Publicar/Despublicar e Apagar. Publicar de novo uma notícia despublicada faz dela a mais recente.
   - **Visualizações:** uma por navegador que abriu a notícia. O painel não guarda IP nem dados de quem leu;
