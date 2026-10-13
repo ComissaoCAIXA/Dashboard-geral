@@ -82,6 +82,19 @@ tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
 .hb .vl{font-variant-numeric:tabular-nums;white-space:nowrap}.hb .vl small{color:var(--muted)}
 .rolagem{max-height:360px;overflow:auto;padding-right:4px}
 .filtros-g{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:8px;margin:12px 0}
+.filtros-a{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:8px;margin:12px 0}
+.lote{position:sticky;top:8px;z-index:5;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;background:var(--s1);color:#fff;border-radius:8px;padding:10px 12px;margin-bottom:10px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.lote select,.lote input{width:auto;padding:6px 8px;font-size:14px}
+.lote .lData{display:inline-flex;align-items:center;gap:6px}
+.lote .btn.sec{color:#fff;border-color:rgba(255,255,255,.6)}
+.lote .btn.ok{background:#fff;color:var(--s1);border-color:#fff}
+td.sel,th.sel{width:34px;text-align:center}
+td.sel input,th.sel input{width:17px;height:17px;cursor:pointer}
+tr.marcado{background:var(--wash)}
+.nomelink{font:inherit;font-weight:600;color:var(--ink);background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.nomelink:hover{color:var(--s1);text-decoration:underline}
+.mais{display:block;margin:12px auto 0}
+@media (max-width:760px){.filtros-a{grid-template-columns:1fr 1fr}.filtros-a input{grid-column:1/-1}}
 .zap{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:600;font-size:13px;color:#fff;background:#1a8d4f;border-radius:6px;padding:6px 12px}
 .prazo{font-size:12.5px;color:var(--warn);font-weight:600}
 @media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.duas{grid-template-columns:minmax(0,1fr)}.filtros-g{grid-template-columns:1fr 1fr}.filtros-g input{grid-column:1/-1}}
@@ -180,15 +193,29 @@ tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
     </div>
 
     <div id="pAprov" hidden>
+      <div class="kpis" id="aKpis"></div>
       <div class="card">
-        <form id="fBusca" class="linha" autocomplete="off">
-          <input type="text" id="busca" placeholder="Buscar por nome, inscrição ou UF (ex.: Maria, 2500..., SP)">
-          <button class="btn" type="submit">Buscar</button>
-          <button class="btn sec" type="button" id="exportar">Exportar CSV</button>
-        </form>
-        <p class="note">Clique numa pessoa para editar a situação, as datas, a observação interna ou ocultar o nome no painel.</p>
+        <div class="linha" style="justify-content:space-between;align-items:baseline"><h2>Todos os aprovados</h2>
+          <button class="btn sec" type="button" id="exportar" style="padding:6px 12px;font-size:13px">Exportar CSV</button></div>
+        <p class="note">Marque uma ou várias pessoas e use a barra azul para registrar a convocação. Clique no nome para editar tudo da pessoa (datas, observação interna, nome oculto, grupo).</p>
+        <div class="filtros-a">
+          <input type="text" id="aBusca" placeholder="Buscar por nome ou inscrição" autocomplete="off">
+          <select id="aCargo"><option value="">Todos os cargos</option></select>
+          <select id="aUF"><option value="">Todos os estados</option></select>
+          <select id="aCota"><option value="">Todas as cotas</option></select>
+          <select id="aSit"><option value="">Vaga imediata e reserva</option><option>Vaga imediata</option><option>Cadastro reserva</option></select>
+          <select id="aConv"><option value="">Todas as situações</option><option>Aguardando</option><option>Convocado</option><option>Empossado</option><option>Desistente</option><option>Sem informação</option></select>
+        </div>
+        <div class="lote" id="aLote" hidden>
+          <span><b id="aNSel">0</b> selecionado(s)</span>
+          <select id="lSit"><option>Convocado</option><option>Empossado</option><option>Desistente</option><option value="Aguardando">Aguardando (desfazer)</option></select>
+          <label class="lData" id="lDataRot">em <input type="date" id="lData"></label>
+          <button class="btn ok" type="button" id="lAplicar">Aplicar</button>
+          <button class="btn sec" type="button" id="lLimpar">Limpar seleção</button>
+        </div>
+        <div id="aRet"></div>
+        <div id="listaAprov"></div>
       </div>
-      <div id="listaAprov"></div>
     </div>
 
     <div id="pHist" hidden>
@@ -247,7 +274,7 @@ const PAINEIS={pend:'pPend',msgs:'pMsgs',grupo:'pGrupo',aprov:'pAprov',hist:'pHi
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
   Object.entries(PAINEIS).forEach(([k,id])=>$(id).hidden=k!==b.dataset.v);
-  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();if(b.dataset.v==='msgs')carregarMsgs();
+  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();if(b.dataset.v==='msgs')carregarMsgs();if(b.dataset.v==='aprov')carregarAprov();
 });
 
 /* ---------- Mensagens (Fale com a comissão) ---------- */
@@ -325,24 +352,70 @@ $('recarregar').onclick=carregarPend;
 
 /* ---------- Aprovados ---------- */
 const COLS='id,nome,inscricao,cargo,uf,cota,situacao,posicao_uf,nota,convocacao,data_convocacao,data_posse,observacao,ocultar_nome,no_grupo,no_grupo_em';
-$('fBusca').onsubmit=async e=>{e.preventDefault();const t=$('busca').value.trim();const el=$('listaAprov');
-  if(t.length<2){msg(el,'info','Digite pelo menos 2 caracteres.');return}
-  el.innerHTML='<p class="vazio">Buscando…</p>';
-  let q=SB.from('aprovados').select(COLS).order('nome').limit(60);
-  const limpo=t.replace(/[%,()]/g,' ').trim();
-  if(/^[A-Za-z]{2}$/.test(limpo))q=q.eq('uf',limpo.toUpperCase());
-  else if(/^\d+$/.test(limpo))q=q.ilike('inscricao',limpo+'%');
-  else q=q.ilike('nome','%'+limpo+'%');
-  const {data,error}=await q;if(error){msg(el,'erro',error.message);return}
-  desenharAprov(data);
+// Lista completa com filtros; seleção de várias pessoas para registrar convocação em lote
+let A=[],aSel=new Set(),aLimite=100,ultimaData='2026-10-08';
+async function carregarAprov(){
+  $('listaAprov').innerHTML='<p class="vazio">Carregando…</p>';
+  const {data,error}=await SB.from('aprovados').select(COLS).order('cargo').order('uf').order('posicao_uf');
+  if(error){msg($('listaAprov'),'erro',error.message);return}
+  A=data;
+  if($('aCargo').options.length===1){
+    const op=(id,vals)=>[...new Set(vals)].sort().forEach(v=>$(id).add(new Option(v,v)));
+    op('aCargo',A.map(r=>r.cargo));op('aUF',A.map(r=>r.uf));op('aCota',A.map(r=>r.cota));
+  }
+  desenharAprov();
+}
+function filtradosAprov(){
+  const q=$('aBusca').value.trim().toLowerCase(),c=$('aCargo').value,u=$('aUF').value,co=$('aCota').value,s=$('aSit').value,cv=$('aConv').value;
+  return A.filter(r=>(!c||r.cargo===c)&&(!u||r.uf===u)&&(!co||r.cota===co)&&(!s||r.situacao===s)&&(!cv||r.convocacao===cv)&&
+    (!q||r.nome.toLowerCase().includes(q)||r.inscricao.startsWith(q)));
+}
+function desenharAprov(){
+  const conta=k=>A.filter(r=>r.convocacao===k).length;
+  $('aKpis').innerHTML=[['Aprovados',A.length,'base completa'],['Convocados',conta('Convocado'),'aguardando posse'],['Empossados',conta('Empossado'),'já tomaram posse'],['Aguardando',conta('Aguardando')+conta('Sem informação'),`${conta('Desistente')} desistente(s)`]]
+    .map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join('');
+  const rows=filtradosAprov(),vis=rows.slice(0,aLimite),el=$('listaAprov');
+  $('aLote').hidden=!aSel.size;$('aNSel').textContent=aSel.size;
+  if(!rows.length){el.innerHTML='<p class="vazio">Ninguém com esses filtros.</p>';return}
+  const todos=vis.every(r=>aSel.has(r.id));
+  el.innerHTML=`<p class="note">${rows.length} pessoa(s)${rows.length>vis.length?` · mostrando ${vis.length}`:''}</p>
+    <div class="tw"><table><thead><tr><th class="sel"><input type="checkbox" id="aTodos" ${todos?'checked':''} title="Selecionar todos os mostrados"></th><th>Nome</th><th>Inscrição</th><th>Cargo</th><th>UF</th><th>Cota</th><th>Classificação</th><th>Convocação</th><th>Grupo</th></tr></thead>
+    <tbody>${vis.map(r=>`<tr data-id="${r.id}" class="${aSel.has(r.id)?'marcado':''}"><td class="sel"><input type="checkbox" ${aSel.has(r.id)?'checked':''}></td>
+      <td><button type="button" class="nomelink">${esc(r.nome)}</button>${r.ocultar_nome?' <span class="pill">nome oculto</span>':''}</td><td>${esc(r.inscricao)}</td><td>${esc(r.cargo)}</td><td>${esc(r.uf)}</td><td>${esc(r.cota)}</td><td>${r.posicao_uf}º · ${esc(r.situacao)}</td>
+      <td><span class="pill ${esc(r.convocacao)}">${esc(r.convocacao)}</span>${r.convocacao==='Empossado'&&r.data_posse?' '+dBR(r.data_posse):r.data_convocacao&&r.convocacao!=='Aguardando'?' '+dBR(r.data_convocacao):''}</td>
+      <td>${r.no_grupo?'<span class="pill Convocado">no grupo</span>':'<span class="pill">fora</span>'}</td></tr>
+      <tr hidden data-ed="${r.id}"><td colspan="9"></td></tr>`).join('')}</tbody></table></div>
+    ${rows.length>vis.length?`<button class="btn sec mais" type="button" id="aMais">Mostrar mais ${Math.min(100,rows.length-vis.length)}</button>`:''}`;
+  $('aTodos').onchange=e=>{vis.forEach(r=>e.target.checked?aSel.add(r.id):aSel.delete(r.id));desenharAprov()};
+  if($('aMais'))$('aMais').onclick=()=>{aLimite+=100;desenharAprov()};
+  el.querySelectorAll('tbody tr[data-id] td.sel input').forEach(cb=>cb.onchange=()=>{const id=+cb.closest('tr').dataset.id;cb.checked?aSel.add(id):aSel.delete(id);
+    cb.closest('tr').classList.toggle('marcado',cb.checked);$('aLote').hidden=!aSel.size;$('aNSel').textContent=aSel.size;
+    $('aTodos').checked=vis.every(r=>aSel.has(r.id))});
+  el.querySelectorAll('.nomelink').forEach(b=>b.onclick=()=>abrirEdicao(+b.closest('tr').dataset.id));
+}
+['aBusca','aCargo','aUF','aCota','aSit','aConv'].forEach(id=>$(id).addEventListener(id==='aBusca'?'input':'change',()=>{aLimite=100;desenharAprov()}));
+// Barra de ação em lote
+const lDataVis=()=>{const s=$('lSit').value;$('lDataRot').hidden=!(s==='Convocado'||s==='Empossado')};
+$('lSit').onchange=lDataVis;$('lData').value=ultimaData;$('lData').max=new Date().toISOString().slice(0,10);
+$('lLimpar').onclick=()=>{aSel.clear();desenharAprov()};
+$('lAplicar').onclick=async()=>{
+  const s=$('lSit').value,d=$('lData').value||null,ids=[...aSel],n=ids.length;
+  const nomes=A.filter(r=>aSel.has(r.id)).slice(0,8).map(r=>'• '+r.nome).join('\n')+(n>8?`\n… e mais ${n-8}`:'');
+  const txt=s==='Aguardando'?`Voltar ${n} pessoa(s) para "Aguardando" e apagar as datas?`:`Marcar ${n} pessoa(s) como "${s}"${d&&s!=='Desistente'?' em '+dBR(d):''}?`;
+  if(!confirm(txt+'\n\n'+nomes+'\n\nO painel público é atualizado na hora.'))return;
+  $('lAplicar').disabled=true;
+  const {data,error}=await SB.rpc('comissao_convocar',{p_ids:ids,p_convocacao:s,p_data:(s==='Convocado'||s==='Empossado')?d:null});
+  $('lAplicar').disabled=false;
+  if(error||!data.ok){msg($('aRet'),'erro',error?error.message:data.erro);return}
+  if(d)ultimaData=d;aSel.clear();msg($('aRet'),'ok',`Pronto: ${data.alterados} registro(s) atualizado(s). O painel público já mostra a mudança.`);
+  setTimeout(()=>{$('aRet').innerHTML=''},6000);
+  carregarAprov();
 };
-function desenharAprov(rows){
-  const el=$('listaAprov');if(!rows.length){el.innerHTML='<p class="vazio">Ninguém encontrado.</p>';return}
-  el.innerHTML=`<div class="card tw"><table><thead><tr><th>Nome</th><th>Inscrição</th><th>Cargo</th><th>UF</th><th>Cota</th><th>Situação</th><th>Convocação</th><th>Grupo</th></tr></thead>
-    <tbody>${rows.map((r,i)=>`<tr class="click" data-i="${i}"><td>${esc(r.nome)}${r.ocultar_nome?' <span class="pill">nome oculto</span>':''}</td><td>${esc(r.inscricao)}</td><td>${esc(r.cargo)}</td><td>${esc(r.uf)}</td><td>${esc(r.cota)}</td><td>${r.posicao_uf}º · ${esc(r.situacao)}</td><td><span class="pill ${esc(r.convocacao)}">${esc(r.convocacao)}</span></td><td>${r.no_grupo?'<span class="pill Convocado">no grupo</span>':'<span class="pill">fora</span>'}</td></tr>
-    <tr hidden data-ed="${i}"><td colspan="8"></td></tr>`).join('')}</tbody></table>${rows.length===60?'<p class="note">Mostrando os 60 primeiros. Refine a busca.</p>':''}</div>`;
-  el.querySelectorAll('tr.click').forEach(tr=>tr.onclick=()=>{const i=+tr.dataset.i,ed=el.querySelector(`tr[data-ed="${i}"]`);
-    if(!ed.hidden){ed.hidden=true;return}ed.hidden=false;const r=rows[i];
+// Edição completa de uma pessoa (abre abaixo da linha)
+function abrirEdicao(id){
+  const el=$('listaAprov'),ed=el.querySelector(`tr[data-ed="${id}"]`);
+  if(!ed.hidden){ed.hidden=true;return}ed.hidden=false;const r=A.find(x=>x.id===id);
+  {
     ed.firstElementChild.innerHTML=`<div class="edit"><div class="g2">
       <div><label class="rot">Situação da convocação</label><select class="e-conv">${['Aguardando','Convocado','Empossado','Desistente','Sem informação'].map(o=>`<option ${o===r.convocacao?'selected':''}>${o}</option>`).join('')}</select></div>
       <div><label class="rot">Data da convocação</label><input type="date" class="e-dc" value="${r.data_convocacao||''}"></div>
@@ -359,9 +432,11 @@ function desenharAprov(rows){
       this.disabled=false;
       if(error||!data.ok){msg(box.querySelector('.ret'),'erro',error?error.message:data.erro);return}
       msg(box.querySelector('.ret'),'ok','Salvo. O painel público já reflete a mudança.');
-      Object.assign(r,{convocacao:box.querySelector('.e-conv').value,ocultar_nome:box.querySelector('.e-oc').checked,no_grupo:box.querySelector('.e-gr').checked});
+      Object.assign(r,{convocacao:box.querySelector('.e-conv').value,data_convocacao:box.querySelector('.e-dc').value||null,data_posse:box.querySelector('.e-dp').value||null,
+        observacao:box.querySelector('.e-obs').value,ocultar_nome:box.querySelector('.e-oc').checked,no_grupo:box.querySelector('.e-gr').checked});
+      setTimeout(desenharAprov,1200);
     };
-  });
+  }
 }
 $('exportar').onclick=async()=>{const {data,error}=await SB.from('aprovados').select(COLS).order('cargo').order('uf').order('posicao_uf');
   if(error){alert(error.message);return}
