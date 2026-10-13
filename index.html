@@ -324,8 +324,11 @@ body.mod-solido .mod::before{display:none}
 .pst-col.pulso{box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 55%,transparent)}
 .pst-col .vazio-col{font-size:11.5px;color:var(--muted);font-style:italic}
 .pst-tks{display:flex;flex-wrap:wrap;gap:4px}
-.tk{display:inline-grid;place-items:center;min-width:34px;height:24px;padding:0 5px;border-radius:5px;font:700 11px ui-monospace,Consolas,monospace;
-  background:var(--c,var(--s1));color:#fff;transition:opacity .3s,transform .3s}
+/* ficha da coluna: mesmo visual da posição na fila (assim não muda de aparência ao "voar") */
+.tk{display:inline-flex;align-items:center;justify-content:center;gap:5px;width:52px;height:28px;border-radius:5px;font:700 11px ui-monospace,Consolas,monospace;
+  --c:var(--s1);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);background:color-mix(in srgb,var(--c) 14%,transparent);
+  color:color-mix(in srgb,var(--c) 75%,var(--ink));transition:opacity .3s,transform .3s}
+.tk.voando{background:color-mix(in srgb,var(--c) 14%,var(--surface))}
 .tk.AC{--c:var(--s1)}.tk.PCD{--c:var(--g4)}.tk.PN{--c:var(--g2)}.tk.PI{--c:var(--g1)}.tk.PQ{--c:var(--g5)}
 .tk.chamado{opacity:.18;transform:scale(.9)}
 .tk.voando{position:fixed;z-index:80;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.3)}
@@ -338,11 +341,9 @@ body.mod-solido .mod::before{display:none}
 .slot.rv::after{content:"";position:absolute;inset:-3px;border:1.5px dashed var(--ink2);border-radius:7px}
 .slot.pop{animation:pop .35s ease-out}
 /* bolinha de convocado nas posições da fila e nas fichas */
-.tk .pt{position:absolute;top:-4px;right:-4px;width:10px;height:10px;border-radius:50%;background:var(--good);box-shadow:0 0 0 2px var(--surface)}
-.tk .pt.pres{background:var(--surface);border:2px solid var(--good)}
-.slot .pt{width:8px;height:8px;border-radius:50%;flex:none;background:var(--good)}
-.slot .pt.pres{background:none;border:1.5px solid var(--good)}
-.slot .pt.nada{background:none}
+.slot .pt,.tk .pt{width:8px;height:8px;border-radius:50%;flex:none;background:var(--good)}
+.slot .pt.pres,.tk .pt.pres{background:none;border:1.5px solid var(--good)}
+.slot .pt.nada,.tk .pt.nada{background:none}
 .tk{position:relative}
 /* situação na legenda */
 .st{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:999px;font-size:12px;font-weight:700;vertical-align:1px}
@@ -1811,7 +1812,7 @@ function montarPistas(vi,listas,totVI){
   tkDe=new Map();
   const cols=ordem.map(m=>{const ps=listas[m]||[];
     return `<div class="pst-col ${modCls(m)}" data-m="${m}"><header><span class="mod ${modCls(m)}">${modSig(m)}</span><span>${vi[m]||0} vaga(s) imed.</span></header>
-      <div class="pst-tks">${ps.length?ps.map((p,i)=>`<span class="tk ${modCls(m)}" data-m="${m}" data-i="${i}" title="${esc(p.ini)}${statusPessoa(p).txt?' · '+statusPessoa(p).txt:''}">${p.ficticio?(i+1)+'º':p.rankUF+'º'}${['conv','pres'].includes(statusPessoa(p).k)?`<i class="pt ${statusPessoa(p).k}"></i>`:''}</span>`).join(''):'<span class="vazio-col">sem aprovados</span>'}</div></div>`}).join('');
+      <div class="pst-tks">${ps.length?ps.map((p,i)=>`<span class="tk ${modCls(m)}" data-m="${m}" data-i="${i}" title="${esc(p.ini)}${statusPessoa(p).txt?' · '+statusPessoa(p).txt:''}">${p.ficticio?(i+1)+'º':p.rankUF+'º'}<i class="pt ${['conv','pres'].includes(statusPessoa(p).k)?statusPessoa(p).k:'nada'}"></i></span>`).join(''):'<span class="vazio-col">sem aprovados</span>'}</div></div>`}).join('');
   const slots=filaAtual.map((x,i)=>`<span class="slot${i===totVI-1&&totVI<filaAtual.length?' fimvi':''}" data-k="${x.k}">${x.k}</span>`).join('');
   document.getElementById('pistas').innerHTML=`<div class="pst-cols" style="--n:${ordem.length}">${cols}</div>
     <div class="pst-trilho-t"><span>Fila de convocação</span><span class="note">traço: fim das vagas imediatas · contorno tracejado: vaga que passou de uma cota para outra</span></div>
