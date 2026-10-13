@@ -716,6 +716,25 @@ main .card .seg button{padding-top:0;padding-bottom:0;display:inline-flex;align-
 #quadroCargo,.fila-ctl select{height:var(--ctl-sm)}
 .fila-ctl .seg{height:var(--ctl-sm)}
 .fila-play .btn{height:var(--ctl-sm);padding-top:0;padding-bottom:0}
+/* ---------- Vagas e regras no celular ---------- */
+@media (max-width:620px){
+  /* cadeias de reversão: rótulo numa linha, cadeia logo abaixo */
+  .rev>div{gap:2px 0;margin-bottom:4px}
+  .rev .rl{width:100%;margin-bottom:3px;font-weight:600}
+  .rev .mod{margin:2px 1px;min-width:0;padding:1px 5px 1px 4px;gap:3px;font-size:11px}
+  .rev>div{font-size:10.5px}
+  .regra{padding-left:46px}
+  /* quadro de vagas: um cartão por estado */
+  .tw .quadro tr.qgrupo{display:block;border:0;padding:14px 2px 4px;margin:0}
+  .tw .quadro td.grp{display:block;border:0;padding:0;font-size:12px;font-weight:700;color:var(--ink2);text-align:left}
+  .tw .quadro tr.qlinha,.tw .quadro tfoot tr{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:14px}
+  .tw .quadro td{text-align:right}
+  .tw .quadro td.uf{grid-column:1/-1;text-align:left}
+  .tw .quadro td.ordem{grid-column:1/-1;display:block;text-align:left;border-top:1px dashed var(--grid);margin-top:6px;padding-top:8px}
+  .tw .quadro td.ordem::before{display:block;margin-bottom:5px}
+  .tw .quadro td.ordem .mod{display:inline-flex;width:46px;margin:0 3px 4px 0}
+  .tw .quadro tfoot td.ordem{font-size:12px}
+}
 /* no celular, seletores com texto em duas linhas crescem o necessário (mínimo 36px) */
 @media (max-width:620px){main .card .seg{height:auto;min-height:var(--ctl-sm)}main .card .seg button{padding:5px 6px;line-height:1.25}}
 [hidden]{display:none!important}
@@ -2043,7 +2062,7 @@ function desenharQuadro(cargo){
   const linhas=VAGAS.filter(v=>v.cargo===cargo);const mac=uf=>{const d=DATA.find(x=>x.uf===uf);return d?cap(d.macro):''};
   const grupos=d3.groups(linhas,v=>mac(v.uf)).sort((a,b)=>MACROS.indexOf(a[0].toUpperCase())-MACROS.indexOf(b[0].toUpperCase()));
   const tot=ordem.map(i=>d3.sum(linhas,v=>v.vi[i]));const sum=a=>a.reduce((s,x)=>s+x,0);
-  const cel=n=>`<td class="${n?'':'zero'}">${n}</td>`;
+  const cel=(n,i)=>`<td class="${n?'':'zero'}" data-l="${rot[i]}">${n}</td>`;
   // Ordem simulada das chamadas das vagas imediatas de cada estado (com os aprovados reais)
   const ordemUF=v=>{const vi={};MOD_F.forEach((m,i)=>vi[m]=v.vi[[1,0,2,3,4][i]]);
     const rs=DATA.filter(d=>d.cargo===cargo&&d.uf===v.uf);const listas={};MOD_F.forEach(m=>listas[m]=rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF));
@@ -2051,8 +2070,8 @@ function desenharQuadro(cargo){
       return `<span class="mod ${modCls(m)}${x.rev?' rv':''}" title="${x.k}ª chamada: ${sigla(m)}${x.rev?` (vaga de ${sigla(x.slot)} que passou para ${sigla(x.lista)})`:''}">${sigla(m)}</span>`}).join('')};
   document.getElementById('quadro').innerHTML=`<table class="quadro"><thead><tr><th rowspan="2" class="uf">Estado</th><th colspan="6">Vagas imediatas</th><th rowspan="2">Cadastro reserva</th><th rowspan="2" class="ordem">Ordem simulada de convocação<br><small class="note">vagas imediatas · clique na linha para ver a fila</small></th></tr>
     <tr>${rot.map((r,i)=>`<th><span class="mod ${['AC','PCD','PN','PI','PQ'][i]}">${r}</span></th>`).join('')}<th>Total</th></tr></thead>
-    <tbody>${grupos.map(([g,vs])=>`<tr><td colspan="9" class="grp">${g||'–'}</td></tr>`+vs.map(v=>`<tr class="qlinha" data-uf="${v.uf}"><td class="uf">${v.uf}</td>${ordem.map(i=>cel(v.vi[i])).join('')}<td><b>${sum(v.vi)}</b></td><td>${sum(v.vi)*3}</td><td class="ordem">${ordemUF(v)}</td></tr>`).join('')).join('')}</tbody>
-    <tfoot><tr><td class="uf">Total</td>${tot.map(n=>`<td>${n}</td>`).join('')}<td>${sum(tot)}</td><td>${sum(tot)*3}</td><td class="ordem note">Borda tracejada: vaga que passou de uma cota para outra.</td></tr></tfoot></table>`;
+    <tbody>${grupos.map(([g,vs])=>`<tr class="qgrupo"><td colspan="9" class="grp">${g||'–'}</td></tr>`+vs.map(v=>`<tr class="qlinha" data-uf="${v.uf}"><td class="uf">${v.uf}</td>${ordem.map(i=>cel(v.vi[i],i)).join('')}<td data-l="Total imed."><b>${sum(v.vi)}</b></td><td data-l="Reserva">${sum(v.vi)*3}</td><td class="ordem" data-l="Ordem simulada (vagas imediatas)">${ordemUF(v)}</td></tr>`).join('')).join('')}</tbody>
+    <tfoot><tr><td class="uf">Total</td>${tot.map((n,i)=>`<td data-l="${rot[i]}">${n}</td>`).join('')}<td data-l="Total imed.">${sum(tot)}</td><td data-l="Reserva">${sum(tot)*3}</td><td class="ordem note">Borda tracejada: vaga que passou de uma cota para outra.</td></tr></tfoot></table>`;
   // Clicar num estado abre a fila dele no simulador
   document.querySelectorAll('#quadro tr.qlinha').forEach(tr=>tr.onclick=()=>{
     if(FS.modo!=='real')document.querySelector('#filaModo button[data-v="real"]').click();
