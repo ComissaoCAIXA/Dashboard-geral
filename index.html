@@ -254,6 +254,27 @@ footer .autor .ic svg{width:18px;height:18px}
 .exreal ul{margin:6px 0 0;padding-left:18px}
 .exreal li{margin:3px 0}
 
+/* ---------- Ações do topo (formulários) ---------- */
+.acoes-topo{display:flex;align-items:center;gap:8px;flex:none}
+.acao{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:600;font-size:13.5px;color:var(--ink);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 14px;cursor:pointer;white-space:nowrap}
+.acao svg{width:16px;height:16px;color:var(--s1)}
+.acao:hover{border-color:var(--s1)}
+.acao[aria-pressed="true"]{background:var(--s1);border-color:var(--s1);color:#fff}
+.acao[aria-pressed="true"] svg{color:#fff}
+/* tema só com ícone */
+body.sobrio header .tema,header .tema{padding:0;width:40px;height:40px;justify-content:center;border-radius:6px}
+header .tema .txt{display:none}
+body.sobrio header .tema .knob,header .tema .knob{background:none;width:auto;height:auto;color:var(--ink2)}
+.voltar-painel{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:13.5px;font-weight:600;color:var(--ink2);background:none;border:0;padding:4px 0;cursor:pointer}
+.voltar-painel:hover{color:var(--s1)}
+.voltar-painel svg{width:16px;height:16px}
+@media (max-width:860px){
+  header{flex-wrap:wrap}
+  .acoes-topo{order:3;width:100%}
+  .acao{flex:1;justify-content:center;padding:9px 8px}
+}
+@media (max-width:620px){.acao{font-size:12.5px;white-space:normal;text-align:left;line-height:1.25}}
+
 /* ---------- Formulário "Informar convocação" ---------- */
 body.aba-form .filters,body.aba-form .det-tgl,body.aba-form .filtbtn,body.aba-form #ufChip{display:none!important}
 .form-wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
@@ -437,14 +458,17 @@ body.sobrio .tw tr{border-radius:6px}
       <h1>Concurso Caixa 2026 · Aprovados</h1>
       <p>Ranking por cargo, estado e macrorregião, com a situação de cada convocação.</p>
     </div>
-    <button class="tema" id="tema" type="button"><span class="knob"></span><span class="txt"></span></button>
+    <div class="acoes-topo">
+      <button class="acao" type="button" data-acao="convocacao"><span data-i="edit"></span><span>Informar convocação</span></button>
+      <button class="acao" type="button" data-acao="grupo"><span data-i="chat"></span><span>Participar do grupo de WhatsApp</span></button>
+      <button class="tema" id="tema" type="button"><span class="knob"></span><span class="txt"></span></button>
+    </div>
   </header>
 
   <div class="bar" id="bar">
     <div class="tabs" role="tablist">
       <button role="tab" data-tab="panorama" aria-selected="true"><span data-i="chart"></span>Panorama<span class="lg">e notas</span></button>
       <button role="tab" data-tab="conv" aria-selected="false"><span data-i="userCheck"></span>Convocações</button>
-      <button role="tab" data-tab="form" aria-selected="false"><span data-i="edit"></span>Informar<span class="lg">convocação</span></button>
     </div>
     <label class="tgl det-tgl" title="Mostra todas as análises: notas, cotas, regiões e destaques"><input type="checkbox" id="detalhe"><span class="trk"></span><span class="ti" data-i="layers"></span><span>Visão detalhada</span></label>
     <button class="filtbtn" id="filtbtn" type="button" aria-expanded="false"><span data-i="filter"></span>Filtros</button>
@@ -545,10 +569,11 @@ body.sobrio .tw tr{border-radius:6px}
   <!-- ABA 3: formulário -->
   <section id="tab-form" hidden>
     <div class="form-wrap">
+      <button class="voltar-painel" type="button" id="voltarPainel"><span data-i="voltar"></span>Voltar ao painel</button>
       <div class="card">
-        <div class="hd"><div><h2>Informar convocação</h2>
-          <p class="note">Foi convocado(a), tomou posse ou desistiu da vaga? Informe aqui. A comissão confirma com você pelo grupo de WhatsApp dos aprovados antes de atualizar o painel.</p></div></div>
-        <ol class="passos" id="passos"><li>Inscrição</li><li>Confirmação</li><li>O que aconteceu</li><li>Protocolo</li></ol>
+        <div class="hd"><div><h2><span id="formTit">Solicitações</span></h2>
+          <p class="note" id="formDesc">Informe convocação, posse ou desistência, ou peça para entrar no grupo de WhatsApp dos aprovados. A comissão confirma com você antes de qualquer mudança.</p></div></div>
+        <ol class="passos" id="passos"><li>Inscrição</li><li>Confirmação</li><li>Pedido</li><li>Protocolo</li></ol>
         <div id="formCorpo"></div>
       </div>
       <div class="card">
@@ -559,7 +584,7 @@ body.sobrio .tw tr{border-radius:6px}
         </form>
         <div id="protRes"></div>
       </div>
-      <p class="note privacidade">Privacidade: o formulário não pede e-mail, telefone ou documentos. Ele usa só o número de inscrição para localizar seus dados (os mesmos do painel). A comprovação é feita pessoalmente com a comissão. Se você não quiser seu nome completo no painel, peça à comissão.</p>
+      <p class="note privacidade">Privacidade: o formulário não pede e-mail nem documentos. Ele usa o número de inscrição para localizar seus dados (os mesmos do painel). O WhatsApp só é pedido para entrar no grupo e é apagado automaticamente após a análise, ou em no máximo 24 horas. Se você não quiser seu nome completo no painel, peça à comissão.</p>
     </div>
   </section>
 
@@ -637,12 +662,14 @@ const ICONS={
   down:'<path d="m19 12-7 7-7-7M12 5v14"/>',
   flat:'<path d="M5 12h14"/>',
   filter:'<path d="M22 3H2l8 9.5V19l4 2v-8.5z"/>',
+  chat:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.9-.9L3 20l1.1-4.7A8.4 8.4 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5z"/>',
+  voltar:'<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>',
   edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
   copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'
 };
 const ico=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
 document.querySelectorAll('[data-i]').forEach(e=>e.innerHTML=ico(e.dataset.i));
-const H2ICON=[['Informar convocação','edit'],['Acompanhar meu pedido','hourglass'],['Maiores notas','trophy'],['cota','layers'],['Cotas','layers'],['Mapa','map'],['Estados','list'],['macrorregião','globe'],['Por cargo','briefcase'],['Andamento por cargo','briefcase'],['lista de origem','layers'],['Distribuição','bars'],['Notas','dots'],['Lista de aprovados','table'],['Quem foi','table']];
+const H2ICON=[['Solicitações','edit'],['Acompanhar meu pedido','hourglass'],['Maiores notas','trophy'],['cota','layers'],['Cotas','layers'],['Mapa','map'],['Estados','list'],['macrorregião','globe'],['Por cargo','briefcase'],['Andamento por cargo','briefcase'],['lista de origem','layers'],['Distribuição','bars'],['Notas','dots'],['Lista de aprovados','table'],['Quem foi','table']];
 document.querySelectorAll('.card h2').forEach(h=>{const m=H2ICON.find(([t])=>h.textContent.includes(t));if(m)h.insertAdjacentHTML('afterbegin',`<span class="ic">${ico(m[1])}</span>`)});
 // Os títulos de ranking mudam de texto: guardar o rótulo num span
 ['rk1t','rk2t'].forEach(id=>{const h=document.getElementById(id);h.innerHTML=`<span class="ic">${ico('list')}</span><span class="t"></span>`});
@@ -1080,6 +1107,7 @@ function render(){
   d3.select('#tab-conv').attr('hidden',S.tab==='conv'?null:true);
   d3.select('#tab-form').attr('hidden',S.tab==='form'?null:true);
   document.body.classList.toggle('aba-form',S.tab==='form');
+  document.querySelectorAll('.acao[data-acao]').forEach(b=>b.setAttribute('aria-pressed',S.tab==='form'&&F.intencao===b.dataset.acao));
   if(S.tab==='form'){hideTip();return} // o formulário tem o próprio controle (não é redesenhado a cada atualização)
   const chip=d3.select('#ufChip');
   if(S.uf){const nome=(GEO.find(f=>f.properties.SIGLA===S.uf)||{properties:{}}).properties.Estado||S.uf;
@@ -1096,10 +1124,21 @@ function render(){
 }
 d3.selectAll('.tabs button').on('click',function(){
   S.tab=this.dataset.tab;
-  // Link direto para o formulário: .../Dashboard-geral/#informar
-  history.replaceState(null,'',S.tab==='form'?'#informar':location.pathname+location.search);
-  render();if(S.tab==='form')iniciarForm();
+  history.replaceState(null,'',location.pathname+location.search);
+  render();
 });
+// Botões do topo: abrem o formulário já no caminho certo.
+// Links diretos: .../Dashboard-geral/#informar  e  .../Dashboard-geral/#grupo
+let abaAnterior='panorama';
+function abrirForm(intencao){
+  if(S.tab!=='form')abaAnterior=S.tab;
+  S.tab='form';
+  Object.assign(F,{passo:1,insc:F.intencao===intencao?F.insc:'',pessoa:null,tipo:null,tit:'',data:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',intencao});
+  history.replaceState(null,'',intencao==='grupo'?'#grupo':'#informar');
+  render();desenharForm();window.scrollTo({top:0});
+}
+document.querySelectorAll('.acao[data-acao]').forEach(b=>b.onclick=()=>abrirForm(b.dataset.acao));
+document.getElementById('voltarPainel').onclick=()=>{S.tab=abaAnterior;history.replaceState(null,'',location.pathname+location.search);render()};
 d3.selectAll('#m1seg button').on('click',function(){S.m1=this.dataset.v;render()});
 d3.selectAll('#m2seg button').on('click',function(){S.m2=this.dataset.v;render()});
 d3.selectAll('#t2seg button').on('click',function(){S.t2=this.dataset.v;S.p2=0;render()});
@@ -1123,6 +1162,8 @@ const dataBR=d=>d?new Date(d.length===10?d+'T12:00:00':d).toLocaleDateString('pt
 const hoje=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const NOME_COTA={AC:'Ampla concorrência',PcD:'Pessoas com deficiência',PN:'Pessoas negras',PI:'Pessoas indígenas',PQ:'Pessoas quilombolas'};
 // Opções conforme a situação atual da pessoa: [tipo enviado ao banco, título, explicação]
+// Opção de entrar no grupo vale para qualquer situação; as demais dependem da situação atual
+const OP_GRUPO=['Entrada no grupo','Quero entrar no grupo de WhatsApp dos aprovados','A comissão confere se você é aprovado(a) e adiciona você ao grupo.'];
 const OPCOES={
   Aguardando:[['Convocação','Fui convocado(a)','Recebi a convocação da CAIXA.'],['Desistência','Desisti da vaga','Não vou assumir o cargo.'],['Correção de dados','Algum dado meu está errado','Cargo, estado, cota, nota ou posição.']],
   Convocado:[['Posse','Tomei posse','Já fui contratado(a) e assumi o cargo.'],['Convocação','A data da minha convocação está errada','Vou informar a data correta.'],['Desistência','Desisti da vaga','Não vou assumir o cargo.'],['Correção de dados','Outro dado meu está errado','Cargo, estado, cota, nota ou posição.']],
@@ -1131,14 +1172,23 @@ const OPCOES={
 };
 OPCOES['Sem informação']=OPCOES.Aguardando;
 const ROTULO_DATA={Convocação:'Data da convocação',Posse:'Data da posse',Desistência:'Data da desistência (opcional)'};
-const F={passo:1,insc:'',pessoa:null,tipo:null,data:'',obs:'',ok:false,protocolo:'',erro:'',carregando:false};
+const F={passo:1,insc:'',pessoa:null,tipo:null,tit:'',data:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',carregando:false,intencao:'convocacao'};
+const ehGrupo=()=>F.tipo==='Entrada no grupo';
 const erroHTML=()=>F.erro?`<div class="erro" role="alert">${ico('flag')}<span>${esc(F.erro)}</span></div>`:'';
 function passosHTML(){document.querySelectorAll('#passos li').forEach((li,i)=>{li.className=i+1<F.passo?'feito':i+1===F.passo?'agora':''})}
 function iniciarForm(){if(!document.getElementById('formCorpo').innerHTML)desenharForm()}
+// (61) 99999-9999 enquanto digita
+const mascaraTel=v=>{const d=v.replace(/\D/g,'').replace(/^55(?=\d{10,11}$)/,'').slice(0,11);
+  return d.length<=2?d:d.length<=6?`(${d.slice(0,2)}) ${d.slice(2)}`:d.length<=10?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`};
+const TEXTO_FORM={convocacao:['Informar convocação','Foi convocado(a), tomou posse ou desistiu da vaga? Informe aqui. A comissão confirma com você antes de atualizar o painel.'],
+  grupo:['Participar do grupo de WhatsApp','O grupo é só para aprovados. Informe sua inscrição e seu WhatsApp: a comissão confere e adiciona você.']};
 function desenharForm(){
   passosHTML();const el=document.getElementById('formCorpo');const p=F.pessoa;
+  const [tit,desc]=TEXTO_FORM[F.intencao]||TEXTO_FORM.convocacao;
+  document.getElementById('formTit').textContent=tit;document.getElementById('formDesc').textContent=desc;
   if(F.passo===1){
     el.innerHTML=`<form id="f1" autocomplete="off">
+      ${F.intencao==='grupo'?'<div class="aviso-form" style="margin:0 0 4px">Para pedir a entrada no grupo de WhatsApp dos aprovados, comece pela sua inscrição.</div>':''}
       <div class="campo"><label for="insc">Número de inscrição</label>
         <input type="text" id="insc" inputmode="numeric" placeholder="Somente números (10 dígitos)" value="${esc(F.insc)}" maxlength="14">
         <small>Está no seu cartão de confirmação e no resultado publicado no Diário Oficial.</small></div>
@@ -1154,40 +1204,77 @@ function desenharForm(){
       F.carregando=false;desenharForm()};
   }
   else if(F.passo===2){
+    const tudoPendente=F.intencao==='grupo'?p.pendente_grupo:p.pendente;
+    // Informar convocação exige estar no grupo: é por lá que a comissão confirma com a pessoa
+    const foraDoGrupo=F.intencao!=='grupo'&&!p.no_grupo;
+    const jaNoGrupo=F.intencao==='grupo'&&p.no_grupo;
+    let aviso='',botao='<button class="btn" type="button" id="sim">Sou eu, continuar</button>';
+    if(foraDoGrupo){
+      aviso=`<div class="aviso-form"><b>Antes, você precisa estar no grupo de WhatsApp dos aprovados.</b><br>
+        A comissão confirma cada convocação conversando com a pessoa pelo grupo. Pelo nosso cadastro, você ainda não está nele.
+        ${p.pendente_grupo?'Seu pedido de entrada no grupo já está <b>em análise</b>: assim que a comissão adicionar você, volte aqui para informar a convocação.':'Peça sua entrada agora (leva um minuto). Depois de entrar no grupo, volte aqui para informar a convocação.'}
+        <br><small style="color:var(--muted)">Nada foi registrado ainda.</small></div>`;
+      botao=p.pendente_grupo?'':'<button class="btn" type="button" id="irGrupo">Pedir entrada no grupo</button>';
+    }else if(tudoPendente){
+      aviso=`<div class="aviso-form">Já existe um pedido ${F.intencao==='grupo'?'de entrada no grupo ':''}desta inscrição <b>em análise</b>. Aguarde a comissão, ou acompanhe pelo protocolo no quadro abaixo.</div>`;botao='';
+    }else if(jaNoGrupo){
+      aviso=`<div class="aviso-form">Pelo nosso cadastro, você <b>já está no grupo</b>. Se saiu ou não encontra o grupo, pode continuar e pedir de novo.</div>`;
+    }
     el.innerHTML=`<p class="rot" style="font-weight:600;margin:0 0 10px">É você?</p>
       <dl class="pessoa"><dd class="quem">${esc(p.nome)}</dd>
         <div><dt>Cargo</dt><dd>${esc(p.cargo)}</dd></div><div><dt>Polo (UF)</dt><dd>${esc(p.uf)}</dd></div>
         <div><dt>Cota</dt><dd>${esc(p.cota)} · ${esc(NOME_COTA[p.cota]||'')}</dd></div><div><dt>Classificação</dt><dd>${p.posicao_uf}º no estado · ${esc(p.situacao)}</dd></div>
         <div><dt>Situação no painel</dt><dd>${esc(p.convocacao)}${p.data_convocacao?' em '+dataBR(p.data_convocacao):''}</dd></div></dl>
-      ${p.pendente?`<div class="aviso-form">Já existe um pedido desta inscrição <b>em análise</b>. Aguarde a comissão entrar em contato pelo grupo de WhatsApp, ou acompanhe pelo protocolo no quadro abaixo.</div>`:''}
-      <div class="btns"><button class="btn sec" type="button" id="nao">Não sou eu</button>
-        ${p.pendente?'':'<button class="btn" type="button" id="sim">Sou eu, continuar</button>'}</div>`;
+      ${aviso}
+      <div class="btns"><button class="btn sec" type="button" id="nao">Não sou eu</button>${botao}</div>`;
     document.getElementById('nao').onclick=()=>{F.passo=1;F.pessoa=null;F.erro='';desenharForm()};
-    const s=document.getElementById('sim');if(s)s.onclick=()=>{F.passo=3;F.tipo=null;F.data='';F.obs='';F.ok=false;F.erro='';desenharForm()};
+    // Redireciona para o pedido de entrada no grupo, mantendo a inscrição já confirmada
+    const g=document.getElementById('irGrupo');if(g)g.onclick=()=>{
+      F.intencao='grupo';Object.assign(F,{passo:3,tipo:OP_GRUPO[0],tit:OP_GRUPO[1],data:'',obs:'',tel:'',nomeZap:'',ok:false,erro:''});
+      history.replaceState(null,'','#grupo');render();desenharForm();window.scrollTo({top:0})};
+    const s=document.getElementById('sim');if(s)s.onclick=()=>{
+      Object.assign(F,{passo:3,tipo:null,tit:'',data:'',obs:'',tel:'',nomeZap:'',ok:false,erro:''});
+      if(F.intencao==='grupo'&&!p.pendente_grupo){F.tipo=OP_GRUPO[0];F.tit=OP_GRUPO[1]}
+      desenharForm()};
   }
   else if(F.passo===3){
-    const ops=OPCOES[p.convocacao]||OPCOES.Aguardando;
-    const precisaData=F.tipo==='Convocação'||F.tipo==='Posse', mostraData=F.tipo&&F.tipo!=='Correção de dados';
-    el.innerHTML=`<form id="f3"><div class="campo" style="margin-top:0"><span class="rot">O que aconteceu?</span>
-        <div class="opcoes">${ops.map(([t,tit,sub],i)=>`<label class="opcao"><input type="radio" name="tipo" value="${i}" ${F.tipo===t&&F.tit===tit?'checked':''}><span><b>${tit}</b>${sub?`<small>${sub}</small>`:''}</span></label>`).join('')}</div></div>
+    // Opções: grupo (se não houver pedido de grupo em análise) + as da situação atual (se não houver outro pedido em análise)
+    const ops=F.intencao==='grupo'?[OP_GRUPO]:(OPCOES[p.convocacao]||OPCOES.Aguardando);
+    const precisaData=F.tipo==='Convocação'||F.tipo==='Posse', mostraData=F.tipo&&!ehGrupo()&&F.tipo!=='Correção de dados';
+    const avisoPend='';
+    el.innerHTML=`<form id="f3"><div class="campo" style="margin-top:0"><span class="rot">${F.intencao==='grupo'?'Confirme o pedido':'O que aconteceu?'}</span>
+        <div class="opcoes">${ops.map(([t,tit,sub],i)=>`<label class="opcao"><input type="radio" name="tipo" value="${i}" ${F.tipo===t&&F.tit===tit?'checked':''}><span><b>${tit}</b>${sub?`<small>${sub}</small>`:''}</span></label>`).join('')}</div>
+        ${avisoPend?`<small style="display:block;margin-top:6px;color:var(--muted)">${avisoPend}</small>`:''}</div>
+      ${ehGrupo()?`<div class="campo"><label for="tel">Seu WhatsApp, com DDD</label>
+          <input type="text" id="tel" inputmode="tel" autocomplete="tel" placeholder="(61) 99999-9999" value="${esc(F.tel)}" maxlength="16">
+          <small>Usado só para a comissão falar com você e adicionar ao grupo. É apagado automaticamente quando a comissão analisar o pedido, ou em no máximo 24 horas.</small></div>
+        <div class="campo"><label for="nz">Nome que aparece no seu WhatsApp (opcional)</label>
+          <input type="text" id="nz" maxlength="60" value="${esc(F.nomeZap)}" placeholder="Ajuda a comissão a reconhecer seu contato"></div>`:''}
       ${mostraData?`<div class="campo"><label for="dt">${ROTULO_DATA[F.tipo]}</label><input type="date" id="dt" min="2026-05-26" max="${hoje()}" value="${esc(F.data)}" ${precisaData?'required':''}></div>`:''}
       ${F.tipo?`<div class="campo"><label for="obs">${F.tipo==='Correção de dados'?'O que está errado?':'Observação (opcional)'}</label>
         <textarea id="obs" maxlength="1000" placeholder="${F.tipo==='Correção de dados'?'Ex.: minha nota correta é 72,50':'Algo que a comissão deva saber'}">${esc(F.obs)}</textarea></div>
-      <label class="check"><input type="checkbox" id="conf" ${F.ok?'checked':''}><span>Confirmo que as informações são verdadeiras e sei que a comissão vai conferir comigo pelo WhatsApp antes de atualizar o painel.</span></label>`:''}
+      <label class="check"><input type="checkbox" id="conf" ${F.ok?'checked':''}><span>${ehGrupo()
+        ?'Autorizo a comissão a usar meu número só para confirmar que sou aprovado(a) e me adicionar ao grupo. Sei que ele será apagado depois da análise.'
+        :'Confirmo que as informações são verdadeiras e sei que a comissão vai conferir comigo pelo WhatsApp antes de atualizar o painel.'}</span></label>`:''}
       ${erroHTML()}
       <div class="btns"><button class="btn sec" type="button" id="volta">Voltar</button>
         <button class="btn" type="submit" ${F.carregando||!F.tipo?'disabled':''}>${F.carregando?'Enviando…':'Enviar'}</button></div></form>`;
-    const guardar=()=>{const d=document.getElementById('dt'),o=document.getElementById('obs'),c=document.getElementById('conf');if(d)F.data=d.value;if(o)F.obs=o.value;if(c)F.ok=c.checked};
+    const guardar=()=>{const g=id=>document.getElementById(id);
+      if(g('dt'))F.data=g('dt').value;if(g('obs'))F.obs=g('obs').value;if(g('conf'))F.ok=g('conf').checked;if(g('tel'))F.tel=g('tel').value;if(g('nz'))F.nomeZap=g('nz').value};
+    const tel=document.getElementById('tel');if(tel)tel.oninput=()=>{tel.value=mascaraTel(tel.value)};
     el.querySelectorAll('input[name=tipo]').forEach(r=>r.onchange=()=>{guardar();const [t,tit]=ops[+r.value];F.tipo=t;F.tit=tit;F.erro='';desenharForm()});
     document.getElementById('volta').onclick=()=>{F.passo=2;F.erro='';desenharForm()};
     document.getElementById('f3').onsubmit=async e=>{e.preventDefault();guardar();F.erro='';
-      if(precisaData&&!F.data)F.erro='Informe a data.';
+      const dig=F.tel.replace(/\D/g,'');
+      if(ehGrupo()&&!(dig.length===10||dig.length===11))F.erro='Informe o WhatsApp com DDD, por exemplo (61) 99999-9999.';
+      else if(precisaData&&!F.data)F.erro='Informe a data.';
       else if(F.tipo==='Correção de dados'&&!F.obs.trim())F.erro='Conte o que está errado no campo acima.';
-      else if(!F.ok)F.erro='Marque a confirmação para enviar.';
+      else if(!F.ok)F.erro='Marque a autorização para enviar.';
       if(F.erro)return desenharForm();
       F.carregando=true;desenharForm();
-      try{const r=await rpc('enviar_pedido',{p_inscricao:F.insc,p_tipo:F.tipo,p_data:F.data||null,p_observacao:F.obs||null});
-        if(!r.ok)F.erro=r.erro;else{F.protocolo=r.protocolo;F.passo=4}}
+      try{const r=await rpc('enviar_pedido',{p_inscricao:F.insc,p_tipo:F.tipo,p_data:ehGrupo()?null:(F.data||null),p_observacao:F.obs||null,
+          p_telefone:ehGrupo()?dig:null,p_nome_whatsapp:ehGrupo()?(F.nomeZap||null):null});
+        if(!r.ok)F.erro=r.erro;else{F.protocolo=r.protocolo;F.passo=4;F.tel='';F.nomeZap=''}}
       catch(err){F.erro=err.message}
       F.carregando=false;desenharForm()};
   }
@@ -1195,11 +1282,13 @@ function desenharForm(){
     el.innerHTML=`<p class="ok-titulo">Pedido enviado!</p>
       <p class="note" style="margin:6px 0 0">Este é o seu protocolo. Anote ou tire um print:</p>
       <div class="protocolo"><span id="protTxt">${esc(F.protocolo)}</span><button type="button" id="copiar">${ico('copy')}Copiar</button></div>
-      <div class="aviso-form"><b>E agora?</b> A comissão vai procurar você no grupo de WhatsApp dos aprovados para confirmar as informações. O painel só muda depois dessa confirmação. Se você ainda não está no grupo, procure a comissão e informe este protocolo.</div>
+      ${ehGrupo()
+        ?`<div class="aviso-form"><b>E agora?</b> A comissão vai conferir seus dados e chamar você no WhatsApp para adicionar ao grupo. Seu número fica guardado só até a análise, <b>no máximo 24 horas</b>, e depois é apagado automaticamente. Se o prazo passar sem contato, envie um novo pedido.</div>`
+        :`<div class="aviso-form"><b>E agora?</b> A comissão vai procurar você no grupo de WhatsApp dos aprovados para confirmar as informações. O painel só muda depois dessa confirmação. Se você ainda não está no grupo, use o botão "Participar do grupo de WhatsApp", no topo da página.</div>`}
       <p class="note">Para ver o andamento, use o quadro <b>Acompanhar meu pedido</b>, logo abaixo.</p>
-      <div class="btns"><button class="btn sec" type="button" id="novo">Informar outra coisa</button></div>`;
+      <div class="btns"><button class="btn sec" type="button" id="novo">Fazer outro pedido</button></div>`;
     document.getElementById('copiar').onclick=async function(){try{await navigator.clipboard.writeText(F.protocolo);this.innerHTML=ico('check')+'Copiado'}catch(e){}};
-    document.getElementById('novo').onclick=()=>{Object.assign(F,{passo:1,insc:'',pessoa:null,tipo:null,data:'',obs:'',ok:false,protocolo:'',erro:''});desenharForm()};
+    document.getElementById('novo').onclick=()=>{Object.assign(F,{passo:1,insc:'',pessoa:null,tipo:null,tit:'',data:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:''});desenharForm()};
   }
 }
 // Acompanhar pedido pelo protocolo
@@ -1207,11 +1296,17 @@ document.getElementById('fProt').onsubmit=async e=>{e.preventDefault();const out
   out.innerHTML='<p class="note">Consultando…</p>';
   try{const r=await rpc('consultar_protocolo',{p_codigo:cod});
     if(!r.ok){out.innerHTML=`<div class="erro" role="alert">${ico('flag')}<span>${esc(r.erro)}</span></div>`;return}
-    const txt={Pendente:'Em análise: a comissão ainda vai confirmar com você.',Aprovado:'Aprovado: o painel já foi atualizado.',Rejeitado:'Não aprovado.'}[r.status]||r.status;
-    out.innerHTML=`<div class="res-prot"><span class="status ${esc(r.status)}">${esc(r.status==='Pendente'?'Em análise':r.status==='Rejeitado'?'Não aprovado':r.status)}</span>
+    const grupo=r.tipo==='Entrada no grupo';
+    const txt={Pendente:grupo?'Em análise: a comissão vai conferir e chamar você no WhatsApp.':'Em análise: a comissão ainda vai confirmar com você.',
+      Aprovado:grupo?'Aprovado: a comissão vai adicionar (ou já adicionou) você ao grupo.':'Aprovado: o painel já foi atualizado.',
+      Rejeitado:'Não aprovado.',
+      Expirado:'O prazo de 24 horas passou sem análise e seu número foi apagado. Se ainda quiser entrar no grupo, envie um novo pedido.'}[r.status]||r.status;
+    const rot={Pendente:'Em análise',Rejeitado:'Não aprovado'}[r.status]||r.status;
+    out.innerHTML=`<div class="res-prot"><span class="status ${esc(r.status)}">${esc(rot)}</span>
       <p style="margin:8px 0 0">${esc(txt)}</p>
       <dl><dt>Protocolo</dt><dd>${esc(r.protocolo)}</dd><dt>Pedido</dt><dd>${esc(r.tipo)}${r.data_evento?' em '+dataBR(r.data_evento):''}</dd>
-        <dt>Enviado em</dt><dd>${dataBR(r.enviado_em)}</dd>${r.revisado_em?`<dt>Revisado em</dt><dd>${dataBR(r.revisado_em)}</dd>`:''}
+        <dt>Enviado em</dt><dd>${dataBR(r.enviado_em)}</dd>${r.expira_em?`<dt>Prazo da análise</dt><dd>até ${new Date(r.expira_em).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</dd>`:''}
+        ${r.revisado_em?`<dt>${r.status==='Expirado'?'Expirou em':'Revisado em'}</dt><dd>${dataBR(r.revisado_em)}</dd>`:''}
         ${r.resposta?`<dt>Resposta da comissão</dt><dd>${esc(r.resposta)}</dd>`:''}</dl></div>`;
   }catch(err){out.innerHTML=`<div class="erro" role="alert">${ico('flag')}<span>${esc(err.message)}</span></div>`}
 };
@@ -1298,7 +1393,8 @@ function rodape(quando,copia){
     if(copia)d3.select('main').insert('div','.bar + *').attr('class','aviso copia')
       .html(`${ico('clock')}<span><b>Mostrando a cópia dos dados de ${quando.toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}.</b> Não foi possível consultar o banco de dados agora (sem internet ou banco fora do ar), então o painel usa a cópia salva dentro deste arquivo. Recarregue a página mais tarde para ver os dados atualizados.</span>`);
     rodape(quando,copia);
-    if(location.hash==='#informar')S.tab='form'; // link direto para o formulário
+    // Links diretos: #solicitacoes (ou o antigo #informar) e #grupo (já abre o pedido de entrada no grupo)
+    if(['#informar','#solicitacoes','#grupo'].includes(location.hash)){S.tab='form';F.intencao=location.hash==='#grupo'?'grupo':'convocacao'}
     render();
     if(S.tab==='form')iniciarForm();
     // Atualização automática com a página aberta

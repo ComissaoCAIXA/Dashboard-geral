@@ -69,6 +69,22 @@ tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
 .edit .g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0 14px}
 .check{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:13.5px}
 .mud{font-size:12.5px;color:var(--ink2)}.mud b{color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px}
+.kpi .l{font-size:12.5px;color:var(--ink2)}.kpi .v{font-size:28px;font-weight:700;line-height:1.15;margin-top:2px}.kpi .s{font-size:12px;color:var(--muted)}
+.prog{height:14px;border-radius:3px;background:var(--empty);overflow:hidden;margin-top:10px}
+.prog span{display:block;height:100%;background:var(--good)}
+.duas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.duas .card{margin-bottom:12px}
+.hb{display:grid;grid-template-columns:minmax(90px,auto) 1fr auto;gap:6px 10px;align-items:center;font-size:13px;margin-top:10px}
+.hb .tr{height:12px;background:var(--empty);border-radius:2px;overflow:hidden}
+.hb .tr span{display:block;height:100%;background:var(--good)}
+.hb .vl{font-variant-numeric:tabular-nums;white-space:nowrap}.hb .vl small{color:var(--muted)}
+.rolagem{max-height:360px;overflow:auto;padding-right:4px}
+.filtros-g{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:8px;margin:12px 0}
+.zap{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:600;font-size:13px;color:#fff;background:#1a8d4f;border-radius:6px;padding:6px 12px}
+.prazo{font-size:12.5px;color:var(--warn);font-weight:600}
+@media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.duas{grid-template-columns:minmax(0,1fr)}.filtros-g{grid-template-columns:1fr 1fr}.filtros-g input{grid-column:1/-1}}
 [hidden]{display:none!important}
 @media (max-width:620px){main{padding:16px 12px 40px}.acoes .btn{flex:1}}
 </style>
@@ -110,6 +126,7 @@ tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
   <section id="vArea" hidden>
     <div class="tabs" role="tablist">
       <button data-v="pend" aria-selected="true">Pedidos pendentes<b id="nPend" hidden></b></button>
+      <button data-v="grupo">Grupo de WhatsApp</button>
       <button data-v="aprov">Aprovados</button>
       <button data-v="hist">Histórico</button>
     </div>
@@ -120,6 +137,30 @@ tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
         <button class="btn sec" type="button" id="recarregar">Atualizar</button>
       </div>
       <div id="listaPend"></div>
+    </div>
+
+    <div id="pGrupo" hidden>
+      <div class="kpis" id="gKpis"></div>
+      <div class="card">
+        <div class="linha" style="justify-content:space-between;align-items:baseline"><h2>Progresso do grupo</h2><span class="note" id="gNota"></span></div>
+        <div class="prog"><span id="gBarra"></span></div>
+      </div>
+      <div class="duas">
+        <div class="card"><h2>Por cargo</h2><p class="note">Barra cheia = todos do cargo já no grupo.</p><div id="gCargo"></div></div>
+        <div class="card"><h2>Por estado</h2><p class="note">Ordenado por quem tem mais pessoas faltando.</p><div id="gUF" class="rolagem"></div></div>
+      </div>
+      <div class="card">
+        <h2>Quem ainda falta no grupo</h2>
+        <p class="note">Use para procurar os aprovados que ainda não entraram. Quando confirmar que a pessoa já está no grupo, clique em "Marcar como no grupo".</p>
+        <div class="filtros-g">
+          <input type="text" id="gBusca" placeholder="Buscar por nome ou inscrição">
+          <select id="gCargoF"><option value="">Todos os cargos</option></select>
+          <select id="gUFF"><option value="">Todos os estados</option></select>
+          <select id="gSitF"><option value="">Vaga imediata e reserva</option><option>Vaga imediata</option><option>Cadastro reserva</option></select>
+          <select id="gMostrar"><option value="fora">Mostrar quem falta</option><option value="dentro">Mostrar quem já está</option></select>
+        </div>
+        <div id="gLista"></div>
+      </div>
     </div>
 
     <div id="pAprov" hidden>
@@ -174,11 +215,11 @@ async function entrar(sessao){
 SB.auth.onAuthStateChange((ev,sessao)=>{if(ev==='INITIAL_SESSION'||ev==='SIGNED_IN'||ev==='SIGNED_OUT')entrar(sessao)});
 
 /* ---------- Abas ---------- */
-const PAINEIS={pend:'pPend',aprov:'pAprov',hist:'pHist'};
+const PAINEIS={pend:'pPend',grupo:'pGrupo',aprov:'pAprov',hist:'pHist'};
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
   Object.entries(PAINEIS).forEach(([k,id])=>$(id).hidden=k!==b.dataset.v);
-  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();
+  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();
 });
 
 /* ---------- Pendentes ---------- */
@@ -194,6 +235,9 @@ function desenharPend(lista){
   el.innerHTML=lista.map(p=>`<div class="pedido" data-id="${p.id}">
     <div class="topo"><span class="prot">${esc(p.protocolo)}</span><span class="tipo">${esc(p.tipo)}${p.data_evento?' em '+dBR(p.data_evento):''}</span><span class="quando">enviado em ${dhBR(p.criado_em)}</span></div>
     <div class="nome">${esc(p.nome)}</div>
+    ${p.tipo==='Entrada no grupo'?`<div class="obs"><b>WhatsApp:</b> ${esc(fmtTel(p.telefone))}${p.nome_whatsapp?` · aparece como <b>${esc(p.nome_whatsapp)}</b>`:''}
+      <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:10px;align-items:center"><a class="zap" href="https://wa.me/${esc(p.telefone)}" target="_blank" rel="noopener">Abrir conversa no WhatsApp</a>
+      <span class="prazo">Expira ${tempoRestante(p.expira_em)}: depois disso o número é apagado.</span></div></div>`:''}
     <dl class="grade"><div><dt>Inscrição</dt><dd>${esc(p.inscricao)}</dd></div><div><dt>Cargo</dt><dd>${esc(p.cargo)}</dd></div>
       <div><dt>Polo</dt><dd>${esc(p.uf)} · ${esc(p.macropolo)}</dd></div><div><dt>Cota</dt><dd>${esc(p.cota)}</dd></div>
       <div><dt>Classificação</dt><dd>${p.posicao_uf}º · ${esc(p.situacao)}</dd></div><div><dt>Nota</dt><dd>${nota(p.nota)}</dd></div>
@@ -202,7 +246,7 @@ function desenharPend(lista){
     ${(p.alertas||[]).map(a=>`<div class="alerta">⚠ ${esc(a)}</div>`).join('')}
     <label class="rot" for="r${p.id}">Resposta para o aprovado (opcional, aparece na consulta do protocolo)</label>
     <textarea id="r${p.id}" maxlength="500" placeholder="Ex.: confirmado com você no WhatsApp em 13/10"></textarea>
-    <div class="acoes"><button class="btn nao" data-d="Rejeitado">Não aprovar</button><button class="btn ok" data-d="Aprovado">Aprovar</button></div>
+    <div class="acoes"><button class="btn nao" data-d="Rejeitado">Não aprovar</button><button class="btn ok" data-d="Aprovado">${p.tipo==='Entrada no grupo'?'Aprovar (está no grupo)':'Aprovar'}</button></div>
     <div class="ret"></div></div>`).join('');
   el.querySelectorAll('.pedido button[data-d]').forEach(b=>b.onclick=async()=>{
     const card=b.closest('.pedido'),id=+card.dataset.id,dec=b.dataset.d,resp=card.querySelector('textarea').value;
@@ -217,7 +261,7 @@ function desenharPend(lista){
 $('recarregar').onclick=carregarPend;
 
 /* ---------- Aprovados ---------- */
-const COLS='id,nome,inscricao,cargo,uf,cota,situacao,posicao_uf,nota,convocacao,data_convocacao,data_posse,observacao,ocultar_nome';
+const COLS='id,nome,inscricao,cargo,uf,cota,situacao,posicao_uf,nota,convocacao,data_convocacao,data_posse,observacao,ocultar_nome,no_grupo,no_grupo_em';
 $('fBusca').onsubmit=async e=>{e.preventDefault();const t=$('busca').value.trim();const el=$('listaAprov');
   if(t.length<2){msg(el,'info','Digite pelo menos 2 caracteres.');return}
   el.innerHTML='<p class="vazio">Buscando…</p>';
@@ -231,9 +275,9 @@ $('fBusca').onsubmit=async e=>{e.preventDefault();const t=$('busca').value.trim(
 };
 function desenharAprov(rows){
   const el=$('listaAprov');if(!rows.length){el.innerHTML='<p class="vazio">Ninguém encontrado.</p>';return}
-  el.innerHTML=`<div class="card tw"><table><thead><tr><th>Nome</th><th>Inscrição</th><th>Cargo</th><th>UF</th><th>Cota</th><th>Situação</th><th>Convocação</th></tr></thead>
-    <tbody>${rows.map((r,i)=>`<tr class="click" data-i="${i}"><td>${esc(r.nome)}${r.ocultar_nome?' <span class="pill">nome oculto</span>':''}</td><td>${esc(r.inscricao)}</td><td>${esc(r.cargo)}</td><td>${esc(r.uf)}</td><td>${esc(r.cota)}</td><td>${r.posicao_uf}º · ${esc(r.situacao)}</td><td><span class="pill ${esc(r.convocacao)}">${esc(r.convocacao)}</span></td></tr>
-    <tr hidden data-ed="${i}"><td colspan="7"></td></tr>`).join('')}</tbody></table>${rows.length===60?'<p class="note">Mostrando os 60 primeiros. Refine a busca.</p>':''}</div>`;
+  el.innerHTML=`<div class="card tw"><table><thead><tr><th>Nome</th><th>Inscrição</th><th>Cargo</th><th>UF</th><th>Cota</th><th>Situação</th><th>Convocação</th><th>Grupo</th></tr></thead>
+    <tbody>${rows.map((r,i)=>`<tr class="click" data-i="${i}"><td>${esc(r.nome)}${r.ocultar_nome?' <span class="pill">nome oculto</span>':''}</td><td>${esc(r.inscricao)}</td><td>${esc(r.cargo)}</td><td>${esc(r.uf)}</td><td>${esc(r.cota)}</td><td>${r.posicao_uf}º · ${esc(r.situacao)}</td><td><span class="pill ${esc(r.convocacao)}">${esc(r.convocacao)}</span></td><td>${r.no_grupo?'<span class="pill Convocado">no grupo</span>':'<span class="pill">fora</span>'}</td></tr>
+    <tr hidden data-ed="${i}"><td colspan="8"></td></tr>`).join('')}</tbody></table>${rows.length===60?'<p class="note">Mostrando os 60 primeiros. Refine a busca.</p>':''}</div>`;
   el.querySelectorAll('tr.click').forEach(tr=>tr.onclick=()=>{const i=+tr.dataset.i,ed=el.querySelector(`tr[data-ed="${i}"]`);
     if(!ed.hidden){ed.hidden=true;return}ed.hidden=false;const r=rows[i];
     ed.firstElementChild.innerHTML=`<div class="edit"><div class="g2">
@@ -242,16 +286,17 @@ function desenharAprov(rows){
       <div><label class="rot">Data da posse</label><input type="date" class="e-dp" value="${r.data_posse||''}"></div></div>
       <label class="rot">Observação interna (só a comissão vê)</label><textarea class="e-obs">${esc(r.observacao||'')}</textarea>
       <label class="check"><input type="checkbox" class="e-oc" ${r.ocultar_nome?'checked':''}> Ocultar o nome completo no painel público (mostra só as iniciais)</label>
+      <label class="check"><input type="checkbox" class="e-gr" ${r.no_grupo?'checked':''}> Verificado e está no grupo de WhatsApp${r.no_grupo_em?` (desde ${dBR(r.no_grupo_em)})`:''}</label>
       <div class="acoes"><button class="btn sec e-can" type="button">Cancelar</button><button class="btn e-sal" type="button">Salvar</button></div><div class="ret"></div></div>`;
     const box=ed.firstElementChild;box.querySelector('.e-can').onclick=()=>ed.hidden=true;
     box.querySelector('.e-sal').onclick=async function(){this.disabled=true;
       const {data,error}=await SB.rpc('comissao_atualizar',{p_id:r.id,p_convocacao:box.querySelector('.e-conv').value,
         p_data_convocacao:box.querySelector('.e-dc').value||null,p_data_posse:box.querySelector('.e-dp').value||null,
-        p_observacao:box.querySelector('.e-obs').value,p_ocultar_nome:box.querySelector('.e-oc').checked});
+        p_observacao:box.querySelector('.e-obs').value,p_ocultar_nome:box.querySelector('.e-oc').checked,p_no_grupo:box.querySelector('.e-gr').checked});
       this.disabled=false;
       if(error||!data.ok){msg(box.querySelector('.ret'),'erro',error?error.message:data.erro);return}
       msg(box.querySelector('.ret'),'ok','Salvo. O painel público já reflete a mudança.');
-      Object.assign(r,{convocacao:box.querySelector('.e-conv').value,ocultar_nome:box.querySelector('.e-oc').checked});
+      Object.assign(r,{convocacao:box.querySelector('.e-conv').value,ocultar_nome:box.querySelector('.e-oc').checked,no_grupo:box.querySelector('.e-gr').checked});
     };
   });
 }
@@ -261,6 +306,58 @@ $('exportar').onclick=async()=>{const {data,error}=await SB.from('aprovados').se
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+linhas.join('\n')],{type:'text/csv;charset=utf-8'}));
   a.download='aprovados-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
 };
+
+/* ---------- Auxiliares ---------- */
+// 5561999998888 -> +55 (61) 99999-8888
+const fmtTel=t=>{const d=String(t||'');const n=d.slice(4);return d.length<12?d:`+55 (${d.slice(2,4)}) ${n.length===9?n.slice(0,5)+'-'+n.slice(5):n.slice(0,4)+'-'+n.slice(4)}`};
+const tempoRestante=iso=>{if(!iso)return'';const m=Math.round((new Date(iso)-Date.now())/60000);
+  if(m<=0)return'a qualquer momento';const h=Math.floor(m/60);return h?`em ${h} h ${m%60} min`:`em ${m} min`};
+const pctTxt=(a,b)=>b?Math.round(a/b*100)+'%':'–';
+
+/* ---------- Grupo de WhatsApp ---------- */
+let G=[];
+async function carregarGrupo(){
+  $('gLista').innerHTML='<p class="vazio">Carregando…</p>';
+  const {data,error}=await SB.from('aprovados').select('id,nome,inscricao,cargo,uf,cota,situacao,posicao_uf,convocacao,no_grupo,no_grupo_em').order('cargo').order('uf').order('posicao_uf');
+  if(error){msg($('gLista'),'erro',error.message);return}
+  G=data;
+  // filtros (preenche só na primeira vez)
+  if($('gCargoF').options.length===1){[...new Set(G.map(r=>r.cargo))].sort().forEach(c=>$('gCargoF').add(new Option(c,c)));[...new Set(G.map(r=>r.uf))].sort().forEach(u=>$('gUFF').add(new Option(u,u)))}
+  desenharGrupo();
+}
+function desenharGrupo(){
+  const tot=G.length,dentro=G.filter(r=>r.no_grupo).length,fora=tot-dentro;
+  const vi=G.filter(r=>r.situacao==='Vaga imediata'),viDentro=vi.filter(r=>r.no_grupo).length;
+  const conv=G.filter(r=>r.convocacao==='Convocado'||r.convocacao==='Empossado'),convFora=conv.filter(r=>!r.no_grupo).length;
+  $('gKpis').innerHTML=[['Aprovados',tot,'base completa (sem Médico do Trabalho)'],['No grupo',dentro,pctTxt(dentro,tot)+' do total'],
+    ['Faltam encontrar',fora,'ainda fora do grupo'],['Vaga imediata no grupo',`${viDentro}/${vi.length}`,pctTxt(viDentro,vi.length)+(convFora?` · ${convFora} convocado(s) fora`:'')]]
+    .map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join('');
+  $('gBarra').style.width=(tot?dentro/tot*100:0)+'%';$('gNota').textContent=`${dentro} de ${tot} no grupo (${pctTxt(dentro,tot)})`;
+  const barras=(grupos,ordem)=>grupos.sort(ordem).map(([k,rs])=>{const d=rs.filter(r=>r.no_grupo).length;
+    return `<span title="${esc(k)}">${esc(k)}</span><span class="tr"><span style="width:${d/rs.length*100}%"></span></span><span class="vl">${d}/${rs.length} <small>· faltam ${rs.length-d}</small></span>`}).join('');
+  const agrupar=c=>Object.entries(G.reduce((m,r)=>{(m[r[c]]=m[r[c]]||[]).push(r);return m},{}));
+  $('gCargo').innerHTML=`<div class="hb">${barras(agrupar('cargo'),(a,b)=>b[1].length-a[1].length)}</div>`;
+  $('gUF').innerHTML=`<div class="hb">${barras(agrupar('uf'),(a,b)=>(b[1].filter(r=>!r.no_grupo).length-a[1].filter(r=>!r.no_grupo).length)||a[0].localeCompare(b[0]))}</div>`;
+  desenharListaGrupo();
+}
+function desenharListaGrupo(){
+  const q=$('gBusca').value.trim().toLowerCase(),c=$('gCargoF').value,u=$('gUFF').value,s=$('gSitF').value,dentro=$('gMostrar').value==='dentro';
+  const rows=G.filter(r=>r.no_grupo===dentro&&(!c||r.cargo===c)&&(!u||r.uf===u)&&(!s||r.situacao===s)&&(!q||r.nome.toLowerCase().includes(q)||r.inscricao.startsWith(q)));
+  const lim=rows.slice(0,150);
+  $('gLista').innerHTML=rows.length?`<p class="note">${rows.length} pessoa(s)${rows.length>150?' · mostrando 150, use os filtros':''}</p>
+    <div class="tw"><table><thead><tr><th>Nome</th><th>Inscrição</th><th>Cargo</th><th>UF</th><th>Situação</th><th>Convocação</th><th></th></tr></thead><tbody>
+    ${lim.map(r=>`<tr><td>${esc(r.nome)}</td><td>${esc(r.inscricao)}</td><td>${esc(r.cargo)}</td><td>${esc(r.uf)}</td><td>${r.posicao_uf}º · ${esc(r.situacao)}</td>
+      <td><span class="pill ${esc(r.convocacao)}">${esc(r.convocacao)}</span></td>
+      <td style="text-align:right"><button class="btn ${dentro?'sec':'ok'}" style="padding:5px 10px;font-size:12.5px" data-id="${r.id}" data-v="${dentro?0:1}">${dentro?'Tirar do grupo':'Marcar como no grupo'}</button></td></tr>`).join('')}
+    </tbody></table></div>`:`<p class="vazio">${dentro?'Ninguém marcado como no grupo com esses filtros.':'Todos com esses filtros já estão no grupo. 🎉'}</p>`;
+  $('gLista').querySelectorAll('button[data-id]').forEach(b=>b.onclick=async()=>{
+    const id=+b.dataset.id,v=b.dataset.v==='1';b.disabled=true;
+    const {data,error}=await SB.rpc('comissao_marcar_grupo',{p_id:id,p_no_grupo:v});
+    if(error||!data.ok){b.disabled=false;alert(error?error.message:data.erro);return}
+    const r=G.find(x=>x.id===id);r.no_grupo=v;r.no_grupo_em=v?new Date().toISOString().slice(0,10):null;desenharGrupo();
+  });
+}
+['gBusca','gCargoF','gUFF','gSitF','gMostrar'].forEach(id=>$(id).addEventListener(id==='gBusca'?'input':'change',desenharListaGrupo));
 
 /* ---------- Histórico ---------- */
 const IGNORAR=new Set(['atualizado_em','revisado_em','criado_em','iniciais','nome_publico','macropolo']);

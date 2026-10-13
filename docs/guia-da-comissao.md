@@ -9,6 +9,13 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
 - **Pedidos pendentes:** cada pedido mostra protocolo, o que a pessoa informou, os dados completos
   dela e alertas automáticos. Confira pelo WhatsApp e clique em **Aprovar** ou **Não aprovar**
   (a resposta opcional aparece para o aprovado na consulta do protocolo).
+- **Grupo de WhatsApp:** quantos aprovados já estão no grupo, quantos faltam, por cargo e por estado,
+  e a lista de quem falta (com filtros). Clique em **Marcar como no grupo** para quem já é membro.
+  Para informar convocação pelo site, a pessoa precisa estar marcada como membro do grupo;
+  quem não está é orientado a pedir a entrada primeiro.
+- **Pedidos de entrada no grupo:** mostram o WhatsApp informado e um botão para abrir a conversa.
+  O número é apagado automaticamente ao aprovar/não aprovar, ou em 24 h se ninguém decidir
+  (o pedido vira "Expirado"). O número nunca vai para o histórico.
 - **Aprovados:** busque por nome, inscrição ou UF e edite situação, datas, observação interna
   ou **ocultar o nome** no painel (para quem pediu para aparecer só com iniciais).
 - **Histórico:** as últimas 100 alterações, com o e-mail de quem fez.
