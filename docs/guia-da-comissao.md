@@ -19,6 +19,11 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
   e a lista de quem falta (com filtros). Clique em **Marcar como no grupo** para quem já é membro.
   Para informar convocação pelo site, a pessoa precisa estar marcada como membro do grupo;
   quem não está é orientado a pedir a entrada primeiro.
+- **Horário da convocação:** o aprovado pode informar o horário em que recebeu a convocação, junto com a
+  convocação ou depois, pela opção "Quero informar o horário da minha convocação". Ao aprovar, o horário vai para
+  a pessoa (e uma convocação presumida passa a confirmada). Também dá para editar o horário na aba Aprovados.
+  O horário serve para descobrir a ordem real das chamadas feitas no mesmo dia e conferir o simulador da aba
+  "Vagas e regras" do painel.
 - **Pedidos de entrada no grupo:** mostram o WhatsApp informado e um botão para abrir a conversa.
   O número é apagado automaticamente ao aprovar/não aprovar, ou em 24 h se ninguém decidir
   (o pedido vira "Expirado"). O número nunca vai para o histórico.

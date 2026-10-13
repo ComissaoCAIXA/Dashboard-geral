@@ -274,6 +274,137 @@ body.sobrio header .tema .knob,header .tema .knob{background:none;width:auto;hei
   .acoes-topo{order:3;width:100%}
   .acao{flex:1;justify-content:center;padding:9px 8px}
 }
+/* ---------- Vagas e regras: simulador da fila ---------- */
+#tab-vagas{display:flex;flex-direction:column;gap:12px}
+#tab-vagas[hidden]{display:none}
+/* Etiqueta de modalidade: fundo suave, borda e ponto na cor da modalidade (texto sempre legível) */
+.mod{--c:var(--s1);display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:42px;font-size:11.5px;font-weight:700;line-height:1.5;padding:1px 7px 1px 6px;border-radius:4px;
+  background:color-mix(in srgb,var(--c) 12%,transparent);color:color-mix(in srgb,var(--c) 72%,var(--ink));border:1px solid color-mix(in srgb,var(--c) 38%,transparent)}
+.mod::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c);flex:none}
+.mod.AC{--c:var(--s1)}.mod.PCD{--c:var(--g4)}.mod.PN{--c:var(--g2)}.mod.PI{--c:var(--g1)}.mod.PQ{--c:var(--g5)}
+/* Estilo anterior (cor sólida), para comparar: abrir a página com ?estilo=solido */
+body.mod-solido .mod{background:var(--c);color:#fff;border-color:transparent}
+body.mod-solido .mod::before{display:none}
+.fila-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0 6px}
+.fila-ctl select{font:inherit;font-size:14px;height:40px;padding:0 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink)}
+.fila-ctl .seg{height:40px;align-items:stretch}
+.fila-ctl .seg button{height:100%;display:inline-flex;align-items:center;padding:0 12px}
+.fila-resumo{font-size:13.5px;color:var(--ink2);margin:8px 0 4px;line-height:1.6}
+.fila-resumo .mod{margin:0 2px}
+.fila-play{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 12px}
+.fila-play .btn{display:inline-flex;align-items:center;gap:6px}
+.fila-play svg{width:14px;height:14px;flex:none}
+.fila{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px}
+.fila li{display:grid;grid-template-columns:38px auto 1fr;gap:4px 8px;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-size:13px;transition:opacity .25s,transform .25s}
+.fila li.oculto{opacity:0;transform:translateY(6px)}
+.fila li.atual{outline:2px solid var(--s1);outline-offset:-1px}
+.fila .k{font:700 12.5px ui-monospace,Consolas,monospace;color:var(--muted)}
+.fila .quem{min-width:0;font-weight:600;line-height:1.3}
+.fila .det{grid-column:2/-1;font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.fila .ok{color:var(--good);font-weight:700}
+.fila .vazia{color:var(--muted);font-style:italic;font-weight:400}
+.tag-rev{display:inline-block;font-size:11px;font-weight:600;padding:0 6px;border-radius:4px;border:1px dashed var(--muted);color:var(--ink2)}
+.fila .divisor{grid-column:1/-1;display:flex;align-items:center;gap:10px;border:0;background:none;padding:6px 0;font-size:12px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em}
+.fila .divisor::before,.fila .divisor::after{content:"";flex:1;border-top:1px dashed var(--axis)}
+.aviso-topo{margin:12px 0 4px;border:1px solid color-mix(in srgb,var(--s5) 55%,transparent);background:color-mix(in srgb,var(--s5) 9%,transparent);border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.55;color:var(--ink2)}
+.aviso-topo p{margin:0}
+.aviso-topo b{color:var(--ink)}
+.aviso-topo summary{cursor:pointer;font-weight:600;color:var(--ink);margin-top:8px}
+.aviso-topo ol{margin:8px 0 0;padding-left:20px}
+.aviso-topo li{margin:6px 0}
+.aviso-topo .difs{margin:6px 0 0;padding-left:18px;font-size:12.5px}
+/* Visualização "Pistas": uma coluna por modalidade; cada chamada voa até a trilha da fila */
+.fila-play .vista{margin-left:auto}
+.pistas[hidden]{display:none}
+.pistas{border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--surface)}
+.pst-cols{display:grid;gap:8px;grid-template-columns:repeat(var(--n),minmax(0,1fr))}
+.pst-col{border-radius:6px;padding:8px 6px;background:color-mix(in srgb,var(--c) 6%,transparent);border:1px solid color-mix(in srgb,var(--c) 22%,transparent);transition:box-shadow .2s}
+.pst-col.AC{--c:var(--s1)}.pst-col.PCD{--c:var(--g4)}.pst-col.PN{--c:var(--g2)}.pst-col.PI{--c:var(--g1)}.pst-col.PQ{--c:var(--g5)}
+.pst-col header{display:flex;align-items:center;justify-content:space-between;gap:4px;margin-bottom:6px;font-size:11.5px;color:var(--ink2)}
+.pst-col.pulso{box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 55%,transparent)}
+.pst-col .vazio-col{font-size:11.5px;color:var(--muted);font-style:italic}
+.pst-tks{display:flex;flex-wrap:wrap;gap:4px}
+.tk{display:inline-grid;place-items:center;min-width:34px;height:24px;padding:0 5px;border-radius:5px;font:700 11px ui-monospace,Consolas,monospace;
+  background:var(--c,var(--s1));color:#fff;transition:opacity .3s,transform .3s}
+.tk.AC{--c:var(--s1)}.tk.PCD{--c:var(--g4)}.tk.PN{--c:var(--g2)}.tk.PI{--c:var(--g1)}.tk.PQ{--c:var(--g5)}
+.tk.chamado{opacity:.18;transform:scale(.9)}
+.tk.voando{position:fixed;z-index:80;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.pst-trilho-t{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 6px;font-size:12.5px;font-weight:700;color:var(--ink2)}
+.pst-trilho{display:flex;flex-wrap:wrap;gap:4px}
+.slot{position:relative;display:inline-grid;place-items:center;min-width:34px;height:24px;border:1px dashed var(--axis);border-radius:5px;font:600 10px ui-monospace,Consolas,monospace;color:var(--muted)}
+.slot.cheio{border:0;color:#fff;background:var(--c)}
+.slot.cheio.AC{--c:var(--s1)}.slot.cheio.PCD{--c:var(--g4)}.slot.cheio.PN{--c:var(--g2)}.slot.cheio.PI{--c:var(--g1)}.slot.cheio.PQ{--c:var(--g5)}
+.slot.rv::after{content:"";position:absolute;inset:-3px;border:1.5px dashed var(--ink2);border-radius:7px}
+.slot.pop{animation:pop .35s ease-out}
+/* bolinha de convocado nas posições da fila e nas fichas */
+.slot .pt,.tk .pt{position:absolute;top:-4px;right:-4px;width:10px;height:10px;border-radius:50%;background:var(--good);box-shadow:0 0 0 2px var(--surface)}
+.slot .pt.pres,.tk .pt.pres{background:var(--surface);border:2px solid var(--good)}
+.tk{position:relative}
+/* situação na legenda */
+.st{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:999px;font-size:12px;font-weight:700;vertical-align:1px}
+.st.conv{color:var(--good);background:color-mix(in srgb,var(--good) 15%,transparent);border:1px solid color-mix(in srgb,var(--good) 45%,transparent)}
+.st.pres{color:var(--good);border:1px dashed var(--good)}
+.st.agu{color:var(--ink2);background:var(--empty)}
+.st.des{color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.pst-leg-cores{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted);margin-top:6px}
+.pst-leg-cores span{display:inline-flex;align-items:center;gap:5px}
+.pst-leg-cores i{position:static;display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--good)}
+.pst-leg-cores i.pres{background:none;border:2px solid var(--good)}
+.slot,.pst-col .tk{cursor:pointer}
+.slot:hover{border-color:var(--ink2)}
+.slot.sel,.tk.sel{outline:2px solid var(--ink);outline-offset:2px}
+.tk.chamado.sel{opacity:.6}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+.slot.fimvi{margin-right:14px}
+.slot.fimvi::before{content:"";position:absolute;right:-10px;top:-4px;bottom:-4px;border-right:2px solid var(--ink2)}
+.pst-leg{margin-top:10px;min-height:40px;font-size:13px;line-height:1.5;color:var(--ink2);padding:8px 10px;border-radius:6px;background:var(--wash)}
+.pst-leg b{color:var(--ink)}
+@media (max-width:620px){.pst-cols{grid-template-columns:repeat(min(var(--n),3),minmax(0,1fr))}.fila-play .vista{margin-left:0}}
+.exemplos{margin-top:10px;padding-top:10px;border-top:1px dashed color-mix(in srgb,var(--s5) 45%,transparent)}
+.exemplos p{margin:2px 0 6px}
+.exemplos ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.ex-fila{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 3px}
+.ex-ch{display:inline-flex;align-items:center;gap:4px;padding:3px 7px 3px 5px;border:1px solid var(--border);border-radius:6px;background:var(--surface)}
+.ex-ch small{font:600 11px ui-monospace,Consolas,monospace;color:var(--muted)}
+.ex-ch b{color:var(--good);font-size:12px}
+.ex-ch.prox{border-style:dashed;opacity:.75}
+.fila .por{grid-column:2/-1;font-size:11.5px;color:var(--muted);line-height:1.35}
+.aviso-sim{margin:14px 0 0;font-size:12.5px;color:var(--ink2);background:var(--wash);border-radius:6px;padding:10px 12px}
+.cenario{display:grid;grid-template-columns:auto repeat(5,minmax(54px,1fr));gap:6px 8px;align-items:center;margin:10px 0;padding:12px;border:1px dashed var(--border);border-radius:8px;font-size:13px}
+.cenario input{width:100%;font:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink)}
+.cenario .rot{color:var(--ink2);font-weight:600}
+.cenario .mod{justify-self:center}
+.regras-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.regra{position:relative;border:1px solid var(--border);border-radius:8px;padding:14px 14px 12px 50px;background:var(--surface)}
+.regra .rn{position:absolute;left:14px;top:14px;width:24px;height:24px;border-radius:50%;background:var(--s1);color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center}
+.regra h3{font-size:14px;margin:2px 0 6px}
+.regra p{font-size:13px;line-height:1.55;color:var(--ink2);margin:0 0 6px}
+.regra small,.faq small{color:var(--muted);white-space:nowrap}
+.rev{display:flex;flex-direction:column;gap:6px;margin:4px 0 8px;font-size:13px;color:var(--muted)}
+.rev .mod{margin:0 3px}
+.rev>div{display:flex;align-items:center;flex-wrap:wrap}
+.rev .rl{width:118px;flex:none;font-size:12px;color:var(--ink2)}
+h3.sub{font-size:14px;margin:18px 0 8px}
+.faq details{border-top:1px solid var(--grid);padding:9px 0}
+.faq summary{cursor:pointer;font-weight:600;font-size:13.5px}
+.faq p{font-size:13px;line-height:1.55;color:var(--ink2);margin:6px 0 0}
+.quadro th,.quadro td{text-align:center;padding:6px 8px;font-size:13px;border-bottom:1px solid var(--grid);font-variant-numeric:tabular-nums}
+.quadro .uf{text-align:left}
+.quadro .ordem{text-align:left;white-space:normal}
+.quadro .ordem .mod{min-width:0;padding:0 5px;margin:1px 2px 1px 0;font-size:10.5px;gap:4px}
+.quadro .ordem .mod::before{width:5px;height:5px}
+.quadro .ordem .mod.rv{border-style:dashed}
+.quadro tbody tr.qlinha{cursor:pointer}
+.quadro tbody tr.qlinha:hover td{background:var(--wash)}
+.quadro{border-collapse:collapse;width:100%}
+.quadro td{color:var(--ink)}
+.quadro td.zero{color:var(--muted)}
+.quadro tfoot td{font-weight:700}
+.quadro tfoot td.ordem{font-weight:400;font-size:12px}
+.quadro td.grp{text-align:left;padding-top:12px}
+.quadro .grp{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+@media (max-width:620px){.regras-grid{grid-template-columns:1fr}.fila{grid-template-columns:1fr}.cenario{grid-template-columns:auto repeat(5,minmax(40px,1fr));font-size:12px}}
+
 /* ---------- Novidades ---------- */
 .novid-btn{position:relative}
 .novid-btn .ponto{position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--s1);box-shadow:0 0 0 2px var(--surface)}
@@ -332,7 +463,7 @@ body.aba-form .filters,body.aba-form .det-tgl,body.aba-form .filtbtn,body.aba-fo
 .campo{margin-top:14px}
 .campo label,.campo .rot{display:block;font-weight:600;font-size:13.5px;margin-bottom:6px}
 .campo small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
-.campo input[type=text],.campo input[type=email],.campo input[type=date],.campo select,.campo textarea,.linha input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink)}
+.campo input[type=text],.campo input[type=email],.campo input[type=date],.campo input[type=time],.campo select,.campo textarea,.linha input{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink)}
 .campo input:focus,.campo select:focus,.campo textarea:focus,.linha input:focus{outline:2px solid var(--s1);outline-offset:-1px}
 .campo textarea{min-height:84px;resize:vertical}
 .btns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
@@ -526,6 +657,7 @@ body.sobrio .tw tr{border-radius:6px}
     <div class="tabs" role="tablist">
       <button role="tab" data-tab="panorama" aria-selected="true"><span data-i="chart"></span>Panorama<span class="lg">e notas</span></button>
       <button role="tab" data-tab="conv" aria-selected="false"><span data-i="userCheck"></span>Convocações</button>
+      <button role="tab" data-tab="vagas" aria-selected="false"><span data-i="fila"></span>Vagas<span class="lg">e regras</span></button>
     </div>
     <label class="tgl det-tgl" title="Mostra todas as análises: notas, cotas, regiões e destaques"><input type="checkbox" id="detalhe"><span class="trk"></span><span class="ti" data-i="layers"></span><span>Visão detalhada</span></label>
     <button class="filtbtn" id="filtbtn" type="button" aria-expanded="false"><span data-i="filter"></span>Filtros</button>
@@ -621,6 +753,81 @@ body.sobrio .tw tr{border-radius:6px}
       <div class="seg" id="t2seg"><button data-v="sim" aria-pressed="true">Convocados</button><button data-v="aguard">Vaga imediata aguardando</button><button data-v="cr">Cadastro reserva</button></div></div>
       <div id="tbl2"></div></div>
     <button class="mais-det" type="button" data-resumo><span data-i="layers"></span>Ver análises detalhadas: andamento por região e cota, notas e destaques</button>
+  </section>
+
+  <!-- ABA: Vagas e convocação (simulador da fila, regras do edital e quadro de vagas) -->
+  <section id="tab-vagas" hidden>
+    <div class="card fila-card">
+      <div class="hd"><div><h2>Simulador da fila de convocação</h2>
+        <p class="note">Escolha o cargo e o estado para ver, chamada a chamada, uma estimativa da ordem de convocação, considerando as cotas e as vagas que passam de uma cota para outra.</p></div></div>
+      <div class="aviso-topo">
+        <p><b>Isto é uma simulação feita pela Comissão de Aprovados, não é a lista oficial.</b> Quem define a ordem e o momento de cada convocação é a CAIXA. O edital estabelece o começo da fila, as proporções das cotas e para onde vão as vagas que sobram, mas não publica a sequência completa de chamadas. Por isso, parte desta fila é uma interpretação da comissão, baseada no edital e conferida com as convocações já feitas. Ela não gera direito nem garante convocação.</p><p style="margin-top:8px"><b>A simulação pode mudar.</b> A cada nova convocação a comissão tem mais dados para conferir a ordem (inclusive o horário de cada convocação, que os aprovados podem informar no formulário), e a regra pode ser ajustada para refletir o que a CAIXA de fato fizer.</p>
+        <details><summary>Como a simulação foi feita e conferida</summary>
+          <ol>
+            <li><b>Começo da fila (item 2.13.1).</b> O edital diz: <i>"A convocação iniciar-se-á por um candidato com deficiência, se houver, seguida por um candidato da ampla concorrência e, em seguida, por um candidato aprovado nas classificações de pessoas negras, indígenas ou quilombolas, se houver."</i> Nos estados <b>com vaga PcD</b>, a simulação segue isso ao pé da letra: PcD, AC e cota racial. Nos estados <b>sem vaga PcD</b>, o edital não diz como fica o começo; a simulação entende que a posição da PcD fica com a ampla concorrência: AC, AC e cota racial. Se o estado tem só 1 vaga AC nas vagas imediatas, a cota vem logo depois dela. Foi assim que a CAIXA fez em 08/10: no CE e em PE (2 vagas AC e 1 PN) chamou AC, AC e então PN; no DF (1 AC e 1 PN), AC e PN.</li>
+            <li><b>Chamadas seguintes (itens 2.8 e 2.13.2).</b> O edital diz que a convocação ocorrerá <i>"de forma alternada, respeitando a proporção"</i> (2.8) e que <i>"as convocações seguirão conforme o número de vagas informado no Edital, em observância à reserva de vagas de 5% para PcD e 25% para pessoas negras, 3% a pessoas indígenas e 2% a pessoas quilombolas"</i> (2.13.2). Por isso a simulação usa esses <b>percentuais fixos</b>, contados sobre as chamadas de cada cargo e estado: PN tem 1 a cada 4 chamadas (4ª, 8ª, 12ª…), PcD 1 a cada 20, e assim por diante. Nas demais chamadas, ampla concorrência. O número de vagas de cada modalidade em cada estado vem do Anexo I: as <b>vagas imediatas</b> são preenchidas primeiro, com exatamente essas quantidades (se a ampla concorrência do bloco acaba antes, seguem as vagas de cota que faltam), e depois vem o <b>cadastro reserva</b>.</li>
+            <li><b>Por que não usar a "fatia" de cada estado (item 2.12.2).</b> O edital explica que, para PcD e pessoas negras, <i>"a aplicação das cotas foi proporcional ao número de vagas por cargo e por polo"</i> e que, para indígenas e quilombolas, <i>"a alocação considerou o total de vagas por Macropolo e a representatividade populacional"</i>, sendo essas vagas colocadas em alguns polos. Com poucas vagas por estado, os arredondamentos distorcem a fatia local (no CE, 1 vaga PN em 3 = 33%; no AM, 1 vaga PI em 2 = 50%). Por isso a ordem segue os percentuais do edital, e não a fatia de cada estado.</li>
+            <li><b>Vagas que sobram (item 2.12):</b> quando uma modalidade não tem mais aprovados, a vaga passa para a próxima da cadeia descrita no edital, na mesma posição da fila.</li>
+            <li><b>Conferência com a convocação real:</b> a simulação foi comparada com as convocações registradas pela comissão (rodada de 08/10/2026). <span id="filaConfere">Calculando…</span></li>
+          </ol>
+        </details>
+      </div>
+      <div class="fila-ctl">
+        <div class="seg" id="filaModo" role="group" aria-label="Tipo de simulação"><button data-v="real" aria-pressed="true">Com os aprovados</button><button data-v="livre" aria-pressed="false">Montar um cenário</button></div>
+        <select id="filaCargo" aria-label="Cargo"></select>
+        <select id="filaUF" aria-label="Estado"></select>
+      </div>
+      <div class="cenario" id="filaCenario" hidden></div>
+      <div class="fila-resumo" id="filaResumo"></div>
+      <div class="fila-play">
+        <button class="btn" type="button" id="filaAnimar"><span data-i="play"></span>Animar a fila</button>
+        <button class="btn sec" type="button" id="filaVolta" aria-label="Chamada anterior"><span data-i="voltar"></span>Anterior</button>
+        <button class="btn sec" type="button" id="filaPasso">Próxima chamada<span data-i="avancar"></span></button>
+        <button class="btn sec" type="button" id="filaTudo">Mostrar tudo</button>
+        <span class="note" id="filaConta"></span>
+        <div class="seg vista" id="filaVista" role="group" aria-label="Forma de ver a fila"><button data-v="lista" aria-pressed="false">Lista</button><button data-v="pistas" aria-pressed="true">Pistas</button></div>
+      </div>
+      <div class="pistas" id="pistas"></div>
+      <ol class="fila" id="fila" hidden></ol>
+      <p class="aviso-sim"><b>Lembrete:</b> simulação da comissão, não é a lista oficial. Quem convoca e define a ordem é a CAIXA. Em cada chamada aparece o item do edital que explica aquela posição.</p>
+    </div>
+
+    <div class="card">
+      <div class="hd"><div><h2>Como funciona a convocação</h2><p class="note">Resumo das regras do edital (Edital nº 01/2025/NS, itens 2.8, 2.12 e 2.13).</p></div></div>
+      <div class="regras-grid">
+        <div class="regra"><span class="rn">1</span><h3>Cada cargo e estado tem sua própria fila</h3>
+          <p>As vagas do Anexo I são por cargo e polo (estado). Para cada uma há <b>vagas imediatas</b> e um <b>cadastro reserva</b> com o triplo de vagas, sempre na mesma proporção entre as modalidades.</p></div>
+        <div class="regra"><span class="rn">2</span><h3>Quem é chamado primeiro</h3>
+          <p>A convocação começa por <b>1 pessoa com deficiência</b> (se houver vaga PcD), depois <b>1 da ampla concorrência</b> e depois <b>1 de cota racial</b> (negros, indígenas ou quilombolas, se houver). <small>Item 2.13.1</small></p>
+          <p>Sem vaga PcD no estado, a posição dela fica com a ampla concorrência: AC, AC e cota racial (ou AC e cota, se o estado tiver só 1 vaga AC), como a CAIXA fez na convocação de 08/10.</p></div>
+        <div class="regra"><span class="rn">3</span><h3>Depois, alternando na proporção</h3>
+          <p>Depois, as cotas seguem os percentuais fixos do edital, contados sobre as chamadas de cada cargo e estado: <b>PN 25%</b> (1 a cada 4: 4ª, 8ª, 12ª chamada…), <b>PcD 5%</b> (1 a cada 20), <b>PI 3%</b> e <b>PQ 2%</b>; nas demais, ampla concorrência. Primeiro são preenchidas as vagas imediatas, com as quantidades exatas do Anexo I, e depois o cadastro reserva. <small>Itens 2.8 e 2.13.2</small></p></div>
+        <div class="regra"><span class="rn">4</span><h3>Se faltar gente numa cota, a vaga passa adiante</h3>
+          <div class="rev">
+            <div><span class="rl">Quilombolas</span><span class="mod PQ">PQ</span>→<span class="mod PI">PI</span>→<span class="mod PN">PN</span>→<span class="mod AC">AC</span></div>
+            <div><span class="rl">Indígenas</span><span class="mod PI">PI</span>→<span class="mod PQ">PQ</span>→<span class="mod PN">PN</span>→<span class="mod AC">AC</span></div>
+            <div><span class="rl">Negros</span><span class="mod PN">PN</span>→<span class="mod AC">AC</span></div>
+            <div><span class="rl">Com deficiência</span><span class="mod PCD">PcD</span>→<span class="mod AC">AC</span></div>
+            <div><span class="rl">Ampla concorrência</span><span class="mod AC">AC</span>→<span class="mod PN">PN</span>→<span class="mod PCD">PcD</span>→<span class="mod PI">PI</span>→<span class="mod PQ">PQ</span></div>
+          </div>
+          <p class="note">A vaga não se perde: segue para a próxima modalidade com aprovados. <small>Item 2.12</small></p></div>
+      </div>
+      <h3 class="sub">Situações especiais</h3>
+      <div class="faq">
+        <details><summary>O estado não tem vaga para pessoas com deficiência</summary><p>A posição que seria da PcD fica com a ampla concorrência, e a cota racial entra no máximo na 3ª chamada. Exemplos: com 2 ou mais vagas AC e 1 PN, a ordem fica AC, AC, PN (como a CAIXA fez no CE e em PE em 08/10); com 1 AC e 1 PN, AC e PN (como no DF). O edital não trata esse caso de forma explícita. Quem é PcD continua concorrendo pela ampla concorrência com a própria nota.</p></details>
+        <details><summary>O estado não tem vaga de ampla concorrência</summary><p>Acontece quando todas as vagas do polo são reservadas (ex.: Arquiteto na BA tem 1 vaga para negros e 1 para indígenas). A fila começa pelas cotas; quem é da ampla concorrência só é chamado se alguma cota não tiver aprovados suficientes.</p></details>
+        <details><summary>Uma cota não teve aprovados suficientes</summary><p>As vagas que sobram passam para a próxima modalidade da cadeia acima, na mesma posição da fila em que a cota seria chamada. No simulador elas aparecem como <span class="tag-rev">vaga PI → PN</span>, por exemplo.</p></details>
+        <details><summary>Quem é cotista e tem nota para a ampla concorrência</summary><p>Concorre nas duas listas. Se for chamado pela ampla concorrência, não ocupa a vaga da cota, que vai para o próximo cotista. <small>Itens 4.1.2.4 e 4.3.4.1</small></p></details>
+        <details><summary>Faltou candidato no meu estado: posso ser chamado em outro?</summary><p>Pode, uma única vez, para outro polo do mesmo macropolo que tenha vaga sem candidato, pela classificação no macropolo. Se aceitar, sai da lista do polo original; se recusar, continua na lista do seu polo. <small>Itens 2.6.2.2 a 2.7</small></p></details>
+        <details><summary>Ser do cadastro reserva garante a convocação?</summary><p>Não. A CAIXA convoca conforme a necessidade e o orçamento durante a validade do concurso, sempre pela ordem de classificação. <small>Itens 2.11.1 e 2.11.2</small></p></details>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd"><div><h2>Quadro de vagas do edital</h2><p class="note">Anexo I do edital. O cadastro reserva tem o triplo de cada coluna.</p></div>
+        <select id="quadroCargo" aria-label="Cargo do quadro de vagas"></select></div>
+      <div class="tw" id="quadro"></div>
+    </div>
   </section>
 
   <!-- ABA 3: formulário -->
@@ -751,6 +958,9 @@ const ICONS={
   menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
   chev:'<path d="m6 9 6 6 6-6"/>',
   mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
+  fila:'<circle cx="5" cy="7" r="2"/><circle cx="12" cy="7" r="2"/><circle cx="19" cy="7" r="2"/><path d="M2 17a3 3 0 0 1 6 0M9 17a3 3 0 0 1 6 0M16 17a3 3 0 0 1 6 0"/>',
+  play:'<path d="m7 4 13 8-13 8z"/>',
+  avancar:'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
   novid:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/>',
   x:'<path d="M18 6 6 18M6 6l12 12"/>'
 };
@@ -1195,7 +1405,9 @@ function render(){
   d3.select('#tab-conv').attr('hidden',S.tab==='conv'?null:true);
   d3.select('#tab-form').attr('hidden',S.tab==='form'?null:true);
   d3.select('#tab-contato').attr('hidden',S.tab==='contato'?null:true);
-  document.body.classList.toggle('aba-form',S.tab==='form'||S.tab==='contato');
+  d3.select('#tab-vagas').attr('hidden',S.tab==='vagas'?null:true);
+  document.body.classList.toggle('aba-form',S.tab==='form'||S.tab==='contato'||S.tab==='vagas');
+  if(S.tab==='vagas'){hideTip();iniciarVagas();return}
   document.querySelectorAll('.acao[data-acao]').forEach(b=>b.setAttribute('aria-pressed',S.tab==='form'&&F.intencao===b.dataset.acao));
   if(S.tab==='form'||S.tab==='contato'){hideTip();return} // os formulários têm o próprio controle (não são redesenhados a cada atualização)
   const chip=d3.select('#ufChip');
@@ -1222,7 +1434,7 @@ let abaAnterior='panorama';
 function abrirForm(intencao){
   if(S.tab!=='form'&&S.tab!=='contato')abaAnterior=S.tab;
   S.tab='form';
-  Object.assign(F,{passo:1,insc:F.intencao===intencao?F.insc:'',pessoa:null,tipo:null,tit:'',data:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',intencao});
+  Object.assign(F,{passo:1,insc:F.intencao===intencao?F.insc:'',pessoa:null,tipo:null,tit:'',data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',intencao});
   history.replaceState(null,'',intencao==='grupo'?'#grupo':'#informar');
   render();desenharForm();window.scrollTo({top:0});
 }
@@ -1271,13 +1483,13 @@ const NOME_COTA={AC:'Ampla concorrência',PcD:'Pessoas com deficiência',PN:'Pes
 const OP_GRUPO=['Entrada no grupo','Quero entrar no grupo de WhatsApp dos aprovados','A comissão confere se você é aprovado(a) e adiciona você ao grupo.'];
 const OPCOES={
   Aguardando:[['Convocação','Fui convocado(a)','Recebi a convocação da CAIXA.'],['Desistência','Desisti da vaga','Não vou assumir o cargo.'],['Correção de dados','Algum dado meu está errado','Cargo, estado, cota, nota ou posição.']],
-  Convocado:[['Posse','Tomei posse','Já fui contratado(a) e assumi o cargo.'],['Convocação','A data da minha convocação está errada','Vou informar a data correta.'],['Desistência','Desisti da vaga','Não vou assumir o cargo.'],['Correção de dados','Outro dado meu está errado','Cargo, estado, cota, nota ou posição.']],
-  Empossado:[['Desistência','Desisti / saí do cargo',''],['Correção de dados','Algum dado meu está errado','']],
+  Convocado:[['Posse','Tomei posse','Já fui contratado(a) e assumi o cargo.'],['Horário da convocação','Quero informar o horário da minha convocação','Só o horário em que recebi a convocação da CAIXA. Ajuda a comissão a entender a ordem das chamadas.'],['Convocação','A data da minha convocação está errada','Vou informar a data correta.'],['Desistência','Desisti da vaga','Não vou assumir o cargo.'],['Correção de dados','Outro dado meu está errado','Cargo, estado, cota, nota ou posição.']],
+  Empossado:[['Horário da convocação','Quero informar o horário da minha convocação','Só o horário em que recebi a convocação da CAIXA. Ajuda a comissão a entender a ordem das chamadas.'],['Desistência','Desisti / saí do cargo',''],['Correção de dados','Algum dado meu está errado','']],
   Desistente:[['Correção de dados','Algum dado meu está errado','Inclusive se a desistência foi registrada por engano.']]
 };
 OPCOES['Sem informação']=OPCOES.Aguardando;
-const ROTULO_DATA={Convocação:'Data da convocação',Posse:'Data da posse',Desistência:'Data da desistência (opcional)'};
-const F={passo:1,insc:'',pessoa:null,tipo:null,tit:'',data:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',carregando:false,intencao:'convocacao'};
+const ROTULO_DATA={Convocação:'Data da convocação','Horário da convocação':'Data da convocação',Posse:'Data da posse',Desistência:'Data da desistência (opcional)'};
+const F={passo:1,insc:'',pessoa:null,tipo:null,tit:'',data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',carregando:false,intencao:'convocacao'};
 const ehGrupo=()=>F.tipo==='Entrada no grupo';
 const erroHTML=()=>F.erro?`<div class="erro" role="alert">${ico('flag')}<span>${esc(F.erro)}</span></div>`:'';
 function passosHTML(){document.querySelectorAll('#passos li').forEach((li,i)=>{li.className=i+1<F.passo?'feito':i+1===F.passo?'agora':''})}
@@ -1335,17 +1547,17 @@ function desenharForm(){
     document.getElementById('nao').onclick=()=>{F.passo=1;F.pessoa=null;F.erro='';desenharForm()};
     // Redireciona para o pedido de entrada no grupo, mantendo a inscrição já confirmada
     const g=document.getElementById('irGrupo');if(g)g.onclick=()=>{
-      F.intencao='grupo';Object.assign(F,{passo:3,tipo:OP_GRUPO[0],tit:OP_GRUPO[1],data:'',obs:'',tel:'',nomeZap:'',ok:false,erro:''});
+      F.intencao='grupo';Object.assign(F,{passo:3,tipo:OP_GRUPO[0],tit:OP_GRUPO[1],data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,erro:''});
       history.replaceState(null,'','#grupo');render();desenharForm();window.scrollTo({top:0})};
     const s=document.getElementById('sim');if(s)s.onclick=()=>{
-      Object.assign(F,{passo:3,tipo:null,tit:'',data:'',obs:'',tel:'',nomeZap:'',ok:false,erro:''});
+      Object.assign(F,{passo:3,tipo:null,tit:'',data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,erro:''});
       if(F.intencao==='grupo'&&!p.pendente_grupo){F.tipo=OP_GRUPO[0];F.tit=OP_GRUPO[1]}
       desenharForm()};
   }
   else if(F.passo===3){
     // Opções: grupo (se não houver pedido de grupo em análise) + as da situação atual (se não houver outro pedido em análise)
     const ops=F.intencao==='grupo'?[OP_GRUPO]:(OPCOES[p.convocacao]||OPCOES.Aguardando);
-    const precisaData=F.tipo==='Convocação'||F.tipo==='Posse', mostraData=F.tipo&&!ehGrupo()&&F.tipo!=='Correção de dados';
+    const soHora=F.tipo==='Horário da convocação',precisaData=F.tipo==='Convocação'||F.tipo==='Posse'||soHora, mostraData=F.tipo&&!ehGrupo()&&F.tipo!=='Correção de dados';
     const avisoPend='';
     el.innerHTML=`<form id="f3"><div class="campo" style="margin-top:0"><span class="rot">${F.intencao==='grupo'?'Confirme o pedido':'O que aconteceu?'}</span>
         <div class="opcoes">${ops.map(([t,tit,sub],i)=>`<label class="opcao"><input type="radio" name="tipo" value="${i}" ${F.tipo===t&&F.tit===tit?'checked':''}><span><b>${tit}</b>${sub?`<small>${sub}</small>`:''}</span></label>`).join('')}</div>
@@ -1356,6 +1568,8 @@ function desenharForm(){
         <div class="campo"><label for="nz">Nome que aparece no seu WhatsApp (opcional)</label>
           <input type="text" id="nz" maxlength="60" value="${esc(F.nomeZap)}" placeholder="Ajuda a comissão a reconhecer seu contato"></div>`:''}
       ${mostraData?`<div class="campo"><label for="dt">${ROTULO_DATA[F.tipo]}</label><input type="date" id="dt" min="2026-05-26" max="${hoje()}" value="${esc(F.data)}" ${precisaData?'required':''}></div>`:''}
+      ${F.tipo==='Convocação'||soHora?`<div class="campo"><label for="hr">Horário em que você recebeu a convocação${soHora?'':' (opcional)'}</label><input type="time" id="hr" value="${esc(F.hora)}" style="max-width:180px" ${soHora?'required':''}>
+        <small>Veja o horário do e-mail ou da mensagem da CAIXA. Como muitas convocações saem no mesmo dia, o horário ajuda a comissão a entender a ordem das chamadas.</small></div>`:''}
       ${F.tipo?`<div class="campo"><label for="obs">${F.tipo==='Correção de dados'?'O que está errado?':'Observação (opcional)'}</label>
         <textarea id="obs" maxlength="1000" placeholder="${F.tipo==='Correção de dados'?'Ex.: minha nota correta é 72,50':'Algo que a comissão deva saber'}">${esc(F.obs)}</textarea></div>
       <label class="check"><input type="checkbox" id="conf" ${F.ok?'checked':''}><span>${ehGrupo()
@@ -1365,20 +1579,24 @@ function desenharForm(){
       <div class="btns"><button class="btn sec" type="button" id="volta">Voltar</button>
         <button class="btn" type="submit" ${F.carregando||!F.tipo?'disabled':''}>${F.carregando?'Enviando…':'Enviar'}</button></div></form>`;
     const guardar=()=>{const g=id=>document.getElementById(id);
-      if(g('dt'))F.data=g('dt').value;if(g('obs'))F.obs=g('obs').value;if(g('conf'))F.ok=g('conf').checked;if(g('tel'))F.tel=g('tel').value;if(g('nz'))F.nomeZap=g('nz').value};
+      if(g('dt'))F.data=g('dt').value;if(g('hr'))F.hora=g('hr').value;if(g('obs'))F.obs=g('obs').value;if(g('conf'))F.ok=g('conf').checked;if(g('tel'))F.tel=g('tel').value;if(g('nz'))F.nomeZap=g('nz').value};
     const tel=document.getElementById('tel');if(tel)tel.oninput=()=>{tel.value=mascaraTel(tel.value)};
-    el.querySelectorAll('input[name=tipo]').forEach(r=>r.onchange=()=>{guardar();const [t,tit]=ops[+r.value];F.tipo=t;F.tit=tit;F.erro='';desenharForm()});
+    el.querySelectorAll('input[name=tipo]').forEach(r=>r.onchange=()=>{guardar();const [t,tit]=ops[+r.value];F.tipo=t;F.tit=tit;F.erro='';
+      // só o horário: a data já vem da convocação registrada
+      if(t==='Horário da convocação'){if(!F.data&&p.data_convocacao)F.data=p.data_convocacao;if(!F.hora&&p.hora_convocacao)F.hora=String(p.hora_convocacao).slice(0,5)}
+      desenharForm()});
     document.getElementById('volta').onclick=()=>{F.passo=2;F.erro='';desenharForm()};
     document.getElementById('f3').onsubmit=async e=>{e.preventDefault();guardar();F.erro='';
       const dig=F.tel.replace(/\D/g,'');
       if(ehGrupo()&&!(dig.length===10||dig.length===11))F.erro='Informe o WhatsApp com DDD, por exemplo (61) 99999-9999.';
       else if(precisaData&&!F.data)F.erro='Informe a data.';
+      else if(soHora&&!F.hora)F.erro='Informe o horário em que você recebeu a convocação.';
       else if(F.tipo==='Correção de dados'&&!F.obs.trim())F.erro='Conte o que está errado no campo acima.';
       else if(!F.ok)F.erro='Marque a autorização para enviar.';
       if(F.erro)return desenharForm();
       F.carregando=true;desenharForm();
       try{const r=await rpc('enviar_pedido',{p_inscricao:F.insc,p_tipo:F.tipo,p_data:ehGrupo()?null:(F.data||null),p_observacao:F.obs||null,
-          p_telefone:ehGrupo()?dig:null,p_nome_whatsapp:ehGrupo()?(F.nomeZap||null):null});
+          p_telefone:ehGrupo()?dig:null,p_nome_whatsapp:ehGrupo()?(F.nomeZap||null):null,p_hora:(F.tipo==='Convocação'||F.tipo==='Horário da convocação')&&F.hora?F.hora:null});
         if(!r.ok)F.erro=r.erro;else{F.protocolo=r.protocolo;F.passo=4;F.tel='';F.nomeZap=''}}
       catch(err){F.erro=err.message}
       F.carregando=false;desenharForm()};
@@ -1393,7 +1611,7 @@ function desenharForm(){
       <p class="note">Para ver o andamento, use o quadro <b>Acompanhar meu pedido</b>, logo abaixo.</p>
       <div class="btns"><button class="btn sec" type="button" id="novo">Fazer outro pedido</button></div>`;
     document.getElementById('copiar').onclick=async function(){try{await navigator.clipboard.writeText(F.protocolo);this.innerHTML=ico('check')+'Copiado'}catch(e){}};
-    document.getElementById('novo').onclick=()=>{Object.assign(F,{passo:1,insc:'',pessoa:null,tipo:null,tit:'',data:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:''});desenharForm()};
+    document.getElementById('novo').onclick=()=>{Object.assign(F,{passo:1,insc:'',pessoa:null,tipo:null,tit:'',data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:''});desenharForm()};
   }
 }
 // Acompanhar pedido pelo protocolo
@@ -1409,18 +1627,289 @@ document.getElementById('fProt').onsubmit=async e=>{e.preventDefault();const out
     const rot={Pendente:'Em análise',Rejeitado:'Não aprovado'}[r.status]||r.status;
     out.innerHTML=`<div class="res-prot"><span class="status ${esc(r.status)}">${esc(rot)}</span>
       <p style="margin:8px 0 0">${esc(txt)}</p>
-      <dl><dt>Protocolo</dt><dd>${esc(r.protocolo)}</dd><dt>Pedido</dt><dd>${esc(r.tipo)}${r.data_evento?' em '+dataBR(r.data_evento):''}</dd>
+      <dl><dt>Protocolo</dt><dd>${esc(r.protocolo)}</dd><dt>Pedido</dt><dd>${esc(r.tipo)}${r.data_evento?' em '+dataBR(r.data_evento):''}${r.hora_evento?' às '+String(r.hora_evento).slice(0,5):''}</dd>
         <dt>Enviado em</dt><dd>${dataBR(r.enviado_em)}</dd>${r.expira_em?`<dt>Prazo da análise</dt><dd>até ${new Date(r.expira_em).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</dd>`:''}
         ${r.revisado_em?`<dt>${r.status==='Expirado'?'Expirou em':'Revisado em'}</dt><dd>${dataBR(r.revisado_em)}</dd>`:''}
         ${r.resposta?`<dt>Resposta da comissão</dt><dd>${esc(r.resposta)}</dd>`:''}</dl></div>`;
   }catch(err){out.innerHTML=`<div class="erro" role="alert">${ico('flag')}<span>${esc(err.message)}</span></div>`}
 };
 
+/* ---------- Vagas e regras: simulador da fila de convocação ---------- */
+// Regra usada (edital, itens 2.8, 2.12 e 2.13). É uma simulação; quem define a ordem é a CAIXA.
+//  1) começo das vagas imediatas (item 2.13.1): PcD (se o polo tem vaga PcD; senão a posição fica com a AC),
+//     depois AC e depois a cota racial com mais vagas no polo;
+//  2) depois, ordem fixa pelos percentuais do item 2.13.2 (5% PcD, 25% PN, 3% PI, 2% PQ), contados sobre o total
+//     de chamadas do polo: uma cota é chamada quando k × percentual ≥ chamadas dela + 1 (PN na 4ª, 8ª, 12ª…);
+//     nas demais chamadas, AC. As vagas por polo vêm do Anexo I: o bloco das vagas imediatas tem exatamente
+//     a composição do edital; se a AC do bloco acaba, seguem as cotas restantes; depois vem o cadastro reserva (3×);
+//  3) se a lista daquela modalidade acabou, a vaga segue a cadeia de reversão do item 2.12.
+// A conferência com os convocados registrados é feita ao vivo em conferirFila() (34 de 34 filas em 13/10/2026).
+// Os percentuais das cotas valem para o concurso todo; a divisão por polo (Anexo I) arredonda, por isso não se usa a
+// "fatia" de cada polo para a ordem.
+const MOD_F=['PCD','AC','PPP/PN','PI','PQ'];
+const REV_F={PQ:['PI','PPP/PN','AC'],PI:['PQ','PPP/PN','AC'],'PPP/PN':['AC'],PCD:['AC'],AC:['PPP/PN','PCD','PI','PQ']};
+const PCT_F={PCD:.05,'PPP/PN':.25,PI:.03,PQ:.02};
+const modCls=m=>m==='PPP/PN'?'PN':m, modSig=m=>sigla(m);
+function montarFila(vi,listas){
+  const usado={},chamadas={};MOD_F.forEach(m=>{usado[m]=0;chamadas[m]=0});
+  const preencher=m=>{for(const c of [m,...REV_F[m]])if(usado[c]<(listas[c]||[]).length)return{slot:m,lista:c,pessoa:listas[c][usado[c]++],rev:c!==m};return{slot:m,lista:null,pessoa:null,rev:false}};
+  const RES=['PCD','PPP/PN','PI','PQ'],out=[],semPcd=!vi.PCD;
+  // Dois blocos: primeiro as vagas imediatas (composição exata do Anexo I), depois o cadastro reserva (3× cada modalidade)
+  [[1,true],[3,false]].forEach(([mult,imediatas])=>{
+    const cap={};MOD_F.forEach(m=>cap[m]=(vi[m]||0)*mult);const N=MOD_F.reduce((s,m)=>s+cap[m],0);
+    const cot=['PPP/PN','PI','PQ'].filter(m=>cap[m]).sort((a,b)=>cap[b]-cap[a]);
+    for(let j=1;j<=N;j++){const k=out.length+1;let m=null,motivo='cota';
+      if(imediatas&&j===1){m=cap.PCD?'PCD':cap.AC?'AC':null;motivo='inicio'}
+      else if(imediatas&&j===2&&cap.AC>0){m='AC';motivo='inicio'}
+      else if(imediatas&&j===3&&cot.length&&!cot.some(c=>chamadas[c])){m=cot.find(c=>cap[c]>0)||null;motivo='inicio'}
+      if(!m){
+        let best=-Infinity;for(const c of RES){if(cap[c]<=0)continue;const d=k*PCT_F[c]-chamadas[c];if(d>=1-1e-9&&d>best+1e-9){best=d;m=c}}
+        if(!m&&cap.AC>0){m='AC';motivo='ac'}
+        if(!m){motivo='sobra';for(const c of RES){if(cap[c]<=0)continue;const d=k*PCT_F[c]-chamadas[c];if(d>best+1e-9){best=d;m=c}}}
+      }
+      cap[m]--;chamadas[m]++;out.push({k,vi:imediatas,motivo,j,semPcd,...preencher(m)})}
+  });
+  return out;
+}// Item do edital que explica cada chamada
+const ITEM_REV={PQ:'2.12.3.1',PI:'2.12.3.2','PPP/PN':'2.12.4',PCD:'2.12.5',AC:'2.12.6'};
+function porQue(x,primeiraAC){
+  const pct=c=>({PCD:'5% (1 a cada 20 chamadas)','PPP/PN':'25% (1 a cada 4 chamadas)',PI:'3%',PQ:'2%'})[c];
+  let t=x.motivo==='inicio'
+    ?(x.slot==='PCD'?'Item 2.13.1: a convocação começa por pessoa com deficiência'
+      :x.slot==='AC'?(x.j===1?'Item 2.13.1: sem vaga PcD no estado, a 1ª posição (que seria da PcD) fica com a ampla concorrência'
+        :x.semPcd?'Item 2.13.1: em seguida, um da ampla concorrência':'Item 2.13.1: depois da PcD, um da ampla concorrência')
+      :'Item 2.13.1: em seguida, um de cota racial')
+    :x.motivo==='ac'?`Item 2.13.2: nesta chamada (${x.k}ª do estado) não é a vez de nenhuma cota pelos percentuais do edital, então é a ampla concorrência`
+    :x.motivo==='sobra'?`As vagas de ampla concorrência ${x.vi?'das vagas imediatas':'do cadastro reserva'} deste estado já foram chamadas; seguem as vagas de cota que faltam nesse bloco (Anexo I)`
+    :`Item 2.13.2: vez de ${sigla(x.slot)} pelos percentuais do edital. ${sigla(x.slot)} tem ${pct(x.slot)} das chamadas, e esta é a ${x.k}ª chamada do estado`;
+  if(x.rev)t+=`. Sem aprovados de ${sigla(x.slot)} disponíveis, a vaga passa para ${sigla(x.lista)} (item ${ITEM_REV[x.slot]})`;
+  else if(!x.pessoa)t+=`. Não há aprovados para esta vaga`;
+  return t+'.';
+}
+// Compara a fila simulada com as convocações registradas (sem as presumidas):
+// bate quando os convocados reais são exatamente as primeiras chamadas da simulação.
+function conferirFila(){
+  let total=0,ok=0;const difs=[];
+  for(const v of VAGAS){
+    const rs=DATA.filter(d=>d.cargo===v.cargo&&d.uf===v.uf);const conv=rs.filter(d=>d.conv&&!d.presumida);if(!conv.length)continue;total++;
+    const vi={};MOD_F.forEach((m,i)=>vi[m]=v.vi[[1,0,2,3,4][i]]);const listas={};MOD_F.forEach(m=>listas[m]=rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF));
+    // convocações presumidas ficam fora da conferência (dos dois lados): só contam as confirmadas
+    const f=montarFila(vi,listas).filter(x=>!(x.pessoa&&x.pessoa.presumida)),pref=f.slice(0,conv.length);
+    if(pref.every(x=>x.pessoa&&x.pessoa.conv)){ok++;continue}
+    const x=pref.find(x=>!(x.pessoa&&x.pessoa.conv));
+    difs.push(`${curto(v.cargo)} · ${v.uf}: a ${x.k}ª chamada simulada é ${x.pessoa?`de ${sigla(x.lista)} (${x.pessoa.rankUF}º no estado)`:'uma vaga sem candidato'}, que não consta como convocado; foram registrados ${conv.length} convocado(s) ali.`);
+  }
+  // Exemplos reais que mostram cada situação da regra
+  const EXEMPLOS=[
+    ['Engenheiro Civil','CE','Sem vaga PcD, 2 AC e 1 PN: a CAIXA chamou os dois primeiros da AC antes da cota.'],
+    ['Engenheiro Civil','PE','Mesmo caso do CE: 2 AC antes da cota.'],
+    ['Arquiteto','PE','Mesma composição, com uma chamada a mais: AC, AC e então PN.'],
+    ['Arquiteto','DF','Sem vaga PcD, 1 AC e 1 PN: AC e logo depois PN, porque o estado tem só 1 vaga AC nas vagas imediatas e a cota vem logo depois dela.'],
+    ['Engenheiro Civil','MA','Com vaga PcD: PcD primeiro, depois AC e depois PN, ao pé da letra do item 2.13.1.'],
+    ['Engenheiro Civil','SP','Com vaga PcD: PcD, AC e PN, e depois mais AC até a próxima vez do PN pelos 25% do edital (8ª chamada).']
+  ];
+  const exHTML=EXEMPLOS.map(([c,u,txt])=>{
+    const v=VAGAS.find(x=>x.cargo===c&&x.uf===u);if(!v)return'';
+    const rs=DATA.filter(d=>d.cargo===c&&d.uf===u),conv=rs.filter(d=>d.conv&&!d.presumida);if(!conv.length)return'';
+    const vi={};MOD_F.forEach((m,i)=>vi[m]=v.vi[[1,0,2,3,4][i]]);const listas={};MOD_F.forEach(m=>listas[m]=rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF));
+    const f=montarFila(vi,listas).filter(x=>!(x.pessoa&&x.pessoa.presumida)).slice(0,conv.length+1);
+    const comp=MOD_F.filter(m=>vi[m]).map(m=>`${vi[m]} ${sigla(m)}`).join(' + ');
+    const chips=f.map((x,i)=>{const m=x.lista||x.slot,ok=x.pessoa&&x.pessoa.conv;
+      return `<span class="ex-ch${ok?'':' prox'}"><small>${x.k}ª</small><span class="mod ${modCls(m)}">${sigla(m)} ${x.pessoa?x.pessoa.rankUF+'º':''}</span>${ok?'<b>✓</b>':''}</span>`}).join('');
+    return `<li><b>${curto(c)} · ${u}</b> <span class="note">(${comp} vagas imediatas)</span><div class="ex-fila">${chips}</div><span class="note">${txt} Convocados registrados: ${conv.length}; a chamada seguinte, sem ✓, é a próxima prevista.</span></li>`}).join('');
+  const el=document.getElementById('filaConfere');if(!el)return;
+  el.innerHTML=!total?'Ainda não há convocações registradas para comparar.':
+    `Em <b>${ok} de ${total}</b> combinações de cargo e estado com convocados conhecidos, as pessoas convocadas pela CAIXA são exatamente as primeiras da fila simulada. Só entram na conta as convocações confirmadas pela comissão; as presumidas ficam de fora.`+
+    (difs.length?` Onde não coincide, a diferença pode ser alguém que foi convocado e não avisou a comissão, ou um ponto em que a CAIXA seguiu outra ordem:<ul class="difs">${difs.map(d=>`<li>${esc(d)}</li>`).join('')}</ul>`:'')+
+    ' Esta conferência é refeita automaticamente sempre que a comissão registra novas convocações.'+
+    (exHTML?`<div class="exemplos"><b>Exemplos da convocação de 08/10/2026</b><p class="note">A CAIXA divulga quem foi convocado, não a ordem interna da rodada. Os exemplos mostram que os convocados são exatamente as primeiras posições da fila simulada (✓ = convocado).</p><ul>${exHTML}</ul></div>`:'');
+}
+const FS={modo:'real',vista:'pistas',cargo:'Engenheiro Civil',uf:'AM',passo:0,timer:null,cen:{vi:{PCD:1,AC:3,'PPP/PN':1,PI:0,PQ:0},ap:{PCD:0,AC:15,'PPP/PN':6,PI:0,PQ:0}}};
+let filaAtual=[],vagasPronta=false,dadosAtuais={vi:{},listas:{}};
+function iniciarVagas(){
+  if(vagasPronta)return;vagasPronta=true;
+  if(new URLSearchParams(location.search).get('estilo')==='solido')document.body.classList.add('mod-solido');
+  const cargos=[...new Set(VAGAS.map(v=>v.cargo))];
+  const fc=document.getElementById('filaCargo'),qc=document.getElementById('quadroCargo');
+  cargos.forEach(c=>{fc.add(new Option(c,c));qc.add(new Option(c,c))});fc.value=FS.cargo;qc.value=FS.cargo;
+  fc.onchange=()=>{FS.cargo=fc.value;FS.uf='';ufsFila();desenharFila(true)};
+  document.getElementById('filaUF').onchange=e=>{FS.uf=e.target.value;desenharFila(true)};
+  qc.onchange=()=>desenharQuadro(qc.value);
+  document.querySelectorAll('#filaModo button').forEach(b=>b.onclick=()=>{FS.modo=b.dataset.v;
+    document.querySelectorAll('#filaModo button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    fc.hidden=document.getElementById('filaUF').hidden=FS.modo!=='real';desenharFila(true)});
+  document.querySelectorAll('#filaVista button').forEach(b=>b.onclick=()=>{FS.vista=b.dataset.v;
+    document.querySelectorAll('#filaVista button').forEach(x=>x.setAttribute('aria-pressed',x===b));desenharFila(false)});
+  document.getElementById('filaAnimar').onclick=animarFila;
+  document.getElementById('filaPasso').onclick=()=>{pararFila();mostrarAte(FS.passo+1)};
+  document.getElementById('filaVolta').onclick=()=>{pararFila();mostrarAte(FS.passo-1)};
+  // Pistas: clicar numa posição da fila (ou numa ficha) mostra quem é e por que está ali
+  document.getElementById('pistas').addEventListener('click',e=>{
+    const s=e.target.closest('.slot'),tk=e.target.closest('.tk');let x=null;
+    if(s)x=filaAtual.find(y=>y.k===+s.dataset.k);
+    else if(tk){const p=(dadosAtuais.listas[tk.dataset.m]||[])[+tk.dataset.i];x=filaAtual.find(y=>y.pessoa===p);
+      if(!x){document.getElementById('pstLeg').innerHTML=`<b>${esc(p.ini)}</b> (${modSig(tk.dataset.m)}${p.rankUF?`, ${p.rankUF}º no estado`:''})<br><span class="note">Fica fora desta fila: as vagas desta modalidade acabam antes de chegar a esta posição.</span>`;return}}
+    if(x)selecionarChamada(x);
+  });
+  document.getElementById('filaTudo').onclick=()=>{pararFila();mostrarAte(filaAtual.length)};
+  ufsFila();desenharFila(true);desenharQuadro(FS.cargo);conferirFila();
+}
+function ufsFila(){
+  const sel=document.getElementById('filaUF');sel.innerHTML='';
+  VAGAS.filter(v=>v.cargo===FS.cargo).sort((a,b)=>a.uf.localeCompare(b.uf)).forEach(v=>sel.add(new Option(`${v.uf} · ${v.vi.reduce((s,x)=>s+x,0)} vaga(s) imediata(s)`,v.uf)));
+  if(!FS.uf||![...sel.options].some(o=>o.value===FS.uf))FS.uf=sel.options[0].value;sel.value=FS.uf;
+}
+function dadosFila(){
+  if(FS.modo==='livre'){const listas={};MOD_F.forEach(m=>listas[m]=Array.from({length:FS.cen.ap[m]||0},(_,i)=>({ini:`${i+1}º de ${modSig(m)}`,rankUF:null,conv:false,ficticio:true})));
+    return{vi:FS.cen.vi,listas}}
+  const v=VAGAS.find(x=>x.cargo===FS.cargo&&x.uf===FS.uf);const vi={};MOD_F.forEach((m,i)=>vi[m]=v.vi[[1,0,2,3,4][i]]);
+  const rs=DATA.filter(d=>d.cargo===FS.cargo&&d.uf===FS.uf);const listas={};
+  MOD_F.forEach(m=>listas[m]=rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF));
+  return{vi,listas};
+}
+function desenharCenario(){
+  const el=document.getElementById('filaCenario');el.hidden=FS.modo!=='livre';if(el.hidden)return;
+  const ordem=['AC','PCD','PPP/PN','PI','PQ'];
+  el.innerHTML=`<span></span>${ordem.map(m=>`<span class="mod ${modCls(m)}">${modSig(m)}</span>`).join('')}
+    <span class="rot">Vagas imediatas</span>${ordem.map(m=>`<input type="number" min="0" max="20" data-t="vi" data-m="${m}" value="${FS.cen.vi[m]||0}">`).join('')}
+    <span class="rot">Aprovados</span>${ordem.map(m=>`<input type="number" min="0" max="80" data-t="ap" data-m="${m}" value="${FS.cen.ap[m]||0}">`).join('')}`;
+  el.querySelectorAll('input').forEach(i=>i.oninput=()=>{FS.cen[i.dataset.t][i.dataset.m]=Math.max(0,Math.min(+i.max,parseInt(i.value)||0));desenharFila(false)});
+}
+function desenharFila(cenarioTambem){
+  pararFila();if(cenarioTambem)desenharCenario();
+  const {vi,listas}=dadosAtuais=dadosFila();filaAtual=montarFila(vi,listas);
+  const totVI=MOD_F.reduce((s,m)=>s+(vi[m]||0),0),ap=MOD_F.reduce((s,m)=>s+(listas[m]||[]).length,0);
+  const revs=filaAtual.filter(x=>x.rev),vazias=filaAtual.filter(x=>!x.pessoa).length;
+  const porSlot=MOD_F.filter(m=>vi[m]).map(m=>`<span class="mod ${modCls(m)}">${modSig(m)}</span> ${vi[m]}`).join(' ');
+  const resumoRev=revs.length?(()=>{const g=d3.rollups(revs,v=>v.length,x=>x.slot+'>'+x.lista);return ' Vagas que passaram de uma cota para outra: '+g.map(([k,n])=>{const [a,b]=k.split('>');return `${n} de ${modSig(a)} → ${modSig(b)}`}).join(', ')+'.'})():'';
+  document.getElementById('filaResumo').innerHTML=!filaAtual.length?'Informe pelo menos uma vaga.':
+    `<b>${totVI} vaga(s) imediata(s)</b> (${porSlot}) e <b>${totVI*3}</b> no cadastro reserva: ${filaAtual.length} chamadas ao todo, com ${ap} aprovado(s).${resumoRev}${vazias?` ${vazias} vaga(s) ficariam sem candidato.`:''}`;
+  const lis=[];
+  filaAtual.forEach((x,i)=>{
+    if(i===totVI&&totVI)lis.push('<li class="divisor">Fim das vagas imediatas · cadastro reserva</li>');
+    const p=x.pessoa;
+    const quem=!p?'<span class="vazia">sem candidato aprovado</span>':esc(p.ini);
+    const det=[];
+    if(p&&!p.ficticio)det.push(`${p.rankUF}º no estado`);
+    if(x.rev)det.push(`<span class="tag-rev">vaga ${modSig(x.slot)} → ${modSig(x.lista)}</span>`);
+    if(p&&p.conv)det.push(p.presumida?'<span class="ok">convocado (presumido)</span>':'<span class="ok">✓ convocado</span>');
+    lis.push(`<li data-k="${x.k}"><span class="k">${x.k}ª</span><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span><span class="quem">${quem}</span>${det.length?`<span class="det">${det.join('')}</span>`:''}<span class="por">${porQue(x,!vi.PCD&&x.k===1)}</span></li>`);
+  });
+  document.getElementById('fila').innerHTML=lis.join('');
+  document.getElementById('fila').hidden=FS.vista!=='lista';
+  document.getElementById('pistas').hidden=FS.vista!=='pistas';
+  if(FS.vista==='pistas'){montarPistas(vi,listas,totVI);mostrarAte(0)}else mostrarAte(filaAtual.length);
+}
+// ---- Visualização "Pistas" ----
+let tkDe=new Map();
+function montarPistas(vi,listas,totVI){
+  const ordem=['AC','PCD','PPP/PN','PI','PQ'].filter(m=>vi[m]||(listas[m]||[]).length);
+  tkDe=new Map();
+  const cols=ordem.map(m=>{const ps=listas[m]||[];
+    return `<div class="pst-col ${modCls(m)}" data-m="${m}"><header><span class="mod ${modCls(m)}">${modSig(m)}</span><span>${vi[m]||0} vaga(s) imed.</span></header>
+      <div class="pst-tks">${ps.length?ps.map((p,i)=>`<span class="tk ${modCls(m)}" data-m="${m}" data-i="${i}" title="${esc(p.ini)}${statusPessoa(p).txt?' · '+statusPessoa(p).txt:''}">${p.ficticio?(i+1)+'º':p.rankUF+'º'}${['conv','pres'].includes(statusPessoa(p).k)?`<i class="pt ${statusPessoa(p).k}"></i>`:''}</span>`).join(''):'<span class="vazio-col">sem aprovados</span>'}</div></div>`}).join('');
+  const slots=filaAtual.map((x,i)=>`<span class="slot${i===totVI-1&&totVI<filaAtual.length?' fimvi':''}" data-k="${x.k}">${x.k}</span>`).join('');
+  document.getElementById('pistas').innerHTML=`<div class="pst-cols" style="--n:${ordem.length}">${cols}</div>
+    <div class="pst-trilho-t"><span>Fila de convocação</span><span class="note">traço: fim das vagas imediatas · contorno tracejado: vaga que passou de uma cota para outra</span></div>
+    <div class="pst-trilho">${slots}</div>
+    <div class="pst-leg-cores"><span><i></i>convocado</span><span><i class="pres"></i>convocado (presumido)</span><span>sem bolinha: aguardando</span><span>clique numa posição para ver quem é</span></div>
+    <div class="pst-leg" id="pstLeg">Clique em <b>Animar a fila</b> ou em <b>Próxima chamada</b>.</div>`;
+  ordem.forEach(m=>(listas[m]||[]).forEach((p,i)=>tkDe.set(p,document.querySelector(`.tk[data-m="${m}"][data-i="${i}"]`))));
+}
+const semMovimento=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+function preencherSlot(x,pop){
+  const s=document.querySelector(`.slot[data-k="${x.k}"]`);if(!s)return;
+  const m=x.lista||x.slot;s.className=s.className.replace(/ ?(cheio|AC|PCD|PN|PI|PQ|rv|pop)\b/g,'')+` cheio ${modCls(m)}${x.rev?' rv':''}${pop?' pop':''}`;
+  s.textContent=x.pessoa?(x.pessoa.ficticio?x.pessoa.ini.split(' ')[0]:x.pessoa.rankUF+'º'):'–';
+  // bolinha verde: convocado (cheia) ou convocado presumido (vazada)
+  const st=statusPessoa(x.pessoa);if(st.k==='conv'||st.k==='pres')s.insertAdjacentHTML('beforeend',`<i class="pt ${st.k}"></i>`);
+  s.title=`${x.k}ª chamada: ${x.pessoa?x.pessoa.ini:'sem candidato'} (${modSig(m)})${st.txt?' · '+st.txt:''}`;
+}
+// Situação da pessoa para a legenda e as bolinhas
+function statusPessoa(p){
+  if(!p||p.ficticio)return{k:'',txt:''};
+  if(p.situacaoConv==='Empossado')return{k:'conv',txt:'Empossado',ic:'✓ '};
+  if(p.situacaoConv==='Desistente')return{k:'des',txt:'Desistente',ic:''};
+  if(p.conv)return p.presumida?{k:'pres',txt:'Convocado (presumido)',ic:''}:{k:'conv',txt:'Convocado',ic:'✓ '};
+  return{k:'agu',txt:p.situacaoConv==='Sem informação'?'Sem informação':'Aguardando',ic:''};
+}
+function legendaPasso(x){
+  const p=x.pessoa,quem=p?(p.ficticio?`${p.ini}`:`<b>${esc(p.ini)}</b> (${modSig(x.lista)}, ${p.rankUF}º no estado)`):'<b>sem candidato aprovado</b>';
+  const st=statusPessoa(p);
+  return `<b>${x.k}ª chamada${x.vi?' · vaga imediata':' · cadastro reserva'}:</b> ${quem}${st.k?` <span class="st ${st.k}">${st.ic}${st.txt}</span>`:''}<br><span class="note">${porQue(x,x.k===1&&x.slot==='AC'&&x.motivo==='inicio'&&!filaAtual.some(y=>y.slot==='PCD'))}</span>`;
+}
+function selecionarChamada(x){
+  document.querySelectorAll('#pistas .sel').forEach(el=>el.classList.remove('sel'));
+  const s=document.querySelector(`.slot[data-k="${x.k}"]`),tk=x.pessoa&&tkDe.get(x.pessoa);
+  s&&s.classList.add('sel');tk&&tk.classList.add('sel');
+  document.getElementById('pstLeg').innerHTML=legendaPasso(x)+(x.k>FS.passo?'<br><span class="note">Esta posição ainda não chegou na animação.</span>':'');
+}
+function atualizarPistas(n,animar){
+  document.querySelectorAll('#pistas .sel').forEach(el=>el.classList.remove('sel'));
+  if(FS.vista!=='pistas')return;
+  filaAtual.forEach(x=>{const tk=x.pessoa&&tkDe.get(x.pessoa),s=document.querySelector(`.slot[data-k="${x.k}"]`);
+    if(x.k<=n&&!(animar&&x.k===n)){tk&&tk.classList.add('chamado');if(s&&!s.classList.contains('cheio'))preencherSlot(x,false)}
+    else if(x.k>n){tk&&tk.classList.remove('chamado');if(s){s.className='slot'+(s.classList.contains('fimvi')?' fimvi':'');s.textContent=x.k;s.title=''}}});
+  const leg=document.getElementById('pstLeg');
+  if(!n){leg.innerHTML='Clique em <b>Animar a fila</b> ou em <b>Próxima chamada</b>.';return}
+  const x=filaAtual[n-1];leg.innerHTML=legendaPasso(x);
+  if(!animar)return;
+  const tk=x.pessoa&&tkDe.get(x.pessoa),s=document.querySelector(`.slot[data-k="${x.k}"]`);
+  // vaga que mudou de cota: a coluna dona da vaga pisca antes
+  if(x.rev){const c=document.querySelector(`.pst-col[data-m="${x.slot}"]`);if(c){c.classList.add('pulso');setTimeout(()=>c.classList.remove('pulso'),700)}}
+  if(!tk||!s||semMovimento()){tk&&tk.classList.add('chamado');preencherSlot(x,!semMovimento());return}
+  const a=tk.getBoundingClientRect(),b=s.getBoundingClientRect(),v=tk.cloneNode(true);
+  v.classList.add('voando');v.style.left=a.left+'px';v.style.top=a.top+'px';v.style.width=a.width+'px';document.body.appendChild(v);
+  tk.classList.add('chamado');
+  const dx=b.left-a.left,dy=b.top-a.top;
+  v.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${dx*.5}px,${dy*.5-40}px) scale(1.25)`},{transform:`translate(${dx}px,${dy}px) scale(1)`}],
+    {duration:x.rev?750:600,delay:x.rev?250:0,easing:'cubic-bezier(.3,.7,.3,1)',fill:'forwards'}).onfinish=()=>{v.remove();preencherSlot(x,true)};
+}
+function mostrarAte(n){
+  const antes=FS.passo;
+  FS.passo=Math.max(0,Math.min(n,filaAtual.length));
+  atualizarPistas(FS.passo,FS.passo===antes+1);
+  document.querySelectorAll('#fila li[data-k]').forEach(li=>{const k=+li.dataset.k;li.classList.toggle('oculto',k>FS.passo);li.classList.toggle('atual',k===FS.passo&&FS.passo<filaAtual.length)});
+  document.querySelectorAll('#fila .divisor').forEach(d=>{const prox=d.nextElementSibling;d.classList.toggle('oculto',!prox||+prox.dataset.k>FS.passo)});
+  document.getElementById('filaConta').textContent=FS.passo<filaAtual.length?`${FS.passo} de ${filaAtual.length} chamadas`:'';
+  const at=document.querySelector('#fila li.atual');if(at&&FS.timer)at.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function pararFila(){if(FS.timer){clearInterval(FS.timer);FS.timer=null;document.getElementById('filaAnimar').lastChild.textContent='Animar a fila'}}
+function animarFila(){
+  if(FS.timer){pararFila();return}
+  if(FS.passo>=filaAtual.length)mostrarAte(0);
+  document.getElementById('filaAnimar').lastChild.textContent='Pausar';
+  FS.timer=setInterval(()=>{if(FS.passo>=filaAtual.length){pararFila();return}mostrarAte(FS.passo+1)},semMovimento()?150:FS.vista==='pistas'?1000:550);
+}
+function desenharQuadro(cargo){
+  const ordem=[0,1,2,3,4],rot=['AC','PcD','PN','PI','PQ'];
+  const linhas=VAGAS.filter(v=>v.cargo===cargo);const mac=uf=>{const d=DATA.find(x=>x.uf===uf);return d?cap(d.macro):''};
+  const grupos=d3.groups(linhas,v=>mac(v.uf)).sort((a,b)=>MACROS.indexOf(a[0].toUpperCase())-MACROS.indexOf(b[0].toUpperCase()));
+  const tot=ordem.map(i=>d3.sum(linhas,v=>v.vi[i]));const sum=a=>a.reduce((s,x)=>s+x,0);
+  const cel=n=>`<td class="${n?'':'zero'}">${n}</td>`;
+  // Ordem simulada das chamadas das vagas imediatas de cada estado (com os aprovados reais)
+  const ordemUF=v=>{const vi={};MOD_F.forEach((m,i)=>vi[m]=v.vi[[1,0,2,3,4][i]]);
+    const rs=DATA.filter(d=>d.cargo===cargo&&d.uf===v.uf);const listas={};MOD_F.forEach(m=>listas[m]=rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF));
+    return montarFila(vi,listas).filter(x=>x.vi).map(x=>{const m=x.lista||x.slot;
+      return `<span class="mod ${modCls(m)}${x.rev?' rv':''}" title="${x.k}ª chamada: ${sigla(m)}${x.rev?` (vaga de ${sigla(x.slot)} que passou para ${sigla(x.lista)})`:''}">${sigla(m)}</span>`}).join('')};
+  document.getElementById('quadro').innerHTML=`<table class="quadro"><thead><tr><th rowspan="2" class="uf">Estado</th><th colspan="6">Vagas imediatas</th><th rowspan="2">Cadastro reserva</th><th rowspan="2" class="ordem">Ordem simulada de convocação<br><small class="note">vagas imediatas · clique na linha para ver a fila</small></th></tr>
+    <tr>${rot.map((r,i)=>`<th><span class="mod ${['AC','PCD','PN','PI','PQ'][i]}">${r}</span></th>`).join('')}<th>Total</th></tr></thead>
+    <tbody>${grupos.map(([g,vs])=>`<tr><td colspan="9" class="grp">${g||'–'}</td></tr>`+vs.map(v=>`<tr class="qlinha" data-uf="${v.uf}"><td class="uf">${v.uf}</td>${ordem.map(i=>cel(v.vi[i])).join('')}<td><b>${sum(v.vi)}</b></td><td>${sum(v.vi)*3}</td><td class="ordem">${ordemUF(v)}</td></tr>`).join('')).join('')}</tbody>
+    <tfoot><tr><td class="uf">Total</td>${tot.map(n=>`<td>${n}</td>`).join('')}<td>${sum(tot)}</td><td>${sum(tot)*3}</td><td class="ordem note">Borda tracejada: vaga que passou de uma cota para outra.</td></tr></tfoot></table>`;
+  // Clicar num estado abre a fila dele no simulador
+  document.querySelectorAll('#quadro tr.qlinha').forEach(tr=>tr.onclick=()=>{
+    if(FS.modo!=='real')document.querySelector('#filaModo button[data-v="real"]').click();
+    FS.cargo=cargo;document.getElementById('filaCargo').value=cargo;FS.uf=tr.dataset.uf;ufsFila();desenharFila(true);
+    document.querySelector('.fila-card').scrollIntoView({behavior:'smooth',block:'start'})});
+}
+
 /* ---------- Novidades (histórico de atualizações) ---------- */
 // Para publicar uma novidade, acrescente uma linha NO TOPO da lista: [data e hora de Brasília, tipo, título, descrição].
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-13 14:05','novo','Informe o horário da sua convocação','Já foi convocado(a)? Em "Informar convocação", escolha "Quero informar o horário da minha convocação". Como muitas convocações saem no mesmo dia, o horário ajuda a comissão a entender a ordem real das chamadas.'],
+  ['2026-10-13 14:00','novo','Aba "Vagas e regras"','Quadro de vagas do edital por estado, as regras de convocação explicadas com os itens do edital e um simulador animado da fila de convocação de cada cargo e estado. É uma simulação da comissão, conferida com a convocação de 08/10, e não a lista oficial.'],
   ['2026-10-13 09:30','novo','Convocação confirmada ou presumida','Convocações deduzidas pela ordem de classificação (alguém atrás na mesma lista já foi chamado) aparecem com a marca "presumida" até a comissão confirmar com a pessoa.'],
   ['2026-10-13 08:50','novo','Novidades do painel','Este histórico: tudo o que muda no painel passa a ser registrado aqui. O ponto azul no ícone indica que há novidade que você ainda não viu.'],
   ['2026-10-13 08:39','melhoria','Menu "Solicitações" no celular','Os formulários agora ficam reunidos num único botão no topo, com uma explicação curta de cada opção.'],
@@ -1601,6 +2090,7 @@ function rodape(quando,copia){
     // Links diretos: #solicitacoes (ou o antigo #informar) e #grupo (já abre o pedido de entrada no grupo)
     if(['#informar','#solicitacoes','#grupo'].includes(location.hash)){S.tab='form';F.intencao=location.hash==='#grupo'?'grupo':'convocacao'}
     if(location.hash==='#contato')S.tab='contato';
+    if(location.hash==='#vagas')S.tab='vagas';
     render();
     if(S.tab==='form')iniciarForm();
     if(S.tab==='contato')desenharContato();
@@ -1609,7 +2099,7 @@ function rodape(quando,copia){
       let ass=assinatura(DATA);
       const atualizar=async()=>{
         try{const novos=await lerBanco();const a=assinatura(novos);
-          if(a!==ass){ass=a;DATA=novos;exemplosCotas();render()}
+          if(a!==ass){ass=a;DATA=novos;exemplosCotas();render();if(vagasPronta){conferirFila();if(FS.modo==='real'&&!FS.timer)desenharFila(false)}}
           rodape(new Date(),false);
         }catch(e){console.warn('Atualização automática falhou',e)}
       };

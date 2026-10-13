@@ -32,7 +32,7 @@ h2{font-size:15px;margin:0 0 4px}
 .btn.ok{background:var(--good);border-color:var(--good)}
 .btn.nao{background:none;color:var(--bad);border-color:var(--bad)}
 .btn:disabled{opacity:.5;cursor:default}
-input[type=text],input[type=email],input[type=date],select,textarea{font:inherit;font-size:15px;padding:9px 11px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink);width:100%}
+input[type=text],input[type=email],input[type=date],input[type=time],select,textarea{font:inherit;font-size:15px;padding:9px 11px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink);width:100%}
 textarea{min-height:60px;resize:vertical}
 label.rot{display:block;font-weight:600;font-size:13px;margin:10px 0 5px}
 .linha{display:flex;gap:8px;flex-wrap:wrap}.linha>input{flex:1;min-width:200px}
@@ -251,6 +251,7 @@ const SB=supabase.createClient('https://ssgtryzcesgyuiltovmu.supabase.co','sb_pu
   {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'implicit'}});
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hBR=h=>h?String(h).slice(0,5):'';
 const dBR=d=>d?new Date(d.length===10?d+'T12:00:00':d).toLocaleDateString('pt-BR'):'–';
 const dhBR=d=>d?new Date(d).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'}):'–';
 const nota=v=>v==null?'–':Number(v).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:2});
@@ -342,7 +343,7 @@ function desenharPend(lista){
   const el=$('listaPend');$('nPend').hidden=!lista.length;$('nPend').textContent=lista.length;
   if(!lista.length){el.innerHTML='<p class="vazio">Nenhum pedido pendente. 🎉</p>';return}
   el.innerHTML=lista.map(p=>`<div class="pedido" data-id="${p.id}">
-    <div class="topo"><span class="prot">${esc(p.protocolo)}</span><span class="tipo">${esc(p.tipo)}${p.data_evento?' em '+dBR(p.data_evento):''}</span><span class="quando">enviado em ${dhBR(p.criado_em)}</span></div>
+    <div class="topo"><span class="prot">${esc(p.protocolo)}</span><span class="tipo">${esc(p.tipo)}${p.data_evento?' em '+dBR(p.data_evento):''}${p.hora_evento?' às '+hBR(p.hora_evento):''}</span><span class="quando">enviado em ${dhBR(p.criado_em)}</span></div>
     <div class="nome">${esc(p.nome)}</div>
     ${p.tipo==='Entrada no grupo'?`<div class="obs"><b>WhatsApp:</b> ${esc(fmtTel(p.telefone))}${p.nome_whatsapp?` · aparece como <b>${esc(p.nome_whatsapp)}</b>`:''}
       <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:10px;align-items:center"><a class="zap" href="https://wa.me/${esc(p.telefone)}" target="_blank" rel="noopener">Abrir conversa no WhatsApp</a>
@@ -370,7 +371,7 @@ function desenharPend(lista){
 $('recarregar').onclick=carregarPend;
 
 /* ---------- Aprovados ---------- */
-const COLS='id,nome,inscricao,cargo,uf,cota,situacao,posicao_uf,nota,convocacao,validacao,data_convocacao,data_posse,observacao,ocultar_nome,no_grupo,no_grupo_em';
+const COLS='id,nome,inscricao,cargo,uf,cota,situacao,posicao_uf,nota,convocacao,validacao,data_convocacao,hora_convocacao,data_posse,observacao,ocultar_nome,no_grupo,no_grupo_em';
 // Lista completa com filtros; seleção de várias pessoas para registrar convocação em lote
 let A=[],aSel=new Set(),aLimite=100,ultimaData='2026-10-08';
 async function carregarAprov(){
@@ -401,7 +402,7 @@ function desenharAprov(){
     <div class="tw"><table><thead><tr><th class="sel"><input type="checkbox" id="aTodos" ${todos?'checked':''} title="Selecionar todos os mostrados"></th><th>Nome</th><th>Inscrição</th><th>Cargo</th><th>UF</th><th>Cota</th><th>Classificação</th><th>Convocação</th><th>Grupo</th></tr></thead>
     <tbody>${vis.map(r=>`<tr data-id="${r.id}" class="${aSel.has(r.id)?'marcado':''}"><td class="sel"><input type="checkbox" ${aSel.has(r.id)?'checked':''}></td>
       <td><button type="button" class="nomelink">${esc(r.nome)}</button>${r.ocultar_nome?' <span class="pill">nome oculto</span>':''}</td><td>${esc(r.inscricao)}</td><td>${esc(r.cargo)}</td><td>${esc(r.uf)}</td><td>${esc(r.cota)}</td><td>${r.posicao_uf}º · ${esc(r.situacao)}</td>
-      <td><span class="pill ${esc(r.convocacao)}">${esc(r.convocacao)}</span>${r.convocacao==='Empossado'&&r.data_posse?' '+dBR(r.data_posse):r.data_convocacao&&r.convocacao!=='Aguardando'?' '+dBR(r.data_convocacao):''}${r.validacao==='Presumida'?' <span class="pill pres" title="Deduzida pela ordem de classificação; a comissão ainda não falou com a pessoa">presumida</span>':''}</td>
+      <td><span class="pill ${esc(r.convocacao)}">${esc(r.convocacao)}</span>${r.convocacao==='Empossado'&&r.data_posse?' '+dBR(r.data_posse):r.data_convocacao&&r.convocacao!=='Aguardando'?' '+dBR(r.data_convocacao)+(r.hora_convocacao?' '+hBR(r.hora_convocacao):''):''}${r.validacao==='Presumida'?' <span class="pill pres" title="Deduzida pela ordem de classificação; a comissão ainda não falou com a pessoa">presumida</span>':''}</td>
       <td>${r.no_grupo?'<span class="pill Convocado">no grupo</span>':'<span class="pill">fora</span>'}</td></tr>
       <tr hidden data-ed="${r.id}"><td colspan="9"></td></tr>`).join('')}</tbody></table></div>
     ${rows.length>vis.length?`<button class="btn sec mais" type="button" id="aMais">Mostrar mais ${Math.min(100,rows.length-vis.length)}</button>`:''}`;
@@ -479,6 +480,7 @@ function abrirEdicao(id){
     ed.firstElementChild.innerHTML=`<div class="edit"><div class="g2">
       <div><label class="rot">Situação da convocação</label><select class="e-conv">${['Aguardando','Convocado','Empossado','Desistente','Sem informação'].map(o=>`<option ${o===r.convocacao?'selected':''}>${o}</option>`).join('')}</select></div>
       <div><label class="rot">Data da convocação</label><input type="date" class="e-dc" value="${r.data_convocacao||''}"></div>
+      <div><label class="rot">Horário da convocação</label><input type="time" class="e-hr" value="${hBR(r.hora_convocacao)}"></div>
       <div><label class="rot">Data da posse</label><input type="date" class="e-dp" value="${r.data_posse||''}"></div>
       <div><label class="rot">Validação da convocação</label><select class="e-val">${['Confirmada','Presumida'].map(o=>`<option ${o===(r.validacao||'Confirmada')?'selected':''}>${o}</option>`).join('')}</select></div></div>
       <p class="note" style="margin:4px 0 0">Confirmada: a comissão falou com a pessoa. Presumida: deduzida pela ordem de classificação. Não vale para "Aguardando".</p>
@@ -491,11 +493,11 @@ function abrirEdicao(id){
       const {data,error}=await SB.rpc('comissao_atualizar',{p_id:r.id,p_convocacao:box.querySelector('.e-conv').value,
         p_data_convocacao:box.querySelector('.e-dc').value||null,p_data_posse:box.querySelector('.e-dp').value||null,
         p_observacao:box.querySelector('.e-obs').value,p_ocultar_nome:box.querySelector('.e-oc').checked,p_no_grupo:box.querySelector('.e-gr').checked,
-        p_validacao:box.querySelector('.e-val').value});
+        p_validacao:box.querySelector('.e-val').value,p_hora_convocacao:box.querySelector('.e-hr').value||null,p_alterar_hora:true});
       this.disabled=false;
       if(error||!data.ok){msg(box.querySelector('.ret'),'erro',error?error.message:data.erro);return}
       msg(box.querySelector('.ret'),'ok','Salvo. O painel público já reflete a mudança.');
-      Object.assign(r,{convocacao:box.querySelector('.e-conv').value,validacao:['Aguardando','Sem informação'].includes(box.querySelector('.e-conv').value)?null:box.querySelector('.e-val').value,data_convocacao:box.querySelector('.e-dc').value||null,data_posse:box.querySelector('.e-dp').value||null,
+      Object.assign(r,{convocacao:box.querySelector('.e-conv').value,validacao:['Aguardando','Sem informação'].includes(box.querySelector('.e-conv').value)?null:box.querySelector('.e-val').value,data_convocacao:box.querySelector('.e-dc').value||null,hora_convocacao:box.querySelector('.e-hr').value||null,data_posse:box.querySelector('.e-dp').value||null,
         observacao:box.querySelector('.e-obs').value,ocultar_nome:box.querySelector('.e-oc').checked,no_grupo:box.querySelector('.e-gr').checked});
       setTimeout(desenharAprov,1200);
     };
