@@ -273,6 +273,45 @@ body.resumo .col .scroll{max-height:none}
 .mais-det:hover{background:var(--wash)}
 .mais-det svg{width:16px;height:16px}
 
+/* ---------- Estilo sóbrio (padrão) ---------- */
+/* Cantos menores, sem faixas coloridas, sem sombras, ícones neutros, rótulos em caixa normal */
+body.sobrio .card{border-radius:8px;box-shadow:none}
+body.sobrio .kpi::before{display:none}
+body.sobrio .kpi:hover{transform:none;border-color:var(--border)}
+body.sobrio .kpi .top{margin-bottom:6px}
+body.sobrio .kpi .l{text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;color:var(--ink2)}
+body.sobrio .kpi .badge{width:auto;height:auto;background:none;color:var(--muted)}
+body.sobrio .kpi .badge svg{width:16px;height:16px}
+body.sobrio .kpi .v{font-size:28px;font-weight:650}
+body.sobrio .mini{height:4px;border-radius:2px}
+body.sobrio .mini span{border-radius:2px}
+body.sobrio .kpi svg.ring{width:44px;height:44px}
+body.sobrio .ic{background:none;width:auto;height:auto;color:var(--muted)}
+body.sobrio .ic svg{width:16px;height:16px}
+body.sobrio h2{gap:8px;font-size:14.5px}
+body.sobrio .hd .note{margin-left:24px}
+body.sobrio .logo{border-radius:8px;background:var(--s1);box-shadow:none;width:40px;height:40px}
+body.sobrio .tema{border-radius:8px;box-shadow:none;padding:7px 12px}
+body.sobrio .tema .knob{background:none;width:auto;height:auto}
+body.sobrio .tabs,body.sobrio .det-tgl,body.sobrio .cotas,body.sobrio .filtbtn,body.sobrio select{border-radius:6px}
+body.sobrio .tabs button{border-radius:4px}
+body.sobrio .seg{border-radius:6px}
+body.sobrio .chip{border-radius:6px}
+body.sobrio .rchip{border-radius:6px}
+body.sobrio .pill{border-radius:4px}
+body.sobrio .dpill{border-radius:4px}
+body.sobrio .csig{border-radius:4px}
+body.sobrio .hb .tr{border-radius:2px;height:12px}
+body.sobrio .hb .tr span:first-child{border-radius:2px 0 0 2px}
+body.sobrio .hb .tr span:last-child{border-radius:0 2px 2px 0}
+body.sobrio .pd{border-radius:6px}
+body.sobrio .pd .pos{border-radius:4px;background:none;border:1px solid var(--border)}
+body.sobrio .aviso{border-radius:6px}
+body.sobrio .mais-det{border-style:solid;border-color:var(--border);border-radius:6px;color:var(--ink2)}
+body.sobrio .mais-det:hover{color:var(--s1);border-color:var(--s1)}
+body.sobrio #tip,body.sobrio #ajudaPop{border-radius:6px}
+body.sobrio .tw tr{border-radius:6px}
+
 /* ---------- Responsivo ---------- */
 #map1,#map2{max-height:min(76vh,780px);margin:0 auto}
 .filtbtn{display:none;align-items:center;gap:6px;font:inherit;font-weight:600;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 12px;cursor:pointer}
@@ -332,7 +371,7 @@ body.resumo .col .scroll{max-height:none}
 [hidden]{display:none!important}
 </style>
 </head>
-<body class="resumo">
+<body class="resumo sobrio">
 <main>
   <header>
     <div class="logo" data-i="award"></div>
@@ -628,8 +667,18 @@ let REGIOES=null; // macro -> Feature (estados fundidos), usado no zoom
 let REGMESH=null; // macro -> MultiLineString do contorno, cada trecho desenhado uma única vez
 // Monta a topologia: simplifica o litoral (muito recortado no arquivo original, vira um borrão
 // grosso na escala do mapa) mantendo as divisas compartilhadas idênticas entre vizinhos
+// Descarta ilhas oceânicas e fragmentos minúsculos (ex.: Fernando de Noronha, Abrolhos), que na
+// escala do mapa viram pontos e contornos soltos no mar. Ilhas grandes (Marajó, Florianópolis) ficam.
+const AREA_MIN_KM2=200;
+function semIlhas(f){
+  const g=f.geometry;if(g.type!=='MultiPolygon')return f;
+  const km2=p=>d3.geoArea({type:'Polygon',coordinates:p})*6371*6371;
+  const partes=g.coordinates.filter(p=>km2(p)>=AREA_MIN_KM2);
+  return {...f,geometry:{type:'MultiPolygon',coordinates:partes.length?partes:g.coordinates}};
+}
 function montarGeo(){
   try{
+    GEO=GEO.map(semIlhas);
     let topo=topojson.topology({uf:{type:'FeatureCollection',features:GEO}},1e5);
     topo=topojson.presimplify(topo);
     topo=topojson.simplify(topo,topojson.quantile(topo,.9));
