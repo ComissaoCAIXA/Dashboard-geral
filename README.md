@@ -72,7 +72,8 @@ com a comissão e nunca aparecem no painel nem neste repositório.
 - As páginas usam só a chave **pública** do Supabase. O que cada visitante pode ler ou fazer é
   decidido pelas regras do próprio banco (Row Level Security e permissões por coluna): o público
   lê apenas as colunas mostradas no painel.
-- Os formulários passam por funções com validação e limite de tentativas por visitante.
+- Os formulários passam por funções com validação e limite de tentativas por visitante. O limite não
+  guarda o IP: guarda só um código irreversível, com um tempero secreto que troca a cada hora e é apagado.
 - A área da comissão exige login por e-mail e só funciona para e-mails cadastrados pela comissão.
   Toda alteração fica registrada no histórico, com quem fez.
 - O WhatsApp informado para entrar no grupo é apagado na decisão da comissão ou em no máximo 24 horas.
