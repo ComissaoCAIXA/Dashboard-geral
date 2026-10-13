@@ -1,5 +1,25 @@
 # Guia da comissão — banco de dados
 
+## Área da comissão (recomendado)
+
+Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
+
+- **Entrar:** digite seu e-mail e clique no link que chega por e-mail (sem senha).
+  Só entra quem está na tabela `comissao` com `ativo` marcado.
+- **Pedidos pendentes:** cada pedido mostra protocolo, o que a pessoa informou, os dados completos
+  dela e alertas automáticos. Confira pelo WhatsApp e clique em **Aprovar** ou **Não aprovar**
+  (a resposta opcional aparece para o aprovado na consulta do protocolo).
+- **Aprovados:** busque por nome, inscrição ou UF e edite situação, datas, observação interna
+  ou **ocultar o nome** no painel (para quem pediu para aparecer só com iniciais).
+- **Histórico:** as últimas 100 alterações, com o e-mail de quem fez.
+- **Exportar CSV:** baixa a base completa (guarde como cópia de segurança).
+
+### Incluir ou remover membros
+Supabase → Table Editor → tabela **`comissao`** → Insert row: preencha `email` (e, se quiser, `nome`).
+Para tirar o acesso, desmarque `ativo`. Não é preciso mais nada: a pessoa já pode entrar pela área.
+
+## Direto no Supabase (para administradores)
+
 Como consultar, incluir e corrigir os dados dos aprovados direto no Supabase.
 
 ## Onde ficam os dados
@@ -9,7 +29,7 @@ Acesse em supabase.com/dashboard → projeto → **Table Editor** (ícone de tab
 
 | Tabela | O que guarda | Quem vê |
 |---|---|---|
-| `aprovados` | A base oficial: nome, inscrição, cargo, UF, cota, nota, situação e convocação | O site vê só iniciais, cargo, UF, cota, nota e situação. Nome e inscrição ficam só aqui |
+| `aprovados` | A base oficial: nome, inscrição, cargo, UF, cota, nota, situação e convocação | O site mostra nome (ou iniciais, se `ocultar_nome`), cargo, UF, cota, nota e situação. Inscrição e observação ficam só com a comissão |
 | `envios` | O que chega pelo formulário do site | Só a comissão |
 | `historico` | Registro automático de toda inclusão, alteração e exclusão | Só a comissão |
 

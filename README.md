@@ -3,8 +3,13 @@
 Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026
 (Edital nº 01/2025/NS, cargos de nível superior), mantido pela Comissão de Aprovados.
 
-Os nomes aparecem apenas pelas iniciais. Nomes completos, números de inscrição e
-qualquer outro dado pessoal **não** ficam neste repositório.
+Por decisão da comissão, o painel mostra o nome completo dos aprovados (que já é público na
+homologação). Quem pedir à comissão aparece só pelas iniciais. Números de inscrição,
+observações internas e qualquer outro dado pessoal **não** ficam neste repositório.
+
+- Painel: `https://comissaocaixa.github.io/Dashboard-geral/`
+- Formulário para o aprovado: `https://comissaocaixa.github.io/Dashboard-geral/#informar`
+- Área da comissão (login por e-mail): `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
 
 ## Estrutura
 
