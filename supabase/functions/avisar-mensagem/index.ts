@@ -10,7 +10,7 @@
 //   SMTP_PASS     senha de app do Gmail (16 letras)
 //   CONTATO_PARA  opcional: outro e-mail para receber os avisos
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
-import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+import nodemailer from "npm:nodemailer@6.9.16";
 
 const ORIGENS = ["https://comissaocaixa.github.io", "http://localhost:8766", "http://127.0.0.1:8766"];
 const PAINEL = "https://comissaocaixa.github.io/Dashboard-geral/";
@@ -25,19 +25,6 @@ function cors(req: Request) {
   };
 }
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
-// Assunto com acentos: a biblioteca quebra o cabeçalho quando o assunto é longo (o e-mail chega "cru").
-// Por isso o assunto já vai codificado em pedaços curtos (RFC 2047, base64), que todo leitor de e-mail junta de volta.
-function assuntoCodificado(texto: string) {
-  const b64 = (s: string) => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
-  const partes: string[] = [];
-  let atual = "";
-  for (const ch of Array.from(texto.replace(/[\r\n]+/g, " "))) {
-    if (new TextEncoder().encode(atual + ch).length > 30) { partes.push(atual); atual = ""; }
-    atual += ch;
-  }
-  if (atual) partes.push(atual);
-  return partes.map((p) => `=?UTF-8?B?${b64(p)}?=`).join(" ");
-}
 
 // Mesmo visual dos e-mails de login (docs/emails/)
 function emailHtml(m: Record<string, string>, quando: string) {
@@ -118,16 +105,16 @@ Deno.serve(async (req) => {
   try {
     if (!usuario || !senha) throw new Error("SMTP_USER/SMTP_PASS não configurados");
     const quando = new Date(m.criado_em).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo", dateStyle: "short", timeStyle: "short" });
-    const smtp = new SMTPClient({ connection: { hostname: "smtp.gmail.com", port: 465, tls: true, auth: { username: usuario, password: senha } } });
-    await smtp.send({
-      from: `Painel dos aprovados <${usuario}>`,
+    // nodemailer codifica certo o assunto e os nomes com acentos (a biblioteca anterior quebrava o e-mail)
+    const smtp = nodemailer.createTransport({ host: "smtp.gmail.com", port: 465, secure: true, auth: { user: usuario, pass: senha } });
+    await smtp.sendMail({
+      from: { name: "Painel dos aprovados", address: usuario },
       to: para!,
-      replyTo: `${assuntoCodificado(m.nome.replace(/[<>"\r\n]/g, ""))} <${m.email}>`,
-      subject: assuntoCodificado(`[Fale com a comissão] ${m.assunto} · ${m.nome}`),
-      content: `Nova mensagem pelo painel dos aprovados.\n\nDe: ${m.nome} <${m.email}>\nEnviada em: ${quando}\nAssunto: ${m.assunto}\n\n${m.mensagem}\n\nResponda a este e-mail para falar com a pessoa. Depois, marque como respondida na área da comissão.`,
+      replyTo: { name: m.nome.replace(/[<>"\r\n]/g, ""), address: m.email },
+      subject: `[Fale com a comissão] ${m.assunto} · ${m.nome}`.replace(/[\r\n]+/g, " "),
+      text: `Nova mensagem pelo painel dos aprovados.\n\nDe: ${m.nome} <${m.email}>\nEnviada em: ${quando}\nAssunto: ${m.assunto}\n\n${m.mensagem}\n\nResponda a este e-mail para falar com a pessoa. Depois, marque como respondida na área da comissão.`,
       html: emailHtml(m, quando),
     });
-    await smtp.close();
     return new Response(JSON.stringify({ ok: true, enviado: true }), { headers: h });
   } catch (e) {
     // A mensagem continua salva e aparece na área da comissão; registra o motivo da falha
