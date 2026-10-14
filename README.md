@@ -39,7 +39,9 @@ com a comissão e nunca aparecem no painel nem neste repositório.
   distribuição das notas e lista completa de aprovados (com PDF).
 - **Convocações:** quem já foi convocado (com data), quem tem vaga imediata e aguarda, e o
   cadastro reserva. Convocações presumidas aparecem com marca própria.
-- **Vagas e regras:** quadro de vagas do Anexo I, regras de convocação com os itens do edital e
+- **Vagas e regras:** busca pelo próprio nome com a chamada prevista e quantas faltam, próximas chamadas,
+  fila completa animada, e (na visão detalhada) quem está em duas listas, memória de cálculo e conferência.
+  Também traz o quadro de vagas do Anexo I, regras de convocação com os itens do edital e
   simulador animado da fila de convocação por cargo e estado, conferido com as convocações reais.
 - **Documentos:** checklist personalizado dos documentos da etapa de comprovação de requisitos,
   com explicação de cada item e PDF para imprimir. As respostas ficam só no aparelho da pessoa.
@@ -63,7 +65,7 @@ com a comissão e nunca aparecem no painel nem neste repositório.
 | Peça | Onde |
 |---|---|
 | Páginas (HTML, CSS e JavaScript, sem etapa de build) | `index.html` (painel) e `comissao.html` (área da comissão), publicadas pelo GitHub Pages |
-| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 024, aplicadas em ordem) |
+| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 025, aplicadas em ordem) |
 | Aviso por e-mail do Fale com a comissão | Função `supabase/functions/avisar-mensagem` (Supabase Edge Functions) |
 | Avisos da comissão no Telegram (pedido novo e mensagem nova) | Função `supabase/functions/avisar-telegram`, chamada pelo banco (migração 020) |
 | Modelos dos e-mails de login da comissão | `docs/emails/` |

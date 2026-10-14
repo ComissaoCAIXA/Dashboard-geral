@@ -756,6 +756,68 @@ main .card .seg button{padding-top:0;padding-bottom:0;display:inline-flex;align-
 .hd .busca-lista:focus{outline:2px solid color-mix(in srgb,var(--s1) 40%,transparent);border-color:var(--s1)}
 @media (max-width:620px){.hd .busca-lista{width:100%;order:5;margin-left:0}}
 
+/* Vagas e regras: visão objetiva (minha posição, números e próximas chamadas) */
+body.aba-form.aba-vagas .det-tgl{display:inline-flex!important}
+.busca-grande{height:var(--ctl)!important;width:min(360px,100%)!important;font-size:14px!important;flex:1 1 260px;padding:0 12px;border:1px solid var(--border);border-radius:6px;background:var(--page);color:var(--ink);font:inherit}
+.posicao{margin:12px 0 8px}
+.pos-vazio{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:1px dashed var(--border);border-radius:10px;color:var(--ink2);font-size:14px;line-height:1.5}
+.pos-vazio svg{width:22px;height:22px;color:var(--s1);flex:none;margin-top:2px}
+.pos-card{padding:14px 16px;border:1px solid color-mix(in srgb,var(--s1) 35%,var(--border));border-left:4px solid var(--s1);border-radius:10px;background:color-mix(in srgb,var(--s1) 5%,var(--surface));margin-bottom:8px}
+.pos-nome{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.pos-nome b{font-size:16px}
+.pos-nome span{font-size:12.5px;color:var(--ink2)}
+.pos-res{margin:8px 0 2px;font-size:15px}
+.pos-res.ok{color:var(--good);font-weight:600}
+.pos-k{font-size:22px;color:var(--s1)}
+.pos-card .note{margin:2px 0 0}
+.pos-dupla{margin:10px 0 0;padding:8px 10px;border-radius:6px;background:color-mix(in srgb,var(--g2) 10%,transparent);font-size:13px;line-height:1.5}
+.aviso-curto{display:flex;gap:8px;align-items:flex-start;margin:4px 0 0;font-size:12.5px;color:var(--ink2);line-height:1.5}
+.aviso-curto svg{width:14px;height:14px;flex:none;margin-top:3px;color:var(--s5)}
+.fila-sub{margin-top:22px}
+.fila-numeros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.fila-numeros{grid-template-columns:1fr}}
+.fn{border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:var(--surface);display:flex;flex-direction:column;gap:3px}
+.fn-l{font-size:12px;color:var(--ink2)}
+.fn-v{font-size:22px;line-height:1.1}
+.fn-s{font-size:12px;color:var(--muted)}
+.proximas{margin-top:10px;border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:var(--surface)}
+.px-tit{font-size:12.5px;font-weight:650;color:var(--ink2);margin-bottom:6px}
+.proximas ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.proximas li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:13.5px;padding:4px 0;border-top:1px solid var(--grid)}
+.proximas li:first-child{border-top:0}
+.proximas .k{font-weight:700;min-width:34px}
+.proximas .quem{font-weight:600}
+.fila-completa{margin-top:12px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+.fila-completa>summary{cursor:pointer;display:flex;align-items:center;gap:8px;padding:12px 14px;font-weight:650;font-size:14px;color:var(--s1);list-style:none}
+.fila-completa>summary::-webkit-details-marker{display:none}
+.fila-completa>summary svg{width:16px;height:16px}
+.fila-completa>summary::after{content:"▾";margin-left:auto;color:var(--muted)}
+.fila-completa:not([open])>summary::after{content:"▸"}
+.fila-completa[open]{padding:0 12px 12px}
+.fila-completa[open]>summary{margin:0 -12px}
+.det-bloco{margin-top:6px}
+.como-feita{padding:0 14px 14px;font-size:13px;line-height:1.6;color:var(--ink2)}
+.como-feita ol{padding-left:20px}
+.como-feita li{margin-bottom:8px}
+
+/* Simulador: quem está em duas listas */
+.fila-dupla{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+.fila-dupla[hidden]{display:none}
+.fd-linha{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.fd-rot{font-size:13px;font-weight:600;color:var(--ink2)}
+.fd-ajuda{font-size:12.5px;color:var(--s1)}
+.fila-dupla .busca-lista{height:var(--ctl-sm);width:min(280px,100%);padding:0 10px;border:1px solid var(--border);border-radius:6px;background:var(--page);color:var(--ink);font:inherit;font-size:13px}
+.fd-achado{display:flex;flex-direction:column;gap:2px;font-size:13px}
+.tag-dupla{display:inline-block;font-size:11px;font-weight:600;padding:1px 6px;border-radius:4px;border:1px dashed var(--g2);color:color-mix(in srgb,var(--g2) 75%,var(--ink));white-space:nowrap}
+.fila li.achado{outline:2px solid var(--s1);outline-offset:2px;border-radius:6px}
+.duplos{margin-top:12px;border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:var(--surface)}
+.duplos>summary{cursor:pointer;font-weight:650;font-size:14px}
+.duplos .note{margin:8px 0}
+.tab-duplos td,.tab-duplos th{white-space:nowrap}
+.fd-seta{font-size:11.5px;font-weight:700;color:var(--good)}
+.fd-seta.baixo{color:var(--bad)}
+.faq-ol{margin:4px 0 8px;padding-left:22px;font-size:13px;line-height:1.55}
+
 /* Memória de cálculo do simulador */
 .memoria{margin-top:14px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
 .memoria>summary{cursor:pointer;display:flex;align-items:center;gap:8px;padding:12px 14px;font-weight:650;font-size:14px;list-style:none}
@@ -1002,44 +1064,70 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
 
   <!-- ABA: Vagas e convocação (simulador da fila, regras do edital e quadro de vagas) -->
   <section id="tab-vagas" hidden>
+    <!-- 1. Minha posição -->
     <div class="card fila-card">
-      <div class="hd"><div><h2>Simulador da fila de convocação</h2>
-        <p class="note">Escolha o cargo e o estado para ver, chamada a chamada, uma estimativa da ordem de convocação, considerando as cotas e as vagas que passam de uma cota para outra.</p></div></div>
-      <div class="aviso-topo">
-        <p><b>Isto é uma simulação feita pela Comissão de Aprovados, não é a lista oficial.</b> Quem define a ordem e o momento de cada convocação é a CAIXA. O edital estabelece o começo da fila, as proporções das cotas e para onde vão as vagas que sobram, mas não publica a sequência completa de chamadas. Por isso, parte desta fila é uma interpretação da comissão, baseada no edital e conferida com as convocações já feitas. Ela não gera direito nem garante convocação.</p><p style="margin-top:8px"><b>A simulação pode mudar.</b> A cada nova convocação a comissão tem mais dados para conferir a ordem (inclusive o horário de cada convocação, que os aprovados podem informar no formulário), e a regra pode ser ajustada para refletir o que a CAIXA de fato fizer.</p>
-        <details><summary>Como a simulação foi feita e conferida</summary>
-          <ol>
-            <li><b>Começo da fila (item 2.13.1).</b> O edital diz: <i>"A convocação iniciar-se-á por um candidato com deficiência, se houver, seguida por um candidato da ampla concorrência e, em seguida, por um candidato aprovado nas classificações de pessoas negras, indígenas ou quilombolas, se houver."</i> Nos estados <b>com vaga PcD</b>, a simulação segue isso ao pé da letra: PcD, AC e cota racial. Nos estados <b>sem vaga PcD</b>, o edital não diz como fica o começo; a simulação entende que a posição da PcD fica com a ampla concorrência: AC, AC e cota racial. Se o estado tem só 1 vaga AC nas vagas imediatas, a cota vem logo depois dela. Foi assim que a CAIXA fez em 08/10: no CE e em PE (2 vagas AC e 1 PN) chamou AC, AC e então PN; no DF (1 AC e 1 PN), AC e PN.</li>
-            <li><b>Chamadas seguintes (itens 2.8 e 2.13.2).</b> O edital diz que a convocação ocorrerá <i>"de forma alternada, respeitando a proporção"</i> (2.8) e que <i>"as convocações seguirão conforme o número de vagas informado no Edital, em observância à reserva de vagas de 5% para PcD e 25% para pessoas negras, 3% a pessoas indígenas e 2% a pessoas quilombolas"</i> (2.13.2). Por isso a simulação usa esses <b>percentuais fixos</b>, contados sobre as chamadas de cada cargo e estado: a cada chamada, cada cota acumula o seu percentual, e ela ganha a vaga quando o acumulado passa em <b>meia vaga</b> o que ela já recebeu (arredondamento da proporção). Com a PN chamada no começo da fila (3ª), as próximas PN são a 6ª, 10ª, 14ª chamada…; a PcD, depois da 1ª, volta na 30ª. Nas demais chamadas, ampla concorrência. Foi esta regra que bateu com todos os 41 cargos e estados do relatório oficial de convocações da CAIXA de 13/10/2026; a conta de cada chamada aparece na memória de cálculo, abaixo da fila. O número de vagas de cada modalidade em cada estado vem do Anexo I: as <b>vagas imediatas</b> são preenchidas primeiro, com exatamente essas quantidades (se a ampla concorrência do bloco acaba antes, seguem as vagas de cota que faltam), e depois vem o <b>cadastro reserva</b>.</li>
-            <li><b>Por que não usar a "fatia" de cada estado (item 2.12.2).</b> O edital explica que, para PcD e pessoas negras, <i>"a aplicação das cotas foi proporcional ao número de vagas por cargo e por polo"</i> e que, para indígenas e quilombolas, <i>"a alocação considerou o total de vagas por Macropolo e a representatividade populacional"</i>, sendo essas vagas colocadas em alguns polos. Com poucas vagas por estado, os arredondamentos distorcem a fatia local (no CE, 1 vaga PN em 3 = 33%; no AM, 1 vaga PI em 2 = 50%). Por isso a ordem segue os percentuais do edital, e não a fatia de cada estado.</li>
-            <li><b>Vagas que sobram (item 2.12):</b> quando uma modalidade não tem mais aprovados, a vaga passa para a próxima da cadeia descrita no edital, na mesma posição da fila.</li>
-            <li><b>Conferência com a convocação real:</b> a simulação foi comparada com as convocações registradas pela comissão (rodada de 08/10/2026). <span id="filaConfere">Calculando…</span></li>
-          </ol>
-        </details>
-      </div>
+      <div class="hd"><div><h2>Quando vou ser chamado?</h2>
+        <p class="note">Escolha o cargo e o estado e procure o seu nome para ver em qual chamada você seria convocado pela simulação.</p></div></div>
       <div class="fila-ctl">
-        <div class="seg" id="filaModo" role="group" aria-label="Tipo de simulação"><button data-v="real" aria-pressed="true">Com os aprovados</button><button data-v="livre" aria-pressed="false">Montar um cenário</button></div>
+        <div class="seg" id="filaModo" role="group" aria-label="Tipo de simulação" data-det><button data-v="real" aria-pressed="true">Com os aprovados</button><button data-v="livre" aria-pressed="false">Montar um cenário</button></div>
         <select id="filaCargo" aria-label="Cargo"></select>
         <select id="filaUF" aria-label="Estado"></select>
+        <input type="search" id="filaBusca" class="busca-lista busca-grande" placeholder="Procure seu nome (sem precisar de acento)" aria-label="Procurar um nome na fila" autocomplete="off">
       </div>
+      <div id="filaPosicao" class="posicao"></div>
+      <p class="aviso-curto"><span data-i="flag"></span><span><b>Simulação da comissão, não é a lista oficial.</b> Quem define a ordem e o momento de cada convocação é a CAIXA, e a simulação pode mudar com novas convocações. <a href="#vagas" class="ir-detalhes">Como a simulação foi feita</a></span></p>
       <div class="cenario" id="filaCenario" hidden></div>
-      <div class="fila-resumo" id="filaResumo"></div>
-      <div class="fila-play">
-        <button class="btn" type="button" id="filaAnimar"><span data-i="play"></span>Animar a fila</button>
-        <button class="btn sec" type="button" id="filaVolta" aria-label="Chamada anterior"><span data-i="voltar"></span>Anterior</button>
-        <button class="btn sec" type="button" id="filaPasso">Próxima chamada<span data-i="avancar"></span></button>
-        <button class="btn sec" type="button" id="filaTudo">Mostrar tudo</button>
-        <span class="note" id="filaConta"></span>
-        <button class="pdfbtn" type="button" data-pdf="fila" title="Baixar a fila simulada deste cargo e estado em PDF (A4 paisagem)"><span data-i="baixar"></span>PDF da fila</button>
-        <div class="seg vista" id="filaVista" role="group" aria-label="Forma de ver a fila"><button data-v="lista" aria-pressed="false">Lista</button><button data-v="pistas" aria-pressed="true">Pistas</button></div>
-      </div>
-      <div class="pistas" id="pistas"></div>
-      <ol class="fila" id="fila" hidden></ol>
-      <p class="aviso-sim"><b>Lembrete:</b> simulação da comissão, não é a lista oficial. Quem convoca e define a ordem é a CAIXA. Em cada chamada aparece o item do edital que explica aquela posição.</p>
-      <details class="memoria" id="filaMemoria" open>
-        <summary><span data-i="table"></span>Memória de cálculo: como as cotas acumulam até ganhar uma vaga</summary>
-        <div id="mcCorpo"></div>
+
+      <!-- 2. A fila deste estado -->
+      <h3 class="sub fila-sub">A fila deste estado</h3>
+      <div class="fila-numeros" id="filaNumeros"></div>
+      <div id="filaProximas"></div>
+      <details class="fila-completa" id="filaCompleta">
+        <summary><span data-i="fila"></span><span id="filaCompletaTit">Ver a fila completa</span></summary>
+        <div class="fila-resumo" id="filaResumo"></div>
+        <div class="fila-play">
+          <button class="btn" type="button" id="filaAnimar"><span data-i="play"></span>Animar a fila</button>
+          <button class="btn sec" type="button" id="filaVolta" aria-label="Chamada anterior"><span data-i="voltar"></span>Anterior</button>
+          <button class="btn sec" type="button" id="filaPasso">Próxima chamada<span data-i="avancar"></span></button>
+          <button class="btn sec" type="button" id="filaTudo">Mostrar tudo</button>
+          <span class="note" id="filaConta"></span>
+          <button class="pdfbtn" type="button" data-pdf="fila" title="Baixar a fila simulada deste cargo e estado em PDF (A4 paisagem)"><span data-i="baixar"></span>PDF da fila</button>
+          <div class="seg vista" id="filaVista" role="group" aria-label="Forma de ver a fila"><button data-v="lista" aria-pressed="false">Lista</button><button data-v="pistas" aria-pressed="true">Pistas</button></div>
+        </div>
+        <div class="pistas" id="pistas"></div>
+        <ol class="fila" id="fila" hidden></ol>
       </details>
+
+      <!-- Visão detalhada -->
+      <div data-det class="det-bloco">
+        <h3 class="sub">Quem está classificado em duas listas</h3>
+        <div class="fila-dupla" id="filaDuplaBox">
+          <div class="fd-linha"><span class="fd-rot">Como tratar quem está em duas listas (ex.: AC e PN):</span>
+            <div class="seg" id="filaDupla" role="group" aria-label="Como tratar quem está em duas listas">
+              <button data-v="homolog" aria-pressed="true" title="Cada pessoa conta só no grupo em que a homologação a colocou. Foi o que a CAIXA fez nos casos conhecidos.">Como a homologação agrupa</button>
+              <button data-v="duas" aria-pressed="false" title="A pessoa entra nas duas listas e é chamada pela que a alcançar primeiro.">Pelas duas listas</button></div>
+            <a href="#vagas" class="fd-ajuda" id="fdAjuda">Entenda</a></div>
+        </div>
+        <div id="filaDuplos"></div>
+        <details class="memoria" id="filaMemoria">
+          <summary><span data-i="table"></span>Memória de cálculo: como as cotas acumulam até ganhar uma vaga</summary>
+          <div id="mcCorpo"></div>
+        </details>
+        <details class="memoria" id="filaComoFeita">
+          <summary><span data-i="list"></span>Como a simulação foi feita e conferida</summary>
+          <div class="como-feita">
+            <p>Quem define a ordem e o momento de cada convocação é a CAIXA. O edital estabelece o começo da fila, as proporções das cotas e para onde vão as vagas que sobram, mas não publica a sequência completa de chamadas. Por isso, parte desta fila é uma interpretação da comissão, baseada no edital e conferida com as convocações já feitas. Ela não gera direito nem garante convocação. A cada nova convocação a comissão tem mais dados para conferir a ordem (inclusive o horário de cada convocação, que os aprovados podem informar no formulário), e a regra pode ser ajustada para refletir o que a CAIXA de fato fizer.</p>
+            <ol>
+              <li><b>Começo da fila (item 2.13.1).</b> O edital diz: <i>"A convocação iniciar-se-á por um candidato com deficiência, se houver, seguida por um candidato da ampla concorrência e, em seguida, por um candidato aprovado nas classificações de pessoas negras, indígenas ou quilombolas, se houver."</i> Nos estados <b>com vaga PcD</b>, a simulação segue isso ao pé da letra: PcD, AC e cota racial. Nos estados <b>sem vaga PcD</b>, o edital não diz como fica o começo; a simulação entende que a posição da PcD fica com a ampla concorrência: AC, AC e cota racial. Se o estado tem só 1 vaga AC nas vagas imediatas, a cota vem logo depois dela. Foi assim que a CAIXA fez em 08/10: no CE e em PE (2 vagas AC e 1 PN) chamou AC, AC e então PN; no DF (1 AC e 1 PN), AC e PN.</li>
+              <li><b>Chamadas seguintes (itens 2.8 e 2.13.2).</b> O edital diz que a convocação ocorrerá <i>"de forma alternada, respeitando a proporção"</i> (2.8) e que <i>"as convocações seguirão conforme o número de vagas informado no Edital, em observância à reserva de vagas de 5% para PcD e 25% para pessoas negras, 3% a pessoas indígenas e 2% a pessoas quilombolas"</i> (2.13.2). Por isso a simulação usa esses <b>percentuais fixos</b>, contados sobre as chamadas de cada cargo e estado: a cada chamada, cada cota acumula o seu percentual, e ela ganha a vaga quando o acumulado passa em <b>meia vaga</b> o que ela já recebeu (arredondamento da proporção). Com a PN chamada no começo da fila (3ª), as próximas PN são a 6ª, 10ª, 14ª chamada…; a PcD, depois da 1ª, volta na 30ª. Nas demais chamadas, ampla concorrência. Foi esta regra que bateu com todos os 41 cargos e estados do relatório oficial de convocações da CAIXA de 13/10/2026; a conta de cada chamada aparece na memória de cálculo, acima. O número de vagas de cada modalidade em cada estado vem do Anexo I: as <b>vagas imediatas</b> são preenchidas primeiro, com exatamente essas quantidades (se a ampla concorrência do bloco acaba antes, seguem as vagas de cota que faltam), e depois vem o <b>cadastro reserva</b>.</li>
+              <li><b>Por que não usar a "fatia" de cada estado (item 2.12.2).</b> O edital explica que, para PcD e pessoas negras, <i>"a aplicação das cotas foi proporcional ao número de vagas por cargo e por polo"</i> e que, para indígenas e quilombolas, <i>"a alocação considerou o total de vagas por Macropolo e a representatividade populacional"</i>, sendo essas vagas colocadas em alguns polos. Com poucas vagas por estado, os arredondamentos distorcem a fatia local (no CE, 1 vaga PN em 3 = 33%; no AM, 1 vaga PI em 2 = 50%). Por isso a ordem segue os percentuais do edital, e não a fatia de cada estado.</li>
+              <li><b>Vagas que sobram (item 2.12):</b> quando uma modalidade não tem mais aprovados, a vaga passa para a próxima da cadeia descrita no edital, na mesma posição da fila.</li>
+              <li><b>Quem está em duas listas:</b> por padrão, cada pessoa conta só no grupo em que a homologação a colocou, como a CAIXA fez nos casos conhecidos. O seletor acima mostra a outra possibilidade.</li>
+              <li><b>Conferência com a convocação real:</b> a simulação foi comparada com as convocações registradas pela comissão. <span id="filaConfere">Calculando…</span></li>
+            </ol>
+          </div>
+        </details>
+      </div>
     </div>
 
     <div class="card">
@@ -1064,6 +1152,12 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
       </div>
       <h3 class="sub">Situações especiais</h3>
       <div class="faq">
+        <details id="faqDuplo"><summary>Estou classificado na ampla concorrência e numa cota ao mesmo tempo</summary>
+          <p>Quem concorre por cota (PcD, PN, PI ou PQ) concorre <b>também</b> na ampla concorrência (AC), e aparece na homologação com uma classificação em cada lista (por exemplo, 17ª na AC e 5ª na PN). Mas cada pessoa ocupa <b>uma vaga só</b>: a homologação colocou cada aprovado num único grupo, nesta ordem:</p>
+          <ol class="faq-ol"><li><b>AC – vagas imediatas:</b> os primeiros da lista AC;</li><li><b>Cotas – vagas imediatas:</b> os primeiros de cada lista de cota que ainda não estavam na AC;</li><li><b>AC – cadastro reserva:</b> os seguintes da lista AC, <b>inclusive cotistas</b> com nota para isso;</li><li><b>Cotas – cadastro reserva:</b> quem sobrou em cada lista de cota.</li></ol>
+          <p>Por isso uma pessoa pode ser, por exemplo, 5ª na lista PN e mesmo assim estar no grupo <b>AC – cadastro reserva</b>: na lista PN, as posições dela e de quem está na mesma situação "pertencem" à AC, e o cadastro reserva PN começa depois delas.</p>
+          <p><b>O que a CAIXA fez até agora:</b> nos casos conhecidos (pessoas no grupo AC de vaga imediata que eram a 1ª de uma lista de cota), a CAIXA <b>seguiu o grupo da homologação</b>: chamou a pessoa pela AC e deu a vaga da cota ao próximo da lista. Para quem está no <b>cadastro reserva da AC</b> e numa cota, <b>ainda não houve nenhum caso</b>, então não se sabe como a CAIXA vai agir.</p>
+          <p><b>No simulador:</b> o padrão é <b>Como a homologação agrupa</b>. Escolha <b>Pelas duas listas</b> para ver a outra possibilidade (a pessoa é chamada pela lista que a alcançar primeiro e é pulada na outra). A tabela abaixo da fila mostra onde cada pessoa nessa situação seria chamada nos dois cenários, e o campo "Procure seu nome nesta fila" mostra a sua posição. <small>Itens 4.1.2.4 e 4.3.4.1</small></p></details>
         <details><summary>O estado não tem vaga para pessoas com deficiência</summary><p>A posição que seria da PcD fica com a ampla concorrência, e a cota racial entra no máximo na 3ª chamada. Exemplos: com 2 ou mais vagas AC e 1 PN, a ordem fica AC, AC, PN (como a CAIXA fez no CE e em PE em 08/10); com 1 AC e 1 PN, AC e PN (como no DF). O edital não trata esse caso de forma explícita. Quem é PcD continua concorrendo pela ampla concorrência com a própria nota.</p></details>
         <details><summary>O estado não tem vaga de ampla concorrência</summary><p>Acontece quando todas as vagas do polo são reservadas (ex.: Arquiteto na BA tem 1 vaga para negros e 1 para indígenas). A fila começa pelas cotas; quem é da ampla concorrência só é chamado se alguma cota não tiver aprovados suficientes.</p></details>
         <details><summary>Uma cota não teve aprovados suficientes</summary><p>As vagas que sobram passam para a próxima modalidade da cadeia acima, na mesma posição da fila em que a cota seria chamada. No simulador elas aparecem como <span class="tag-rev">vaga PI → PN</span>, por exemplo.</p></details>
@@ -1073,12 +1167,13 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
       </div>
     </div>
 
-    <div class="card">
+    <div class="card" data-det>
       <div class="hd"><div><h2>Quadro de vagas do edital</h2><p class="note">Anexo I do edital. O cadastro reserva tem o triplo de cada coluna.</p></div>
         <div class="hd-acoes"><select id="quadroCargo" aria-label="Cargo do quadro de vagas"></select>
           <button class="pdfbtn" type="button" data-pdf="quadro" title="Baixar o quadro de vagas deste cargo em PDF (A4 paisagem)"><span data-i="baixar"></span>PDF</button></div></div>
       <div class="tw" id="quadro"></div>
     </div>
+    <button class="mais-det" type="button" data-resumo><span data-i="layers"></span>Ver detalhes: quem está em duas listas, memória de cálculo, como a simulação foi feita e quadro de vagas</button>
   </section>
 
   <!-- ABA: Documentos (checklist da etapa de comprovação de requisitos) -->
@@ -1741,6 +1836,7 @@ function render(){
   d3.select('#tab-vagas').attr('hidden',S.tab==='vagas'?null:true);
   d3.select('#tab-docs').attr('hidden',S.tab==='docs'?null:true);
   document.body.classList.toggle('aba-form',S.tab==='form'||S.tab==='contato'||S.tab==='vagas'||S.tab==='docs');
+  document.body.classList.toggle('aba-vagas',S.tab==='vagas'); // a chave "Visão detalhada" também vale na aba Vagas e regras
   if(S.tab==='vagas'){hideTip();iniciarVagas();return}
   if(S.tab==='docs'){hideTip();iniciarDocs();return}
   document.querySelectorAll('.acao[data-acao]').forEach(b=>b.setAttribute('aria-pressed',S.tab==='form'&&F.intencao===b.dataset.acao));
@@ -1990,7 +2086,10 @@ const PCT_F={PCD:.05,'PPP/PN':.25,PI:.03,PQ:.02};
 const modCls=m=>m==='PPP/PN'?'PN':m, modSig=m=>sigla(m);
 function montarFila(vi,listas,limiar=0.5){
   const usado={},chamadas={};MOD_F.forEach(m=>{usado[m]=0;chamadas[m]=0});
-  const preencher=m=>{for(const c of [m,...REV_F[m]])if(usado[c]<(listas[c]||[]).length)return{slot:m,lista:c,pessoa:listas[c][usado[c]++],rev:c!==m};return{slot:m,lista:null,pessoa:null,rev:false}};
+  // Quem já foi chamado por uma lista é pulado nas outras (só acontece no cenário "pelas duas listas")
+  const ja=new Set();
+  const preencher=m=>{for(const c of [m,...REV_F[m]]){const L=listas[c]||[];while(usado[c]<L.length&&ja.has(L[usado[c]]))usado[c]++;
+    if(usado[c]<L.length){const p=L[usado[c]++];ja.add(p);return{slot:m,lista:c,pessoa:p,rev:c!==m}}}return{slot:m,lista:null,pessoa:null,rev:false}};
   const RES=['PCD','PPP/PN','PI','PQ'],out=[],semPcd=!vi.PCD;
   // Dois blocos: primeiro as vagas imediatas (composição exata do Anexo I), depois o cadastro reserva (3× cada modalidade)
   [[1,true],[3,false]].forEach(([mult,imediatas])=>{
@@ -2062,7 +2161,7 @@ function conferirFila(){
     ' Esta conferência é refeita automaticamente sempre que a comissão registra novas convocações.'+
     (exHTML?`<div class="exemplos"><b>Exemplos da convocação de 08/10/2026</b><p class="note">A CAIXA divulga quem foi convocado, não a ordem interna da rodada. Os exemplos mostram que os convocados são exatamente as primeiras posições da fila simulada (✓ = convocado).</p><ul>${exHTML}</ul></div>`:'');
 }
-const FS={modo:'real',vista:'pistas',cargo:'Engenheiro Civil',uf:'AM',passo:0,timer:null,cen:{vi:{PCD:1,AC:3,'PPP/PN':1,PI:0,PQ:0},ap:{PCD:0,AC:15,'PPP/PN':6,PI:0,PQ:0}}};
+const FS={modo:'real',dupla:'homolog',vista:'pistas',cargo:'Engenheiro Civil',uf:'AM',passo:0,timer:null,cen:{vi:{PCD:1,AC:3,'PPP/PN':1,PI:0,PQ:0},ap:{PCD:0,AC:15,'PPP/PN':6,PI:0,PQ:0}}};
 let filaAtual=[],vagasPronta=false,dadosAtuais={vi:{},listas:{}};
 function iniciarVagas(){
   if(vagasPronta)return;vagasPronta=true;
@@ -2078,6 +2177,11 @@ function iniciarVagas(){
     fc.hidden=document.getElementById('filaUF').hidden=FS.modo!=='real';desenharFila(true)});
   document.querySelectorAll('#filaVista button').forEach(b=>b.onclick=()=>{FS.vista=b.dataset.v;
     document.querySelectorAll('#filaVista button').forEach(x=>x.setAttribute('aria-pressed',x===b));desenharFila(false)});
+  document.querySelectorAll('#filaDupla button').forEach(b=>b.onclick=()=>{FS.dupla=b.dataset.v;
+    document.querySelectorAll('#filaDupla button').forEach(x=>x.setAttribute('aria-pressed',x===b));desenharFila(false)});
+  {let t;document.getElementById('filaBusca').addEventListener('input',()=>{clearTimeout(t);t=setTimeout(buscarNaFila,150)})}
+  document.querySelectorAll('.ir-detalhes').forEach(a=>a.onclick=e=>{e.preventDefault();aplicarDetalhe(true);const d=document.getElementById('filaComoFeita');d.open=true;setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'start'}),50)});
+  document.getElementById('fdAjuda').onclick=e=>{e.preventDefault();const d=document.getElementById('faqDuplo');d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})};
   document.getElementById('filaAnimar').onclick=animarFila;
   document.getElementById('filaPasso').onclick=()=>{pararFila();mostrarAte(FS.passo+1)};
   document.getElementById('filaVolta').onclick=()=>{pararFila();mostrarAte(FS.passo-1)};
@@ -2101,11 +2205,104 @@ function dadosFila(){
   if(FS.modo==='livre'){const listas={};MOD_F.forEach(m=>listas[m]=Array.from({length:FS.cen.ap[m]||0},(_,i)=>({ini:`${i+1}º de ${modSig(m)}`,rankUF:null,conv:false,ficticio:true})));
     return{vi:FS.cen.vi,listas}}
   const v=VAGAS.find(x=>x.cargo===FS.cargo&&x.uf===FS.uf);const vi={};MOD_F.forEach((m,i)=>vi[m]=v.vi[[1,0,2,3,4][i]]);
-  const rs=DATA.filter(d=>d.cargo===FS.cargo&&d.uf===FS.uf);const listas={};
-  MOD_F.forEach(m=>listas[m]=rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF));
-  return{vi,listas};
+  const rs=DATA.filter(d=>d.cargo===FS.cargo&&d.uf===FS.uf);
+  return{vi,listas:listasDoEstado(rs,FS.dupla)};
 }
-function desenharCenario(){
+// Listas de cada modalidade num cargo e estado.
+//  'homolog': cada pessoa só na lista do grupo em que a homologação a colocou (o que a CAIXA fez nos casos conhecidos);
+//  'duas'   : quem está classificado em mais de uma lista entra em todas, e é chamado pela que o alcançar primeiro.
+const CHAVE_LISTA={AC:'AC',PCD:'PCD','PPP/PN':'PN',PI:'PI',PQ:'PQ'};
+function posNaLista(d,m){
+  if(d.listasPolo&&d.listasPolo[CHAVE_LISTA[m]]!=null)return d.listasPolo[CHAVE_LISTA[m]];
+  return d.lista===m?d.rankUF:null;
+}
+function listasDoEstado(rs,modo){
+  const listas={};
+  MOD_F.forEach(m=>listas[m]=modo==='duas'
+    ?rs.filter(d=>posNaLista(d,m)!=null).sort((a,b)=>posNaLista(a,m)-posNaLista(b,m)||a.rankUF-b.rankUF)
+    :rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF));
+  return listas;
+}
+// "Também 5ª na lista PN": outras listas em que a pessoa aparece, além do grupo da homologação
+function outrasListas(p){
+  if(!p||!p.listasPolo)return [];
+  return Object.entries(p.listasPolo).filter(([k])=>k!==CHAVE_LISTA[p.lista]&&!(k==='AC'&&p.lista!=='AC')).map(([k,v])=>`${k==='PCD'?'PcD':k} ${v}ª`);
+}
+// Pistas no cenário "pelas duas listas": a pessoa fica só na faixa da lista que a chamou (ou na do seu grupo, se não for chamada)
+function vistaUnica(listas,fila){
+  const por=new Map(fila.filter(x=>x.pessoa).map(x=>[x.pessoa,x.lista]));
+  const out={};MOD_F.forEach(m=>out[m]=(listas[m]||[]).filter(p=>(por.get(p)||p.lista)===m));
+  return out;
+}
+// Onde cada pessoa é chamada nos dois cenários (só no modo "com os aprovados")
+function chamadasDosCenarios(vi){
+  const rs=DATA.filter(d=>d.cargo===FS.cargo&&d.uf===FS.uf);
+  const mapa=f=>new Map(f.filter(x=>x.pessoa).map(x=>[x.pessoa,x]));
+  return {rs,A:mapa(montarFila(vi,listasDoEstado(rs,'homolog'))),B:mapa(montarFila(vi,listasDoEstado(rs,'duas')))};
+}
+const textoChamada=x=>x?`${x.k}ª chamada · ${modSig(x.lista)}`:'fora desta fila';
+function desenharDuplos(vi){
+  const el=document.getElementById('filaDuplos'),box=document.getElementById('filaDuplaBox');
+  box.hidden=FS.modo!=='real';
+  if(FS.modo!=='real'){el.innerHTML='';return}
+  const {rs,A,B}=chamadasDosCenarios(vi);
+  const muda=rs.filter(p=>{const a=A.get(p),b=B.get(p);return (a&&a.k)!==(b&&b.k)||(a&&a.lista)!==(b&&b.lista)});
+  const duplosAC=rs.filter(p=>p.lista==='AC'&&outrasListas(p).length);
+  const linhas=[...new Set([...duplosAC,...muda])].sort((p,q)=>Math.min(A.get(p)?.k??999,B.get(p)?.k??999)-Math.min(A.get(q)?.k??999,B.get(q)?.k??999));
+  if(!linhas.length){el.innerHTML='';return}
+  const MAX=12,vis=linhas.slice(0,MAX);
+  el.innerHTML=`<details class="duplos" ${duplosAC.length?'open':''}><summary>Quem está classificado em duas listas e o que muda entre os cenários <span class="note">(${linhas.length} pessoa(s))</span></summary>
+    <p class="note">A homologação colocou cada pessoa num só grupo (por exemplo, <b>AC – cadastro reserva</b>), mas ela continua classificada nas outras listas em que concorreu. O painel mostra por padrão o cenário <b>Como a homologação agrupa</b>, que foi o que a CAIXA fez nos casos conhecidos. Veja abaixo onde cada pessoa seria chamada nos dois cenários.</p>
+    <div class="tw"><table class="tab-duplos"><thead><tr><th>Pessoa</th><th>Grupo na homologação</th><th>Como a homologação agrupa</th><th>Pelas duas listas</th></tr></thead><tbody>
+    ${vis.map(p=>{const a=A.get(p),b=B.get(p),ol=outrasListas(p);return `<tr><td data-l="Pessoa"><b>${esc(p.ini)}</b></td>
+      <td data-l="Grupo"><span class="mod ${modCls(p.lista)}">${modSig(p.lista)}</span> ${p.sit==='VI'?'vaga imediata':'cadastro reserva'}${ol.length?` <span class="tag-dupla">também ${ol.join(' · ')}</span>`:''}</td>
+      <td data-l="Como a homologação agrupa">${textoChamada(a)}</td><td data-l="Pelas duas listas">${textoChamada(b)}${a&&b&&b.k<a.k?' <span class="fd-seta">▲ antes</span>':a&&b&&b.k>a.k?' <span class="fd-seta baixo">▼ depois</span>':''}</td></tr>`}).join('')}
+    </tbody></table></div>${linhas.length>MAX?`<p class="note">E mais ${linhas.length-MAX} pessoa(s) mais adiante na fila.</p>`:''}</details>`;
+}
+// "Procure seu nome nesta fila"
+// "Procure seu nome": cartão com a chamada prevista da pessoa (e o outro cenário, se ela estiver em duas listas)
+function buscarNaFila(){
+  const q=document.getElementById('filaBusca').value,el=document.getElementById('filaPosicao');
+  document.querySelectorAll('#fila li.achado').forEach(li=>li.classList.remove('achado'));
+  if(FS.modo!=='real'){el.innerHTML='';return}
+  const {rs,A,B}=chamadasDosCenarios(dadosAtuais.vi);
+  const feitas=rs.filter(d=>d.conv).length,total=filaAtual.length;
+  if(!q.trim()){
+    el.innerHTML=`<div class="pos-vazio"><span data-i="userCheck"></span><span>Digite seu nome acima para ver em qual chamada você seria convocado.<br><span class="note">Neste cargo e estado, a comissão registrou <b>${feitas}</b> convocação(ões) até agora, de ${total} chamadas previstas (vagas imediatas e cadastro reserva).</span></span></div>`;
+    el.querySelectorAll('[data-i]').forEach(e=>e.innerHTML=ico(e.dataset.i));return}
+  const achados=rs.filter(p=>casaBusca(q,p.ini)).slice(0,3);
+  if(!achados.length){el.innerHTML=`<div class="pos-vazio"><span>Ninguém com esse nome em ${esc(curto(FS.cargo))} · ${esc(FS.uf)}. Confira o cargo e o estado acima.</span></div>`;return}
+  const princ=FS.dupla==='duas'?B:A,alt=FS.dupla==='duas'?A:B;
+  el.innerHTML=achados.map(p=>{
+    const x=princ.get(p),y=alt.get(p),ol=outrasListas(p);
+    const grupo=`<span class="mod ${modCls(p.lista)}">${modSig(p.lista)}</span> ${p.sit==='VI'?'vaga imediata':'cadastro reserva'} · ${p.rankUF}º no estado`;
+    let corpo;
+    if(p.conv)corpo=`<p class="pos-res ok">✓ Já ${p.presumida?'consta como convocado(a) (presumido)':'foi convocado(a)'}${p.dataConv?` em ${new Date(p.dataConv+'T12:00:00').toLocaleDateString('pt-BR')}`:''}.</p>`;
+    else if(x){const falta=x.k-feitas;
+      corpo=`<p class="pos-res">Pela simulação, seria chamado(a) na <b class="pos-k">${x.k}ª chamada</b> <span class="note">(pela lista ${modSig(x.lista)})</span></p>
+        <p class="note">${falta>0?`A comissão registrou ${feitas} convocação(ões) neste cargo e estado: faltam cerca de <b>${falta}</b> chamada(s) até a sua.`:`As chamadas registradas já passaram desta posição: confira se a sua convocação foi informada à comissão.`}</p>`}
+    else corpo=`<p class="pos-res">Fica depois das ${total} chamadas previstas (vagas imediatas e cadastro reserva).</p><p class="note">Só seria chamado(a) se houver desistências, eliminações ou novas vagas.</p>`;
+    const dupla=ol.length?`<p class="pos-dupla"><b>Você também está classificado(a) em ${ol.join(' · ')}.</b> ${y&&(!x||y.k!==x.k)?`Se a CAIXA ${FS.dupla==='duas'?'seguir o grupo da homologação':'considerar as duas listas'}, seria a <b>${y.k}ª chamada</b> (pela lista ${modSig(y.lista)}).`:'Nos dois cenários a chamada é a mesma.'} <a href="#vagas" class="ver-duplo">Entenda</a></p>`:'';
+    return `<div class="pos-card"><div class="pos-nome"><b>${esc(p.ini)}</b><span>${esc(curto(p.cargo))} · ${esc(p.uf)} · ${grupo}</span></div>${corpo}${dupla}</div>`}).join('');
+  el.querySelectorAll('.ver-duplo').forEach(a=>a.onclick=e=>{e.preventDefault();const d=document.getElementById('faqDuplo');d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})});
+  const atual=princ.get(achados[0]);
+  if(atual){const li=document.querySelector(`#fila li[data-k="${atual.k}"]`);if(li)li.classList.add('achado')}
+}
+// Números do estado e as próximas chamadas (o que a pessoa precisa ver sem abrir a fila completa)
+function desenharNumeros(vi,totVI){
+  const elN=document.getElementById('filaNumeros'),elP=document.getElementById('filaProximas');
+  const total=filaAtual.length,feitas=filaAtual.filter(x=>x.pessoa&&x.pessoa.conv).length;
+  const prox=filaAtual.filter(x=>!(x.pessoa&&x.pessoa.conv));
+  const comp=MOD_F.filter(m=>vi[m]).map(m=>`<span class="mod ${modCls(m)}">${modSig(m)}</span> ${vi[m]}`).join(' ');
+  elN.innerHTML=[
+    ['Vagas imediatas',totVI,comp+` · cadastro reserva ${totVI*3}`],
+    ['Convocações registradas',FS.modo==='real'?feitas:'–',FS.modo==='real'?`de ${total} chamadas previstas`:'cenário montado'],
+    ['Próxima chamada',prox[0]?`${prox[0].k}ª`:'–',prox[0]?`<span class="mod ${modCls(prox[0].lista||prox[0].slot)}">${modSig(prox[0].lista||prox[0].slot)}</span> ${prox[0].pessoa?esc(prox[0].pessoa.ini):'sem candidato'}`:'fila concluída']
+  ].map(([l,v,s])=>`<div class="fn"><span class="fn-l">${l}</span><b class="fn-v">${v}</b><span class="fn-s">${s}</span></div>`).join('');
+  const P=prox.slice(0,5);
+  elP.innerHTML=P.length?`<div class="proximas"><div class="px-tit">Próximas chamadas previstas</div><ol>${P.map(x=>`<li><span class="k">${x.k}ª</span><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span><span class="quem">${x.pessoa?esc(x.pessoa.ini):'<span class="vazia">sem candidato</span>'}</span><span class="note">${x.pessoa&&!x.pessoa.ficticio?x.pessoa.rankUF+'º no estado · ':''}${x.vi?'vaga imediata':'cadastro reserva'}</span></li>`).join('')}</ol></div>`:'';
+  document.getElementById('filaCompletaTit').textContent=`Ver a fila completa (${total} chamadas), com animação e o motivo de cada chamada`;
+}function desenharCenario(){
   const el=document.getElementById('filaCenario');el.hidden=FS.modo!=='livre';if(el.hidden)return;
   const ordem=['AC','PCD','PPP/PN','PI','PQ'];
   el.innerHTML=`<span></span>${ordem.map(m=>`<span class="mod ${modCls(m)}">${modSig(m)}</span>`).join('')}
@@ -2115,8 +2312,10 @@ function desenharCenario(){
 }
 function desenharFila(cenarioTambem){
   pararFila();if(cenarioTambem)desenharCenario();
-  const {vi,listas}=dadosAtuais=dadosFila();filaAtual=montarFila(vi,listas);
-  const totVI=MOD_F.reduce((s,m)=>s+(vi[m]||0),0),ap=MOD_F.reduce((s,m)=>s+(listas[m]||[]).length,0);
+  const {vi,listas}=dadosFila();filaAtual=montarFila(vi,listas);
+  // Nas pistas cada pessoa aparece numa faixa só: a da lista que a chamou (no cenário "pelas duas listas")
+  const listasVista=FS.modo==='real'&&FS.dupla==='duas'?vistaUnica(listas,filaAtual):listas;dadosAtuais={vi,listas:listasVista};
+  const totVI=MOD_F.reduce((s,m)=>s+(vi[m]||0),0),ap=new Set(MOD_F.flatMap(m=>listas[m]||[])).size;
   const revs=filaAtual.filter(x=>x.rev),vazias=filaAtual.filter(x=>!x.pessoa).length;
   const porSlot=MOD_F.filter(m=>vi[m]).map(m=>`<span class="mod ${modCls(m)}">${modSig(m)}</span> ${vi[m]}`).join(' ');
   const resumoRev=revs.length?(()=>{const g=d3.rollups(revs,v=>v.length,x=>x.slot+'>'+x.lista);return ' Vagas que passaram de uma cota para outra: '+g.map(([k,n])=>{const [a,b]=k.split('>');return `${n} de ${modSig(a)} → ${modSig(b)}`}).join(', ')+'.'})():'';
@@ -2130,14 +2329,17 @@ function desenharFila(cenarioTambem){
     const det=[];
     if(p&&!p.ficticio)det.push(`${p.rankUF}º no estado`);
     if(x.rev)det.push(`<span class="tag-rev">vaga ${modSig(x.slot)} → ${modSig(x.lista)}</span>`);
+    const ol=outrasListas(p);if(ol.length)det.push(`<span class="tag-dupla" title="Classificação na homologação em outra lista">também ${ol.join(' · ')}</span>`);
+    if(p&&p.lista&&x.lista&&p.lista!==x.lista&&!x.rev)det.push(`<span class="tag-dupla">chamada pela lista ${modSig(x.lista)}</span>`);
     if(p&&p.conv)det.push(p.presumida?'<span class="ok">convocado (presumido)</span>':'<span class="ok">✓ convocado</span>');
     lis.push(`<li data-k="${x.k}"><span class="k">${x.k}ª</span><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span><span class="quem">${quem}</span>${det.length?`<span class="det">${det.join('')}</span>`:''}<span class="por">${porQue(x,!vi.PCD&&x.k===1)}</span></li>`);
   });
   document.getElementById('fila').innerHTML=lis.join('');
   document.getElementById('fila').hidden=FS.vista!=='lista';
   document.getElementById('pistas').hidden=FS.vista!=='pistas';
-  if(FS.vista==='pistas'){montarPistas(vi,listas,totVI);mostrarAte(0)}else mostrarAte(filaAtual.length);
+  if(FS.vista==='pistas'){montarPistas(vi,listasVista,totVI);mostrarAte(0)}else mostrarAte(filaAtual.length);
   desenharMemoria(vi,listas);
+  desenharNumeros(vi,totVI);desenharDuplos(vi);buscarNaFila();
 }
 // ---- Memória de cálculo: quanto cada cota acumulou a cada chamada ----
 // Em cada chamada k, a cota c acumula k × percentual do edital; o saldo é esse acumulado menos as vagas
@@ -2506,6 +2708,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-14 21:30','novo','"Vagas e regras" mais simples, com a sua posição na fila','A aba foi reorganizada: escolha o cargo e o estado, procure o seu nome e veja em qual chamada você seria convocado e quantas faltam. Logo abaixo ficam as próximas chamadas previstas e a fila completa. Quem está classificado em duas listas (por exemplo, AC e PN) vê também a outra possibilidade, explicada num novo item de "Situações especiais". A memória de cálculo, a conferência e o quadro de vagas ficam na "Visão detalhada".'],
   ['2026-10-14 18:30','melhoria','Cargos do painel no título','Sugestão de uma aprovada: o título agora deixa claro que o painel é dos cargos de Arquiteto e Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho), e o rodapé avisa que o cargo de Médico do Trabalho não faz parte do painel.'],
   ['2026-10-13 23:40','novo','Busca nas listas','A lista de aprovados e a lista de convocações ganharam um campo de busca. Não precisa digitar o nome exato: acentos, maiúsculas e letras dobradas não importam ("alan" encontra "Állan"), e dá para combinar nome, cargo e estado ("joao civil amapa").'],
   ['2026-10-13 23:05','melhoria','Simulador da fila ajustado e com memória de cálculo','A regra do simulador foi ajustada para bater com o relatório oficial de convocações da CAIXA de 13/10: a cota ganha a vaga quando a proporção acumulada passa em meia vaga o que ela já recebeu (com a PN na 3ª chamada, as próximas são a 6ª, 10ª, 14ª…). Abaixo da fila, a nova memória de cálculo mostra, chamada a chamada, quanto cada cota acumulou até ganhar a vaga.'],
@@ -2678,8 +2881,8 @@ const TOUR=[
   {aba:'panorama',s:['#tbl1'],card:1,t:'Lista de aprovados',x:['A lista com nota, posição no estado, cota e situação. Clique no título de uma coluna para ordenar e use <b>PDF</b> para baixar a lista com os filtros escolhidos.']},
   {aba:'conv',s:['#k2'],t:'Convocações',x:['Quantas pessoas já foram convocadas e quantas aguardam. As convocações chegam pelos próprios aprovados e são conferidas pela comissão.','A marca <b>presumida</b> indica uma convocação deduzida pela ordem de classificação, que a comissão ainda vai confirmar.']},
   {aba:'conv',s:['#tbl2'],card:1,t:'Quem foi e quem não foi convocado',x:['Alterne entre os convocados (com a data), quem tem vaga imediata e aguarda, e o cadastro reserva. Também pode ser baixado em PDF.']},
-  {aba:'vagas',s:['.fila-ctl'],t:'Simulador da fila',x:['Escolha o cargo e o estado para ver uma estimativa, chamada a chamada, da ordem de convocação, com as cotas e as vagas que passam de uma cota para outra.','É uma simulação da comissão, não a lista oficial: quem define a ordem é a CAIXA.']},
-  {aba:'vagas',s:['.fila-play'],t:'Veja a fila andar',x:['<b>Animar a fila</b> mostra as chamadas uma a uma. Use <b>Anterior</b> e <b>Próxima chamada</b> para ir no seu ritmo, ou troque entre <b>Pistas</b> e <b>Lista</b>.']},
+  {aba:'vagas',s:['.fila-ctl'],t:'Quando vou ser chamado?',x:['Escolha o cargo e o estado e <b>procure o seu nome</b>: o painel mostra em qual chamada você seria convocado pela simulação e quantas chamadas faltam. Se você estiver classificado em duas listas (por exemplo, AC e PN), ele mostra também a outra possibilidade.','É uma simulação da comissão, não a lista oficial: quem define a ordem é a CAIXA.']},
+  {aba:'vagas',s:['#filaNumeros','#filaProximas'],t:'A fila do estado',x:['Quantas vagas o estado tem, quantas convocações já foram registradas e quem são as <b>próximas chamadas previstas</b>. Logo abaixo, <b>Ver a fila completa</b> abre todas as chamadas, com animação e o motivo de cada uma.','Ligue a <b>Visão detalhada</b> para ver a memória de cálculo, quem está em duas listas e o quadro de vagas do edital.']},
   {aba:'vagas',s:['.regras-grid'],t:'Como funciona a convocação',x:['As regras do edital resumidas: quem é chamado primeiro, a proporção das cotas e para onde vai a vaga quando falta gente numa cota. Mais abaixo está o quadro de vagas do Anexo I.']},
   {aba:'docs',s:['#docPerfil'],card:1,t:'Checklist de documentos',x:['Para quem foi convocado: responda às perguntas e a lista de documentos se ajusta ao seu caso, com a explicação de cada um e PDF para imprimir.','Suas respostas ficam salvas só neste aparelho.']},
   {aba:'docs',s:['#docLista'],card:1,t:'Seu checklist',x:['A lista montada para o seu caso, com a explicação de cada documento e de onde ele vem (edital ou Relação da CAIXA). Marque o que já separou: a barra mostra quanto falta.','Use <b>PDF do checklist</b> para imprimir e <b>Desmarcar tudo</b> para recomeçar.']},
@@ -2883,7 +3086,7 @@ const SNAPSHOT=/*SNAPSHOT*/{"em":"2026-10-13T12:01:12.255Z","data":[{"cargo":"Ar
 const DB={
   url:'https://ssgtryzcesgyuiltovmu.supabase.co',
   chave:'sb_publishable_cTwDqwQkTA8sJsMbuAIXRA_oCKeeaLU',
-  colunas:'id,nome_publico,cargo,uf,macropolo,cota,situacao,nota,posicao_uf,class_macro,convocacao,validacao,data_convocacao,atualizado_em',
+  colunas:'id,nome_publico,cargo,uf,macropolo,cota,situacao,nota,posicao_uf,class_macro,convocacao,validacao,data_convocacao,atualizado_em,listas_polo',
   intervalo:2*60*1000 // nova consulta a cada 2 minutos com a página aberta
 };
 const COTA_DB={AC:'AC',PcD:'PCD',PN:'PPP/PN',PI:'PI',PQ:'PQ'};
@@ -2895,7 +3098,7 @@ async function lerBanco(){
     sit:a.situacao==='Vaga imediata'?'VI':'CR',lista:COTA_DB[a.cota],listas:[COTA_DB[a.cota]],
     rankUF:a.posicao_uf,classMacro:a.class_macro,
     conv:a.convocacao==='Sem informação'?null:(a.convocacao==='Convocado'||a.convocacao==='Empossado'),
-    situacaoConv:a.convocacao,dataConv:a.data_convocacao,atualizado:a.atualizado_em,presumida:a.validacao==='Presumida'
+    situacaoConv:a.convocacao,dataConv:a.data_convocacao,atualizado:a.atualizado_em,presumida:a.validacao==='Presumida',listasPolo:a.listas_polo||null
   }));
 }
 // Muda sempre que alguém inclui, altera ou exclui um registro
