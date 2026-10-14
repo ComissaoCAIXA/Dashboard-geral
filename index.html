@@ -741,6 +741,42 @@ main .card .seg button{padding-top:0;padding-bottom:0;display:inline-flex;align-
 /* no celular, seletores com texto em duas linhas crescem o necessário (mínimo 36px) */
 @media (max-width:620px){main .card .seg{height:auto;min-height:var(--ctl-sm)}main .card .seg button{padding:5px 6px;line-height:1.25}}
 [hidden]{display:none!important}
+/* Memória de cálculo do simulador */
+.memoria{margin-top:14px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+.memoria>summary{cursor:pointer;display:flex;align-items:center;gap:8px;padding:12px 14px;font-weight:650;font-size:14px;list-style:none}
+.memoria>summary::-webkit-details-marker{display:none}
+.memoria>summary svg{width:16px;height:16px;color:var(--s1)}
+.memoria>summary::after{content:"▾";margin-left:auto;color:var(--muted)}
+.memoria:not([open])>summary::after{content:"▸"}
+#mcCorpo{padding:0 14px 14px}
+.mc-expl{font-size:13px;line-height:1.6;color:var(--ink2);margin:0 0 10px}
+.mc-expl b{color:var(--ink)}
+.mc-scroll{overflow-x:auto;border:1px solid var(--grid);border-radius:6px}
+.mc-tab{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+.mc-tab th,.mc-tab td{padding:6px 8px;border-bottom:1px solid var(--grid);text-align:left;white-space:nowrap;vertical-align:middle}
+.mc-tab thead th{position:sticky;top:0;background:var(--surface);color:var(--ink2);font-weight:600;font-size:12px}
+.mc-tab thead th small{display:block;font-weight:500;color:var(--muted)}
+.mc-tab td.k{font-weight:700}
+.mc-tab tr.divisor td{background:var(--empty);color:var(--ink2);font-weight:600;font-size:12px;text-align:center}
+.mc-cel{position:relative;min-width:150px}
+.mc-cel .cta{color:var(--muted)}
+.mc-cel .sal{font-weight:700}
+.mc-cel .barra{display:block;height:4px;border-radius:2px;background:var(--grid);margin-top:4px;overflow:hidden;width:110px}
+.mc-cel .barra i{display:block;height:100%;background:var(--c,var(--s1));opacity:.55}
+.mc-cel.pronta .barra i{opacity:1}
+.mc-cel.pronta{background:color-mix(in srgb,var(--c,var(--s1)) 7%,transparent)}
+.mc-cel.vez{background:color-mix(in srgb,var(--c,var(--s1)) 16%,transparent);box-shadow:inset 3px 0 0 var(--c,var(--s1))}
+.mc-cel.vez .sal::after{content:" ✓ vez";color:var(--c,var(--s1));font-weight:700}
+.mc-cel.vez[data-m="inicio"] .sal::after{content:" ✓ início"}
+.mc-cel.vez[data-m="sobra"] .sal::after{content:" ✓ sobra"}
+.mc-cel.PCD{--c:var(--g4)}.mc-cel.PN{--c:var(--g2)}.mc-cel.PI{--c:var(--g1)}.mc-cel.PQ{--c:var(--g5)}
+.mc-tab td.res .mod{margin-right:6px}
+.mc-tab td.mot{color:var(--ink2);white-space:normal;min-width:180px;font-size:12px}
+.mc-mais{margin-top:10px}
+.mc-leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--ink2);margin-top:8px}
+.mc-leg span{display:inline-flex;align-items:center;gap:6px}
+.mc-leg i{width:14px;height:14px;border-radius:3px;display:inline-block}
+
 /* Notícias da comissão */
 .ntc-btn{position:relative}
 .ntc-n{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center;box-shadow:0 0 0 2px var(--page)}
@@ -958,7 +994,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
         <details><summary>Como a simulação foi feita e conferida</summary>
           <ol>
             <li><b>Começo da fila (item 2.13.1).</b> O edital diz: <i>"A convocação iniciar-se-á por um candidato com deficiência, se houver, seguida por um candidato da ampla concorrência e, em seguida, por um candidato aprovado nas classificações de pessoas negras, indígenas ou quilombolas, se houver."</i> Nos estados <b>com vaga PcD</b>, a simulação segue isso ao pé da letra: PcD, AC e cota racial. Nos estados <b>sem vaga PcD</b>, o edital não diz como fica o começo; a simulação entende que a posição da PcD fica com a ampla concorrência: AC, AC e cota racial. Se o estado tem só 1 vaga AC nas vagas imediatas, a cota vem logo depois dela. Foi assim que a CAIXA fez em 08/10: no CE e em PE (2 vagas AC e 1 PN) chamou AC, AC e então PN; no DF (1 AC e 1 PN), AC e PN.</li>
-            <li><b>Chamadas seguintes (itens 2.8 e 2.13.2).</b> O edital diz que a convocação ocorrerá <i>"de forma alternada, respeitando a proporção"</i> (2.8) e que <i>"as convocações seguirão conforme o número de vagas informado no Edital, em observância à reserva de vagas de 5% para PcD e 25% para pessoas negras, 3% a pessoas indígenas e 2% a pessoas quilombolas"</i> (2.13.2). Por isso a simulação usa esses <b>percentuais fixos</b>, contados sobre as chamadas de cada cargo e estado: PN tem 1 a cada 4 chamadas (4ª, 8ª, 12ª…), PcD 1 a cada 20, e assim por diante. Nas demais chamadas, ampla concorrência. O número de vagas de cada modalidade em cada estado vem do Anexo I: as <b>vagas imediatas</b> são preenchidas primeiro, com exatamente essas quantidades (se a ampla concorrência do bloco acaba antes, seguem as vagas de cota que faltam), e depois vem o <b>cadastro reserva</b>.</li>
+            <li><b>Chamadas seguintes (itens 2.8 e 2.13.2).</b> O edital diz que a convocação ocorrerá <i>"de forma alternada, respeitando a proporção"</i> (2.8) e que <i>"as convocações seguirão conforme o número de vagas informado no Edital, em observância à reserva de vagas de 5% para PcD e 25% para pessoas negras, 3% a pessoas indígenas e 2% a pessoas quilombolas"</i> (2.13.2). Por isso a simulação usa esses <b>percentuais fixos</b>, contados sobre as chamadas de cada cargo e estado: a cada chamada, cada cota acumula o seu percentual, e ela ganha a vaga quando o acumulado passa em <b>meia vaga</b> o que ela já recebeu (arredondamento da proporção). Com a PN chamada no começo da fila (3ª), as próximas PN são a 6ª, 10ª, 14ª chamada…; a PcD, depois da 1ª, volta na 30ª. Nas demais chamadas, ampla concorrência. Foi esta regra que bateu com todos os 41 cargos e estados do relatório oficial de convocações da CAIXA de 13/10/2026; a conta de cada chamada aparece na memória de cálculo, abaixo da fila. O número de vagas de cada modalidade em cada estado vem do Anexo I: as <b>vagas imediatas</b> são preenchidas primeiro, com exatamente essas quantidades (se a ampla concorrência do bloco acaba antes, seguem as vagas de cota que faltam), e depois vem o <b>cadastro reserva</b>.</li>
             <li><b>Por que não usar a "fatia" de cada estado (item 2.12.2).</b> O edital explica que, para PcD e pessoas negras, <i>"a aplicação das cotas foi proporcional ao número de vagas por cargo e por polo"</i> e que, para indígenas e quilombolas, <i>"a alocação considerou o total de vagas por Macropolo e a representatividade populacional"</i>, sendo essas vagas colocadas em alguns polos. Com poucas vagas por estado, os arredondamentos distorcem a fatia local (no CE, 1 vaga PN em 3 = 33%; no AM, 1 vaga PI em 2 = 50%). Por isso a ordem segue os percentuais do edital, e não a fatia de cada estado.</li>
             <li><b>Vagas que sobram (item 2.12):</b> quando uma modalidade não tem mais aprovados, a vaga passa para a próxima da cadeia descrita no edital, na mesma posição da fila.</li>
             <li><b>Conferência com a convocação real:</b> a simulação foi comparada com as convocações registradas pela comissão (rodada de 08/10/2026). <span id="filaConfere">Calculando…</span></li>
@@ -984,6 +1020,10 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
       <div class="pistas" id="pistas"></div>
       <ol class="fila" id="fila" hidden></ol>
       <p class="aviso-sim"><b>Lembrete:</b> simulação da comissão, não é a lista oficial. Quem convoca e define a ordem é a CAIXA. Em cada chamada aparece o item do edital que explica aquela posição.</p>
+      <details class="memoria" id="filaMemoria" open>
+        <summary><span data-i="table"></span>Memória de cálculo: como as cotas acumulam até ganhar uma vaga</summary>
+        <div id="mcCorpo"></div>
+      </details>
     </div>
 
     <div class="card">
@@ -995,7 +1035,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
           <p>A convocação começa por <b>1 pessoa com deficiência</b> (se houver vaga PcD), depois <b>1 da ampla concorrência</b> e depois <b>1 de cota racial</b> (negros, indígenas ou quilombolas, se houver). <small>Item 2.13.1</small></p>
           <p>Sem vaga PcD no estado, a posição dela fica com a ampla concorrência: AC, AC e cota racial (ou AC e cota, se o estado tiver só 1 vaga AC), como a CAIXA fez na convocação de 08/10.</p></div>
         <div class="regra"><span class="rn">3</span><h3>Depois, alternando na proporção</h3>
-          <p>Depois, as cotas seguem os percentuais fixos do edital, contados sobre as chamadas de cada cargo e estado: <b>PN 25%</b> (1 a cada 4: 4ª, 8ª, 12ª chamada…), <b>PcD 5%</b> (1 a cada 20), <b>PI 3%</b> e <b>PQ 2%</b>; nas demais, ampla concorrência. Primeiro são preenchidas as vagas imediatas, com as quantidades exatas do Anexo I, e depois o cadastro reserva. <small>Itens 2.8 e 2.13.2</small></p></div>
+          <p>Depois, as cotas seguem os percentuais fixos do edital, contados sobre as chamadas de cada cargo e estado: <b>PN 25%</b>, <b>PcD 5%</b>, <b>PI 3%</b> e <b>PQ 2%</b>. A cada chamada a cota acumula o seu percentual e ganha a vaga quando passa em meia vaga o que já recebeu (com a PN na 3ª chamada, as próximas são a 6ª, 10ª, 14ª…); nas demais, ampla concorrência. Primeiro são preenchidas as vagas imediatas, com as quantidades exatas do Anexo I, e depois o cadastro reserva. <small>Itens 2.8 e 2.13.2</small></p></div>
         <div class="regra"><span class="rn">4</span><h3>Se faltar gente numa cota, a vaga passa adiante</h3>
           <div class="rev">
             <div><span class="rl">Quilombolas</span><span class="mod PQ">PQ</span>→<span class="mod PI">PI</span>→<span class="mod PN">PN</span>→<span class="mod AC">AC</span></div>
@@ -1908,7 +1948,8 @@ document.getElementById('fProt').onsubmit=async e=>{e.preventDefault();const out
 //  1) começo das vagas imediatas (item 2.13.1): PcD (se o polo tem vaga PcD; senão a posição fica com a AC),
 //     depois AC e depois a cota racial com mais vagas no polo;
 //  2) depois, ordem fixa pelos percentuais do item 2.13.2 (5% PcD, 25% PN, 3% PI, 2% PQ), contados sobre o total
-//     de chamadas do polo: uma cota é chamada quando k × percentual ≥ chamadas dela + 1 (PN na 4ª, 8ª, 12ª…);
+//     de chamadas do polo: uma cota é chamada quando k × percentual − chamadas dela ≥ 0,5 (arredondamento;
+//     PN na 3ª pelo início e depois 6ª, 10ª, 14ª…). Bateu com os 41 cargos/estados do relatório da CAIXA de 13/10/2026;
 //     nas demais chamadas, AC. As vagas por polo vêm do Anexo I: o bloco das vagas imediatas tem exatamente
 //     a composição do edital; se a AC do bloco acaba, seguem as cotas restantes; depois vem o cadastro reserva (3×);
 //  3) se a lista daquela modalidade acabou, a vaga segue a cadeia de reversão do item 2.12.
@@ -1919,7 +1960,7 @@ const MOD_F=['PCD','AC','PPP/PN','PI','PQ'];
 const REV_F={PQ:['PI','PPP/PN','AC'],PI:['PQ','PPP/PN','AC'],'PPP/PN':['AC'],PCD:['AC'],AC:['PPP/PN','PCD','PI','PQ']};
 const PCT_F={PCD:.05,'PPP/PN':.25,PI:.03,PQ:.02};
 const modCls=m=>m==='PPP/PN'?'PN':m, modSig=m=>sigla(m);
-function montarFila(vi,listas){
+function montarFila(vi,listas,limiar=0.5){
   const usado={},chamadas={};MOD_F.forEach(m=>{usado[m]=0;chamadas[m]=0});
   const preencher=m=>{for(const c of [m,...REV_F[m]])if(usado[c]<(listas[c]||[]).length)return{slot:m,lista:c,pessoa:listas[c][usado[c]++],rev:c!==m};return{slot:m,lista:null,pessoa:null,rev:false}};
   const RES=['PCD','PPP/PN','PI','PQ'],out=[],semPcd=!vi.PCD;
@@ -1932,7 +1973,7 @@ function montarFila(vi,listas){
       else if(imediatas&&j===2&&cap.AC>0){m='AC';motivo='inicio'}
       else if(imediatas&&j===3&&cot.length&&!cot.some(c=>chamadas[c])){m=cot.find(c=>cap[c]>0)||null;motivo='inicio'}
       if(!m){
-        let best=-Infinity;for(const c of RES){if(cap[c]<=0)continue;const d=k*PCT_F[c]-chamadas[c];if(d>=1-1e-9&&d>best+1e-9){best=d;m=c}}
+        let best=-Infinity;for(const c of RES){if(cap[c]<=0)continue;const d=k*PCT_F[c]-chamadas[c];if(d>=limiar-1e-9&&d>best+1e-9){best=d;m=c}}
         if(!m&&cap.AC>0){m='AC';motivo='ac'}
         if(!m){motivo='sobra';for(const c of RES){if(cap[c]<=0)continue;const d=k*PCT_F[c]-chamadas[c];if(d>best+1e-9){best=d;m=c}}}
       }
@@ -1942,7 +1983,7 @@ function montarFila(vi,listas){
 }// Item do edital que explica cada chamada
 const ITEM_REV={PQ:'2.12.3.1',PI:'2.12.3.2','PPP/PN':'2.12.4',PCD:'2.12.5',AC:'2.12.6'};
 function porQue(x,primeiraAC){
-  const pct=c=>({PCD:'5% (1 a cada 20 chamadas)','PPP/PN':'25% (1 a cada 4 chamadas)',PI:'3%',PQ:'2%'})[c];
+  const pct=c=>({PCD:'5%','PPP/PN':'25%',PI:'3%',PQ:'2%'})[c];
   let t=x.motivo==='inicio'
     ?(x.slot==='PCD'?'Item 2.13.1: a convocação começa por pessoa com deficiência'
       :x.slot==='AC'?(x.j===1?'Item 2.13.1: sem vaga PcD no estado, a 1ª posição (que seria da PcD) fica com a ampla concorrência'
@@ -1950,7 +1991,7 @@ function porQue(x,primeiraAC){
       :'Item 2.13.1: em seguida, um de cota racial')
     :x.motivo==='ac'?`Item 2.13.2: nesta chamada (${x.k}ª do estado) não é a vez de nenhuma cota pelos percentuais do edital, então é a ampla concorrência`
     :x.motivo==='sobra'?`As vagas de ampla concorrência ${x.vi?'das vagas imediatas':'do cadastro reserva'} deste estado já foram chamadas; seguem as vagas de cota que faltam nesse bloco (Anexo I)`
-    :`Item 2.13.2: vez de ${sigla(x.slot)} pelos percentuais do edital. ${sigla(x.slot)} tem ${pct(x.slot)} das chamadas, e esta é a ${x.k}ª chamada do estado`;
+    :`Item 2.13.2: vez de ${sigla(x.slot)} pelos percentuais do edital. Na ${x.k}ª chamada do estado, o acumulado de ${sigla(x.slot)} (${x.k} × ${pct(x.slot)}) passou em meia vaga o que ela já tinha recebido (veja a memória de cálculo)`;
   if(x.rev)t+=`. Sem aprovados de ${sigla(x.slot)} disponíveis, a vaga passa para ${sigla(x.lista)} (item ${ITEM_REV[x.slot]})`;
   else if(!x.pessoa)t+=`. Não há aprovados para esta vaga`;
   return t+'.';
@@ -1975,7 +2016,7 @@ function conferirFila(){
     ['Arquiteto','PE','Mesma composição, com uma chamada a mais: AC, AC e então PN.'],
     ['Arquiteto','DF','Sem vaga PcD, 1 AC e 1 PN: AC e logo depois PN, porque o estado tem só 1 vaga AC nas vagas imediatas e a cota vem logo depois dela.'],
     ['Engenheiro Civil','MA','Com vaga PcD: PcD primeiro, depois AC e depois PN, ao pé da letra do item 2.13.1.'],
-    ['Engenheiro Civil','SP','Com vaga PcD: PcD, AC e PN, e depois mais AC até a próxima vez do PN pelos 25% do edital (8ª chamada).']
+    ['Engenheiro Civil','SP','Com vaga PcD: PcD, AC e PN, e depois mais AC até a próxima vez do PN pelos 25% do edital (6ª chamada).']
   ];
   const exHTML=EXEMPLOS.map(([c,u,txt])=>{
     const v=VAGAS.find(x=>x.cargo===c&&x.uf===u);if(!v)return'';
@@ -2068,6 +2109,44 @@ function desenharFila(cenarioTambem){
   document.getElementById('fila').hidden=FS.vista!=='lista';
   document.getElementById('pistas').hidden=FS.vista!=='pistas';
   if(FS.vista==='pistas'){montarPistas(vi,listas,totVI);mostrarAte(0)}else mostrarAte(filaAtual.length);
+  desenharMemoria(vi,listas);
+}
+// ---- Memória de cálculo: quanto cada cota acumulou a cada chamada ----
+// Em cada chamada k, a cota c acumula k × percentual do edital; o saldo é esse acumulado menos as vagas
+// que a cota já recebeu. Quando o saldo chega ao limiar, é a vez da cota (a de maior saldo, se houver mais de uma).
+const MC={limiar:0.5,todas:false}; // mesmo limiar de montarFila
+const fmtN=v=>v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+function desenharMemoria(vi,listas){
+  const el=document.getElementById('mcCorpo');if(!el)return;
+  const fila=montarFila(vi,listas,MC.limiar);
+  const cotas=['PPP/PN','PCD','PI','PQ'].filter(c=>vi[c]>0);
+  if(!fila.length){el.innerHTML='<p class="mc-expl">Informe pelo menos uma vaga.</p>';return}
+  const pct=c=>Math.round(PCT_F[c]*100)+'%';
+  const lim=fmtN(MC.limiar).replace(/,?0+$/,"");
+  const MOT={inicio:'Início da fila (item 2.13.1)',ac:'Nenhuma cota chegou ao limiar: ampla concorrência',sobra:'Ampla concorrência do bloco acabou: segue a cota com mais saldo',cota:'Saldo da cota chegou ao limiar (item 2.13.2)'};
+  const ch={};cotas.forEach(c=>ch[c]=0);ch.AC=0;
+  const totVI=MOD_F.reduce((s,m)=>s+(vi[m]||0),0);
+  const linhas=[];
+  fila.forEach((x,i)=>{
+    if(i===totVI&&totVI)linhas.push(`<tr class="divisor"><td colspan="${cotas.length+3}">Fim das vagas imediatas · cadastro reserva</td></tr>`);
+    const cel=cotas.map(c=>{
+      const ac=x.k*PCT_F[c],s=ac-ch[c],pronta=x.motivo!=="inicio"&&s>=MC.limiar-1e-9,vez=x.slot===c;
+
+      return `<td class="mc-cel ${modCls(c)}${vez?' vez':pronta?' pronta':''}"${vez?` data-m="${x.motivo}"`:''}><span class="cta">${x.k} × ${pct(c)} = ${fmtN(ac)} − ${ch[c]} =</span> <span class="sal">${fmtN(s)}</span>
+        <span class="barra"><i style="width:${Math.max(0,Math.min(100,s/MC.limiar*100))}%"></i></span></td>`});
+    const p=x.pessoa,quem=!p?'sem candidato':p.ficticio?esc(p.ini):`${esc(p.ini)} <small>(${p.rankUF}º)</small>`;
+    linhas.push(`<tr><td class="k">${x.k}ª</td>${cel.join('')}<td class="res"><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span>${quem}${x.rev?` <small>(vaga ${modSig(x.slot)})</small>`:''}</td><td class="mot">${MOT[x.motivo]||''}</td></tr>`);
+    ch[x.slot]=(ch[x.slot]||0)+1;
+  });
+  const LIM=24,corte=!MC.todas&&linhas.length>LIM+1;
+  el.innerHTML=`<p class="mc-expl">A cada chamada, cada cota acumula o seu percentual do edital: <b>PN 25%</b>, <b>PcD 5%</b>, <b>PI 3%</b> e <b>PQ 2%</b> (item 2.13.2). O <b>saldo</b> é o acumulado menos as vagas que a cota já recebeu. Quando o saldo chega a <b>${lim}</b>, é a vez da cota (se duas chegam juntas, vai a de maior saldo). Nas demais chamadas, ampla concorrência. As três primeiras chamadas seguem o começo da fila do item 2.13.1 e já contam como vagas recebidas: por isso a cota chamada logo no início (a PcD, por exemplo) fica com saldo negativo por um tempo, até o acumulado alcançar a vaga que ela recebeu adiantada. Esta regra bateu com todos os 41 cargos e estados do relatório oficial de convocações da CAIXA de 13/10/2026.</p>
+    ${cotas.length?'':'<p class="mc-expl">Este estado não tem vagas de cota: todas as chamadas são de ampla concorrência.</p>'}
+    <div class="mc-scroll"><table class="mc-tab"><thead><tr><th>Chamada</th>${cotas.map(c=>`<th><span class="mod ${modCls(c)}">${modSig(c)}</span> ${pct(c)}<small>chamada × % − vagas já recebidas = saldo</small></th>`).join('')}<th>Quem é chamado</th><th>Por quê</th></tr></thead>
+      <tbody>${(corte?linhas.slice(0,LIM):linhas).join('')}</tbody></table></div>
+    <div class="mc-leg"><span><i style="background:color-mix(in srgb,var(--g2) 16%,transparent);box-shadow:inset 3px 0 0 var(--g2)"></i>Saldo chegou ao limiar e a cota foi chamada</span><span><i style="background:color-mix(in srgb,var(--g2) 7%,transparent)"></i>Saldo no limiar, mas outra cota tinha mais saldo</span><span><b>✓ início</b>: começo da fila (item 2.13.1)</span><span><b>✓ sobra</b>: a ampla concorrência do bloco acabou e a cota com mais saldo leva a vaga</span></div>
+    ${corte?`<button class="btn sec mc-mais" type="button" id="mcMais">Mostrar todas as ${fila.length} chamadas</button>`:''}`;
+
+  const mais=document.getElementById('mcMais');if(mais)mais.onclick=()=>{MC.todas=true;desenharMemoria(vi,listas)};
 }
 // ---- Visualização "Pistas" ----
 let tkDe=new Map();
@@ -2399,6 +2478,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-14 10:30','melhoria','Simulador da fila ajustado e com memória de cálculo','A regra do simulador foi ajustada para bater com o relatório oficial de convocações da CAIXA de 13/10: a cota ganha a vaga quando a proporção acumulada passa em meia vaga o que ela já recebeu (com a PN na 3ª chamada, as próximas são a 6ª, 10ª, 14ª…). Abaixo da fila, a nova memória de cálculo mostra, chamada a chamada, quanto cada cota acumulou até ganhar a vaga.'],
   ['2026-10-14 00:10','melhoria','De onde vêm os dados','O rodapé agora explica que o painel é uma iniciativa independente da Comissão de Aprovados, sem vínculo com a CAIXA, e de onde vêm as informações: edital, homologação, relatórios da CAIXA e o grupo dos aprovados.'],
   ['2026-10-13 23:00','novo','Notícias da comissão','Novo botão "Notícias" no topo: avisos publicados pela Comissão de Aprovados, com a importância e o assunto de cada um. Os avisos importantes aparecem no meio da tela na primeira vez que você abre o painel depois da publicação.'],
   ['2026-10-13 22:30','novo','Tour pelo painel','Novo botão "Tour" no topo: um passeio guiado, passo a passo, por todos os recursos do painel. Na primeira visita, o painel oferece o tour.'],
