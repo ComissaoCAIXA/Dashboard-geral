@@ -210,6 +210,15 @@ footer{color:var(--muted);font-size:12px;margin-top:24px;padding-top:18px;border
 footer .autor{display:flex;align-items:center;gap:10px}
 footer .autor b{display:block;color:var(--ink);font-size:13.5px}
 footer .autor-nome{font-weight:500;color:var(--ink2)}
+footer .rodape-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto}
+footer .rbtn{display:inline-flex;align-items:center;gap:7px;height:var(--ctl-sm);padding:0 14px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap}
+footer .rbtn svg{width:16px;height:16px;color:var(--ink2)}
+footer .rbtn:hover{border-color:var(--s1);color:var(--s1)}
+footer .rbtn:hover svg{color:var(--s1)}
+footer .rbtn.principal{background:var(--s1);border-color:var(--s1);color:#fff}
+footer .rbtn.principal svg{color:#fff}
+footer .rbtn.principal:hover{filter:brightness(1.08);color:#fff}
+@media (max-width:620px){footer .rodape-acoes{margin-left:0;width:100%}footer .rbtn{flex:1;justify-content:center}}
 footer .acesso-comissao{color:var(--ink2);text-decoration:underline;text-underline-offset:2px}
 footer .acesso-comissao:hover{color:var(--s1)}
 footer .autor span:not(.ic){display:block;color:var(--ink2);font-size:12.5px}
@@ -1153,7 +1162,8 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
   </aside>
 
   <footer>
-    <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida (Arquiteto · AP)</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026. · <a class="acesso-comissao ir-contato" href="#contato">Fale com a comissão</a> · <a class="acesso-comissao" href="comissao.html">Acesso da comissão</a></span></div></div>
+    <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida (Arquiteto · AP)</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026.</span></div></div>
+    <div class="rodape-acoes"><a class="rbtn principal ir-contato" href="#contato"><span data-i="mail"></span>Fale com a comissão</a><a class="rbtn" href="comissao.html"><span data-i="cadeado"></span>Acesso da comissão</a></div>
     <div id="foot"></div>
     <p class="aviso-legal"><b>Iniciativa independente, sem caráter oficial.</b> Este painel é organizado voluntariamente pela Comissão de Aprovados e não tem vínculo com a CAIXA nem com a banca do concurso. Os dados vêm de fontes públicas (o Edital nº 01/2025/NS, a homologação do resultado no Diário Oficial da União e os relatórios de convocação da CAIXA) e de informações dos próprios aprovados, reunidas no grupo de WhatsApp e conferidas pela comissão. Podem conter erros ou atrasos, e as simulações e os materiais de apoio são interpretações da comissão. Nada aqui substitui as publicações oficiais nem gera direito a convocação, e a comissão não se responsabiliza por decisões tomadas com base no painel. Confira sempre os documentos oficiais da CAIXA.</p>
     <section class="membros" aria-labelledby="membrosTit">
@@ -1265,6 +1275,7 @@ const ICONS={
   doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/>',
   avancar:'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
   novid:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/>',
+  cadeado:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   mega:'<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
   tour:'<circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2.1 6.3-6.3 2.1 2.1-6.3z"/>',
   x:'<path d="M18 6 6 18M6 6l12 12"/>'
@@ -2657,7 +2668,7 @@ const TOUR=[
   {s:['#ntcBtn'],t:'Notícias da comissão',x:['Avisos publicados pela comissão, como novas rodadas de convocação, com a importância e o assunto de cada um. O número vermelho mostra quantas você ainda não leu.','Os avisos importantes aparecem sozinhos no meio da tela quando você abre o painel.']},
   {s:['#novidBtn'],t:'Novidades',x:['O histórico de atualizações do painel. O ponto azul aparece quando há novidade que você ainda não viu.']},
   {s:['#tema'],t:'Modo claro e escuro',x:['Troque a aparência do painel quando quiser.']},
-  {s:['footer .autor'],t:'Fale com a comissão',x:['No rodapé fica o contato com a Comissão de Aprovados, para dúvidas, sugestões e correções.']},
+  {s:['footer .rodape-acoes','footer .autor'],t:'Fale com a comissão',x:['No rodapé ficam os botões <b>Fale com a comissão</b>, para dúvidas, sugestões e correções, e <b>Acesso da comissão</b>, a área restrita dos membros.']},
   {s:['footer .membros'],t:'Quem faz o painel',x:['Estes são os membros da Comissão de Aprovados, todos aprovados no concurso, com o cargo e o polo de cada um. São eles que conferem as convocações e mantêm o painel atualizado.','Pronto! Sempre que quiser rever, clique em <b>Tour</b> no topo da página.']}
 ];
 const TU={i:0,ativo:false,abaIni:'panorama',luz:null,pop:null,bloq:null};
