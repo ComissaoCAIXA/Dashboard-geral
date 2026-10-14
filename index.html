@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aprovados Caixa 2026</title>
+<title>Aprovados Caixa 2026 · Arquiteto e Engenharias</title>
 <meta name="robots" content="noindex">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-server@3.0.1/dist/topojson-server.min.js"></script>
@@ -872,8 +872,8 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
   <header>
     <div class="logo" data-i="award"></div>
     <div class="tt">
-      <h1>Concurso Caixa 2026 · Aprovados</h1>
-      <p>Ranking por cargo, estado e macrorregião, com a situação de cada convocação.</p>
+      <h1>Concurso Caixa 2026 · Arquiteto e Engenharias</h1>
+      <p>Aprovados de Arquiteto e Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho): ranking por cargo, estado e macrorregião, com a situação de cada convocação.</p>
     </div>
     <div class="acoes-topo">
       <button class="acao" type="button" data-acao="convocacao"><span data-i="edit"></span><span>Informar convocação</span></button>
@@ -1172,7 +1172,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
     <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida (Arquiteto · AP)</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026.</span></div></div>
     <div class="rodape-acoes"><a class="rbtn principal ir-contato" href="#contato"><span data-i="mail"></span>Fale com a comissão</a><a class="rbtn" href="comissao.html"><span data-i="cadeado"></span>Acesso da comissão</a></div>
     <div id="foot"></div>
-    <p class="aviso-legal"><b>Iniciativa independente, sem caráter oficial.</b> Este painel é organizado voluntariamente pela Comissão de Aprovados e não tem vínculo com a CAIXA nem com a banca do concurso. Os dados vêm de fontes públicas (o Edital nº 01/2025/NS, a homologação do resultado no Diário Oficial da União e os relatórios de convocação da CAIXA) e de informações dos próprios aprovados, reunidas no grupo de WhatsApp e conferidas pela comissão. Podem conter erros ou atrasos, e as simulações e os materiais de apoio são interpretações da comissão. Nada aqui substitui as publicações oficiais nem gera direito a convocação, e a comissão não se responsabiliza por decisões tomadas com base no painel. Confira sempre os documentos oficiais da CAIXA.</p>
+    <p class="aviso-legal"><b>Iniciativa independente, sem caráter oficial.</b> Este painel é organizado voluntariamente pela Comissão de Aprovados e não tem vínculo com a CAIXA nem com a banca do concurso. Os dados vêm de fontes públicas (o Edital nº 01/2025/NS, a homologação do resultado no Diário Oficial da União e os relatórios de convocação da CAIXA) e de informações dos próprios aprovados, reunidas no grupo de WhatsApp e conferidas pela comissão. Podem conter erros ou atrasos, e as simulações e os materiais de apoio são interpretações da comissão. Nada aqui substitui as publicações oficiais nem gera direito a convocação, e a comissão não se responsabiliza por decisões tomadas com base no painel. Confira sempre os documentos oficiais da CAIXA.<br><b>Cargos abrangidos:</b> Arquiteto e Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho). O cargo de <b>Médico do Trabalho</b>, também do Edital nº 01/2025/NS, não faz parte deste painel.</p>
     <section class="membros" aria-labelledby="membrosTit">
       <h3 id="membrosTit">Membros da Comissão de Aprovados</h3>
       <ul>
@@ -2506,6 +2506,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-14 18:30','melhoria','Cargos do painel no título','Sugestão de uma aprovada: o título agora deixa claro que o painel é dos cargos de Arquiteto e Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho), e o rodapé avisa que o cargo de Médico do Trabalho não faz parte do painel.'],
   ['2026-10-13 23:40','novo','Busca nas listas','A lista de aprovados e a lista de convocações ganharam um campo de busca. Não precisa digitar o nome exato: acentos, maiúsculas e letras dobradas não importam ("alan" encontra "Állan"), e dá para combinar nome, cargo e estado ("joao civil amapa").'],
   ['2026-10-13 23:05','melhoria','Simulador da fila ajustado e com memória de cálculo','A regra do simulador foi ajustada para bater com o relatório oficial de convocações da CAIXA de 13/10: a cota ganha a vaga quando a proporção acumulada passa em meia vaga o que ela já recebeu (com a PN na 3ª chamada, as próximas são a 6ª, 10ª, 14ª…). Abaixo da fila, a nova memória de cálculo mostra, chamada a chamada, quanto cada cota acumulou até ganhar a vaga.'],
   ['2026-10-13 23:02','melhoria','De onde vêm os dados','O rodapé agora explica que o painel é uma iniciativa independente da Comissão de Aprovados, sem vínculo com a CAIXA, e de onde vêm as informações: edital, homologação, relatórios da CAIXA e o grupo dos aprovados.'],
