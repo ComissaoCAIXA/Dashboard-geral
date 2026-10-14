@@ -750,6 +750,11 @@ main .card .seg button{padding-top:0;padding-bottom:0;display:inline-flex;align-
 /* no celular, seletores com texto em duas linhas crescem o necessário (mínimo 36px) */
 @media (max-width:620px){main .card .seg{height:auto;min-height:var(--ctl-sm)}main .card .seg button{padding:5px 6px;line-height:1.25}}
 [hidden]{display:none!important}
+/* Busca nas listas (ignora acentos e maiúsculas) */
+.hd .busca-lista{margin-left:auto;height:var(--ctl-sm);width:min(260px,100%);padding:0 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit;font-size:13px}
+.hd .busca-lista:focus{outline:2px solid color-mix(in srgb,var(--s1) 40%,transparent);border-color:var(--s1)}
+@media (max-width:620px){.hd .busca-lista{width:100%;order:5;margin-left:0}}
+
 /* Memória de cálculo do simulador */
 .memoria{margin-top:14px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
 .memoria>summary{cursor:pointer;display:flex;align-items:center;gap:8px;padding:12px 14px;font-weight:650;font-size:14px;list-style:none}
@@ -957,7 +962,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
       <div class="card"><div class="hd"><div><h2>Notas por cargo</h2><p class="note">Cada ponto é uma pessoa · traço = mediana</p></div></div><div id="strip1"></div>
         <div class="legend"><span><i style="background:var(--s1)"></i>Vaga imediata</span><span><i style="background:var(--s2)"></i>Cadastro reserva</span></div></div>
     </div>
-    <div class="card"><div class="hd"><h2>Lista de aprovados</h2><button class="pdfbtn" type="button" data-pdf="tbl1" title="Baixar a lista em PDF (A4 paisagem), com os filtros escolhidos"><span data-i="baixar"></span>PDF</button></div><div id="tbl1"></div></div>
+    <div class="card"><div class="hd"><h2>Lista de aprovados</h2><input type="search" class="busca-lista" id="q1" placeholder="Buscar nome, cargo ou estado" aria-label="Buscar na lista de aprovados" autocomplete="off"><button class="pdfbtn" type="button" data-pdf="tbl1" title="Baixar a lista em PDF (A4 paisagem), com os filtros escolhidos"><span data-i="baixar"></span>PDF</button></div><div id="tbl1"></div></div>
     <button class="mais-det" type="button" data-resumo><span data-i="layers"></span>Ver análises detalhadas: notas, cotas do edital, regiões e destaques</button>
   </section>
 
@@ -988,6 +993,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
       <div class="legend"><span><i style="background:var(--s3)"></i>Convocado</span><span><i style="background:var(--s1)"></i>Vaga imediata aguardando</span><span><i style="background:var(--neutral)"></i>Cadastro reserva</span></div></div>
     <div class="card"><div class="hd"><h2>Quem foi e quem não foi convocado</h2>
       <div class="seg" id="t2seg"><button data-v="sim" aria-pressed="true">Convocados</button><button data-v="aguard">Vaga imediata aguardando</button><button data-v="cr">Cadastro reserva</button></div>
+      <input type="search" class="busca-lista" id="q2" placeholder="Buscar nome, cargo ou estado" aria-label="Buscar na lista de convocações" autocomplete="off">
       <button class="pdfbtn" type="button" data-pdf="tbl2" title="Baixar a lista em PDF (A4 paisagem), com os filtros escolhidos"><span data-i="baixar"></span>PDF</button></div>
       <div id="tbl2"></div></div>
     <button class="mais-det" type="button" data-resumo><span data-i="layers"></span>Ver análises detalhadas: andamento por região e cota, notas e destaques</button>
@@ -1370,7 +1376,15 @@ function kpis(el,list){
 const algumFiltro=()=>S.cargo||S.macro||S.lista||S.uf;
 
 /* ---------- Estado ---------- */
-const S={tab:'panorama',cargo:'',macro:'',lista:'',uf:'',m1:'n',m2:'conv',t2:'sim',sort1:{k:'nota',d:-1},sort2:{k:'nota',d:-1},p1:0,p2:0};
+const S={tab:'panorama',cargo:'',macro:'',lista:'',uf:'',m1:'n',m2:'conv',t2:'sim',sort1:{k:'nota',d:-1},sort2:{k:'nota',d:-1},p1:0,p2:0,q1:'',q2:''};
+// Busca tolerante: ignora acentos, maiúsculas e pontuação; cada palavra digitada precisa aparecer (em qualquer ordem)
+const normBusca=s=>String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+// Grafias parecidas contam como iguais: letras dobradas (Állan = Alan), y = i, ph = f, th = t.
+// Cada palavra digitada precisa casar com o começo de uma palavra (números: em qualquer ponto).
+const nomeUF=uf=>((GEO||[]).find(f=>f.properties.SIGLA===uf)||{properties:{}}).properties.Estado||'';
+const simplBusca=s=>s.replace(/ph/g,'f').replace(/th/g,'t').replace(/y/g,'i').replace(/([a-z])\1+/g,'$1');
+const casaBusca=(q,...campos)=>{const t=simplBusca(normBusca(q)).split(' ').filter(Boolean);if(!t.length)return true;
+  const alvo=' '+simplBusca(normBusca(campos.join(' ')));return t.every(p=>/^\d+$/.test(p)?alvo.includes(p):alvo.includes(' '+p))};
 let DATA=[],GEO=null,PROJ=null;
 const filt=(ignoreUF)=>DATA.filter(d=>(!S.cargo||d.cargo===S.cargo)&&(!S.macro||d.macro===S.macro)&&cotaOk(d)&&(ignoreUF||!S.uf||d.uf===S.uf));
 
@@ -1662,7 +1676,7 @@ function renderPanorama(){
   tabelaCotas('#cotaTbl',RsemCota);
   histograma('#hist1',R);
   strip('#strip1',R,d=>d.sit==='VI'?css('--s1'):css('--s2'),d=>d.sit==='VI'?'top':'');
-  tabela('#tbl1',R,[
+  tabela('#tbl1',R.filter(r=>casaBusca(S.q1,r.ini,r.cargo,r.uf,nomeUF(r.uf),r.macro)),[
     {k:'ini',t:'Nome'},{k:'cargo',t:'Cargo',f:r=>curto(r.cargo)},{k:'uf',t:'UF'},{k:'macro',t:'Macrorregião',f:r=>cap(r.macro)},
     {k:'lista',t:'Cota',f:r=>r.listas.map(sigla).join(' + ')},{k:'sit',t:'Situação',f:sitPill},{k:'nota',t:'Nota',num:1,f:r=>nota(r.nota)},
     {k:'rankUF',t:'Posição na UF',num:1,f:r=>r.rankUF+'º'},{k:'classMacro',t:'Class. macro',num:1,f:r=>r.classMacro?r.classMacro+'º':'–'},{k:'conv',t:'Convocado',f:convPill}
@@ -1707,7 +1721,7 @@ function renderConv(){
   hbars('#cota2',COTAS.map(c=>{const g=grp(RC.filter(d=>d.lista===c.k));return{label:c.sig,parts:partsC(g),value:`${g.conv} <small>· ${pct(g.vi?g.viConv/g.vi:NaN)} das VI</small>`,sel:S.lista===c.k,tip:tipG(`${c.nome} (${c.sig})`,g),onClick:()=>{S.lista=S.lista===c.k?'':c.k;S.p1=S.p2=0;render()}}}));
   strip('#strip2',R,d=>d.conv?css('--s3'):d.sit==='VI'?css('--s1'):css('--neutral'),d=>d.conv?'top':'');
   const T={sim:conv,aguard,cr:R.filter(d=>d.sit==='CR'&&!d.conv)}[S.t2];
-  tabela('#tbl2',T,[
+  tabela('#tbl2',T.filter(r=>casaBusca(S.q2,r.ini,r.cargo,r.uf,nomeUF(r.uf),r.macro)),[
     {k:'ini',t:'Nome'},{k:'cargo',t:'Cargo',f:r=>curto(r.cargo)},{k:'uf',t:'UF'},{k:'macro',t:'Macrorregião',f:r=>cap(r.macro)},
     {k:'lista',t:'Cota',f:r=>r.listas.map(sigla).join(' + ')},{k:'sit',t:'Situação',f:sitPill},{k:'nota',t:'Nota',num:1,f:r=>nota(r.nota)},
     {k:'rankUF',t:'Posição na UF',num:1,f:r=>r.rankUF+'º'},{k:'conv',t:'Convocado',f:convPill},
@@ -1768,6 +1782,8 @@ function abrirContato(){
   S.tab='contato';history.replaceState(null,'','#contato');
   render();desenharContato();window.scrollTo({top:0});
 }
+// Busca nas listas: refaz o painel um instante depois de parar de digitar
+['q1','q2'].forEach(id=>{const el=document.getElementById(id);let t;el.addEventListener('input',()=>{S[id]=el.value;S[id==='q1'?'p1':'p2']=0;clearTimeout(t);t=setTimeout(render,150)})});
 document.querySelectorAll('.ir-contato').forEach(a=>a.onclick=e=>{e.preventDefault();abrirContato()});
 // Menu "Solicitações" (celular)
 const menuBtn=document.getElementById('menuBtn'),menuLista=document.getElementById('menuLista');
@@ -2489,6 +2505,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-13 23:40','novo','Busca nas listas','A lista de aprovados e a lista de convocações ganharam um campo de busca. Não precisa digitar o nome exato: acentos, maiúsculas e letras dobradas não importam ("alan" encontra "Állan"), e dá para combinar nome, cargo e estado ("joao civil amapa").'],
   ['2026-10-13 23:05','melhoria','Simulador da fila ajustado e com memória de cálculo','A regra do simulador foi ajustada para bater com o relatório oficial de convocações da CAIXA de 13/10: a cota ganha a vaga quando a proporção acumulada passa em meia vaga o que ela já recebeu (com a PN na 3ª chamada, as próximas são a 6ª, 10ª, 14ª…). Abaixo da fila, a nova memória de cálculo mostra, chamada a chamada, quanto cada cota acumulou até ganhar a vaga.'],
   ['2026-10-13 23:02','melhoria','De onde vêm os dados','O rodapé agora explica que o painel é uma iniciativa independente da Comissão de Aprovados, sem vínculo com a CAIXA, e de onde vêm as informações: edital, homologação, relatórios da CAIXA e o grupo dos aprovados.'],
   ['2026-10-13 23:00','novo','Notícias da comissão','Novo botão "Notícias" no topo: avisos publicados pela Comissão de Aprovados, com a importância e o assunto de cada um. Os avisos importantes aparecem no meio da tela na primeira vez que você abre o painel depois da publicação.'],

@@ -59,6 +59,9 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
   - **Visualizações:** uma por navegador que abriu a notícia. O painel não guarda IP nem dados de quem leu;
     o "já vi" fica no próprio navegador da pessoa.
 - **Histórico:** as últimas 100 alterações, com o e-mail de quem fez.
+- **Buscas:** todos os campos de busca (Aprovados, Grupo, Pedidos, Mensagens, Notícias e Histórico) ignoram acentos,
+  maiúsculas e letras dobradas ("alan" encontra "Állan") e aceitam várias palavras em qualquer ordem, inclusive cargo e
+  estado ("civil bahia"). Só números procuram pela inscrição ou pelo protocolo.
 - **Exportar CSV:** baixa a base completa (guarde como cópia de segurança).
 
 ### Incluir ou remover membros

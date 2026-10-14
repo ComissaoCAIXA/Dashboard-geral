@@ -36,6 +36,8 @@ input[type=text],input[type=email],input[type=date],input[type=time],select,text
 textarea{min-height:60px;resize:vertical}
 label.rot{display:block;font-weight:600;font-size:13px;margin:10px 0 5px}
 .linha{display:flex;gap:8px;flex-wrap:wrap}.linha>input{flex:1;min-width:200px}
+.busca{max-width:360px;min-width:200px;flex:1}
+@media (max-width:620px){.busca{max-width:none}}
 .msg{padding:10px 12px;border-radius:6px;font-size:13.5px;margin-top:10px}
 .msg.erro{color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent)}
 .msg.ok{color:var(--good);background:color-mix(in srgb,var(--good) 10%,transparent)}
@@ -202,7 +204,7 @@ tr.marcado{background:var(--wash)}
     <div id="pPend">
       <div class="linha" style="justify-content:space-between;align-items:center;margin-bottom:10px">
         <p class="note" style="margin:0">Confira cada pedido com a pessoa pelo WhatsApp antes de decidir. Ao aprovar, o painel público é atualizado.</p>
-        <button class="btn sec" type="button" id="recarregar">Atualizar</button>
+        <div class="linha" style="flex-wrap:nowrap"><input type="text" id="pBusca" class="busca" placeholder="Buscar nome, protocolo, inscrição, cargo…" autocomplete="off"><button class="btn sec" type="button" id="recarregar">Atualizar</button></div>
       </div>
       <div id="listaPend"></div>
     </div>
@@ -210,6 +212,7 @@ tr.marcado{background:var(--wash)}
     <div id="pMsgs" hidden>
       <div class="linha" style="justify-content:space-between;align-items:center;margin-bottom:10px">
         <p class="note" style="margin:0">Mensagens do "Fale com a comissão". Cada uma também chega no e-mail da comissão: responda por lá e marque aqui como respondida.</p>
+        <input type="text" id="mBusca" class="busca" placeholder="Buscar nome, e-mail, assunto ou texto" autocomplete="off">
         <select id="mFiltro" style="width:auto"><option value="Nova">Não respondidas</option><option value="Respondida">Respondidas</option><option value="">Todas</option></select>
       </div>
       <div id="listaMsgs"></div>
@@ -229,7 +232,7 @@ tr.marcado{background:var(--wash)}
         <h2>Quem ainda falta no grupo</h2>
         <p class="note">Use para procurar os aprovados que ainda não entraram. Quando confirmar que a pessoa já está no grupo, clique em "Marcar como no grupo".</p>
         <div class="filtros-g">
-          <input type="text" id="gBusca" placeholder="Buscar por nome ou inscrição">
+          <input type="text" id="gBusca" placeholder="Buscar nome, inscrição, cargo ou estado">
           <select id="gCargoF"><option value="">Todos os cargos</option></select>
           <select id="gUFF"><option value="">Todos os estados</option></select>
           <select id="gSitF"><option value="">Vaga imediata e reserva</option><option>Vaga imediata</option><option>Cadastro reserva</option></select>
@@ -247,7 +250,7 @@ tr.marcado{background:var(--wash)}
           <button class="btn sec" type="button" id="exportar" style="padding:6px 12px;font-size:13px">Exportar CSV</button></div>
         <p class="note">Marque uma ou várias pessoas e use a barra azul para registrar a convocação. Clique no nome para editar tudo da pessoa (datas, observação interna, nome oculto, grupo).</p>
         <div class="filtros-a">
-          <input type="text" id="aBusca" placeholder="Buscar por nome ou inscrição" autocomplete="off">
+          <input type="text" id="aBusca" placeholder="Buscar nome, inscrição, cargo ou estado" autocomplete="off">
           <select id="aCargo"><option value="">Todos os cargos</option></select>
           <select id="aUF"><option value="">Todos os estados</option></select>
           <select id="aCota"><option value="">Todas as cotas</option></select>
@@ -334,12 +337,13 @@ tr.marcado{background:var(--wash)}
       <div class="card">
         <h2>Notícias</h2>
         <p class="note">A mais recente publicada com destaque é a que aparece no meio da tela. "Visualizações" conta uma vez por navegador que abriu a notícia.</p>
+        <input type="text" id="nBusca" class="busca" placeholder="Buscar título, texto ou tag" autocomplete="off" style="margin-bottom:10px">
         <div id="nLista"></div>
       </div>
     </div>
 
     <div id="pHist" hidden>
-      <div class="card"><p class="note" style="margin:0">Últimas 100 alterações. Mostra quem fez (e-mail do membro, "formulário" ou "postgres" quando feito direto no Supabase).</p></div>
+      <div class="card"><p class="note" style="margin:0 0 10px">Últimas 100 alterações. Mostra quem fez (e-mail do membro, "formulário" para pedidos do site, "automático" para avisos, ou "postgres" quando feito direto no Supabase).</p><input type="text" id="hBusca" class="busca" placeholder="Buscar pessoa, pedido, quem fez ou o que mudou" autocomplete="off"></div>
       <div id="listaHist"></div>
     </div>
   </section>
@@ -352,6 +356,30 @@ const SB=supabase.createClient('https://ssgtryzcesgyuiltovmu.supabase.co','sb_pu
   {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'implicit'}});
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// Busca tolerante: ignora acentos, maiúsculas e pontuação; cada palavra digitada precisa aparecer (em qualquer ordem).
+// Só números: também procura pelo começo da inscrição ou do protocolo.
+const normBusca=s=>String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+// Grafias parecidas contam como iguais: letras dobradas (Állan = Alan), y = i, ph = f, th = t.
+// Cada palavra digitada precisa casar com o começo de uma palavra (números: em qualquer ponto).
+const NOME_UF={AC:'Acre',AL:'Alagoas',AP:'Amapá',AM:'Amazonas',BA:'Bahia',CE:'Ceará',DF:'Distrito Federal',ES:'Espírito Santo',GO:'Goiás',MA:'Maranhão',MT:'Mato Grosso',MS:'Mato Grosso do Sul',MG:'Minas Gerais',PA:'Pará',PB:'Paraíba',PR:'Paraná',PE:'Pernambuco',PI:'Piauí',RJ:'Rio de Janeiro',RN:'Rio Grande do Norte',RS:'Rio Grande do Sul',RO:'Rondônia',RR:'Roraima',SC:'Santa Catarina',SP:'São Paulo',SE:'Sergipe',TO:'Tocantins'};
+const simplBusca=s=>s.replace(/ph/g,'f').replace(/th/g,'t').replace(/y/g,'i').replace(/([a-z])\1+/g,'$1');
+const casaBusca=(q,...campos)=>{const t=simplBusca(normBusca(q)).split(' ').filter(Boolean);if(!t.length)return true;
+  const alvo=' '+simplBusca(normBusca(campos.join(' ')));return t.every(p=>/^\d+$/.test(p)?alvo.includes(p):alvo.includes(' '+p))};
+const textoBusca=(...campos)=>esc(normBusca(campos.join(' ')));
+// Mostra só os itens (com data-busca) que combinam com a busca; avisa quando nenhum combina
+function aplicarBusca(lista,q){
+  if(!lista)return;let n=0;const itens=[...lista.querySelectorAll('[data-busca]')];
+  itens.forEach(i=>{const ok=casaBusca(q,i.dataset.busca);i.hidden=!ok;if(ok)n++});
+  let av=lista.querySelector('.sem-res');
+  if(itens.length&&!n&&String(q).trim()){if(!av){av=document.createElement('p');av.className='vazio sem-res';lista.append(av)}av.textContent='Nada encontrado para "'+q.trim()+'".';av.hidden=false}
+  else if(av)av.hidden=true;
+}
+// Pedidos, mensagens, histórico e notícias: a busca vale ao digitar e continua valendo quando a lista recarrega
+[['listaPend','pBusca'],['listaMsgs','mBusca'],['listaHist','hBusca'],['nLista','nBusca']].forEach(([l,b])=>{
+  const L=$(l),B=$(b);
+  new MutationObserver(()=>aplicarBusca(L,B.value)).observe(L,{childList:true});
+  B.addEventListener('input',()=>aplicarBusca(L,B.value));
+});
 const hBR=h=>h?String(h).slice(0,5):'';
 const dBR=d=>d?new Date(d.length===10?d+'T12:00:00':d).toLocaleDateString('pt-BR'):'–';
 const dhBR=d=>d?new Date(d).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'}):'–';
@@ -560,7 +588,7 @@ async function carregarNtc(){
   NTC=data;
   if(!data.length){el.innerHTML='<p class="vazio">Nenhuma notícia ainda. Escreva a primeira acima.</p>';return}
   const topo=data.find(n=>n.publicada&&n.destaque);
-  el.innerHTML=`<div class="tw"><table><thead><tr><th>Título</th><th>Situação</th><th>Publicada em</th><th>Visualizações</th><th></th></tr></thead><tbody>${data.map(n=>`<tr>
+  el.innerHTML=`<div class="tw"><table><thead><tr><th>Título</th><th>Situação</th><th>Publicada em</th><th>Visualizações</th><th></th></tr></thead><tbody>${data.map(n=>`<tr data-busca="${textoBusca(n.titulo,n.texto,n.importancia,n.categoria,n.publicada?'publicada':'rascunho')}">
     <td><div class="n-tags" style="margin-bottom:4px">${tagsNtc(n.importancia,n.categoria)}${n===topo?' <span class="pill pres">em destaque agora</span>':''}</div><b>${esc(n.titulo)}</b>
       <div class="note">${n.destaque?'Abre em destaque':'Só na lista'} · por ${esc(n.atualizado_por||n.criado_por||'–')}</div></td>
     <td>${n.publicada?'<span class="pill Aprovado">Publicada</span>':'<span class="pill">Rascunho</span>'}</td>
@@ -594,7 +622,7 @@ async function carregarMsgs(){
   if(!data.length){el.innerHTML=`<p class="vazio">${$('mFiltro').value==='Nova'?'Nenhuma mensagem esperando resposta. 🎉':'Nenhuma mensagem.'}</p>`;return}
   el.innerHTML=data.map(m=>{
     const resp=`mailto:${encodeURIComponent(m.email)}?subject=${encodeURIComponent('Re: '+m.assunto)}`;
-    return `<div class="pedido" data-id="${m.id}">
+    return `<div class="pedido" data-id="${m.id}" data-busca="${textoBusca(m.nome,m.email,m.assunto,m.mensagem,m.status==='Nova'?'nao respondida':'respondida')}">
     <div class="topo"><span class="tipo">${esc(m.assunto)}</span><span class="quando">recebida em ${dhBR(m.criado_em)}</span><span class="pill ${m.status==='Respondida'?'Aprovado':''}">${esc(m.status==='Nova'?'Não respondida':'Respondida')}</span></div>
     <div class="nome">${esc(m.nome)}</div>
     <p style="margin:0 0 6px"><a href="${resp}">${esc(m.email)}</a></p>
@@ -625,7 +653,7 @@ async function carregarPend(){
 function desenharPend(lista){
   const el=$('listaPend');$('nPend').hidden=!lista.length;$('nPend').textContent=lista.length;
   if(!lista.length){el.innerHTML='<p class="vazio">Nenhum pedido pendente. 🎉</p>';return}
-  el.innerHTML=lista.map(p=>`<div class="pedido" data-id="${p.id}">
+  el.innerHTML=lista.map(p=>`<div class="pedido" data-id="${p.id}" data-busca="${textoBusca(p.nome,p.protocolo,p.tipo,p.cargo,p.uf,NOME_UF[p.uf],p.cota,p.inscricao,p.nome_whatsapp,p.observacao)}">
     <div class="topo"><span class="prot">${esc(p.protocolo)}</span><span class="tipo">${esc(p.tipo)}${p.data_evento?' em '+dBR(p.data_evento):''}${p.hora_evento?' às '+hBR(p.hora_evento):''}</span><span class="quando">enviado em ${dhBR(p.criado_em)}</span></div>
     <div class="nome">${esc(p.nome)}</div>
     ${p.tipo==='Entrada no grupo'?`<div class="obs"><b>WhatsApp:</b> ${esc(fmtTel(p.telefone))}${p.nome_whatsapp?` · aparece como <b>${esc(p.nome_whatsapp)}</b>`:''}
@@ -669,9 +697,9 @@ async function carregarAprov(){
   desenharAprov();
 }
 function filtradosAprov(){
-  const q=$('aBusca').value.trim().toLowerCase(),c=$('aCargo').value,u=$('aUF').value,co=$('aCota').value,s=$('aSit').value,cv=$('aConv').value,va=$('aVal').value;
+  const q=$('aBusca').value.trim(),c=$('aCargo').value,u=$('aUF').value,co=$('aCota').value,s=$('aSit').value,cv=$('aConv').value,va=$('aVal').value;
   return A.filter(r=>(!c||r.cargo===c)&&(!u||r.uf===u)&&(!co||r.cota===co)&&(!s||r.situacao===s)&&(!cv||r.convocacao===cv)&&(!va||r.validacao===va)&&
-    (!q||r.nome.toLowerCase().includes(q)||r.inscricao.startsWith(q)));
+    (!q||casaBusca(q,r.nome,r.cargo,r.uf,NOME_UF[r.uf],r.cota)||(/^\d+$/.test(q)&&r.inscricao.startsWith(q))));
 }
 function desenharAprov(){
   const conta=k=>A.filter(r=>r.convocacao===k).length,pres=A.filter(r=>r.validacao==='Presumida').length;
@@ -827,8 +855,8 @@ function desenharGrupo(){
   desenharListaGrupo();
 }
 function desenharListaGrupo(){
-  const q=$('gBusca').value.trim().toLowerCase(),c=$('gCargoF').value,u=$('gUFF').value,s=$('gSitF').value,dentro=$('gMostrar').value==='dentro';
-  const rows=G.filter(r=>r.no_grupo===dentro&&(!c||r.cargo===c)&&(!u||r.uf===u)&&(!s||r.situacao===s)&&(!q||r.nome.toLowerCase().includes(q)||r.inscricao.startsWith(q)));
+  const q=$('gBusca').value.trim(),c=$('gCargoF').value,u=$('gUFF').value,s=$('gSitF').value,dentro=$('gMostrar').value==='dentro';
+  const rows=G.filter(r=>r.no_grupo===dentro&&(!c||r.cargo===c)&&(!u||r.uf===u)&&(!s||r.situacao===s)&&(!q||casaBusca(q,r.nome,r.cargo,r.uf,NOME_UF[r.uf])||(/^\d+$/.test(q)&&r.inscricao.startsWith(q))));
   const lim=rows.slice(0,150);
   $('gLista').innerHTML=rows.length?`<p class="note">${rows.length} pessoa(s)${rows.length>150?' · mostrando 150, use os filtros':''}</p>
     <div class="tw"><table><thead><tr><th>Nome</th><th>Inscrição</th><th>Cargo</th><th>UF</th><th>Situação</th><th>Convocação</th><th></th></tr></thead><tbody>
@@ -857,7 +885,7 @@ async function carregarHist(){
     const muds=h.acao==='UPDATE'?Object.keys(d).filter(k=>!IGNORAR.has(k)&&JSON.stringify(a[k])!==JSON.stringify(d[k])).map(k=>`<b>${esc(k)}</b>: ${esc(a[k]??'–')} → ${esc(d[k]??'–')}`).join('<br>'):
       h.acao==='INSERT'?'Incluído':'Excluído';
     const oque={aprovados:'Aprovado',envios:'Pedido',noticias:'Notícia'}[h.tabela]||h.tabela;
-    return `<tr><td>${dhBR(h.feito_em)}</td><td>${esc(h.feito_por)}</td><td>${esc(oque)}: ${esc(ref)}</td><td class="mud">${muds}</td></tr>`}).join('')}</tbody></table></div>`;
+    return `<tr data-busca="${textoBusca(h.feito_por,oque,ref,h.acao=='INSERT'?'incluido':h.acao=='DELETE'?'excluido':'alterado',muds.replace(/<[^>]+>/g,' '))}"><td>${dhBR(h.feito_em)}</td><td>${esc(h.feito_por)}</td><td>${esc(oque)}: ${esc(ref)}</td><td class="mud">${muds}</td></tr>`}).join('')}</tbody></table></div>`;
 }
 </script>
 </body>
