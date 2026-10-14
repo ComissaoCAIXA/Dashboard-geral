@@ -33,7 +33,7 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
     mostrados). Na barra azul, cada campo começa em *Não alterar*; escolha só o que quer mudar —
     situação, validação, data da convocação, data da posse (definir ou apagar), grupo de WhatsApp e
     nome no painel — e clique em **Aplicar aos selecionados**. A observação interna não muda em lote.
-    Voltar para *Aguardando* apaga as datas e a validação.
+    Voltar para *Aguardando* apaga as datas, o horário e a validação, em qualquer forma de edição.
   - **Validação da convocação:** *Confirmada* = a comissão falou com a pessoa (pedidos aprovados no
     formulário viram Confirmada sozinhos). *Presumida* = deduzida pela ordem de classificação; no painel
     público aparece com a marca "presumida". Quando encontrar a pessoa, mude para Confirmada.

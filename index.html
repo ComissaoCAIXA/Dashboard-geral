@@ -1472,7 +1472,7 @@ function strip(el,rows,cor,rot){
     const ord=[...rs].sort((a,b)=>(rot(a)===rot(b)?0:rot(a)==='top'?1:-1));
     svg.append('g').selectAll('circle').data(ord).join('circle').attr('cx',d=>x(d.nota)).attr('cy',()=>cy+(rnd()-.5)*(row-(estreito?28:14))).attr('r',3.6)
       .attr('fill',d=>cor(d)).attr('fill-opacity',.85).attr('stroke',css('--surface')).attr('stroke-width',1)
-      .on('mousemove',(e,d)=>showTip(e,`<b>${d.ini}</b><br>${curto(d.cargo)} · ${d.uf}<br><span class="m">Nota:</span> ${nota(d.nota)} · ${d.rankUF}º na UF<br><span class="m">${d.sit==='VI'?'Vaga imediata':'Cadastro reserva'}${d.conv?' · convocado':''}</span>`)).on('mouseleave',hideTip);
+      .on('mousemove',(e,d)=>showTip(e,`<b>${esc(d.ini)}</b><br>${curto(d.cargo)} · ${d.uf}<br><span class="m">Nota:</span> ${nota(d.nota)} · ${d.rankUF}º na UF<br><span class="m">${d.sit==='VI'?'Vaga imediata':'Cadastro reserva'}${d.conv?' · convocado':''}</span>`)).on('mouseleave',hideTip);
     const md=d3.median(rs,d=>d.nota);
     svg.append('line').attr('x1',x(md)).attr('x2',x(md)).attr('y1',cy-(estreito?13:row/2-4)).attr('y2',cy+(estreito?13:row/2-4)).attr('stroke',css('--ink')).attr('stroke-width',2);
   });
@@ -1487,7 +1487,7 @@ function tabela(el,rows,cols,sortKey,pageKey){
   const pages=Math.max(1,Math.ceil(sorted.length/PS));S[pageKey]=Math.min(S[pageKey],pages-1);const pg=S[pageKey];
   box.html(`<label class="msort">Ordenar por <select>${cols.map(c=>[1,-1].map(d=>`<option value="${c.k}|${d}"${st.k===c.k&&st.d===d?' selected':''}>${c.t} ${d>0?'(crescente)':'(decrescente)'}</option>`).join('')).join('')}</select></label>
     <div class="tw"><table><thead><tr>${cols.map(c=>`<th data-k="${c.k}" class="${c.num?'num':''}">${c.t}${st.k===c.k?(st.d>0?' ▲':' ▼'):''}</th>`).join('')}</tr></thead>
-    <tbody>${sorted.slice(pg*PS,pg*PS+PS).map(r=>`<tr>${cols.map(c=>`<td class="${c.num?'num':''}" data-l="${c.t}">${c.f?c.f(r):r[c.k]??'–'}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${cols.length}" style="color:var(--muted)">Ninguém nesse filtro.</td></tr>`}</tbody></table></div>
+    <tbody>${sorted.slice(pg*PS,pg*PS+PS).map(r=>`<tr>${cols.map(c=>`<td class="${c.num?'num':''}" data-l="${c.t}">${c.f?c.f(r):esc(r[c.k]??'–')}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${cols.length}" style="color:var(--muted)">Ninguém nesse filtro.</td></tr>`}</tbody></table></div>
     <div class="pager"><span>${nf(sorted.length)} pessoa(s) · página ${pg+1} de ${pages}</span><button data-p="-1" ${pg===0?'disabled':''}>Anterior</button><button data-p="1" ${pg>=pages-1?'disabled':''}>Próxima</button></div>`);
   box.selectAll('th').on('click',function(){const k=this.dataset.k;S[sortKey]=st.k===k?{k,d:-st.d}:{k,d:k==='nota'?-1:1};render()});
   box.select('.msort select').on('change',function(){const [k,d]=this.value.split('|');S[sortKey]={k,d:+d};S[pageKey]=0;render()});
@@ -1509,14 +1509,14 @@ function rankEstados(el,tEl,titulo,porUF,fmtv,parts,tipFn){
 function podio(el,rows,n=5){
   const top=[...rows].sort((a,b)=>b.nota-a.nota).slice(0,n);
   d3.select(el).attr('class','podio').html(top.length?top.map((d,i)=>`<div class="pd" data-uf="${d.uf}"><span class="pos">${i+1}º</span>
-    <span class="who"><b>${d.ini}</b><span>${curto(d.cargo)} · ${d.uf} · ${d.sit==='VI'?'vaga imediata':'cadastro reserva'}</span></span><span class="nt">${nota(d.nota)}</span></div>`).join('')
+    <span class="who"><b>${esc(d.ini)}</b><span>${curto(d.cargo)} · ${d.uf} · ${d.sit==='VI'?'vaga imediata':'cadastro reserva'}</span></span><span class="nt">${nota(d.nota)}</span></div>`).join('')
     :'<p class="note">Ninguém neste filtro.</p>');
   d3.select(el).selectAll('.pd').on('click',function(){const uf=this.dataset.uf;S.uf=S.uf===uf?'':uf;S.p1=S.p2=0;render()});
 }
 // Primeiro e último nome (para etiquetas pequenas, como o marcador do mapa)
 const nomeCurto=s=>{const p=String(s||'').trim().split(/\s+/);return p.length>2?p[0]+' '+p[p.length-1]:p.join(' ')};
 const pinMaior=(rows,txt)=>{const t=d3.greatest(rows,d=>d.nota);return t?{uf:t.uf,label:`${nota(t.nota)} · ${nomeCurto(t.ini)}`,
-  tip:`<b>${txt}: ${nota(t.nota)}</b><br>${t.ini} · ${curto(t.cargo)}<br><span class="m">${t.uf} · ${t.rankUF}º na UF</span>`}:null};
+  tip:`<b>${txt}: ${nota(t.nota)}</b><br>${esc(t.ini)} · ${curto(t.cargo)}<br><span class="m">${t.uf} · ${t.rankUF}º na UF</span>`}:null};
 
 /* ---------- Cotas ---------- */
 // Mesmos filtros do painel, exceto a cota (para comparar todas as cotas lado a lado)
@@ -1584,7 +1584,7 @@ function renderPanorama(){
     {tone:'--s2',icon:'clock',label:'Cadastro reserva',aj:'kCR',value:nf(R.length-vi),sub:`${pct(R.length?(R.length-vi)/R.length:NaN)} dos aprovados`,bar:R.length?(R.length-vi)/R.length:0},
     {tone:'--s3',icon:'chart',label:'Nota média',det:1,aj:'kMedia',value:nota(media),
      delta:f?{v:media-gMedia,fmt:pts,ref:'vs. geral'}:null,sub:f?'':'mediana '+nota(d3.median(R,d=>d.nota))},
-    {tone:'--s5',icon:'trophy',label:'Maior nota',det:1,aj:'kMax',value:nota(top?.nota),sub:top?`${top.ini} · ${curto(top.cargo)} · ${top.uf}`:''},
+    {tone:'--s5',icon:'trophy',label:'Maior nota',det:1,aj:'kMax',value:nota(top?.nota),sub:top?`${esc(top.ini)} · ${curto(top.cargo)} · ${top.uf}`:''},
     {tone:'--s1',icon:'target',label:'Corte da vaga imediata',aj:'kCorte',value:nota(corte),
      delta:f&&corte!=null?{v:corte-gCorte,fmt:pts,ref:'vs. geral'}:null,sub:f?'':'menor nota que garantiu vaga'}
   ]);
@@ -1631,7 +1631,7 @@ function renderConv(){
     {tone:'--s1',icon:'hourglass',label:'Aguardando',aj:'kAguard',value:nf(aguard.length),unit:'vagas imediatas',sub:`${pct(vi.length?aguard.length/vi.length:NaN)} ainda sem convocação`,bar:vi.length?aguard.length/vi.length:0},
     {tone:'--s4',icon:'jump',label:'Chamados do reserva',det:1,aj:'kCRConv',value:nf(convCR.length),sub:'convocados além das vagas imediatas'},
     {tone:'--s5',icon:'star',label:'Nota média convocados',det:1,aj:'kMediaConv',value:nota(mConv),delta:conv.length?{v:mConv-mGeral,fmt:v=>nota(v)+' pts',ref:'vs. todos os aprovados'}:null},
-    {tone:'--s2',icon:'flag',label:'Menor nota convocada',det:1,aj:'kMinConv',value:nota(d3.min(conv,d=>d.nota)),sub:(()=>{const t=d3.least(conv,d=>d.nota);return t?`${t.ini} · ${curto(t.cargo)} · ${t.uf}`:''})()}
+    {tone:'--s2',icon:'flag',label:'Menor nota convocada',det:1,aj:'kMinConv',value:nota(d3.min(conv,d=>d.nota)),sub:(()=>{const t=d3.least(conv,d=>d.nota);return t?`${esc(t.ini)} · ${curto(t.cargo)} · ${t.uf}`:''})()}
   ]);
 
   const porUF=d3.rollup(RM,rs=>{const vi=rs.filter(d=>d.sit==='VI');const c=rs.filter(d=>d.conv).length;

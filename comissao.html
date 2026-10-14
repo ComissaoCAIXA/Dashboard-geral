@@ -266,7 +266,7 @@ tr.marcado{background:var(--wash)}
             <label>Grupo de WhatsApp<select id="lGrupo"><option value="">Não alterar</option><option value="1">Está no grupo</option><option value="0">Fora do grupo</option></select></label>
             <label>Nome no painel<select id="lNome"><option value="">Não alterar</option><option value="0">Nome completo</option><option value="1">Só iniciais</option></select></label>
           </div>
-          <div class="lote-pe"><small>"Aguardando" ou "Sem informação" apaga as datas e a validação, a menos que você defina as datas. A observação interna não é alterada em lote.</small>
+          <div class="lote-pe"><small>"Aguardando" ou "Sem informação" apaga as datas, o horário e a validação. A observação interna não é alterada em lote.</small>
             <button class="btn ok" type="button" id="lAplicar">Aplicar aos selecionados</button></div>
         </div>
         <div id="aRet"></div>
@@ -853,10 +853,10 @@ async function carregarHist(){
   if(error){msg(el,'erro',error.message);return}
   if(!data.length){el.innerHTML='<p class="vazio">Sem registros.</p>';return}
   el.innerHTML=`<div class="card tw"><table><thead><tr><th>Quando</th><th>Quem</th><th>O quê</th><th>Mudanças</th></tr></thead><tbody>${data.map(h=>{
-    const a=h.antes||{},d=h.depois||{},ref=d.nome||a.nome||(d.protocolo?'Pedido '+d.protocolo:a.protocolo?'Pedido '+a.protocolo:'');
+    const a=h.antes||{},d=h.depois||{},ref=d.nome||a.nome||d.titulo||a.titulo||(d.protocolo?'Pedido '+d.protocolo:a.protocolo?'Pedido '+a.protocolo:'');
     const muds=h.acao==='UPDATE'?Object.keys(d).filter(k=>!IGNORAR.has(k)&&JSON.stringify(a[k])!==JSON.stringify(d[k])).map(k=>`<b>${esc(k)}</b>: ${esc(a[k]??'–')} → ${esc(d[k]??'–')}`).join('<br>'):
       h.acao==='INSERT'?'Incluído':'Excluído';
-    const oque={aprovados:'Aprovado',envios:'Pedido'}[h.tabela]||h.tabela;
+    const oque={aprovados:'Aprovado',envios:'Pedido',noticias:'Notícia'}[h.tabela]||h.tabela;
     return `<tr><td>${dhBR(h.feito_em)}</td><td>${esc(h.feito_por)}</td><td>${esc(oque)}: ${esc(ref)}</td><td class="mud">${muds}</td></tr>`}).join('')}</tbody></table></div>`;
 }
 </script>
