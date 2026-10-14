@@ -262,7 +262,8 @@ footer .membros span{color:var(--muted);font-size:11.5px}
 .aviso.copia svg{width:18px;height:18px;flex:none;color:var(--s1);margin-top:1px}
 .regras summary{cursor:pointer;font-weight:650;color:var(--ink)}
 .regras p{margin:8px 0}
-.regras>div{max-width:900px}
+.regras>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:4px 32px;align-items:start}
+.regras>div>section{min-width:0}
 .regras h3{font-size:13.5px;color:var(--ink);margin:16px 0 6px}
 .glos{display:grid;grid-template-columns:130px 1fr;gap:8px 16px;margin:0;align-items:baseline}
 .glos dt{text-align:right;white-space:nowrap}
@@ -936,7 +937,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
       <div class="hd"><div><h2>Cotas: edital × resultado</h2><p class="note">Vagas previstas no Anexo I do edital comparadas com quem foi classificado em cada cota, respeitando os filtros de cargo, região e estado.</p></div></div>
       <div id="cotaTbl"></div>
       <details class="regras"><summary>Como ler esta tabela e como funcionam as cotas</summary><div>
-        <h3>Como ler a tabela</h3>
+        <section><h3>Como ler a tabela</h3>
         <dl class="glos">
           <dt><b>10</b> <small>de 12</small></dt><dd>Quantas pessoas foram classificadas nessa cota (10) e quantas vagas o edital previa para ela (12), dentro dos filtros escolhidos. A barrinha embaixo mostra essa proporção.</dd>
           <dt><span class="dpill ok">✓</span></dt><dd>O número de classificados é igual ao previsto no edital: todas as vagas da cota foram ocupadas por pessoas da própria cota.</dd>
@@ -945,15 +946,15 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
           <dt>Corte VI</dt><dd>Menor nota entre as pessoas que ficaram com vaga imediata naquela cota.</dd>
           <dt>Cadastro reserva</dt><dd>Lista de espera, chamada depois das vagas imediatas. O edital prevê 3 pessoas no cadastro para cada vaga imediata, em cada cota.</dd>
         </dl>
-        <h3>Exemplos</h3>
+        </section><section><h3>Exemplos</h3>
         <p><b>Exemplo hipotético:</b> um cargo em um estado tem 1 vaga para quilombolas (PQ), mas ninguém dessa cota foi aprovado. Pelo edital, a vaga passa primeiro para indígenas (PI). Se também não houver indígenas aprovados, vai para pessoas negras (PN) e, por fim, para a ampla concorrência (AC). Na tabela, PQ aparece com <span class="dpill menos">-1 revertida</span> e a modalidade que ficou com a vaga aparece com <span class="dpill mais">+1 recebida</span>.</p>
         <div id="cotaEx"></div>
-        <h3>Regras do edital</h3>
+        </section><section><h3>Regras do edital</h3>
         <p><b>Reserva:</b> 5% para pessoas com deficiência (PcD), 25% para pessoas negras (PN), 3% para indígenas (PI) e 2% para quilombolas (PQ), inclusive no cadastro reserva. O cadastro reserva tem 3 vezes o número de vagas imediatas em cada cota.</p>
         <p><b>Distribuição:</b> PcD e PN foram distribuídas proporcionalmente por cargo e polo. PI e PQ foram alocadas por macropolo, nos polos com mais de uma vaga e maior população desses grupos (Censo 2022).</p>
         <p><b>Sobras:</b> vaga de PQ sem aprovados vai para PI, depois PN, depois ampla concorrência; vaga de PI vai para PQ, depois PN, depois AC. Vagas de PN ou PcD sem aprovados vão para a ampla concorrência.</p>
         <p><b>Ordem de convocação:</b> começa por uma pessoa com deficiência (se houver), depois uma da ampla concorrência e em seguida uma de PN, PI ou PQ, alternando nessa proporção.</p>
-        <p class="note" style="margin:0">Fonte: Edital nº 01/2025/NS da CAIXA, itens 2.12, 2.13 e 4, e Anexo I (retificado em 18/11/2025).</p>
+        <p class="note" style="margin:0">Fonte: Edital nº 01/2025/NS da CAIXA, itens 2.12, 2.13 e 4, e Anexo I (retificado em 18/11/2025).</p></section>
       </div></details>
     </div>
     <div class="row r-2" data-det>
