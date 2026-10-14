@@ -198,6 +198,7 @@ tr.marcado{background:var(--wash)}
       <button data-v="grupo">Grupo de WhatsApp</button>
       <button data-v="aprov">Aprovados</button>
       <button data-v="ntc">Notícias</button>
+      <button data-v="bkp">Backups<b id="nBkp" hidden></b></button>
       <button data-v="hist">Histórico</button>
     </div>
 
@@ -342,6 +343,24 @@ tr.marcado{background:var(--wash)}
       </div>
     </div>
 
+    <div id="pBkp" hidden>
+      <div class="kpis" id="bKpis"></div>
+      <div id="bAlerta"></div>
+      <div class="card">
+        <div class="linha" style="justify-content:space-between;align-items:baseline"><h2>Últimos 10 backups</h2>
+          <button class="btn sec" type="button" id="bAtualizar" style="padding:6px 12px;font-size:13px">Atualizar</button></div>
+        <p class="note">Todo dia às 03:30 (Brasília) uma cópia completa do banco é guardada, <b>criptografada</b>, no repositório privado
+          <a href="https://github.com/ComissaoCAIXA/Dashboard-backup" target="_blank" rel="noopener">ComissaoCAIXA/Dashboard-backup</a>.
+          Só abre com a chave privada da comissão e a senha dela. "Ver execução" abre o registro da tarefa no GitHub (exige acesso ao repositório).</p>
+        <div id="bLista"></div>
+      </div>
+      <div class="card">
+        <h2>Como restaurar</h2>
+        <p class="note" style="margin:0">O passo a passo está no README do repositório de backup. Em resumo: baixar o arquivo do dia, abrir com a chave privada
+          (<code>gpg --decrypt</code>) e restaurar no banco com <code>pg_restore</code>. Antes de restaurar por cima do banco em uso, fale com quem administra o Supabase.</p>
+      </div>
+    </div>
+
     <div id="pHist" hidden>
       <div class="card"><p class="note" style="margin:0 0 10px">Últimas 100 alterações. Mostra quem fez (e-mail do membro, "formulário" para pedidos do site, "automático" para avisos, ou "postgres" quando feito direto no Supabase).</p><input type="text" id="hBusca" class="busca" placeholder="Buscar pessoa, pedido, quem fez ou o que mudou" autocomplete="off"></div>
       <div id="listaHist"></div>
@@ -414,16 +433,16 @@ async function entrar(sessao){
   const {data,error}=await SB.rpc('comissao_eu');
   if(error||!data||!data.ok){$('negEmail').textContent=sessao.user.email;mostrar('vNegado');return}
   if(data.nome)$('quem').textContent=data.nome+' · '+data.email;
-  mostrar('vArea');carregarPend();contarMsgs();
+  mostrar('vArea');carregarPend();contarMsgs();carregarBackups();
 }
 SB.auth.onAuthStateChange((ev,sessao)=>{if(ev==='INITIAL_SESSION'||ev==='SIGNED_IN'||ev==='SIGNED_OUT')entrar(sessao)});
 
 /* ---------- Abas ---------- */
-const PAINEIS={pend:'pPend',msgs:'pMsgs',grupo:'pGrupo',aprov:'pAprov',ntc:'pNtc',hist:'pHist'};
+const PAINEIS={pend:'pPend',msgs:'pMsgs',grupo:'pGrupo',aprov:'pAprov',ntc:'pNtc',bkp:'pBkp',hist:'pHist'};
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
   Object.entries(PAINEIS).forEach(([k,id])=>$(id).hidden=k!==b.dataset.v);
-  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();if(b.dataset.v==='msgs')carregarMsgs();if(b.dataset.v==='aprov')carregarAprov();if(b.dataset.v==='ntc')carregarNtc();
+  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();if(b.dataset.v==='msgs')carregarMsgs();if(b.dataset.v==='aprov')carregarAprov();if(b.dataset.v==='ntc')carregarNtc();if(b.dataset.v==='bkp')carregarBackups();
 });
 
 /* ---------- Notícias (aparecem no painel público) ---------- */
@@ -607,6 +626,44 @@ $('nLista').onclick=async e=>{
   if(nEditando&&nEditando.id===n.id)nLimpar();
   carregarNtc();
 };
+
+/* ---------- Backups (registro gravado pela tarefa do repositório privado) ---------- */
+const kb=b=>b==null?'–':b<1024*1024?Math.round(b/1024)+' KB':(b/1024/1024).toFixed(1).replace('.',',')+' MB';
+function haQuanto(iso){const m=Math.round((Date.now()-new Date(iso))/60000);return m<60?`há ${m} min`:m<48*60?`há ${Math.round(m/60)} h`:`há ${Math.round(m/1440)} dias`}
+function proximoBackup(){
+  // 03:30 de Brasília = 06:30 UTC
+  const a=new Date(),p=new Date(Date.UTC(a.getUTCFullYear(),a.getUTCMonth(),a.getUTCDate(),6,30));
+  if(p<=a)p.setUTCDate(p.getUTCDate()+1);
+  return p.toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+async function carregarBackups(){
+  const el=$('bLista');el.innerHTML='<p class="vazio">Carregando…</p>';
+  const {data,error}=await SB.from('backups').select('*').order('criado_em',{ascending:false}).limit(10);
+  if(error){msg(el,'erro',error.message);return}
+  const ult=data[0],ultOk=data.find(b=>b.status==='ok');
+  const horasOk=ultOk?(Date.now()-new Date(ultOk.criado_em))/3600000:Infinity;
+  const atrasado=horasOk>27,falhou=ult&&ult.status==='falha';
+  $('nBkp').hidden=!(atrasado||falhou);$('nBkp').textContent='!';
+  $('bKpis').innerHTML=[
+    ['Situação',!data.length?'Sem registro':(atrasado||falhou)?'⚠ Atenção':'✓ Em dia',
+      !data.length?'nenhum backup registrado ainda':falhou?'a última execução falhou':atrasado?'nenhum backup nas últimas 27 h':'backups rodando normalmente'],
+    ['Último backup',ultOk?haQuanto(ultOk.criado_em):'–',ultOk?dhBR(ultOk.criado_em):''],
+    ['Próximo',proximoBackup().split(',')[0],'às 03:30 (Brasília)'],
+    ['Tamanho',ultOk?kb(ultOk.tamanho):'–',ultOk&&ultOk.registros?`${ultOk.registros.aprovados??'–'} aprovados no banco`:'']
+  ].map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v" style="font-size:22px">${esc(v)}</div><div class="s">${esc(s)}</div></div>`).join('');
+  $('bAlerta').innerHTML=falhou?`<div class="alerta">⚠ A última execução do backup falhou (${dhBR(ult.criado_em)}). Abra a execução no GitHub para ver o motivo; o GitHub também avisa por e-mail a conta ComissaoCAIXA.</div>`
+    :atrasado&&data.length?`<div class="alerta">⚠ Nenhum backup com sucesso nas últimas 27 horas. Confira a aba Actions do repositório de backup.</div>`:'';
+  if(!data.length){el.innerHTML='<p class="vazio">Nenhum backup registrado ainda.</p>';return}
+  const R=[['aprovados','aprovados'],['envios','pedidos'],['mensagens','mensagens'],['noticias','notícias'],['historico','histórico']];
+  el.innerHTML=`<div class="tw"><table><thead><tr><th>Quando</th><th>Situação</th><th>Arquivo</th><th>Tamanho</th><th>Registros copiados</th><th></th></tr></thead><tbody>${data.map(b=>`<tr>
+    <td class="num">${dhBR(b.criado_em)}<div class="note">${haQuanto(b.criado_em)}</div></td>
+    <td>${b.status==='ok'?'<span class="pill Aprovado">✓ Concluído</span>':'<span class="pill Rejeitado">Falhou</span>'}</td>
+    <td>${b.arquivo?`<code>${esc(b.arquivo)}</code><div class="note">criptografado</div>`:`<span class="note">${esc(b.erro||'–')}</span>`}</td>
+    <td class="num">${kb(b.tamanho)}</td>
+    <td>${b.registros?R.map(([k,t])=>`${Number(b.registros[k]??0).toLocaleString('pt-BR')} ${t}`).join(' · '):'–'}</td>
+    <td>${b.execucao?`<a href="${esc(b.execucao)}" target="_blank" rel="noopener">Ver execução</a>`:''}</td></tr>`).join('')}</tbody></table></div>`;
+}
+$('bAtualizar').onclick=carregarBackups;
 
 /* ---------- Mensagens (Fale com a comissão) ---------- */
 async function contarMsgs(){

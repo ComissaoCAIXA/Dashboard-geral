@@ -197,5 +197,7 @@ do topo de cada arquivo). Se trocar a senha do Gmail ou revogar a senha de app, 
 
 Todo dia às 03:30 o repositório **privado** `ComissaoCAIXA/Dashboard-backup` guarda uma cópia do banco,
 **criptografada**. Só abre com a chave privada `backup-CHAVE-PRIVADA.asc` (guardada fora do GitHub) e a senha dela.
-O backup lê o banco com o usuário `backup_leitura`, que não consegue alterar nada. Como restaurar: veja o README
+O backup lê o banco com o usuário `backup_leitura`, que só lê (e só pode inserir na tabela de registro `backups`).
+A aba **Backups** da área da comissão mostra se está em dia, o último e o próximo backup e os 10 mais recentes;
+a aba ganha um "!" quando a última execução falha ou quando passam 27 h sem backup. Como restaurar: veja o README
 daquele repositório.
