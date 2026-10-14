@@ -68,6 +68,17 @@ Para tirar o acesso, desmarque `ativo`. Não é preciso mais nada: a pessoa já 
 Só e-mails desta tabela conseguem criar conta: a função `hook_so_comissao` (ligada em
 Authentication → Hooks → *Before User Created*) recusa qualquer outro e-mail na tela de login.
 
+### Avisos no Telegram
+O bot **@ComissaoCaixa2026Bot** avisa no grupo "Comissão CAIXA - Avisos do painel" a cada **pedido novo**
+(protocolo, tipo, cargo, estado, cota e iniciais) e a cada **mensagem nova** do Fale com a comissão
+(assunto e primeiro nome). O aviso não traz telefone, inscrição nem o texto da mensagem; o botão
+abre a área da comissão.
+- Para alguém receber os avisos, basta entrar no grupo do Telegram.
+- A chave do bot fica só em Supabase → Edge Functions → Secrets → `TELEGRAM_TOKEN`. Se vazar: no
+  @BotFather, `/revoke`, e cole a chave nova no mesmo segredo.
+- Para mandar os avisos para outro grupo: adicione o bot no grupo novo, mande `/start@ComissaoCaixa2026Bot`
+  lá e peça a um administrador para trocar o número em `configuracao` (chave `telegram_chat_id`).
+
 ### Mensagens antigas
 As mensagens do Fale com a comissão são apagadas do banco 6 meses depois de recebidas. O aviso
 que chegou no e-mail da comissão continua lá.
