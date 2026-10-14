@@ -25,6 +25,19 @@ function cors(req: Request) {
   };
 }
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
+// Assunto com acentos: a biblioteca quebra o cabeçalho quando o assunto é longo (o e-mail chega "cru").
+// Por isso o assunto já vai codificado em pedaços curtos (RFC 2047, base64), que todo leitor de e-mail junta de volta.
+function assuntoCodificado(texto: string) {
+  const b64 = (s: string) => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
+  const partes: string[] = [];
+  let atual = "";
+  for (const ch of Array.from(texto.replace(/[\r\n]+/g, " "))) {
+    if (new TextEncoder().encode(atual + ch).length > 30) { partes.push(atual); atual = ""; }
+    atual += ch;
+  }
+  if (atual) partes.push(atual);
+  return partes.map((p) => `=?UTF-8?B?${b64(p)}?=`).join(" ");
+}
 
 // Mesmo visual dos e-mails de login (docs/emails/)
 function emailHtml(m: Record<string, string>, quando: string) {
@@ -109,8 +122,8 @@ Deno.serve(async (req) => {
     await smtp.send({
       from: `Painel dos aprovados <${usuario}>`,
       to: para!,
-      replyTo: `${m.nome.replace(/[<>"\r\n]/g, "")} <${m.email}>`,
-      subject: `[Fale com a comissão] ${m.assunto} · ${m.nome}`.replace(/[\r\n]/g, " "),
+      replyTo: `${assuntoCodificado(m.nome.replace(/[<>"\r\n]/g, ""))} <${m.email}>`,
+      subject: assuntoCodificado(`[Fale com a comissão] ${m.assunto} · ${m.nome}`),
       content: `Nova mensagem pelo painel dos aprovados.\n\nDe: ${m.nome} <${m.email}>\nEnviada em: ${quando}\nAssunto: ${m.assunto}\n\n${m.mensagem}\n\nResponda a este e-mail para falar com a pessoa. Depois, marque como respondida na área da comissão.`,
       html: emailHtml(m, quando),
     });
