@@ -192,3 +192,10 @@ do topo de cada arquivo). Se trocar a senha do Gmail ou revogar a senha de app, 
   O papel **Developer** permite editar os dados. Um papel só de consulta (**Read-only**)
   pode depender do plano da organização.
 - Apagar uma linha não tem "desfazer", mas os dados antigos ficam guardados no `historico`.
+
+## Backup
+
+Todo dia às 03:30 o repositório **privado** `ComissaoCAIXA/Dashboard-backup` guarda uma cópia do banco,
+**criptografada**. Só abre com a chave privada `backup-CHAVE-PRIVADA.asc` (guardada fora do GitHub) e a senha dela.
+O backup lê o banco com o usuário `backup_leitura`, que não consegue alterar nada. Como restaurar: veja o README
+daquele repositório.
