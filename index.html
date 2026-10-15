@@ -586,7 +586,11 @@ body.aba-form .filters,body.aba-form .det-tgl,body.aba-form .filtbtn,body.aba-fo
 /* ---------- Ajuda ("?") ---------- */
 .ajuda{display:inline-grid;place-items:center;width:18px;height:18px;flex:none;margin-left:2px;padding:0;border-radius:50%;border:1.5px solid var(--muted);background:none;color:var(--muted);font:700 11px/1 system-ui,sans-serif;cursor:help;text-transform:none;letter-spacing:0;vertical-align:middle}
 .ajuda:hover,.ajuda:focus-visible{border-color:var(--s1);color:var(--s1);outline:none}
-.kpi .l{display:inline-flex;align-items:center;gap:6px}
+/* o "?" acompanha a última palavra do título (não fica solto ao lado do ícone quando o título quebra) */
+.kpi .l{display:block;min-width:0;line-height:1.35}
+.kpi .l .nw{white-space:nowrap}
+.kpi .top{align-items:flex-start;gap:8px}
+.kpi .top .badge{flex:none}
 #ajudaPop{position:fixed;z-index:30;max-width:340px;background:var(--surface);color:var(--ink);border:1px solid var(--border);border-left:3px solid var(--s1);border-radius:10px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.2);font-size:13px;line-height:1.5}
 #ajudaPop b{display:block;font-size:13.5px;margin-bottom:4px}
 #ajudaPop p{margin:0;color:var(--ink2)}
@@ -672,7 +676,10 @@ body.sobrio .tw tr{border-radius:6px}
   .cotas{display:flex}
   .cotas button{flex:1 1 auto;padding:7px 6px}
   .ctab td:first-child{font-size:14px}
-  .ctab .mbar{min-width:50px}
+  /* no celular a barrinha vai para a linha de baixo, dentro da própria célula */
+  .tw .ctab td.num{flex-wrap:wrap;row-gap:4px}
+  .ctab .cv{white-space:nowrap}
+  .ctab .mbar{flex:1 0 100%;min-width:0;margin-top:0}
   #ufChip{order:3}
   .card{padding:14px;border-radius:12px}
   .kpis{gap:8px}
@@ -1463,7 +1470,7 @@ function kpis(el,list){
     }
     const ring=k.ring!=null?(()=>{const r=22,c=2*Math.PI*r;return `<svg class="ring" width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="${r}" stroke="var(--empty)"/><circle cx="28" cy="28" r="${r}" stroke="var(--tone)" stroke-linecap="round" stroke-dasharray="${c*k.ring} ${c}" transform="rotate(-90 28 28)"/></svg>`})():'';
     return `<div class="card kpi${k.ring!=null?' has-ring':''}"${k.det?' data-det':''} style="--tone:var(${k.tone})">
-      <div class="top"><span class="l">${k.label}${k.aj?botaoAjuda(k.aj):''}</span><span class="badge">${ico(k.icon)}</span></div>
+      <div class="top"><span class="l">${k.aj?k.label.replace(/(\S+)$/,`<span class="nw">$1&nbsp;${botaoAjuda(k.aj)}</span>`):k.label}</span><span class="badge">${ico(k.icon)}</span></div>
       <div class="v">${k.value}${k.unit?`<small>${k.unit}</small>`:''}</div>
       ${delta||k.sub?`<div class="s">${delta}${k.sub?`<span>${k.sub}</span>`:''}</div>`:''}
       ${k.bar!=null?`<div class="mini"><span style="width:${Math.max(0,Math.min(1,k.bar))*100}%"></span></div>`:''}${ring}</div>`;
@@ -1697,8 +1704,8 @@ function tabelaCotas(el,rows){
   const barra=(real,prev)=>prev?`<span class="mbar"><span style="width:${Math.min(100,real/prev*100)}%"></span></span>`:'';
   const tr=(l,total)=>`<tr class="${total?'tot':''}${S.lista&&S.lista===l.c.k?' sel':''}" ${total?'':`data-k="${l.c.k}"`}>
     <td data-l="Modalidade"><span class="csig">${l.c.sig}</span><span class="cnome">${l.c.nome}${l.c.res?`<small>${pct(l.c.res)} das vagas</small>`:''}</span></td>
-    <td data-l="Vagas imediatas" class="num"><b>${l.vi}</b> <small>de ${l.prevVI}</small> ${dif(l.vi,l.prevVI)}${barra(l.vi,l.prevVI)}</td>
-    <td data-l="Cadastro reserva" class="num"><b>${l.cr}</b> <small>de ${l.prevCR}</small>${barra(l.cr,l.prevCR)}</td>
+    <td data-l="Vagas imediatas" class="num"><span class="cv"><b>${l.vi}</b> <small>de ${l.prevVI}</small> ${dif(l.vi,l.prevVI)}</span>${barra(l.vi,l.prevVI)}</td>
+    <td data-l="Cadastro reserva" class="num"><span class="cv"><b>${l.cr}</b> <small>de ${l.prevCR}</small></span>${barra(l.cr,l.prevCR)}</td>
     <td data-l="Nota média" class="num">${nota(l.media)}</td>
     <td data-l="Corte da vaga imediata" class="num">${nota(l.corte)}</td>
     <td data-l="Maior nota" class="num">${nota(l.max)}</td></tr>`;
