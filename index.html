@@ -418,6 +418,14 @@ body.mod-solido .mod::before{display:none}
 .slot .pt,.tk .pt{width:8px;height:8px;border-radius:50%;flex:none;background:var(--good)}
 .slot .pt.pres,.tk .pt.pres{background:none;border:1.5px solid var(--good)}
 .slot .pt.nada,.tk .pt.nada{background:none}
+/* cheia = já aconteceu; só o contorno = intenção/presunção. Verde: convocação · vermelho: desistência · roxo: final da fila */
+.slot .pt.des,.tk .pt.des{background:var(--bad)}
+.slot .pt.pdes,.tk .pt.pdes{background:none;border:1.5px solid var(--bad)}
+.slot .pt.ffc,.tk .pt.ffc{background:var(--s4)}
+.slot .pt.ff,.tk .pt.ff{background:none;border:1.5px solid var(--s4)}
+.slot .pts,.tk .pts{display:inline-flex;gap:2px;align-items:center}
+/* ficha de quem saiu da fila (desistência) */
+.tk.fora{opacity:.5;text-decoration:line-through}
 .tk{position:relative}
 /* situação na legenda */
 .st{display:inline-block;margin-left:6px;padding:1px 9px;border-radius:999px;font-size:12px;font-weight:700;vertical-align:1px}
@@ -425,6 +433,13 @@ body.mod-solido .mod::before{display:none}
 .st.pres{color:var(--good);border:1px dashed var(--good)}
 .st.agu{color:var(--ink2);background:var(--empty)}
 .st.des{color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.st.pdes{color:var(--bad);border:1px dashed var(--bad)}
+.st.ffc{color:color-mix(in srgb,var(--s4) 85%,var(--ink));background:color-mix(in srgb,var(--s4) 16%,transparent)}
+.st.ff{color:color-mix(in srgb,var(--s4) 85%,var(--ink));border:1px dashed var(--s4)}
+.pst-leg-cores i.des{background:var(--bad)}
+.pst-leg-cores i.pdes{background:none;border:2px solid var(--bad)}
+.pst-leg-cores i.ffc{background:var(--s4)}
+.pst-leg-cores i.ff{background:none;border:2px solid var(--s4)}
 .pst-leg-cores{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted);margin-top:6px}
 .pst-leg-cores span{display:inline-flex;align-items:center;gap:5px}
 .pst-leg-cores i{position:static;display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--good)}
@@ -1107,8 +1122,8 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
         <select id="filaUF" aria-label="Estado"></select>
         <input type="search" id="filaBusca" class="busca-lista busca-grande" placeholder="Procure seu nome (sem precisar de acento)" aria-label="Procurar um nome na fila" autocomplete="off">
       </div>
-      <label class="ff-tgl" id="filaFFBox"><input type="checkbox" id="filaFF"><span><b>Considerar quem pretende ir para o final da fila</b> <span class="note" id="filaFFConta"></span></span></label>
-      <label class="ff-tgl pd" id="filaPDBox"><input type="checkbox" id="filaPD"><span><b>Considerar quem pretende desistir</b> <span class="note" id="filaPDConta"></span></span></label>
+      <label class="ff-tgl" id="filaFFBox"><input type="checkbox" id="filaFF"><span><b>Considerar quem pretende ir para o final da fila</b> <span class="note" id="filaFFConta"></span> <a href="#vagas" class="fd-ajuda" data-faq="faqFinalFila">Entenda</a></span></label>
+      <label class="ff-tgl" id="filaPDBox"><input type="checkbox" id="filaPD"><span><b>Considerar quem pretende desistir</b> <span class="note" id="filaPDConta"></span> <a href="#vagas" class="fd-ajuda" data-faq="faqDesist">Entenda</a></span></label>
       <div id="filaPosicao" class="posicao"></div>
       <p class="aviso-curto"><span data-i="flag"></span><span><b>Simulação da comissão, não é a lista oficial.</b> Quem define a ordem e o momento de cada convocação é a CAIXA, e a simulação pode mudar com novas convocações. <a href="#vagas" class="ir-detalhes">Como a simulação foi feita</a></span></p>
       <div class="cenario" id="filaCenario" hidden></div>
@@ -1157,6 +1172,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
               <li><b>Chamadas seguintes (itens 2.8 e 2.13.2).</b> O edital diz que a convocação ocorrerá <i>"de forma alternada, respeitando a proporção"</i> (2.8) e que <i>"as convocações seguirão conforme o número de vagas informado no Edital, em observância à reserva de vagas de 5% para PcD e 25% para pessoas negras, 3% a pessoas indígenas e 2% a pessoas quilombolas"</i> (2.13.2). Por isso a simulação usa esses <b>percentuais fixos</b>, contados sobre as chamadas de cada cargo e estado: a cada chamada, cada cota acumula o seu percentual, e ela ganha a vaga quando o acumulado passa em <b>meia vaga</b> o que ela já recebeu (arredondamento da proporção). Com a PN chamada no começo da fila (3ª), as próximas PN são a 6ª, 10ª, 14ª chamada…; a PcD, depois da 1ª, volta na 30ª. Nas demais chamadas, ampla concorrência. Foi esta regra que bateu com todos os 41 cargos e estados do relatório oficial de convocações da CAIXA de 13/10/2026; a conta de cada chamada aparece na memória de cálculo, acima. O número de vagas de cada modalidade em cada estado vem do Anexo I: as <b>vagas imediatas</b> são preenchidas primeiro, com exatamente essas quantidades (se a ampla concorrência do bloco acaba antes, seguem as vagas de cota que faltam), e depois vem o <b>cadastro reserva</b>.</li>
               <li><b>Por que não usar a "fatia" de cada estado (item 2.12.2).</b> O edital explica que, para PcD e pessoas negras, <i>"a aplicação das cotas foi proporcional ao número de vagas por cargo e por polo"</i> e que, para indígenas e quilombolas, <i>"a alocação considerou o total de vagas por Macropolo e a representatividade populacional"</i>, sendo essas vagas colocadas em alguns polos. Com poucas vagas por estado, os arredondamentos distorcem a fatia local (no CE, 1 vaga PN em 3 = 33%; no AM, 1 vaga PI em 2 = 50%). Por isso a ordem segue os percentuais do edital, e não a fatia de cada estado.</li>
               <li><b>Vagas que sobram (item 2.12):</b> quando uma modalidade não tem mais aprovados, a vaga passa para a próxima da cadeia descrita no edital, na mesma posição da fila.</li>
+              <li><b>Desistência e final da fila:</b> quem já desistiu de fato sai da fila e a vaga segue para a próxima pessoa da mesma lista; quem foi reclassificado pela CAIXA vai para o fim da sua lista. Essas duas coisas valem sempre. As intenções (pretende desistir, pretende final da fila) só entram quando você liga as opções acima da fila. Veja as perguntas "Alguém desistiu" e "Alguém pediu o final da fila", mais abaixo.</li>
               <li><b>Quem está em duas listas:</b> por padrão, cada pessoa conta só no grupo em que a homologação a colocou, como a CAIXA fez nos casos conhecidos. O seletor acima mostra a outra possibilidade.</li>
               <li><b>Conferência com a convocação real:</b> a simulação foi comparada com as convocações registradas pela comissão. <span id="filaConfere">Calculando…</span></li>
             </ol>
@@ -1193,6 +1209,15 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
           <p>Por isso uma pessoa pode ser, por exemplo, 5ª na lista PN e mesmo assim estar no grupo <b>AC – cadastro reserva</b>: na lista PN, as posições dela e de quem está na mesma situação "pertencem" à AC, e o cadastro reserva PN começa depois delas.</p>
           <p><b>O que a CAIXA fez até agora:</b> nos casos conhecidos (pessoas no grupo AC de vaga imediata que eram a 1ª de uma lista de cota), a CAIXA <b>seguiu o grupo da homologação</b>: chamou a pessoa pela AC e deu a vaga da cota ao próximo da lista. Para quem está no <b>cadastro reserva da AC</b> e numa cota, <b>ainda não houve nenhum caso</b>, então não se sabe como a CAIXA vai agir.</p>
           <p><b>No simulador:</b> o padrão é <b>Como a homologação agrupa</b>. Escolha <b>Pelas duas listas</b> para ver a outra possibilidade (a pessoa é chamada pela lista que a alcançar primeiro e é pulada na outra). A tabela abaixo da fila mostra onde cada pessoa nessa situação seria chamada nos dois cenários, e o campo "Procure seu nome nesta fila" mostra a sua posição. <small>Itens 4.1.2.4 e 4.3.4.1</small></p></details>
+        <details id="faqDesist"><summary>Alguém desistiu ou pretende desistir</summary>
+          <p>A CAIXA só fica sabendo da desistência quando convoca a pessoa e ela recusa. Por isso o painel separa duas situações:</p>
+          <ol class="faq-ol"><li><span class="pill p-des">Desistente</span> <b>já aconteceu:</b> a pessoa foi convocada e informou à CAIXA que desistiu. A vaga continua sendo da mesma lista (AC, PN…) e segue para a <b>próxima pessoa dessa lista</b>. Na simulação isso vale sempre: a ficha de quem desistiu aparece riscada, com a bolinha vermelha cheia.</li>
+          <li><span class="pill p-pd">Pretende desistir</span> <b>só intenção:</b> a pessoa contou à comissão que não vai assumir, mas para a CAIXA ela continua na lista e será convocada normalmente. Na simulação, só conta se você ligar <b>Considerar quem pretende desistir</b> (bolinha vermelha só com o contorno).</li></ol></details>
+        <details id="faqFinalFila"><summary>Alguém pediu (ou vai pedir) o final da fila</summary>
+          <p>O final da fila é a reclassificação para o fim da lista de classificação. Também há duas situações:</p>
+          <ol class="faq-ol"><li><span class="pill p-ffc">⤵ Final da fila</span> <b>já aconteceu:</b> a pessoa pediu e a CAIXA confirmou. A classificação muda de verdade: ela vai para o fim da sua lista e volta a aguardar nova convocação. Na simulação isso vale sempre (bolinha roxa cheia), e a posição aparece como "→ fim da lista".</li>
+          <li><span class="pill p-ff">⤵ Pretende final da fila</span> <b>só intenção:</b> a pessoa ainda não pediu à CAIXA. Na simulação, só conta se você ligar <b>Considerar quem pretende ir para o final da fila</b> (bolinha roxa só com o contorno).</li></ol>
+          <p>A pessoa também informa em qual lista pede a reclassificação (polo ou macropolo). Ainda não se sabe como a CAIXA aplica isso; por enquanto, a simulação considera só a fila do polo.</p></details>
         <details><summary>O estado não tem vaga para pessoas com deficiência</summary><p>A posição que seria da PcD fica com a ampla concorrência, e a cota racial entra no máximo na 3ª chamada. Exemplos: com 2 ou mais vagas AC e 1 PN, a ordem fica AC, AC, PN (como a CAIXA fez no CE e em PE em 08/10); com 1 AC e 1 PN, AC e PN (como no DF). O edital não trata esse caso de forma explícita. Quem é PcD continua concorrendo pela ampla concorrência com a própria nota.</p></details>
         <details><summary>O estado não tem vaga de ampla concorrência</summary><p>Acontece quando todas as vagas do polo são reservadas (ex.: Arquiteto na BA tem 1 vaga para negros e 1 para indígenas). A fila começa pelas cotas; quem é da ampla concorrência só é chamado se alguma cota não tiver aprovados suficientes.</p></details>
         <details><summary>Uma cota não teve aprovados suficientes</summary><p>As vagas que sobram passam para a próxima modalidade da cadeia acima, na mesma posição da fila em que a cota seria chamada. No simulador elas aparecem como <span class="tag-rev">vaga PI → PN</span>, por exemplo.</p></details>
@@ -2314,6 +2339,7 @@ function iniciarVagas(){
   {let t;document.getElementById('filaBusca').addEventListener('input',()=>{clearTimeout(t);t=setTimeout(buscarNaFila,150)})}
   document.getElementById('filaFF').onchange=e=>{FS.ff=e.target.checked;desenharFila(false)};
   document.getElementById('filaPD').onchange=e=>{FS.pd=e.target.checked;desenharFila(false)};
+  document.querySelectorAll('a[data-faq]').forEach(a=>a.onclick=e=>{e.preventDefault();const d=document.getElementById(a.dataset.faq);d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})});
   document.querySelectorAll('.ir-detalhes').forEach(a=>a.onclick=e=>{e.preventDefault();aplicarDetalhe(true);const d=document.getElementById('filaComoFeita');d.open=true;setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'start'}),50)});
   document.getElementById('fdAjuda').onclick=e=>{e.preventDefault();const d=document.getElementById('faqDuplo');d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})};
   document.getElementById('filaAnimar').onclick=animarFila;
@@ -2324,7 +2350,10 @@ function iniciarVagas(){
     const s=e.target.closest('.slot'),tk=e.target.closest('.tk');let x=null;
     if(s)x=filaAtual.find(y=>y.k===+s.dataset.k);
     else if(tk){const p=(dadosAtuais.listas[tk.dataset.m]||[])[+tk.dataset.i];x=filaAtual.find(y=>y.pessoa===p);
-      if(!x){document.getElementById('pstLeg').innerHTML=`<b>${esc(p.ini)}</b> (${modSig(tk.dataset.m)}${p.rankUF?`, ${p.rankUF}º no estado`:''})<br><span class="note">Fica fora desta fila: as vagas desta modalidade acabam antes de chegar a esta posição.</span>`;return}}
+      if(!x){const sub=filaAtual.find(y=>(y.des||[]).includes(p)),t=textoSituacao(p);
+        document.getElementById('pstLeg').innerHTML=`<b>${esc(p.ini)}</b> (${modSig(tk.dataset.m)}${p.rankUF?`, ${p.rankUF}º no estado`:''})${t?` · ${esc(t)}`:''}<br><span class="note">${sub
+          ?`${desistiu(p)?'Desistiu da vaga':'Pretende desistir (opção ligada)'}: sai da fila, e a vaga segue para a próxima pessoa da lista${sub.pessoa?`, <b>${esc(sub.pessoa.ini)}</b> (${sub.k}ª chamada)`:''}.`
+          :'Fica fora desta fila: as vagas desta modalidade acabam antes de chegar a esta posição.'}</span>`;return}}
     if(x)selecionarChamada(x);
   });
   document.getElementById('filaTudo').onclick=()=>{pararFila();mostrarAte(filaAtual.length)};
@@ -2457,7 +2486,7 @@ function desenharNumeros(vi,totVI){
     ['Próxima chamada',prox[0]?`${prox[0].k}ª`:'–',prox[0]?`<span class="mod ${modCls(prox[0].lista||prox[0].slot)}">${modSig(prox[0].lista||prox[0].slot)}</span> ${prox[0].pessoa?esc(prox[0].pessoa.ini):'sem candidato'}`:'fila concluída']
   ].map(([l,v,s])=>`<div class="fn"><span class="fn-l">${l}</span><b class="fn-v">${v}</b><span class="fn-s">${s}</span></div>`).join('');
   const P=prox.slice(0,5);
-  elP.innerHTML=P.length?`<div class="proximas"><div class="px-tit">Próximas chamadas previstas</div><ol>${P.map(x=>`<li><span class="k">${x.k}ª</span><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span><span class="quem">${x.pessoa?esc(x.pessoa.ini):'<span class="vazia">sem candidato</span>'}</span><span class="note">${x.pessoa&&!x.pessoa.ficticio?x.pessoa.rankUF+'º no estado · ':''}${x.vi?'vaga imediata':'cadastro reserva'}</span></li>`).join('')}</ol></div>`:'';
+  elP.innerHTML=P.length?`<div class="proximas"><div class="px-tit">Próximas chamadas previstas</div><ol>${P.map(x=>`<li><span class="k">${x.k}ª</span><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span><span class="quem">${x.pessoa?esc(x.pessoa.ini):'<span class="vazia">sem candidato</span>'}</span><span class="note">${x.pessoa&&!x.pessoa.ficticio?x.pessoa.rankUF+'º no estado · ':''}${x.vi?'vaga imediata':'cadastro reserva'}${(x.des||[]).length?` · no lugar de ${x.des.map(d=>esc(d.ini)).join(', ')}, que ${x.des.length>1?'saíram':'saiu'} da fila`:''}</span>${pretendeDesistir(x.pessoa)?desPill(x.pessoa):''}${x.pessoa&&x.pessoa.finalFila?ffPill(x.pessoa):''}</li>`).join('')}</ol></div>`:'';
   document.getElementById('filaCompletaTit').textContent=`Ver a fila completa (${total} chamadas), com animação e o motivo de cada chamada`;
 }function desenharCenario(){
   const el=document.getElementById('filaCenario');el.hidden=FS.modo!=='livre';if(el.hidden)return;
@@ -2553,14 +2582,17 @@ let tkDe=new Map();
 function montarPistas(vi,listas,totVI){
   const ordem=['AC','PCD','PPP/PN','PI','PQ'].filter(m=>vi[m]||(listas[m]||[]).length);
   tkDe=new Map();
+  // quem desistiu (ou pretende, com a opção ligada) fica na faixa, riscado: a vaga foi para o próximo da lista
+  const fora=new Set(filaAtual.flatMap(x=>x.des||[]));
   const cols=ordem.map(m=>{const ps=listas[m]||[];
     return `<div class="pst-col ${modCls(m)}" data-m="${m}"><header><span class="mod ${modCls(m)}">${modSig(m)}</span><span>${vi[m]||0} vaga(s) imed.</span></header>
-      <div class="pst-tks">${ps.length?ps.map((p,i)=>`<span class="tk ${modCls(m)}" data-m="${m}" data-i="${i}" title="${esc(p.ini)}${statusPessoa(p).txt?' · '+statusPessoa(p).txt:''}">${p.ficticio?(i+1)+'º':p.rankUF+'º'}<i class="pt ${['conv','pres'].includes(statusPessoa(p).k)?statusPessoa(p).k:'nada'}"></i></span>`).join(''):'<span class="vazio-col">sem aprovados</span>'}</div></div>`}).join('');
+      <div class="pst-tks">${ps.length?ps.map((p,i)=>`<span class="tk ${modCls(m)}${fora.has(p)?' fora':''}" data-m="${m}" data-i="${i}" title="${esc(p.ini)}${textoSituacao(p)?' · '+textoSituacao(p):''}${fora.has(p)?' · saiu da fila: a vaga segue para o próximo da lista':''}">${p.ficticio?(i+1)+'º':p.rankUF+'º'}${bolinhas(p)}</span>`).join(''):'<span class="vazio-col">sem aprovados</span>'}</div></div>`}).join('');
   const slots=filaAtual.map((x,i)=>`<span class="slot${i===totVI-1&&totVI<filaAtual.length?' fimvi':''}" data-k="${x.k}">${x.k}</span>`).join('');
   document.getElementById('pistas').innerHTML=`<div class="pst-cols" style="--n:${ordem.length}">${cols}</div>
     <div class="pst-trilho-t"><span>Fila de convocação</span><span class="note">traço: fim das vagas imediatas · contorno tracejado: vaga que passou de uma cota para outra</span></div>
     <div class="pst-trilho">${slots}</div>
-    <div class="pst-leg-cores"><span><i></i>convocado</span><span><i class="pres"></i>convocado (presumido)</span><span>sem bolinha: aguardando</span><span>clique numa posição para ver quem é</span></div>
+    <div class="pst-leg-cores"><span><i></i>convocado</span><span><i class="pres"></i>convocado (presumido)</span><span><i class="des"></i>desistente</span><span><i class="pdes"></i>pretende desistir</span><span><i class="ffc"></i>final da fila (reclassificado)</span><span><i class="ff"></i>pretende final da fila</span><span>sem bolinha: aguardando</span></div>
+    <div class="pst-leg-cores" style="margin-top:2px"><span>bolinha cheia: já aconteceu · só o contorno: intenção ou presunção</span><span>ficha riscada: saiu da fila e a vaga seguiu para o próximo da lista</span><span>clique numa posição para ver quem é</span></div>
     <div class="pst-leg" id="pstLeg">Clique em <b>Animar a fila</b> ou em <b>Próxima chamada</b>.</div>`;
   ordem.forEach(m=>(listas[m]||[]).forEach((p,i)=>tkDe.set(p,document.querySelector(`.tk[data-m="${m}"][data-i="${i}"]`))));
 }
@@ -2569,22 +2601,32 @@ function preencherSlot(x,pop){
   const s=document.querySelector(`.slot[data-k="${x.k}"]`);if(!s)return;
   const m=x.lista||x.slot;s.className=s.className.replace(/ ?(cheio|AC|PCD|PN|PI|PQ|rv|pop)\b/g,'')+` cheio ${modCls(m)}${x.rev?' rv':''}${pop?' pop':''}`;
   s.textContent=x.pessoa?(x.pessoa.ficticio?x.pessoa.ini.split(' ')[0]:x.pessoa.rankUF+'º'):'–';
-  // bolinha verde: convocado (cheia) ou convocado presumido (vazada)
-  const st=statusPessoa(x.pessoa);s.insertAdjacentHTML('beforeend',`<i class="pt ${st.k==='conv'||st.k==='pres'?st.k:'nada'}"></i>`);
-  s.title=`${x.k}ª chamada: ${x.pessoa?x.pessoa.ini:'sem candidato'} (${modSig(m)})${st.txt?' · '+st.txt:''}`;
+  s.insertAdjacentHTML('beforeend',bolinhas(x.pessoa));
+  const t=textoSituacao(x.pessoa),des=(x.des||[]).map(d=>`${d.ini} ${desistiu(d)?'desistiu':'pretende desistir'}`);
+  s.title=`${x.k}ª chamada: ${x.pessoa?x.pessoa.ini:'sem candidato'} (${modSig(m)})${t?' · '+t:''}${des.length?' · vaga de '+des.join(', '):''}`;
 }
 // Situação da pessoa para a legenda e as bolinhas
 function statusPessoa(p){
   if(!p||p.ficticio)return{k:'',txt:''};
   if(p.situacaoConv==='Empossado')return{k:'conv',txt:'Empossado',ic:'✓ '};
-  if(p.situacaoConv==='Desistente')return{k:'des',txt:'Desistente',ic:''};
+  if(desistiu(p))return{k:'des',txt:'Desistente',ic:''};
+  if(pretendeDesistir(p))return{k:'pdes',txt:'Pretende desistir',ic:''};
   if(p.conv)return p.presumida?{k:'pres',txt:'Convocado (presumido)',ic:''}:{k:'conv',txt:'Convocado',ic:'✓ '};
   return{k:'agu',txt:p.situacaoConv==='Sem informação'?'Sem informação':'Aguardando',ic:''};
 }
+// Final da fila (segunda informação, independente da convocação)
+const statusFF=p=>!p||p.ficticio||!p.finalFila?null:p.ffConf?{k:'ffc',txt:'Final da fila (reclassificado)'}:{k:'ff',txt:'Pretende final da fila'};
+const textoSituacao=p=>{const st=statusPessoa(p),f=statusFF(p);return [st.txt,f&&f.txt].filter(Boolean).join(' · ')};
+// Até duas bolinhas: situação da convocação (verde/vermelha) e final da fila (roxa). Cheia: já aconteceu; contorno: intenção ou presunção
+function bolinhas(p){
+  const st=statusPessoa(p),f=statusFF(p),k=['conv','pres','des','pdes'].includes(st.k)?st.k:'nada';
+  return f?`<span class="pts"><i class="pt ${k}"></i><i class="pt ${f.k}"></i></span>`:`<i class="pt ${k}"></i>`;
+}
 function legendaPasso(x){
   const p=x.pessoa,quem=p?(p.ficticio?`${p.ini}`:`<b>${esc(p.ini)}</b> (${modSig(x.lista)}, ${p.rankUF}º no estado)`):'<b>sem candidato aprovado</b>';
-  const st=statusPessoa(p);
-  return `<b>${x.k}ª chamada${x.vi?' · vaga imediata':' · cadastro reserva'}:</b> ${quem}${st.k?` <span class="st ${st.k}">${st.ic}${st.txt}</span>`:''}<br><span class="note">${porQue(x,x.k===1&&x.slot==='AC'&&x.motivo==='inicio'&&!filaAtual.some(y=>y.slot==='PCD'))}</span>`;
+  const st=statusPessoa(p),f=statusFF(p);
+  const des=(x.des||[]).map(d=>`<b>${esc(d.ini)}</b> ${desistiu(d)?'desistiu':'pretende desistir'}`);
+  return `<b>${x.k}ª chamada${x.vi?' · vaga imediata':' · cadastro reserva'}:</b> ${quem}${st.k?` <span class="st ${st.k}">${st.ic}${st.txt}</span>`:''}${f?` <span class="st ${f.k}">⤵ ${f.txt}</span>`:''}<br><span class="note">${porQue(x,x.k===1&&x.slot==='AC'&&x.motivo==='inicio'&&!filaAtual.some(y=>y.slot==='PCD'))}${des.length?` ${des.join(', ')}: a vaga seguiu para a próxima pessoa da lista.`:''}</span>`;
 }
 function selecionarChamada(x){
   document.querySelectorAll('#pistas .sel').forEach(el=>el.classList.remove('sel'));
@@ -2878,7 +2920,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
-  ['2026-10-16 22:30','novo','Solicitações dos aprovados, final da fila e desistência','O botão "Informar convocação" virou "Solicitações dos aprovados": dá para marcar mais de um pedido no mesmo envio (um protocolo só) e enviar novos pedidos mesmo com outros em análise. Novas opções: pedir ou confirmar o final da fila (com a lista: polo ou macropolo) e avisar que pretende desistir. No painel, os selos separam o que é só intenção ("Pretende desistir", "Pretende final da fila") do que já aconteceu com a CAIXA ("Desistente", "Final da fila"); passe o mouse para ver a explicação. Em "Vagas e regras", a vaga de quem desistiu segue para o próximo da lista, quem foi reclassificado vai para o fim, e as intenções entram com as novas opções da simulação. Na aba Convocações há uma lista própria de desistências.'],
+  ['2026-10-16 22:30','novo','Solicitações dos aprovados, final da fila e desistência','O botão "Informar convocação" virou "Solicitações dos aprovados": dá para marcar mais de um pedido no mesmo envio (um protocolo só) e enviar novos pedidos mesmo com outros em análise. Novas opções: pedir ou confirmar o final da fila (com a lista: polo ou macropolo) e avisar que pretende desistir. No painel, os selos separam o que é só intenção ("Pretende desistir", "Pretende final da fila") do que já aconteceu com a CAIXA ("Desistente", "Final da fila"); passe o mouse para ver a explicação. Em "Vagas e regras", a vaga de quem desistiu segue para o próximo da lista, quem foi reclassificado vai para o fim, e as intenções entram com as novas opções da simulação. Na fila, novas bolinhas: vermelha para desistência e roxa para final da fila (cheia quando já aconteceu, só o contorno quando é intenção). Na aba Convocações há uma lista própria de desistências.'],
   ['2026-10-14 21:30','novo','"Vagas e regras" mais simples, com a sua posição na fila','A aba foi reorganizada: escolha o cargo e o estado, procure o seu nome e veja em qual chamada você seria convocado e quantas faltam. Logo abaixo ficam as próximas chamadas previstas e a fila completa. Quem está classificado em duas listas (por exemplo, AC e PN) vê também a outra possibilidade, explicada num novo item de "Situações especiais". A memória de cálculo, a conferência e o quadro de vagas ficam na "Visão detalhada".'],
   ['2026-10-14 18:30','melhoria','Cargos do painel no título','Sugestão de uma aprovada: o título agora deixa claro que o painel é dos cargos de Arquiteto e Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho), e o rodapé avisa que o cargo de Médico do Trabalho não faz parte do painel.'],
   ['2026-10-13 23:40','novo','Busca nas listas','A lista de aprovados e a lista de convocações ganharam um campo de busca. Não precisa digitar o nome exato: acentos, maiúsculas e letras dobradas não importam ("alan" encontra "Állan"), e dá para combinar nome, cargo e estado ("joao civil amapa").'],
