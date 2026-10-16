@@ -727,6 +727,29 @@ const ROT_DET={tbl1:'lista de aprovados',tbl2:'convocações',fila:'fila simulad
 // barras horizontais (mesmo estilo da aba Grupo)
 const barrasMet=(itens,cor)=>{if(!itens.length)return '<p class="vazio" style="padding:10px 0">Ainda sem dados no período.</p>';const mx=Math.max(...itens.map(i=>i[1]),1);
   return `<div class="hb">${itens.map(([r,v,s])=>`<span>${esc(r)}</span><span class="tr"><span style="width:${v/mx*100}%;background:${cor||'var(--s1)'}"></span></span><span class="vl">${nfm(v)}${s?` <small>${esc(s)}</small>`:''}</span>`).join('')}</div>`};
+const pl=(n,um,varios)=>`${nfm(n)} ${Number(n)===1?um:varios}`;
+// Gráfico de colunas: visitantes por dia, desenhado na largura real do card (sem esticar texto nem barras).
+// Passe o mouse numa coluna para ver os detalhes do dia.
+function graficoMet(){
+  const el=$('metGrafico'),D=(MET&&MET.dias)||[];if(!D.length||!el.offsetParent){el.innerHTML='';return}
+  const W=Math.max(280,Math.floor(el.clientWidth)),H=180,pl0=34,pb=24,pt=16;
+  const maxV=Math.max(1,...D.map(d=>d.visitantes));
+  const passoY=[1,2,5,10,20,25,50,100,200,250,500,1000,2000,5000].find(s=>maxV/s<=4)||Math.ceil(maxV/4);
+  const topo=Math.ceil(maxV/passoY)*passoY,y=v=>pt+(H-pt-pb)*(1-v/topo);
+  const area=W-pl0,bw=area/D.length,larg=Math.min(34,bw*.7),mostraValor=D.length<=31&&bw>=16;
+  const passoX=Math.ceil(D.length/Math.max(2,Math.floor(area/48)));
+  const ticks=[];for(let v=0;v<=topo;v+=passoY)ticks.push(v);
+  el.innerHTML=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Visitantes por dia" style="display:block;font-family:inherit">
+    ${ticks.map(v=>`<line x1="${pl0}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-width="1"/><text x="${pl0-6}" y="${y(v)+3.5}" font-size="11" text-anchor="end" fill="var(--muted)">${nfm(v)}</text>`).join('')}
+    ${D.map((d,i)=>{const cx=pl0+i*bw+bw/2,h=y(0)-y(d.visitantes),ult=i===D.length-1;
+      return `<g><title>${dBR(d.dia)}: ${pl(d.visitantes,'visitante','visitantes')} · ${pl(d.visitas,'abertura','aberturas')} do painel · ${pl(d.novos,'pessoa nova','pessoas novas')} · ${pl(d.pedidos,'pedido','pedidos')} · ${pl(d.mensagens,'mensagem','mensagens')}</title>
+        <rect x="${pl0+i*bw}" y="${pt}" width="${bw}" height="${H-pt-pb}" fill="transparent"/>
+        ${h>0?`<rect x="${cx-larg/2}" y="${y(d.visitantes)}" width="${larg}" height="${h}" rx="3" fill="${ult?'var(--s1)':'color-mix(in srgb,var(--s1) 60%,transparent)'}"/>`:''}
+        ${mostraValor&&d.visitantes?`<text x="${cx}" y="${y(d.visitantes)-4}" font-size="11" font-weight="600" text-anchor="middle" fill="var(--ink2)">${nfm(d.visitantes)}</text>`:''}
+        ${(D.length-1-i)%passoX===0?`<text x="${cx+17>W?W-1:cx}" y="${H-7}" font-size="11" text-anchor="${cx+17>W?'end':'middle'}" fill="var(--muted)">${d.dia.slice(8,10)}/${d.dia.slice(5,7)}</text>`:''}</g>`}).join('')}
+  </svg>`;
+}
+{let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(graficoMet,150)})}
 function desenharMetricas(){
   const m=MET,D=m.dias||[],ev=m.eventos||[],soma=k=>D.reduce((s,d)=>s+Number(d[k]||0),0);
   const hoje=D[D.length-1]||{},ontem=D[D.length-2]||{};
@@ -738,18 +761,9 @@ function desenharMetricas(){
     ['Pessoas novas',nfm(soma('novos')),`abriram o painel pela 1ª vez no período`],
     ['Pedidos e mensagens',nfm(soma('pedidos')+soma('mensagens')),`${nfm(soma('pedidos'))} pedido(s) · ${nfm(soma('mensagens'))} mensagem(ns) no período`]
   ].map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join('');
-  $('metSub').textContent=m.desde?`A contagem começou em ${dBR(m.desde)}. Desde então: ${nfm(m.total.visitas)} aberturas do painel e ${nfm(m.total.novos)} pessoas novas.`
+  $('metSub').textContent=m.desde?`A contagem começou em ${dBR(m.desde)}. Desde então: ${pl(m.total.visitas,'abertura','aberturas')} do painel e ${pl(m.total.novos,'pessoa nova','pessoas novas')}.`
     :'A contagem começa a partir de agora: os números aparecem conforme as pessoas abrirem o painel.';
-  // gráfico de colunas: visitantes por dia (passe o mouse para ver os detalhes do dia)
-  const W=Math.max(320,D.length*22),H=170,pb=22,pt=14,mx=Math.max(4,...D.map(d=>d.visitantes)),bw=W/D.length,y=v=>pt+(H-pt-pb)*(1-v/mx);
-  const passo=D.length>40?14:D.length>15?5:1;
-  $('metGrafico').innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:${H}px" role="img" aria-label="Visitantes por dia">
-    ${[0.5,1].map(f=>`<line x1="0" x2="${W}" y1="${y(mx*f)}" y2="${y(mx*f)}" stroke="var(--grid)" stroke-width="1"/><text x="2" y="${y(mx*f)-3}" font-size="10" fill="var(--muted)">${nfm(Math.round(mx*f))}</text>`).join('')}
-    ${D.map((d,i)=>{const x=i*bw+bw*.15,w=bw*.7,h=Math.max(0,H-pb-y(d.visitantes));return `<g><title>${dBR(d.dia)}: ${nfm(d.visitantes)} visitante(s), ${nfm(d.visitas)} abertura(s), ${nfm(d.novos)} nova(s) · ${nfm(d.pedidos)} pedido(s), ${nfm(d.mensagens)} mensagem(ns)</title>
-      <rect x="${x}" y="${H-pb-h}" width="${w}" height="${h}" rx="2" fill="${i===D.length-1?'var(--s1)':'color-mix(in srgb,var(--s1) 55%,transparent)'}"/>
-      <rect x="${i*bw}" y="${pt}" width="${bw}" height="${H-pt-pb}" fill="transparent"/>
-      ${i%passo===0||i===D.length-1?`<text x="${i===D.length-1?x+w:i===0?x:x+w/2}" y="${H-6}" font-size="10" text-anchor="${i===D.length-1?'end':i===0?'start':'middle'}" fill="var(--muted)">${d.dia.slice(8,10)}/${d.dia.slice(5,7)}</text>`:''}</g>`}).join('')}
-  </svg>`;
+  graficoMet();
   const rot=d=>ROT_DET[d]||d;
   $('metDisp').innerHTML=barrasMet(por('visita').map(x=>[rot(x.detalhe),x.total]));
   $('metAbas').innerHTML=barrasMet(por('aba').map(x=>[rot(x.detalhe==='docs'?'docs2':x.detalhe),x.total]));
