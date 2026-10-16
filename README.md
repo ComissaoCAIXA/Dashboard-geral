@@ -65,7 +65,7 @@ com a comissão e nunca aparecem no painel nem neste repositório.
 | Peça | Onde |
 |---|---|
 | Páginas (HTML, CSS e JavaScript, sem etapa de build) | `index.html` (painel) e `comissao.html` (área da comissão), publicadas pelo GitHub Pages |
-| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 029, aplicadas em ordem) |
+| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 031, aplicadas em ordem) |
 | Aviso por e-mail do Fale com a comissão | Função `supabase/functions/avisar-mensagem` (Supabase Edge Functions) |
 | Avisos da comissão no Telegram (pedido novo e mensagem nova) | Função `supabase/functions/avisar-telegram`, chamada pelo banco (migração 020) |
 | Modelos dos e-mails de login da comissão | `docs/emails/` |
@@ -80,6 +80,10 @@ com a comissão e nunca aparecem no painel nem neste repositório.
 - A área da comissão exige login por e-mail e só funciona para e-mails cadastrados pela comissão.
   Toda alteração fica registrada no histórico, com quem fez.
 - O WhatsApp informado para entrar no grupo é apagado na decisão da comissão ou em no máximo 24 horas.
+- **Métricas de uso:** o painel soma, por dia, quantas vezes foi aberto (celular, tablet ou computador) e
+  quais recursos foram usados (abas, buscas, PDFs, simulação). São só contadores: não há IP, cookie,
+  nome nem identificador. "Visitante do dia" é decidido no próprio navegador, com uma data guardada nele.
+  Só a comissão vê os números, na aba Métricas.
 - Senhas, a chave `service_role` e a senha do e-mail ficam só no Supabase, nunca no código.
 - **Nunca** entram neste repositório: números de inscrição, CPF, telefones, e-mails de aprovados,
   observações internas, planilhas ou arquivos com dados pessoais.

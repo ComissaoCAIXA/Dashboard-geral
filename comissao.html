@@ -97,6 +97,11 @@ tr.click{cursor:pointer}tr.click:hover{background:var(--wash)}
 .pill.pres{background:var(--warnbg);color:var(--warn)}
 .pill.ff{background:none;border:1px dashed var(--border);color:var(--ink2)}
 .pill.ffc{background:var(--wash);color:var(--s1)}
+.met-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.met-grade .card{margin-bottom:0}
+.met-grade+.card{margin-top:12px}
+.met-graf{overflow:hidden}
+@media (max-width:760px){.met-grade{grid-template-columns:1fr}}
 .seg-ped{display:inline-flex;border:1px solid var(--border);border-radius:8px;padding:3px;gap:3px;margin:0 0 12px}
 .seg-ped button{border:0;background:none;color:var(--ink2);font:inherit;font-size:13.5px;font-weight:600;padding:6px 14px;border-radius:6px;cursor:pointer}
 .seg-ped button[aria-pressed="true"]{background:var(--s1);color:#fff}
@@ -201,7 +206,8 @@ tr.marcado{background:var(--wash)}
   <!-- Área -->
   <section id="vArea" hidden>
     <div class="tabs" role="tablist">
-      <button data-v="pend" aria-selected="true">Pedidos pendentes<b id="nPend" hidden></b></button>
+      <button data-v="met" aria-selected="true">Métricas</button>
+      <button data-v="pend" aria-selected="false">Pedidos pendentes<b id="nPend" hidden></b></button>
       <button data-v="msgs">Mensagens<b id="nMsgs" hidden></b></button>
       <button data-v="grupo">Grupo de WhatsApp</button>
       <button data-v="aprov">Aprovados</button>
@@ -210,7 +216,27 @@ tr.marcado{background:var(--wash)}
       <button data-v="hist">Histórico</button>
     </div>
 
-    <div id="pPend">
+    <div id="pMet">
+      <div class="linha" style="justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div class="seg-ped" id="metPeriodo" role="group" aria-label="Período" style="margin:0"><button type="button" data-d="7" aria-pressed="false">7 dias</button><button type="button" data-d="30" aria-pressed="true">30 dias</button><button type="button" data-d="90" aria-pressed="false">90 dias</button></div>
+        <button class="btn sec" type="button" id="metAtualizar" style="padding:6px 12px;font-size:13px">Atualizar</button></div>
+      <div class="kpis" id="metKpis"></div>
+      <div class="card"><h2 style="margin:0 0 2px">Visitantes por dia</h2>
+        <p class="note" style="margin:0 0 8px" id="metSub"></p>
+        <div id="metGrafico" class="met-graf"></div></div>
+      <div class="met-grade">
+        <div class="card"><h2 style="margin:0">Dispositivo</h2><p class="note" style="margin:2px 0 0">Aberturas do painel no período</p><div id="metDisp"></div></div>
+        <div class="card"><h2 style="margin:0">Abas mais vistas</h2><p class="note" style="margin:2px 0 0">Quantas visitas abriram cada aba</p><div id="metAbas"></div></div>
+        <div class="card"><h2 style="margin:0">O que as pessoas fazem</h2><p class="note" style="margin:2px 0 0">No período (cada recurso conta uma vez por visita)</p><div id="metAcoes"></div></div>
+        <div class="card"><h2 style="margin:0">Estados mais consultados</h2><p class="note" style="margin:2px 0 0">Visitas que filtraram o painel por estado</p><div id="metUF"></div></div>
+      </div>
+      <div class="card"><h2 style="margin:0">Notícias</h2><p class="note" style="margin:2px 0 0">Leituras de cada notícia desde a publicação</p><div id="metNtc"></div></div>
+      <p class="note">Como contamos: o painel soma, por dia, quantas vezes foi aberto e quais recursos foram usados. Não guardamos IP, nome, cookie
+        nem nenhum identificador. "Visitante" é cada navegador que abriu o painel naquele dia (decidido no próprio aparelho), então a mesma pessoa
+        em dois aparelhos conta duas vezes, e quem usa navegação anônima ou bloqueador pode não ser contado. São números aproximados, bons para ver a tendência.</p>
+    </div>
+
+    <div id="pPend" hidden>
       <div class="linha" style="justify-content:space-between;align-items:center;margin-bottom:10px">
         <p class="note" style="margin:0">Confira cada pedido com a pessoa pelo WhatsApp antes de decidir. Ao aprovar, o painel público é atualizado.</p>
         <div class="linha" style="flex-wrap:nowrap"><input type="text" id="pBusca" class="busca" placeholder="Buscar nome, protocolo, inscrição, cargo…" autocomplete="off"><button class="btn sec" type="button" id="recarregar">Atualizar</button></div>
@@ -449,16 +475,16 @@ async function entrar(sessao){
   const {data,error}=await SB.rpc('comissao_eu');
   if(error||!data||!data.ok){$('negEmail').textContent=sessao.user.email;mostrar('vNegado');return}
   if(data.nome)$('quem').textContent=data.nome+' · '+data.email;
-  mostrar('vArea');carregarPend();contarMsgs();carregarBackups();
+  mostrar('vArea');carregarMetricas();carregarPend();contarMsgs();carregarBackups();
 }
 SB.auth.onAuthStateChange((ev,sessao)=>{if(ev==='INITIAL_SESSION'||ev==='SIGNED_IN'||ev==='SIGNED_OUT')entrar(sessao)});
 
 /* ---------- Abas ---------- */
-const PAINEIS={pend:'pPend',msgs:'pMsgs',grupo:'pGrupo',aprov:'pAprov',ntc:'pNtc',bkp:'pBkp',hist:'pHist'};
+const PAINEIS={met:'pMet',pend:'pPend',msgs:'pMsgs',grupo:'pGrupo',aprov:'pAprov',ntc:'pNtc',bkp:'pBkp',hist:'pHist'};
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
   Object.entries(PAINEIS).forEach(([k,id])=>$(id).hidden=k!==b.dataset.v);
-  if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();if(b.dataset.v==='msgs')carregarMsgs();if(b.dataset.v==='aprov')carregarAprov();if(b.dataset.v==='ntc')carregarNtc();if(b.dataset.v==='bkp')carregarBackups();
+  if(b.dataset.v==='met')carregarMetricas();if(b.dataset.v==='pend')carregarPend();if(b.dataset.v==='hist')carregarHist();if(b.dataset.v==='grupo')carregarGrupo();if(b.dataset.v==='msgs')carregarMsgs();if(b.dataset.v==='aprov')carregarAprov();if(b.dataset.v==='ntc')carregarNtc();if(b.dataset.v==='bkp')carregarBackups();
 });
 
 /* ---------- Notícias (aparecem no painel público) ---------- */
@@ -681,6 +707,59 @@ async function carregarBackups(){
 }
 $('bAtualizar').onclick=carregarBackups;
 
+/* ---------- Métricas de uso do painel (contadores por dia, sem dados pessoais; migração 030) ---------- */
+let metDias=30,MET=null;
+async function carregarMetricas(){
+  $('metKpis').innerHTML='<p class="vazio">Carregando…</p>';
+  const {data,error}=await SB.rpc('comissao_metricas',{p_dias:metDias});
+  if(error){msg($('metKpis'),'erro',error.message);return}
+  MET=data;desenharMetricas();
+}
+document.querySelectorAll('#metPeriodo button').forEach(b=>b.onclick=()=>{metDias=+b.dataset.d;
+  document.querySelectorAll('#metPeriodo button').forEach(x=>x.setAttribute('aria-pressed',x===b));carregarMetricas()});
+$('metAtualizar').onclick=carregarMetricas;
+const nfm=v=>Number(v||0).toLocaleString('pt-BR');
+const ROT_ACAO={busca_fila:'Procuraram o nome no simulador',busca_lista:'Buscaram nas listas de aprovados',formulario:'Abriram as Solicitações',
+  pedido_form:'Enviaram pedido pelo site',pdf:'Baixaram PDF',tour:'Fizeram o tour',noticias:'Abriram as notícias',simulacao:'Ligaram opções da simulação'};
+const ROT_DET={tbl1:'lista de aprovados',tbl2:'convocações',fila:'fila simulada',quadro:'quadro de vagas',docs:'checklist',convocacao:'solicitações',grupo:'grupo de WhatsApp',
+  solicitacao:'solicitações','final-da-fila':'final da fila','pretende-desistir':'pretende desistir',q1:'lista de aprovados',q2:'convocações',
+  panorama:'Panorama',conv:'Convocações',vagas:'Vagas e regras',docs2:'Documentos',celular:'Celular',tablet:'Tablet',computador:'Computador'};
+// barras horizontais (mesmo estilo da aba Grupo)
+const barrasMet=(itens,cor)=>{if(!itens.length)return '<p class="vazio" style="padding:10px 0">Ainda sem dados no período.</p>';const mx=Math.max(...itens.map(i=>i[1]),1);
+  return `<div class="hb">${itens.map(([r,v,s])=>`<span>${esc(r)}</span><span class="tr"><span style="width:${v/mx*100}%;background:${cor||'var(--s1)'}"></span></span><span class="vl">${nfm(v)}${s?` <small>${esc(s)}</small>`:''}</span>`).join('')}</div>`};
+function desenharMetricas(){
+  const m=MET,D=m.dias||[],ev=m.eventos||[],soma=k=>D.reduce((s,d)=>s+Number(d[k]||0),0);
+  const hoje=D[D.length-1]||{},ontem=D[D.length-2]||{};
+  const por=(e)=>ev.filter(x=>x.evento===e);
+  const vari=(a,b)=>!b?'':a>b?` · ▲ ${nfm(a-b)} a mais que ontem`:a<b?` · ▼ ${nfm(b-a)} a menos que ontem`:' · igual a ontem';
+  $('metKpis').innerHTML=[
+    ['Visitantes hoje',nfm(hoje.visitantes),`${nfm(hoje.visitas)} aberturas do painel${vari(hoje.visitantes,ontem.visitantes)}`],
+    [`Visitantes em ${metDias} dias`,nfm(soma('visitantes')),`média de ${nfm(Math.round(soma('visitantes')/Math.max(1,D.length)))} por dia`],
+    ['Pessoas novas',nfm(soma('novos')),`abriram o painel pela 1ª vez no período`],
+    ['Pedidos e mensagens',nfm(soma('pedidos')+soma('mensagens')),`${nfm(soma('pedidos'))} pedido(s) · ${nfm(soma('mensagens'))} mensagem(ns) no período`]
+  ].map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join('');
+  $('metSub').textContent=m.desde?`A contagem começou em ${dBR(m.desde)}. Desde então: ${nfm(m.total.visitas)} aberturas do painel e ${nfm(m.total.novos)} pessoas novas.`
+    :'A contagem começa a partir de agora: os números aparecem conforme as pessoas abrirem o painel.';
+  // gráfico de colunas: visitantes por dia (passe o mouse para ver os detalhes do dia)
+  const W=Math.max(320,D.length*22),H=170,pb=22,pt=14,mx=Math.max(4,...D.map(d=>d.visitantes)),bw=W/D.length,y=v=>pt+(H-pt-pb)*(1-v/mx);
+  const passo=D.length>40?14:D.length>15?5:1;
+  $('metGrafico').innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:${H}px" role="img" aria-label="Visitantes por dia">
+    ${[0.5,1].map(f=>`<line x1="0" x2="${W}" y1="${y(mx*f)}" y2="${y(mx*f)}" stroke="var(--grid)" stroke-width="1"/><text x="2" y="${y(mx*f)-3}" font-size="10" fill="var(--muted)">${nfm(Math.round(mx*f))}</text>`).join('')}
+    ${D.map((d,i)=>{const x=i*bw+bw*.15,w=bw*.7,h=Math.max(0,H-pb-y(d.visitantes));return `<g><title>${dBR(d.dia)}: ${nfm(d.visitantes)} visitante(s), ${nfm(d.visitas)} abertura(s), ${nfm(d.novos)} nova(s) · ${nfm(d.pedidos)} pedido(s), ${nfm(d.mensagens)} mensagem(ns)</title>
+      <rect x="${x}" y="${H-pb-h}" width="${w}" height="${h}" rx="2" fill="${i===D.length-1?'var(--s1)':'color-mix(in srgb,var(--s1) 55%,transparent)'}"/>
+      <rect x="${i*bw}" y="${pt}" width="${bw}" height="${H-pt-pb}" fill="transparent"/>
+      ${i%passo===0||i===D.length-1?`<text x="${i===D.length-1?x+w:i===0?x:x+w/2}" y="${H-6}" font-size="10" text-anchor="${i===D.length-1?'end':i===0?'start':'middle'}" fill="var(--muted)">${d.dia.slice(8,10)}/${d.dia.slice(5,7)}</text>`:''}</g>`}).join('')}
+  </svg>`;
+  const rot=d=>ROT_DET[d]||d;
+  $('metDisp').innerHTML=barrasMet(por('visita').map(x=>[rot(x.detalhe),x.total]));
+  $('metAbas').innerHTML=barrasMet(por('aba').map(x=>[rot(x.detalhe==='docs'?'docs2':x.detalhe),x.total]));
+  const acoes=Object.keys(ROT_ACAO).map(k=>{const xs=por(k);if(!xs.length)return null;const t=xs.reduce((s,x)=>s+x.total,0);
+    const det=xs.length>1||xs[0].detalhe?xs.map(x=>`${rot(x.detalhe)} ${nfm(x.total)}`).join(' · '):'';return [ROT_ACAO[k],t,det]}).filter(Boolean).sort((a,b)=>b[1]-a[1]);
+  $('metAcoes').innerHTML=barrasMet(acoes,'var(--good)');
+  $('metUF').innerHTML=barrasMet(por('filtro_estado').slice(0,10).map(x=>[NOME_UF[x.detalhe.toUpperCase()]||x.detalhe.toUpperCase(),x.total]));
+  $('metNtc').innerHTML=barrasMet((m.noticias||[]).map(n=>[n.titulo,n.visualizacoes,n.publicado_em?dBR(n.publicado_em):'']),'var(--warn)');
+}
+
 /* ---------- Mensagens (Fale com a comissão) ---------- */
 async function contarMsgs(){
   const {count}=await SB.from('mensagens').select('id',{count:'exact',head:true}).eq('status','Nova');
@@ -759,8 +838,8 @@ $('recarregar').onclick=()=>{carregarPend();if(!$('blocoAnal').hidden)carregarAn
 
 /* ---------- Pedidos já analisados (aprovados, não aprovados e expirados) ---------- */
 let ANAL=null;
-document.querySelectorAll('.seg-ped button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.seg-ped button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+document.querySelectorAll('#pPend .seg-ped button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#pPend .seg-ped button').forEach(x=>x.setAttribute('aria-pressed',x===b));
   const anal=b.dataset.v==='anal';$('listaPend').hidden=anal;$('blocoAnal').hidden=!anal;
   if(anal&&!ANAL)carregarAnal()});
 async function carregarAnal(){

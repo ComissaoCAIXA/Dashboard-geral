@@ -12,6 +12,11 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
   **Responder** no e-mail (a resposta vai direto para a pessoa) e depois clique em
   **Marcar como respondida**. Se aparecer o alerta "o aviso não chegou ao e-mail", responda pelo botão
   **Responder por e-mail** da própria mensagem. Limite: 3 mensagens por visitante a cada hora.
+- **Métricas** (primeira aba): quantos visitantes o painel teve por dia, pessoas novas, dispositivo
+  (celular, tablet, computador), abas mais vistas, o que as pessoas fazem (buscas no simulador, PDFs,
+  solicitações, tour, notícias), estados mais consultados e leituras de cada notícia. Escolha 7, 30 ou
+  90 dias. São contadores sem dados pessoais; números aproximados, bons para ver a tendência. A contagem
+  começou em 16/10/2026.
 - **Pedidos pendentes:** cada pedido mostra protocolo, o que a pessoa informou, os dados completos
   dela e alertas automáticos. Confira pelo WhatsApp e clique em **Aprovar** ou **Não aprovar**
   (a resposta opcional aparece para o aprovado na consulta do protocolo).

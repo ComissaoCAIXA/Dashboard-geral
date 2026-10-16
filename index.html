@@ -1940,6 +1940,7 @@ function renderConv(){
 /* ---------- Controle ---------- */
 function sync(){fCargo.value=S.cargo;fMacro.value=S.macro}
 function render(){
+  try{if(['panorama','conv','vagas','docs'].includes(S.tab))uso('aba',S.tab,true);if(S.uf)uso('filtro_estado',S.uf,true)}catch(e){} // métricas ainda não carregadas
   d3.selectAll('.tabs button').attr('aria-selected',function(){return this.dataset.tab===S.tab});
   d3.select('#tab-panorama').attr('hidden',S.tab==='panorama'?null:true);
   d3.select('#tab-conv').attr('hidden',S.tab==='conv'?null:true);
@@ -1976,6 +1977,7 @@ d3.selectAll('.tabs button').on('click',function(){
 // Links diretos: .../Dashboard-geral/#informar  e  .../Dashboard-geral/#grupo
 let abaAnterior='panorama';
 function abrirForm(intencao){
+  uso('formulario',intencao,true);
   if(S.tab!=='form'&&S.tab!=='contato')abaAnterior=S.tab;
   S.tab='form';
   Object.assign(F,{passo:1,insc:F.intencao===intencao?F.insc:'',pessoa:null,tipo:null,tit:'',data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',intencao});
@@ -1993,7 +1995,7 @@ function abrirContato(){
   render();desenharContato();window.scrollTo({top:0});
 }
 // Busca nas listas: refaz o painel um instante depois de parar de digitar
-['q1','q2'].forEach(id=>{const el=document.getElementById(id);let t;el.addEventListener('input',()=>{S[id]=el.value;S[id==='q1'?'p1':'p2']=0;clearTimeout(t);t=setTimeout(render,150)})});
+['q1','q2'].forEach(id=>{const el=document.getElementById(id);let t;el.addEventListener('input',()=>{uso('busca_lista',id,true);S[id]=el.value;S[id==='q1'?'p1':'p2']=0;clearTimeout(t);t=setTimeout(render,150)})});
 document.querySelectorAll('.ir-contato').forEach(a=>a.onclick=e=>{e.preventDefault();abrirContato()});
 // Menu "Solicitações" (celular)
 const menuBtn=document.getElementById('menuBtn'),menuLista=document.getElementById('menuLista');
@@ -2021,6 +2023,34 @@ async function rpc(fn,args){
   return j;
 }
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ---------- Métricas de uso (aba Métricas da área da comissão) ----------
+   Só contadores por dia ("visita de celular", "abriu a aba Vagas"...). Não envia IP, nome nem identificador:
+   "visitante do dia" e "visitante novo" são decididos aqui, com a data guardada no próprio navegador.
+   Os eventos vão juntos, em poucas chamadas (a cada 20 eventos, ao sair da página ou depois de alguns segundos). */
+const USO={fila:[],vistos:new Set(),ativo:location.hostname==='comissaocaixa.github.io'}; // só no endereço oficial (prévias e testes não contam)
+function uso(ev,det='',umaVez=false){
+  if(!USO.ativo)return;
+  if(umaVez){const k=ev+'|'+det;if(USO.vistos.has(k))return;USO.vistos.add(k)}
+  USO.fila.push([ev,String(det).toLowerCase()]);if(USO.fila.length>=20)enviarUso();
+}
+function enviarUso(){
+  if(!USO.fila.length)return;
+  const corpo=JSON.stringify({p_eventos:USO.fila.splice(0,30)});
+  try{fetch(`${DB.url}/rest/v1/rpc/registrar_uso`,{method:'POST',keepalive:true,headers:{apikey:DB.chave,'Content-Type':'application/json'},body:corpo}).catch(()=>{})}catch(e){}
+}
+const dispositivo=()=>innerWidth<621?'celular':innerWidth<1100?'tablet':'computador';
+(function contarVisita(){
+  const hoje=new Date().toLocaleDateString('sv-SE',{timeZone:'America/Sao_Paulo'}),d=dispositivo();
+  uso('visita',d);
+  try{ // sem acesso ao armazenamento do navegador (modo anônimo restrito), conta só a visita
+    const ult=localStorage.getItem('uso_ultimo_dia'),primeira=localStorage.getItem('uso_primeira');
+    if(ult!==hoje){uso('visitante_dia',d);localStorage.setItem('uso_ultimo_dia',hoje)}
+    if(!primeira){uso('visitante_novo',d);localStorage.setItem('uso_primeira',hoje)}
+  }catch(e){}
+  setTimeout(enviarUso,4000);
+  addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')enviarUso()});
+  addEventListener('pagehide',enviarUso);
+})();
 const dataBR=d=>d?new Date(d.length===10?d+'T12:00:00':d).toLocaleDateString('pt-BR'):'–';
 const hoje=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const NOME_COTA={AC:'Ampla concorrência',PcD:'Pessoas com deficiência',PN:'Pessoas negras',PI:'Pessoas indígenas',PQ:'Pessoas quilombolas'};
@@ -2173,7 +2203,7 @@ function desenharForm(){
       const itens=F.sel.map(t=>({tipo:t,data:cp(t).data||null,hora:cp(t).hora||null,lista:cp(t).lista||null,observacao:t===comObs?(F.obs.trim()||null):null}));
       F.carregando=true;desenharForm();
       try{const r=await rpc('enviar_pedidos',{p_inscricao:F.insc,p_itens:itens});
-        if(!r.ok)F.erro=r.erro;else{F.protocolo=r.protocolo;F.enviados=[...F.sel];F.passo=4}}
+        if(!r.ok)F.erro=r.erro;else{F.protocolo=r.protocolo;F.enviados=[...F.sel];F.passo=4;uso('pedido_form','solicitacao')}}
       catch(err){F.erro=err.message}
       F.carregando=false;desenharForm()};
   }
@@ -2220,7 +2250,7 @@ function desenharForm(){
       F.carregando=true;desenharForm();
       try{const r=await rpc('enviar_pedido',{p_inscricao:F.insc,p_tipo:F.tipo,p_data:ehGrupo()?null:(F.data||null),p_observacao:F.obs||null,
           p_telefone:ehGrupo()?dig:null,p_nome_whatsapp:ehGrupo()?(F.nomeZap||null):null,p_hora:(F.tipo==='Convocação'||F.tipo==='Horário da convocação')&&F.hora?F.hora:null});
-        if(!r.ok)F.erro=r.erro;else{F.protocolo=r.protocolo;F.passo=4;F.tel='';F.nomeZap=''}}
+        if(!r.ok)F.erro=r.erro;else{F.protocolo=r.protocolo;F.passo=4;F.tel='';F.nomeZap='';uso('pedido_form','grupo')}}
       catch(err){F.erro=err.message}
       F.carregando=false;desenharForm()};
   }
@@ -2382,8 +2412,8 @@ function iniciarVagas(){
   document.querySelectorAll('#filaDupla button').forEach(b=>b.onclick=()=>{FS.dupla=b.dataset.v;
     document.querySelectorAll('#filaDupla button').forEach(x=>x.setAttribute('aria-pressed',x===b));desenharFila(false)});
   {let t;document.getElementById('filaBusca').addEventListener('input',()=>{clearTimeout(t);t=setTimeout(buscarNaFila,150)})}
-  document.getElementById('filaFF').onchange=e=>{FS.ff=e.target.checked;desenharFila(false)};
-  document.getElementById('filaPD').onchange=e=>{FS.pd=e.target.checked;desenharFila(false)};
+  document.getElementById('filaFF').onchange=e=>{FS.ff=e.target.checked;uso('simulacao','final-da-fila',true);desenharFila(false)};
+  document.getElementById('filaPD').onchange=e=>{FS.pd=e.target.checked;uso('simulacao','pretende-desistir',true);desenharFila(false)};
   document.querySelectorAll('a[data-faq]').forEach(a=>a.onclick=e=>{e.preventDefault();const d=document.getElementById(a.dataset.faq);d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})});
   document.querySelectorAll('.ir-detalhes').forEach(a=>a.onclick=e=>{e.preventDefault();aplicarDetalhe(true);const d=document.getElementById('filaComoFeita');d.open=true;setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'start'}),50)});
   document.getElementById('fdAjuda').onclick=e=>{e.preventDefault();const d=document.getElementById('faqDuplo');d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})};
@@ -2497,6 +2527,7 @@ function buscarNaFila(){
   if(!q.trim()){
     el.innerHTML=`<div class="pos-vazio"><span data-i="userCheck"></span><span>Digite seu nome acima para ver em qual chamada você seria convocado.<br><span class="note">Neste cargo e estado, a comissão registrou <b>${feitas}</b> convocação(ões) até agora, de ${total} chamadas previstas (vagas imediatas e cadastro reserva).</span></span></div>`;
     el.querySelectorAll('[data-i]').forEach(e=>e.innerHTML=ico(e.dataset.i));return}
+  uso('busca_fila','',true);
   const achados=rs.filter(p=>casaBusca(q,p.ini)).slice(0,3);
   if(!achados.length){el.innerHTML=`<div class="pos-vazio"><span>Ninguém com esse nome em ${esc(curto(FS.cargo))} · ${esc(FS.uf)}. Confira o cargo e o estado acima.</span></div>`;return}
   const princ=FS.dupla==='duas'?B:A,alt=FS.dupla==='duas'?A:B;
@@ -2903,6 +2934,7 @@ const ordemSimuladaUF=(cargo,v,soImediatas=true)=>{const vi={};MOD_F.forEach((m,
   return montarFila(vi,l).filter(x=>!soImediatas||x.vi)};
 const AVISO_SIM='Simulação feita pela Comissão de Aprovados com base no edital (itens 2.8, 2.12 e 2.13) e conferida com as convocações registradas. Não é a lista oficial: quem define a ordem e o momento de cada convocação é a CAIXA. A simulação pode mudar com novas convocações.';
 async function gerarPDF(tipo,btn){
+  uso('pdf',tipo);
   const txt0=btn.lastChild.textContent;btn.disabled=true;btn.lastChild.textContent='Gerando…';
   try{
     await carregarPDF();
@@ -3120,7 +3152,7 @@ function abrirNoticias(abrir){
   if(abrir){ntcFiltro='';desenharNoticias();document.getElementById('ntcCorpo').scrollTop=0;document.getElementById('ntcFechar').focus()}
   else ntcBtn.focus({preventScroll:true});
 }
-ntcBtn.onclick=()=>abrirNoticias(true);
+ntcBtn.onclick=()=>{uso('noticias','',true);abrirNoticias(true)};
 document.getElementById('ntcFechar').onclick=()=>abrirNoticias(false);
 ntcFundo.onclick=()=>abrirNoticias(false);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!ntcLista.hidden)abrirNoticias(false)});
@@ -3216,6 +3248,7 @@ function posicionarTour(){
 }
 function abrirTour(){
   if(TU.ativo)return;
+  uso('tour','',true);
   if(document.getElementById('load'))return; // dados ainda carregando
   fecharConvite();if(!novid.hidden)novidades(false);if(!ntcLista.hidden)abrirNoticias(false);
   TU.ativo=true;TU.abaIni=['panorama','conv','vagas','docs'].includes(S.tab)?S.tab:'panorama';
