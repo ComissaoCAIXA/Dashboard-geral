@@ -194,6 +194,8 @@ tbody tr:hover{background:var(--wash)}
 .p-ok{background:color-mix(in srgb,var(--s3) 16%,transparent);color:var(--s3)}
 .p-pres{background:none;border:1px dashed color-mix(in srgb,var(--ink2) 55%,transparent);color:var(--ink2);margin-left:4px;cursor:help}
 .p-na{background:var(--empty);color:var(--muted)}
+.p-des{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad);cursor:help}
+.p-pd{background:none;border:1px dashed color-mix(in srgb,var(--bad) 60%,transparent);color:color-mix(in srgb,var(--bad) 85%,var(--ink));cursor:help;white-space:nowrap}
 .pager{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:8px;color:var(--ink2);font-size:13px}
 .pager button{font:inherit;border:1px solid var(--border);background:var(--surface);color:var(--ink);border-radius:6px;padding:4px 10px;cursor:pointer}
 .pager button:disabled{opacity:.4;cursor:default}
@@ -559,9 +561,27 @@ body.aba-form .filters,body.aba-form .det-tgl,body.aba-form .filtbtn,body.aba-fo
 .opcao{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer}
 .opcao:hover{border-color:var(--ink2)}
 .opcao:has(input:checked){border-color:var(--s1);background:var(--wash)}
-.opcao input{margin-top:3px;accent-color:var(--s1)}
+.campo .opcao{display:flex;margin-bottom:0;font-weight:400;font-size:inherit}
+.opcao input{margin-top:3px;accent-color:var(--s1);flex:none}
 .opcao b{display:block;font-size:14.5px}
 .opcao small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+/* campos de uma opção marcada (datas, horário), logo abaixo dela */
+.sub-campos{margin:-2px 0 6px}
+.sub-campos .campo:first-child{margin-top:0}
+.sub-campos select{max-width:320px}
+.opcao.ja{cursor:default;opacity:.65}
+.opcao.ja:hover{border-color:var(--border)}
+.opcao .ja-tag{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;padding:0 6px;border-radius:4px;color:#8a5a00;background:color-mix(in srgb,var(--s5) 22%,transparent);vertical-align:1px}
+.enviados{list-style:none;margin:8px 0 4px;padding:0;display:grid;gap:4px;font-size:14px}
+.enviados li{display:flex;gap:6px;align-items:center}
+.enviados svg{width:15px;height:15px;color:var(--good);flex:none}
+.itens-prot{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.itens-prot li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px}
+.itens-prot li .status{flex:none;font-size:12px;padding:1px 8px}
+.itens-prot small{display:block;color:var(--muted);margin-top:2px}
+/* selo "final da fila": a pessoa pretende pedir a reclassificação para o fim da lista */
+.p-ff{background:none;border:1px dashed color-mix(in srgb,var(--s4) 70%,transparent);color:color-mix(in srgb,var(--s4) 80%,var(--ink));margin-left:4px;cursor:help;white-space:nowrap}
+.p-ffc{background:color-mix(in srgb,var(--s4) 16%,transparent);color:color-mix(in srgb,var(--s4) 85%,var(--ink));margin-left:4px;cursor:help;white-space:nowrap}
 .check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink2);margin-top:16px;cursor:pointer}
 .check input{margin-top:3px;accent-color:var(--s1)}
 .protocolo{display:flex;align-items:center;justify-content:center;gap:12px;font:700 34px/1 ui-monospace,Consolas,monospace;letter-spacing:.08em;padding:20px;border:1px dashed var(--s1);border-radius:8px;margin:14px 0;color:var(--ink)}
@@ -815,6 +835,12 @@ body.aba-form.aba-vagas .det-tgl{display:inline-flex!important}
 .fd-ajuda{font-size:12.5px;color:var(--s1)}
 .fila-dupla .busca-lista{height:var(--ctl-sm);width:min(280px,100%);padding:0 10px;border:1px solid var(--border);border-radius:6px;background:var(--page);color:var(--ink);font:inherit;font-size:13px}
 .fd-achado{display:flex;flex-direction:column;gap:2px;font-size:13px}
+.ff-tgl{display:flex;gap:8px;align-items:flex-start;margin:2px 0 8px;font-size:13px;cursor:pointer;line-height:1.45}
+.ff-tgl[hidden]{display:none}
+.ff-tgl input{margin-top:2px;accent-color:var(--s4);flex:none}
+.ff-tgl:has(input:disabled){cursor:default;opacity:.75}
+.tag-ff{display:inline-block;font-size:11px;font-weight:600;padding:1px 6px;border-radius:4px;border:1px solid color-mix(in srgb,var(--s4) 70%,transparent);color:color-mix(in srgb,var(--s4) 80%,var(--ink));white-space:nowrap}
+.pos-ff{margin:8px 0 0;font-size:13px;padding:8px 10px;border-radius:6px;background:color-mix(in srgb,var(--s4) 9%,transparent)}
 .tag-dupla{display:inline-block;font-size:11px;font-weight:600;padding:1px 6px;border-radius:4px;border:1px dashed var(--g2);color:color-mix(in srgb,var(--g2) 75%,var(--ink));white-space:nowrap}
 .fila li.achado{outline:2px solid var(--s1);outline-offset:2px;border-radius:6px}
 .duplos{margin-top:12px;border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:var(--surface)}
@@ -945,13 +971,13 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
       <p>Aprovados de Arquiteto e Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho): ranking por cargo, estado e macrorregião, com a situação de cada convocação.</p>
     </div>
     <div class="acoes-topo">
-      <button class="acao" type="button" data-acao="convocacao"><span data-i="edit"></span><span>Informar convocação</span></button>
+      <button class="acao" type="button" data-acao="convocacao"><span data-i="edit"></span><span>Solicitações dos aprovados</span></button>
       <button class="acao" type="button" data-acao="grupo"><span data-i="chat"></span><span>Participar do grupo de WhatsApp</span></button>
       <!-- No celular, os botões acima viram este menu -->
       <div class="menu-acoes">
         <button class="acao" type="button" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="menuLista"><span data-i="menu"></span><span>Solicitações</span><span class="seta" data-i="chev"></span></button>
         <div class="menu-lista" id="menuLista" role="menu" hidden>
-          <button type="button" role="menuitem" data-ir="convocacao"><span data-i="edit"></span><span><b>Informar convocação</b><small>Convocação, posse ou desistência</small></span></button>
+          <button type="button" role="menuitem" data-ir="convocacao"><span data-i="edit"></span><span><b>Solicitações dos aprovados</b><small>Convocação, posse, final da fila, correções</small></span></button>
           <button type="button" role="menuitem" data-ir="grupo"><span data-i="chat"></span><span><b>Participar do grupo de WhatsApp</b><small>Grupo exclusivo dos aprovados</small></span></button>
           <button type="button" role="menuitem" data-ir="contato"><span data-i="mail"></span><span><b>Fale com a comissão</b><small>Dúvidas, sugestões e imprensa</small></span></button>
         </div>
@@ -1062,7 +1088,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
     <div class="card" data-det style="margin-bottom:12px"><div class="hd"><div><h2>Notas de quem já foi convocado</h2><p class="note">Cada ponto é uma pessoa · só cargos com informação de convocação</p></div></div><div id="strip2"></div>
       <div class="legend"><span><i style="background:var(--s3)"></i>Convocado</span><span><i style="background:var(--s1)"></i>Vaga imediata aguardando</span><span><i style="background:var(--neutral)"></i>Cadastro reserva</span></div></div>
     <div class="card"><div class="hd"><h2>Quem foi e quem não foi convocado</h2>
-      <div class="seg" id="t2seg"><button data-v="sim" aria-pressed="true">Convocados</button><button data-v="aguard">Vaga imediata aguardando</button><button data-v="cr">Cadastro reserva</button></div>
+      <div class="seg" id="t2seg"><button data-v="sim" aria-pressed="true">Convocados</button><button data-v="aguard">Vaga imediata aguardando</button><button data-v="cr">Cadastro reserva</button><button data-v="des" id="t2des" hidden>Desistências</button></div>
       <input type="search" class="busca-lista" id="q2" placeholder="Buscar nome, cargo ou estado" aria-label="Buscar na lista de convocações" autocomplete="off">
       <button class="pdfbtn" type="button" data-pdf="tbl2" title="Baixar a lista em PDF (A4 paisagem), com os filtros escolhidos"><span data-i="baixar"></span>PDF</button></div>
       <div id="tbl2"></div></div>
@@ -1081,6 +1107,8 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
         <select id="filaUF" aria-label="Estado"></select>
         <input type="search" id="filaBusca" class="busca-lista busca-grande" placeholder="Procure seu nome (sem precisar de acento)" aria-label="Procurar um nome na fila" autocomplete="off">
       </div>
+      <label class="ff-tgl" id="filaFFBox"><input type="checkbox" id="filaFF"><span><b>Considerar quem pretende ir para o final da fila</b> <span class="note" id="filaFFConta"></span></span></label>
+      <label class="ff-tgl pd" id="filaPDBox"><input type="checkbox" id="filaPD"><span><b>Considerar quem pretende desistir</b> <span class="note" id="filaPDConta"></span></span></label>
       <div id="filaPosicao" class="posicao"></div>
       <p class="aviso-curto"><span data-i="flag"></span><span><b>Simulação da comissão, não é a lista oficial.</b> Quem define a ordem e o momento de cada convocação é a CAIXA, e a simulação pode mudar com novas convocações. <a href="#vagas" class="ir-detalhes">Como a simulação foi feita</a></span></p>
       <div class="cenario" id="filaCenario" hidden></div>
@@ -1663,7 +1691,20 @@ function tabela(el,rows,cols,sortKey,pageKey){
 }
 const sitPill=r=>r.sit==='VI'?'<span class="pill p-vi">Vaga imediata</span>':'<span class="pill p-cr">Cadastro reserva</span>';
 const PRESUMIDA_TXT='Convocação presumida: a comissão ainda não falou com esta pessoa, mas alguém classificado depois dela na mesma lista (cargo, estado e cota) já foi convocado.';
-const convPill=r=>r.conv===null?'<span class="pill p-na">Sem informação</span>':r.conv?'<span class="pill p-ok">Convocado</span>'+(r.presumida?`<span class="pill p-pres" title="${PRESUMIDA_TXT}">presumida</span>`:''):'<span class="pill p-na">Não</span>';
+// Final da fila: intenção (ainda não pediu à CAIXA) ou reclassificação já confirmada pela CAIXA (muda a classificação)
+const FF_TXT='Só uma intenção: a pessoa informou à comissão que pretende pedir à CAIXA a reclassificação para o final da fila, mas isso ainda não aconteceu. Para a CAIXA ela continua na posição original.';
+const FFC_TXT='Reclassificada de verdade: a pessoa pediu e a CAIXA confirmou a ida para o final da fila. Ela passa para o fim da sua lista de classificação e volta a aguardar nova convocação.';
+const ffPend=r=>!!r&&r.finalFila&&!r.ffConf;   // só intenção
+const ffPill=r=>!r.finalFila?'':r.ffConf?`<span class="pill p-ffc" title="${FFC_TXT}">⤵ Final da fila</span>`:`<span class="pill p-ff" title="${FF_TXT}">⤵ Pretende final da fila</span>`;
+// Posição: quem foi reclassificado vai para o fim da lista
+const posTxt=r=>r.ffConf?`<span title="${FFC_TXT}">${r.rankUF}º → fim da lista</span>`:r.rankUF+'º';
+// Desistência: com data de convocação, a pessoa já foi chamada e desistiu de fato; sem data, é só a intenção informada à comissão
+const DES_TXT='Desistiu de fato: foi convocada pela CAIXA e informou a ela que desistiu da vaga. A vaga segue para a próxima pessoa da mesma lista.';
+const PD_TXT='Só uma intenção: a pessoa informou à comissão que pretende desistir, mas isso ainda não aconteceu. Para a CAIXA ela continua na lista e será convocada normalmente quando chegar a vez dela.';
+const desistiu=p=>!!p&&p.situacaoConv==='Desistente'&&!!p.dataConv;      // desistência real (já convocada)
+const pretendeDesistir=p=>!!p&&p.situacaoConv==='Desistente'&&!p.dataConv; // só intenção
+const desPill=r=>desistiu(r)?`<span class="pill p-des" title="${DES_TXT}">Desistente</span>`:`<span class="pill p-pd" title="${PD_TXT}">Pretende desistir</span>`;
+const convPill=r=>(r.situacaoConv==='Desistente'?desPill(r):r.conv===null?'<span class="pill p-na">Sem informação</span>':r.conv?'<span class="pill p-ok">Convocado</span>'+(r.presumida?`<span class="pill p-pres" title="${PRESUMIDA_TXT}">presumida</span>`:''):'<span class="pill p-na">Não</span>')+ffPill(r);
 
 /* ---------- Ranking de estados ---------- */
 function rankEstados(el,tEl,titulo,porUF,fmtv,parts,tipFn){
@@ -1782,7 +1823,7 @@ function renderPanorama(){
   tabela('#tbl1',R.filter(r=>casaBusca(S.q1,r.ini,r.cargo,r.uf,nomeUF(r.uf),r.macro)),[
     {k:'ini',t:'Nome'},{k:'cargo',t:'Cargo',f:r=>curto(r.cargo)},{k:'uf',t:'UF'},{k:'macro',t:'Macrorregião',f:r=>cap(r.macro)},
     {k:'lista',t:'Cota',f:r=>r.listas.map(sigla).join(' + ')},{k:'sit',t:'Situação',f:sitPill},{k:'nota',t:'Nota',num:1,f:r=>nota(r.nota)},
-    {k:'rankUF',t:'Posição na UF',num:1,f:r=>r.rankUF+'º'},{k:'classMacro',t:'Class. macro',num:1,f:r=>r.classMacro?r.classMacro+'º':'–'},{k:'conv',t:'Convocado',f:convPill}
+    {k:'rankUF',t:'Posição na UF',num:1,f:posTxt},{k:'classMacro',t:'Class. macro',num:1,f:r=>r.classMacro?r.classMacro+'º':'–'},{k:'conv',t:'Convocado',f:convPill}
   ],'sort1','p1');
 }
 
@@ -1823,11 +1864,14 @@ function renderConv(){
   const RC=semCota(false).filter(d=>d.conv!==null);
   hbars('#cota2',COTAS.map(c=>{const g=grp(RC.filter(d=>d.lista===c.k));return{label:c.sig,parts:partsC(g),value:`${g.conv} <small>· ${pct(g.vi?g.viConv/g.vi:NaN)} das VI</small>`,sel:S.lista===c.k,tip:tipG(`${c.nome} (${c.sig})`,g),onClick:()=>{S.lista=S.lista===c.k?'':c.k;S.p1=S.p2=0;render()}}}));
   strip('#strip2',R,d=>d.conv?css('--s3'):d.sit==='VI'?css('--s1'):css('--neutral'),d=>d.conv?'top':'');
-  const T={sim:conv,aguard,cr:R.filter(d=>d.sit==='CR'&&!d.conv)}[S.t2];
+  // Desistentes ficam numa lista própria (o botão só aparece quando há algum com os filtros atuais)
+  const des=d=>desistiu(d)||pretendeDesistir(d),desist=R.filter(des);
+  document.getElementById('t2des').hidden=!desist.length;if(!desist.length&&S.t2==='des')S.t2='sim';
+  const T={sim:conv,aguard:aguard.filter(d=>!des(d)),cr:R.filter(d=>d.sit==='CR'&&!d.conv&&!des(d)),des:desist}[S.t2];
   tabela('#tbl2',T.filter(r=>casaBusca(S.q2,r.ini,r.cargo,r.uf,nomeUF(r.uf),r.macro)),[
     {k:'ini',t:'Nome'},{k:'cargo',t:'Cargo',f:r=>curto(r.cargo)},{k:'uf',t:'UF'},{k:'macro',t:'Macrorregião',f:r=>cap(r.macro)},
     {k:'lista',t:'Cota',f:r=>r.listas.map(sigla).join(' + ')},{k:'sit',t:'Situação',f:sitPill},{k:'nota',t:'Nota',num:1,f:r=>nota(r.nota)},
-    {k:'rankUF',t:'Posição na UF',num:1,f:r=>r.rankUF+'º'},{k:'conv',t:'Convocado',f:convPill},
+    {k:'rankUF',t:'Posição na UF',num:1,f:posTxt},{k:'conv',t:'Convocado',f:convPill},
     {k:'dataConv',t:'Data da convocação',f:r=>r.dataConv?new Date(r.dataConv+'T12:00:00').toLocaleDateString('pt-BR'):'–'}
   ],'sort2','p2');
 }
@@ -1922,14 +1966,28 @@ const NOME_COTA={AC:'Ampla concorrência',PcD:'Pessoas com deficiência',PN:'Pes
 // Opção de entrar no grupo vale para qualquer situação; as demais dependem da situação atual
 const OP_GRUPO=['Entrada no grupo','Quero entrar no grupo de WhatsApp dos aprovados','A comissão confere se você é aprovado(a) e adiciona você ao grupo.'];
 const OPCOES={
-  Aguardando:[['Convocação','Fui convocado(a)','Recebi a convocação da CAIXA.'],['Desistência','Desisti da vaga','Não vou assumir o cargo.'],['Correção de dados','Algum dado meu está errado','Cargo, estado, cota, nota ou posição.']],
-  Convocado:[['Posse','Tomei posse','Já fui contratado(a) e assumi o cargo.'],['Horário da convocação','Quero informar o horário da minha convocação','Só o horário em que recebi a convocação da CAIXA. Ajuda a comissão a entender a ordem das chamadas.'],['Convocação','A data da minha convocação está errada','Vou informar a data correta.'],['Desistência','Desisti da vaga','Não vou assumir o cargo.'],['Correção de dados','Outro dado meu está errado','Cargo, estado, cota, nota ou posição.']],
+  Aguardando:[['Convocação','Fui convocado(a)','Recebi a convocação da CAIXA.'],['Desistência','Pretendo desistir da vaga','É só um aviso à comissão: a CAIXA vai convocar você normalmente quando chegar a sua vez, e aí você confirma a desistência com ela. No painel aparece "Pretende desistir".'],['Correção de dados','Algum dado meu está errado','Cargo, estado, cota, nota ou posição.']],
+  Convocado:[['Posse','Tomei posse','Já fui contratado(a) e assumi o cargo.'],['Horário da convocação','Quero informar o horário da minha convocação','Só o horário em que recebi a convocação da CAIXA. Ajuda a comissão a entender a ordem das chamadas.'],['Convocação','A data da minha convocação está errada','Vou informar a data correta.'],['Desistência','Desisti da vaga','Já informei à CAIXA que não vou assumir o cargo.'],['Correção de dados','Outro dado meu está errado','Cargo, estado, cota, nota ou posição.']],
   Empossado:[['Horário da convocação','Quero informar o horário da minha convocação','Só o horário em que recebi a convocação da CAIXA. Ajuda a comissão a entender a ordem das chamadas.'],['Desistência','Desisti / saí do cargo',''],['Correção de dados','Algum dado meu está errado','']],
   Desistente:[['Correção de dados','Algum dado meu está errado','Inclusive se a desistência foi registrada por engano.']]
 };
 OPCOES['Sem informação']=OPCOES.Aguardando;
+// Final da fila: só a intenção de pedir à CAIXA a reclassificação para o fim da lista (para quem ainda não tomou posse)
+const OP_FF=['Final da fila','Pretendo pedir para ir para o final da fila','Ainda não pedi à CAIXA. É só a sua intenção: aparece "Pretende final da fila" ao lado do seu nome e você entra num cenário da simulação.'];
+const OP_FF_RET=['Retirar final da fila','Não vou mais pedir o final da fila','Tira o selo do painel e você volta à sua posição na simulação.'];
+const OP_FFC=['Reclassificação confirmada','Fui reclassificado(a) para o final da fila','A CAIXA já confirmou o meu pedido. Você vai para o fim da sua lista de classificação e volta a aguardar nova convocação.'];
+function opcoesDe(p){
+  const ops=[...(OPCOES[p.convocacao]||OPCOES.Aguardando)];
+  const ff=[];
+  if(['Aguardando','Sem informação','Convocado'].includes(p.convocacao)&&!p.final_fila_confirmado){ff.push(p.final_fila?OP_FF_RET:OP_FF,OP_FFC)}
+  else if(p.final_fila&&!p.final_fila_confirmado)ff.push(OP_FF_RET);
+  const i=ops.findIndex(o=>o[0]==='Correção de dados');ops.splice(i<0?ops.length:i,0,...ff);
+  return ops;
+}
+// Opções que não combinam no mesmo envio: marcar uma desmarca as outras
+const NAO_COMBINA=[['Convocação','Posse','Desistência','Reclassificação confirmada'],['Convocação','Horário da convocação'],['Desistência','Final da fila'],['Final da fila','Reclassificação confirmada']];
 const ROTULO_DATA={Convocação:'Data da convocação','Horário da convocação':'Data da convocação',Posse:'Data da posse',Desistência:'Data da desistência (opcional)'};
-const F={passo:1,insc:'',pessoa:null,tipo:null,tit:'',data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',carregando:false,intencao:'convocacao'};
+const F={passo:1,insc:'',pessoa:null,tipo:null,tit:'',sel:[],campos:{},enviados:[],data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',carregando:false,intencao:'convocacao'};
 const ehGrupo=()=>F.tipo==='Entrada no grupo';
 const erroHTML=()=>F.erro?`<div class="erro" role="alert">${ico('flag')}<span>${esc(F.erro)}</span></div>`:'';
 function passosHTML(){document.querySelectorAll('#passos li').forEach((li,i)=>{li.className=i+1<F.passo?'feito':i+1===F.passo?'agora':''})}
@@ -1937,7 +1995,7 @@ function iniciarForm(){if(!document.getElementById('formCorpo').innerHTML)desenh
 // (61) 99999-9999 enquanto digita
 const mascaraTel=v=>{const d=v.replace(/\D/g,'').replace(/^55(?=\d{10,11}$)/,'').slice(0,11);
   return d.length<=2?d:d.length<=6?`(${d.slice(0,2)}) ${d.slice(2)}`:d.length<=10?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`};
-const TEXTO_FORM={convocacao:['Informar convocação','Foi convocado(a), tomou posse ou desistiu da vaga? Informe aqui. A comissão confirma com você antes de atualizar o painel.'],
+const TEXTO_FORM={convocacao:['Solicitações dos aprovados','Informe convocação, posse ou desistência, indique que pretende pedir o final da fila ou peça a correção de um dado. Dá para marcar mais de uma opção no mesmo envio. A comissão confirma com você antes de atualizar o painel.'],
   grupo:['Participar do grupo de WhatsApp','O grupo é só para aprovados. Informe sua inscrição e seu WhatsApp: a comissão confere e adiciona você.']};
 function desenharForm(){
   passosHTML();const el=document.getElementById('formCorpo');const p=F.pessoa;
@@ -1961,7 +2019,8 @@ function desenharForm(){
       F.carregando=false;desenharForm()};
   }
   else if(F.passo===2){
-    const tudoPendente=F.intencao==='grupo'?p.pendente_grupo:p.pendente;
+    // Grupo: um pedido de entrada por vez. Solicitações: pode haver várias em análise (só não repete o mesmo tipo)
+    const tudoPendente=F.intencao==='grupo'?p.pendente_grupo:false;
     // Informar convocação exige estar no grupo: é por lá que a comissão confirma com a pessoa
     const foraDoGrupo=F.intencao!=='grupo'&&!p.no_grupo;
     const jaNoGrupo=F.intencao==='grupo'&&p.no_grupo;
@@ -1969,11 +2028,13 @@ function desenharForm(){
     if(foraDoGrupo){
       aviso=`<div class="aviso-form"><b>Antes, você precisa estar no grupo de WhatsApp dos aprovados.</b><br>
         A comissão confirma cada convocação conversando com a pessoa pelo grupo. Pelo nosso cadastro, você ainda não está nele.
-        ${p.pendente_grupo?'Seu pedido de entrada no grupo já está <b>em análise</b>: assim que a comissão adicionar você, volte aqui para informar a convocação.':'Peça sua entrada agora (leva um minuto). Depois de entrar no grupo, volte aqui para informar a convocação.'}
+        ${p.pendente_grupo?'Seu pedido de entrada no grupo já está <b>em análise</b>: assim que a comissão adicionar você, volte aqui para enviar sua solicitação.':'Peça sua entrada agora (leva um minuto). Depois de entrar no grupo, volte aqui para enviar sua solicitação.'}
         <br><small style="color:var(--muted)">Nada foi registrado ainda.</small></div>`;
       botao=p.pendente_grupo?'':'<button class="btn" type="button" id="irGrupo">Pedir entrada no grupo</button>';
     }else if(tudoPendente){
       aviso=`<div class="aviso-form">Já existe um pedido ${F.intencao==='grupo'?'de entrada no grupo ':''}desta inscrição <b>em análise</b>. Aguarde a comissão, ou acompanhe pelo protocolo no quadro abaixo.</div>`;botao='';
+    }else if(F.intencao!=='grupo'&&p.pendente){
+      aviso=`<div class="aviso-form">Você já tem pedido(s) <b>em análise</b>. Pode enviar outros normalmente: o que já está em análise aparece marcado no próximo passo.</div>`;
     }else if(jaNoGrupo){
       aviso=`<div class="aviso-form">Pelo nosso cadastro, você <b>já está no grupo</b>. Se saiu ou não encontra o grupo, pode continuar e pedir de novo.</div>`;
     }
@@ -1981,7 +2042,7 @@ function desenharForm(){
       <dl class="pessoa"><dd class="quem">${esc(p.nome)}</dd>
         <div><dt>Cargo</dt><dd>${esc(p.cargo)}</dd></div><div><dt>Polo (UF)</dt><dd>${esc(p.uf)}</dd></div>
         <div><dt>Cota</dt><dd>${esc(p.cota)} · ${esc(NOME_COTA[p.cota]||'')}</dd></div><div><dt>Classificação</dt><dd>${p.posicao_uf}º no estado · ${esc(p.situacao)}</dd></div>
-        <div><dt>Situação no painel</dt><dd>${esc(p.convocacao)}${p.data_convocacao?' em '+dataBR(p.data_convocacao):''}</dd></div></dl>
+        <div><dt>Situação no painel</dt><dd>${esc(p.convocacao)}${p.data_convocacao?' em '+dataBR(p.data_convocacao):''}${p.final_fila?' · '+ffPill({finalFila:true,ffConf:p.final_fila_confirmado}):''}</dd></div></dl>
       ${aviso}
       <div class="btns"><button class="btn sec" type="button" id="nao">Não sou eu</button>${botao}</div>`;
     document.getElementById('nao').onclick=()=>{F.passo=1;F.pessoa=null;F.erro='';desenharForm()};
@@ -1990,9 +2051,61 @@ function desenharForm(){
       F.intencao='grupo';Object.assign(F,{passo:3,tipo:OP_GRUPO[0],tit:OP_GRUPO[1],data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,erro:''});
       history.replaceState(null,'','#grupo');render();desenharForm();window.scrollTo({top:0})};
     const s=document.getElementById('sim');if(s)s.onclick=()=>{
-      Object.assign(F,{passo:3,tipo:null,tit:'',data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,erro:''});
+      Object.assign(F,{passo:3,tipo:null,tit:'',sel:[],campos:{},data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,erro:''});
       if(F.intencao==='grupo'&&!p.pendente_grupo){F.tipo=OP_GRUPO[0];F.tit=OP_GRUPO[1]}
       desenharForm()};
+  }
+  else if(F.passo===3&&F.intencao!=='grupo'){
+    // Solicitações: uma ou mais opções no mesmo envio; os campos de cada uma aparecem logo abaixo dela
+    const ops=opcoesDe(p),tem=t=>F.sel.includes(t),cp=t=>F.campos[t]||(F.campos[t]={data:'',hora:''});
+    const emAnalise=t=>(p.pendentes_tipos||[]).includes(t);
+    const campoData=(t,obrig)=>`<div class="campo"><label>${ROTULO_DATA[t]}</label><input type="date" data-t="${esc(t)}" data-c="data" min="2026-05-26" max="${hoje()}" value="${esc(cp(t).data)}" ${obrig?'required':''}></div>`;
+    const campoHora=(t,obrig)=>`<div class="campo"><label>Horário em que você recebeu a convocação${obrig?'':' (opcional)'}</label><input type="time" data-t="${esc(t)}" data-c="hora" value="${esc(cp(t).hora)}" style="max-width:180px" ${obrig?'required':''}>
+      <small>Veja o horário do e-mail ou da mensagem da CAIXA. Como muitas convocações saem no mesmo dia, o horário ajuda a comissão a entender a ordem das chamadas.</small></div>`;
+    // Final da fila: em qual lista (ainda não se sabe como a CAIXA aplica; fica registrado para a comissão)
+    const campoLista=t=>`<div class="campo"><label>Em qual lista ${t==='Reclassificação confirmada'?'você foi reclassificado(a)':'você pretende pedir'}?</label>
+      <select data-t="${esc(t)}" data-c="lista" required>${[['','Escolha…'],['Polo','No polo (estado)'],['Macropolo','No macropolo'],['Não sei','Não sei']].map(([v,r])=>`<option value="${v}" ${cp(t).lista===v?'selected':''}>${r}</option>`).join('')}</select>
+      <small>A simulação do painel considera a fila do polo.</small></div>`;
+    const camposDe=t=>{const c=t==='Convocação'?campoData(t,true)+campoHora(t,false):t==='Horário da convocação'?campoData(t,true)+campoHora(t,true)
+      :t==='Posse'?campoData(t,true):t==='Desistência'?campoData(t,false):t==='Final da fila'||t==='Reclassificação confirmada'?campoLista(t):'';return c?`<div class="sub-campos">${c}</div>`:''};
+    const corr=tem('Correção de dados'),ff=tem('Final da fila');
+    el.innerHTML=`<form id="f3"><div class="campo" style="margin-top:0"><span class="rot">O que você quer informar ou pedir?</span>
+        <small style="display:block;margin:-2px 0 8px;color:var(--muted)">Marque uma ou mais opções. Cada uma é conferida pela comissão separadamente.</small>
+        <div class="opcoes">${ops.map(([t,tit,sub],i)=>emAnalise(t)
+          ?`<label class="opcao ja"><input type="checkbox" disabled><span><b>${tit}<span class="ja-tag">já em análise</span></b><small>Você já enviou este pedido. Aguarde a comissão.</small></span></label>`
+          :`<label class="opcao${tem(t)?' on':''}"><input type="checkbox" name="tipo" value="${i}" ${tem(t)?'checked':''}><span><b>${tit}</b>${sub?`<small>${sub}</small>`:''}</span></label>${tem(t)?camposDe(t):''}`).join('')}</div></div>
+      ${F.sel.length?`<div class="campo"><label for="obs">${corr?'O que está errado? (e outras observações)':'Observação (opcional)'}</label>
+        <textarea id="obs" maxlength="1000" placeholder="${corr?'Ex.: minha nota correta é 72,50':'Algo que a comissão deva saber'}">${esc(F.obs)}</textarea></div>
+      <label class="check"><input type="checkbox" id="conf" ${F.ok?'checked':''}><span>Confirmo que as informações são verdadeiras e sei que a comissão vai conferir comigo pelo WhatsApp antes de atualizar o painel.${ff?' Sei que, depois da confirmação, o selo <b>final da fila</b> aparece no painel público ao lado do meu nome.':''}</span></label>`:''}
+      ${erroHTML()}
+      <div class="btns"><button class="btn sec" type="button" id="volta">Voltar</button>
+        <button class="btn" type="submit" ${F.carregando||!F.sel.length?'disabled':''}>${F.carregando?'Enviando…':F.sel.length>1?`Enviar ${F.sel.length} pedidos`:'Enviar'}</button></div></form>`;
+    const guardar=()=>{el.querySelectorAll('[data-c]').forEach(i=>{cp(i.dataset.t)[i.dataset.c]=i.value});
+      const g=id=>document.getElementById(id);if(g('obs'))F.obs=g('obs').value;if(g('conf'))F.ok=g('conf').checked};
+    el.querySelectorAll('input[name=tipo]').forEach(r=>r.onchange=()=>{guardar();const t=ops[+r.value][0];F.erro='';
+      if(r.checked){NAO_COMBINA.filter(g=>g.includes(t)).forEach(g=>F.sel=F.sel.filter(x=>x===t||!g.includes(x)));F.sel.push(t);
+        // só o horário: a data já vem da convocação registrada
+        if(t==='Horário da convocação'){const c=cp(t);if(!c.data&&p.data_convocacao)c.data=p.data_convocacao;if(!c.hora&&p.hora_convocacao)c.hora=String(p.hora_convocacao).slice(0,5)}}
+      else F.sel=F.sel.filter(x=>x!==t);
+      F.sel.sort((a,b)=>ops.findIndex(o=>o[0]===a)-ops.findIndex(o=>o[0]===b));
+      desenharForm()});
+    document.getElementById('volta').onclick=()=>{F.passo=2;F.erro='';desenharForm()};
+    document.getElementById('f3').onsubmit=async e=>{e.preventDefault();guardar();F.erro='';
+      for(const t of F.sel){const c=cp(t);
+        if(['Convocação','Posse','Horário da convocação'].includes(t)&&!c.data){F.erro=`Informe a ${ROTULO_DATA[t].toLowerCase()}.`;break}
+        if(t==='Horário da convocação'&&!c.hora){F.erro='Informe o horário em que você recebeu a convocação.';break}
+        if((t==='Final da fila'||t==='Reclassificação confirmada')&&!c.lista){F.erro='Escolha em qual lista é a reclassificação (polo, macropolo ou não sei).';break}}
+      if(!F.erro&&corr&&!F.obs.trim())F.erro='Conte o que está errado no campo de observação.';
+      if(!F.erro&&!F.ok)F.erro='Marque a confirmação para enviar.';
+      if(F.erro)return desenharForm();
+      // A observação vai junto da correção (ou do primeiro pedido), para não se repetir em cada pedido
+      const comObs=corr?'Correção de dados':F.sel[0];
+      const itens=F.sel.map(t=>({tipo:t,data:cp(t).data||null,hora:cp(t).hora||null,lista:cp(t).lista||null,observacao:t===comObs?(F.obs.trim()||null):null}));
+      F.carregando=true;desenharForm();
+      try{const r=await rpc('enviar_pedidos',{p_inscricao:F.insc,p_itens:itens});
+        if(!r.ok)F.erro=r.erro;else{F.protocolo=r.protocolo;F.enviados=[...F.sel];F.passo=4}}
+      catch(err){F.erro=err.message}
+      F.carregando=false;desenharForm()};
   }
   else if(F.passo===3){
     // Opções: grupo (se não houver pedido de grupo em análise) + as da situação atual (se não houver outro pedido em análise)
@@ -2042,16 +2155,19 @@ function desenharForm(){
       F.carregando=false;desenharForm()};
   }
   else{
-    el.innerHTML=`<p class="ok-titulo">Pedido enviado!</p>
-      <p class="note" style="margin:6px 0 0">Este é o seu protocolo. Anote ou tire um print:</p>
+    const varios=!ehGrupo()&&F.enviados.length>1;
+    const titulo=t=>((F.pessoa?opcoesDe(F.pessoa):[]).find(o=>o[0]===t)||[t,t])[1];
+    el.innerHTML=`<p class="ok-titulo">${varios?`${F.enviados.length} pedidos enviados!`:'Pedido enviado!'}</p>
+      ${varios?`<ul class="enviados">${F.enviados.map(t=>`<li>${ico('check')}${esc(titulo(t))}</li>`).join('')}</ul>`:''}
+      <p class="note" style="margin:6px 0 0">${varios?'Um protocolo só para acompanhar todos. Anote ou tire um print:':'Este é o seu protocolo. Anote ou tire um print:'}</p>
       <div class="protocolo"><span id="protTxt">${esc(F.protocolo)}</span><button type="button" id="copiar">${ico('copy')}Copiar</button></div>
       ${ehGrupo()
         ?`<div class="aviso-form"><b>E agora?</b> A comissão vai conferir seus dados e chamar você no WhatsApp para adicionar ao grupo. Seu número fica guardado só até a análise, <b>no máximo 24 horas</b>, e depois é apagado automaticamente. Se o prazo passar sem contato, envie um novo pedido.</div>`
-        :`<div class="aviso-form"><b>E agora?</b> A comissão vai procurar você no grupo de WhatsApp dos aprovados para confirmar as informações. O painel só muda depois dessa confirmação. Se você ainda não está no grupo, use o botão "Participar do grupo de WhatsApp", no topo da página.</div>`}
+        :`<div class="aviso-form"><b>E agora?</b> A comissão vai procurar você no grupo de WhatsApp dos aprovados para confirmar as informações. O painel só muda depois dessa confirmação${F.enviados.includes('Final da fila')?' (a partir daí o selo <b>final da fila</b> aparece ao lado do seu nome)':''}. Se você ainda não está no grupo, use o botão "Participar do grupo de WhatsApp", no topo da página.</div>`}
       <p class="note">Para ver o andamento, use o quadro <b>Acompanhar meu pedido</b>, logo abaixo.</p>
       <div class="btns"><button class="btn sec" type="button" id="novo">Fazer outro pedido</button></div>`;
     document.getElementById('copiar').onclick=async function(){try{await navigator.clipboard.writeText(F.protocolo);this.innerHTML=ico('check')+'Copiado'}catch(e){}};
-    document.getElementById('novo').onclick=()=>{Object.assign(F,{passo:1,insc:'',pessoa:null,tipo:null,tit:'',data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:''});desenharForm()};
+    document.getElementById('novo').onclick=()=>{Object.assign(F,{passo:1,insc:'',pessoa:null,tipo:null,tit:'',sel:[],campos:{},enviados:[],data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:''});desenharForm()};
   }
 }
 // Acompanhar pedido pelo protocolo
@@ -2064,10 +2180,15 @@ document.getElementById('fProt').onsubmit=async e=>{e.preventDefault();const out
       Aprovado:grupo?'Aprovado: a comissão vai adicionar (ou já adicionou) você ao grupo.':'Aprovado: o painel já foi atualizado.',
       Rejeitado:'Não aprovado.',
       Expirado:'O prazo de 24 horas passou sem análise e seu número foi apagado. Se ainda quiser entrar no grupo, envie um novo pedido.'}[r.status]||r.status;
-    const rot={Pendente:'Em análise',Rejeitado:'Não aprovado'}[r.status]||r.status;
-    out.innerHTML=`<div class="res-prot"><span class="status ${esc(r.status)}">${esc(rot)}</span>
-      <p style="margin:8px 0 0">${esc(txt)}</p>
-      <dl><dt>Protocolo</dt><dd>${esc(r.protocolo)}</dd><dt>Pedido</dt><dd>${esc(r.tipo)}${r.data_evento?' em '+dataBR(r.data_evento):''}${r.hora_evento?' às '+String(r.hora_evento).slice(0,5):''}</dd>
+    const rotSt=s=>({Pendente:'Em análise',Rejeitado:'Não aprovado'}[s]||s),rot=rotSt(r.status);
+    const pedidoTxt=x=>`${esc(x.tipo)}${x.data_evento?' em '+dataBR(x.data_evento):''}${x.hora_evento?' às '+String(x.hora_evento).slice(0,5):''}`;
+    // Vários pedidos no mesmo envio: cada um com a sua situação
+    const itens=(r.itens||[]).length>1?r.itens:null;
+    out.innerHTML=`<div class="res-prot">${itens?'':`<span class="status ${esc(r.status)}">${esc(rot)}</span>
+      <p style="margin:8px 0 0">${esc(txt)}</p>`}
+      ${itens?`<p style="margin:0 0 8px"><b>${itens.length} pedidos enviados juntos.</b> A comissão confere cada um separadamente.</p>
+      <ul class="itens-prot">${itens.map(x=>`<li><span class="status ${esc(x.status)}">${esc(rotSt(x.status))}</span><span>${pedidoTxt(x)}${x.resposta?`<small>Resposta da comissão: ${esc(x.resposta)}</small>`:''}</span></li>`).join('')}</ul>`:''}
+      <dl><dt>Protocolo</dt><dd>${esc(r.protocolo)}</dd>${itens?'':`<dt>Pedido</dt><dd>${pedidoTxt(r)}</dd>`}
         <dt>Enviado em</dt><dd>${dataBR(r.enviado_em)}</dd>${r.expira_em?`<dt>Prazo da análise</dt><dd>até ${new Date(r.expira_em).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</dd>`:''}
         ${r.revisado_em?`<dt>${r.status==='Expirado'?'Expirou em':'Revisado em'}</dt><dd>${dataBR(r.revisado_em)}</dd>`:''}
         ${r.resposta?`<dt>Resposta da comissão</dt><dd>${esc(r.resposta)}</dd>`:''}</dl></div>`;
@@ -2091,12 +2212,16 @@ const MOD_F=['PCD','AC','PPP/PN','PI','PQ'];
 const REV_F={PQ:['PI','PPP/PN','AC'],PI:['PQ','PPP/PN','AC'],'PPP/PN':['AC'],PCD:['AC'],AC:['PPP/PN','PCD','PI','PQ']};
 const PCT_F={PCD:.05,'PPP/PN':.25,PI:.03,PQ:.02};
 const modCls=m=>m==='PPP/PN'?'PN':m, modSig=m=>sigla(m);
-function montarFila(vi,listas,limiar=0.5){
+// Quem desiste não ocupa chamada: a vaga segue para a próxima pessoa da mesma lista.
+// Desistência real sempre conta; a intenção de desistir só conta com a opção "Considerar quem pretende desistir".
+const pularPadrao=p=>desistiu(p)||(FS.pd&&pretendeDesistir(p));
+function montarFila(vi,listas,limiar=0.5,pular=pularPadrao){
   const usado={},chamadas={};MOD_F.forEach(m=>{usado[m]=0;chamadas[m]=0});
   // Quem já foi chamado por uma lista é pulado nas outras (só acontece no cenário "pelas duas listas")
   const ja=new Set();
-  const preencher=m=>{for(const c of [m,...REV_F[m]]){const L=listas[c]||[];while(usado[c]<L.length&&ja.has(L[usado[c]]))usado[c]++;
-    if(usado[c]<L.length){const p=L[usado[c]++];ja.add(p);return{slot:m,lista:c,pessoa:p,rev:c!==m}}}return{slot:m,lista:null,pessoa:null,rev:false}};
+  const preencher=m=>{const des=[];for(const c of [m,...REV_F[m]]){const L=listas[c]||[];
+    while(usado[c]<L.length&&(ja.has(L[usado[c]])||pular(L[usado[c]]))){const q=L[usado[c]++];if(!ja.has(q)){ja.add(q);des.push(q)}}
+    if(usado[c]<L.length){const p=L[usado[c]++];ja.add(p);return{slot:m,lista:c,pessoa:p,rev:c!==m,des}}}return{slot:m,lista:null,pessoa:null,rev:false,des}};
   const RES=['PCD','PPP/PN','PI','PQ'],out=[],semPcd=!vi.PCD;
   // Dois blocos: primeiro as vagas imediatas (composição exata do Anexo I), depois o cadastro reserva (3× cada modalidade)
   [[1,true],[3,false]].forEach(([mult,imediatas])=>{
@@ -2168,7 +2293,7 @@ function conferirFila(){
     ' Esta conferência é refeita automaticamente sempre que a comissão registra novas convocações.'+
     (exHTML?`<div class="exemplos"><b>Exemplos da convocação de 08/10/2026</b><p class="note">A CAIXA divulga quem foi convocado, não a ordem interna da rodada. Os exemplos mostram que os convocados são exatamente as primeiras posições da fila simulada (✓ = convocado).</p><ul>${exHTML}</ul></div>`:'');
 }
-const FS={modo:'real',dupla:'homolog',vista:'pistas',cargo:'Engenheiro Civil',uf:'AM',passo:0,timer:null,cen:{vi:{PCD:1,AC:3,'PPP/PN':1,PI:0,PQ:0},ap:{PCD:0,AC:15,'PPP/PN':6,PI:0,PQ:0}}};
+const FS={modo:'real',dupla:'homolog',ff:false,pd:false,vista:'pistas',cargo:'Engenheiro Civil',uf:'AM',passo:0,timer:null,cen:{vi:{PCD:1,AC:3,'PPP/PN':1,PI:0,PQ:0},ap:{PCD:0,AC:15,'PPP/PN':6,PI:0,PQ:0}}};
 let filaAtual=[],vagasPronta=false,dadosAtuais={vi:{},listas:{}};
 function iniciarVagas(){
   if(vagasPronta)return;vagasPronta=true;
@@ -2187,6 +2312,8 @@ function iniciarVagas(){
   document.querySelectorAll('#filaDupla button').forEach(b=>b.onclick=()=>{FS.dupla=b.dataset.v;
     document.querySelectorAll('#filaDupla button').forEach(x=>x.setAttribute('aria-pressed',x===b));desenharFila(false)});
   {let t;document.getElementById('filaBusca').addEventListener('input',()=>{clearTimeout(t);t=setTimeout(buscarNaFila,150)})}
+  document.getElementById('filaFF').onchange=e=>{FS.ff=e.target.checked;desenharFila(false)};
+  document.getElementById('filaPD').onchange=e=>{FS.pd=e.target.checked;desenharFila(false)};
   document.querySelectorAll('.ir-detalhes').forEach(a=>a.onclick=e=>{e.preventDefault();aplicarDetalhe(true);const d=document.getElementById('filaComoFeita');d.open=true;setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'start'}),50)});
   document.getElementById('fdAjuda').onclick=e=>{e.preventDefault();const d=document.getElementById('faqDuplo');d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})};
   document.getElementById('filaAnimar').onclick=animarFila;
@@ -2213,7 +2340,7 @@ function dadosFila(){
     return{vi:FS.cen.vi,listas}}
   const v=VAGAS.find(x=>x.cargo===FS.cargo&&x.uf===FS.uf);const vi={};MOD_F.forEach((m,i)=>vi[m]=v.vi[[1,0,2,3,4][i]]);
   const rs=DATA.filter(d=>d.cargo===FS.cargo&&d.uf===FS.uf);
-  return{vi,listas:listasDoEstado(rs,FS.dupla)};
+  return{vi,listas:listasDoEstado(rs,FS.dupla,FS.ff)};
 }
 // Listas de cada modalidade num cargo e estado.
 //  'homolog': cada pessoa só na lista do grupo em que a homologação a colocou (o que a CAIXA fez nos casos conhecidos);
@@ -2223,11 +2350,17 @@ function posNaLista(d,m){
   if(d.listasPolo&&d.listasPolo[CHAVE_LISTA[m]]!=null)return d.listasPolo[CHAVE_LISTA[m]];
   return d.lista===m?d.rankUF:null;
 }
-function listasDoEstado(rs,modo){
+// Já recebeu a chamada (convocado ou empossado). Quem desistiu não ocupa chamada: a vaga foi para o próximo da lista.
+const jaChamado=p=>!!p&&!!p.conv;
+// ff: quem indicou que pretende pedir o final da fila vai para o fim da sua lista (mantendo a ordem entre essas pessoas)
+function listasDoEstado(rs,modo,ff){
   const listas={};
-  MOD_F.forEach(m=>listas[m]=modo==='duas'
+  MOD_F.forEach(m=>{const L=modo==='duas'
     ?rs.filter(d=>posNaLista(d,m)!=null).sort((a,b)=>posNaLista(a,m)-posNaLista(b,m)||a.rankUF-b.rankUF)
-    :rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF));
+    :rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF);
+    // reclassificação confirmada pela CAIXA vai sempre para o fim; a intenção só com a opção ligada
+    const fim=d=>d.ffConf||(ff&&ffPend(d));
+    listas[m]=[...L.filter(d=>!fim(d)),...L.filter(fim)]});
   return listas;
 }
 // "Também 5ª na lista PN": outras listas em que a pessoa aparece, além do grupo da homologação
@@ -2245,7 +2378,9 @@ function vistaUnica(listas,fila){
 function chamadasDosCenarios(vi){
   const rs=DATA.filter(d=>d.cargo===FS.cargo&&d.uf===FS.uf);
   const mapa=f=>new Map(f.filter(x=>x.pessoa).map(x=>[x.pessoa,x]));
-  return {rs,A:mapa(montarFila(vi,listasDoEstado(rs,'homolog'))),B:mapa(montarFila(vi,listasDoEstado(rs,'duas')))};
+  return {rs,A:mapa(montarFila(vi,listasDoEstado(rs,'homolog',FS.ff))),B:mapa(montarFila(vi,listasDoEstado(rs,'duas',FS.ff))),
+    // o mesmo cenário de listas, com a opção do final da fila invertida (para mostrar a diferença no cartão da pessoa)
+    C:mapa(montarFila(vi,listasDoEstado(rs,FS.dupla,!FS.ff)))};
 }
 const textoChamada=x=>x?`${x.k}ª chamada · ${modSig(x.lista)}`:'fora desta fila';
 function desenharDuplos(vi){
@@ -2272,8 +2407,19 @@ function buscarNaFila(){
   const q=document.getElementById('filaBusca').value,el=document.getElementById('filaPosicao');
   document.querySelectorAll('#fila li.achado').forEach(li=>li.classList.remove('achado'));
   if(FS.modo!=='real'){el.innerHTML='';return}
-  const {rs,A,B}=chamadasDosCenarios(dadosAtuais.vi);
-  const feitas=rs.filter(d=>d.conv).length,total=filaAtual.length;
+  const {rs,A,B,C}=chamadasDosCenarios(dadosAtuais.vi);
+  // chamada de quem pretende desistir, sem tirá-la da fila
+  const D=new Map(montarFila(dadosAtuais.vi,listasDoEstado(rs,FS.dupla,FS.ff),0.5,p=>desistiu(p)).filter(x=>x.pessoa).map(x=>[x.pessoa,x]));
+  const feitas=rs.filter(jaChamado).length,total=filaAtual.length;
+  // Final da fila: o que muda para a pessoa se os pedidos forem (ou não) considerados
+  const chamadaTxt=c=>c?`a <b>${c.k}ª chamada</b>`:'depois das chamadas previstas';
+  const ffNota=(p,x)=>{const c=C.get(p);
+    if(p.ffConf)return `<p class="pos-ff">⤵ A CAIXA confirmou a sua <b>reclassificação para o final da fila</b>: você está no fim da sua lista, e a chamada acima já considera isso.</p>`;
+    if(ffPend(p))return `<p class="pos-ff">⤵ Você indicou que pretende pedir o <b>final da fila</b>. ${FS.ff?`A chamada acima já considera isso; sem esse pedido, seria ${chamadaTxt(c)}.`:`Se pedir, você vai para o fim da sua lista e seria ${chamadaTxt(c)}. Marque a opção acima para ver a fila assim.`}</p>`;
+    if(p.conv||p.situacaoConv==='Desistente')return '';
+    const frente=rs.filter(d=>ffPend(d)&&d.lista===p.lista&&d.rankUF<p.rankUF).length;if(!frente)return '';
+    const igual=(c&&c.k)===(x&&x.k);
+    return `<p class="pos-ff">⤵ <b>${frente} pessoa(s) à sua frente</b> na sua lista ${frente>1?'pretendem':'pretende'} pedir o final da fila. ${FS.ff?(igual?'A chamada acima já considera isso, e sem esses pedidos ela seria a mesma.':`A chamada acima já considera isso; sem esses pedidos, você seria ${chamadaTxt(c)}.`):(igual?'Mesmo se pedirem, a sua chamada prevista não muda.':`Se pedirem, você seria ${chamadaTxt(c)}. Marque a opção acima para ver a fila assim.`)}</p>`};
   if(!q.trim()){
     el.innerHTML=`<div class="pos-vazio"><span data-i="userCheck"></span><span>Digite seu nome acima para ver em qual chamada você seria convocado.<br><span class="note">Neste cargo e estado, a comissão registrou <b>${feitas}</b> convocação(ões) até agora, de ${total} chamadas previstas (vagas imediatas e cadastro reserva).</span></span></div>`;
     el.querySelectorAll('[data-i]').forEach(e=>e.innerHTML=ico(e.dataset.i));return}
@@ -2284,13 +2430,17 @@ function buscarNaFila(){
     const x=princ.get(p),y=alt.get(p),ol=outrasListas(p);
     const grupo=`<span class="mod ${modCls(p.lista)}">${modSig(p.lista)}</span> ${p.sit==='VI'?'vaga imediata':'cadastro reserva'} · ${p.rankUF}º no estado`;
     let corpo;
-    if(p.conv)corpo=`<p class="pos-res ok">✓ Já ${p.presumida?'consta como convocado(a) (presumido)':'foi convocado(a)'}${p.dataConv?` em ${new Date(p.dataConv+'T12:00:00').toLocaleDateString('pt-BR')}`:''}.</p>`;
+    if(desistiu(p)){const sub=filaAtual.find(z=>(z.des||[]).includes(p));
+      corpo=`<p class="pos-res">${desPill(p)} Foi convocado(a) e desistiu da vaga.</p><p class="note">A vaga segue para a próxima pessoa da mesma lista${sub&&sub.pessoa?`: <b>${esc(sub.pessoa.ini)}</b> (${sub.k}ª chamada)`:''}.</p>`}
+    else if(pretendeDesistir(p)){const z=D.get(p);
+      corpo=`<p class="pos-res">${desPill(p)} Informou à comissão que pretende desistir.</p><p class="note">É só uma intenção: para a CAIXA continua na lista${z?` e, pela simulação, seria chamado(a) na <b>${z.k}ª chamada</b>`:''}. ${FS.pd?'Com a opção "Considerar quem pretende desistir" ligada, a pessoa sai da fila e quem vem atrás sobe.':'Ligue "Considerar quem pretende desistir" para ver a fila sem essa pessoa.'}</p>`}
+    else if(p.conv)corpo=`<p class="pos-res ok">✓ Já ${p.presumida?'consta como convocado(a) (presumido)':'foi convocado(a)'}${p.dataConv?` em ${new Date(p.dataConv+'T12:00:00').toLocaleDateString('pt-BR')}`:''}.</p>`;
     else if(x){const falta=x.k-feitas;
       corpo=`<p class="pos-res">Pela simulação, seria chamado(a) na <b class="pos-k">${x.k}ª chamada</b> <span class="note">(pela lista ${modSig(x.lista)})</span></p>
         <p class="note">${falta>0?`A comissão registrou ${feitas} convocação(ões) neste cargo e estado: faltam cerca de <b>${falta}</b> chamada(s) até a sua.`:`As chamadas registradas já passaram desta posição: confira se a sua convocação foi informada à comissão.`}</p>`}
     else corpo=`<p class="pos-res">Fica depois das ${total} chamadas previstas (vagas imediatas e cadastro reserva).</p><p class="note">Só seria chamado(a) se houver desistências, eliminações ou novas vagas.</p>`;
     const dupla=ol.length?`<p class="pos-dupla"><b>Você também está classificado(a) em ${ol.join(' · ')}.</b> ${y&&(!x||y.k!==x.k)?`Se a CAIXA ${FS.dupla==='duas'?'seguir o grupo da homologação':'considerar as duas listas'}, seria a <b>${y.k}ª chamada</b> (pela lista ${modSig(y.lista)}).`:'Nos dois cenários a chamada é a mesma.'} <a href="#vagas" class="ver-duplo">Entenda</a></p>`:'';
-    return `<div class="pos-card"><div class="pos-nome"><b>${esc(p.ini)}</b><span>${esc(curto(p.cargo))} · ${esc(p.uf)} · ${grupo}</span></div>${corpo}${dupla}</div>`}).join('');
+    return `<div class="pos-card"><div class="pos-nome"><b>${esc(p.ini)}</b><span>${esc(curto(p.cargo))} · ${esc(p.uf)} · ${grupo}${ffPill(p)}</span></div>${corpo}${ffNota(p,x)}${dupla}</div>`}).join('');
   el.querySelectorAll('.ver-duplo').forEach(a=>a.onclick=e=>{e.preventDefault();const d=document.getElementById('faqDuplo');d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})});
   const atual=princ.get(achados[0]);
   if(atual){const li=document.querySelector(`#fila li[data-k="${atual.k}"]`);if(li)li.classList.add('achado')}
@@ -2298,8 +2448,8 @@ function buscarNaFila(){
 // Números do estado e as próximas chamadas (o que a pessoa precisa ver sem abrir a fila completa)
 function desenharNumeros(vi,totVI){
   const elN=document.getElementById('filaNumeros'),elP=document.getElementById('filaProximas');
-  const total=filaAtual.length,feitas=filaAtual.filter(x=>x.pessoa&&x.pessoa.conv).length;
-  const prox=filaAtual.filter(x=>!(x.pessoa&&x.pessoa.conv));
+  const total=filaAtual.length,feitas=filaAtual.filter(x=>jaChamado(x.pessoa)).length;
+  const prox=filaAtual.filter(x=>!jaChamado(x.pessoa));
   const comp=MOD_F.filter(m=>vi[m]).map(m=>`<span class="mod ${modCls(m)}">${modSig(m)}</span> ${vi[m]}`).join(' ');
   elN.innerHTML=[
     ['Vagas imediatas',totVI,comp+` · cadastro reserva ${totVI*3}`],
@@ -2319,6 +2469,15 @@ function desenharNumeros(vi,totVI){
 }
 function desenharFila(cenarioTambem){
   pararFila();if(cenarioTambem)desenharCenario();
+  // Opção do final da fila: só com os aprovados; mostra quantos indicaram neste cargo e estado
+  {const box=document.getElementById('filaFFBox'),cb=document.getElementById('filaFF');box.hidden=FS.modo!=='real';
+    const n=FS.modo==='real'?DATA.filter(d=>d.cargo===FS.cargo&&d.uf===FS.uf&&ffPend(d)).length:0;
+    if(!n&&FS.ff)FS.ff=false;cb.checked=FS.ff;cb.disabled=!n;
+    document.getElementById('filaFFConta').textContent=n?`(${n} pessoa${n>1?'s':''} neste cargo e estado ${n>1?'indicaram':'indicou'} que ${n>1?'pretendem':'pretende'} pedir; ${n>1?'elas vão':'ela vai'} para o fim da sua lista)`:'(ninguém indicou isso neste cargo e estado até agora)'}
+  {const box=document.getElementById('filaPDBox'),cb=document.getElementById('filaPD');box.hidden=FS.modo!=='real';
+    const n=FS.modo==='real'?DATA.filter(d=>d.cargo===FS.cargo&&d.uf===FS.uf&&pretendeDesistir(d)).length:0;
+    if(!n&&FS.pd)FS.pd=false;cb.checked=FS.pd;cb.disabled=!n;
+    document.getElementById('filaPDConta').textContent=n?`(${n} pessoa${n>1?'s':''} neste cargo e estado ${n>1?'disseram':'disse'} à comissão que ${n>1?'pretendem':'pretende'} desistir; ${n>1?'saem':'sai'} da fila e quem vem atrás sobe)`:'(ninguém indicou isso neste cargo e estado até agora)'}
   const {vi,listas}=dadosFila();filaAtual=montarFila(vi,listas);
   // Nas pistas cada pessoa aparece numa faixa só: a da lista que a chamou (no cenário "pelas duas listas")
   const listasVista=FS.modo==='real'&&FS.dupla==='duas'?vistaUnica(listas,filaAtual):listas;dadosAtuais={vi,listas:listasVista};
@@ -2339,6 +2498,10 @@ function desenharFila(cenarioTambem){
     const ol=outrasListas(p);if(ol.length)det.push(`<span class="tag-dupla" title="Classificação na homologação em outra lista">também ${ol.join(' · ')}</span>`);
     if(p&&p.lista&&x.lista&&p.lista!==x.lista&&!x.rev)det.push(`<span class="tag-dupla">chamada pela lista ${modSig(x.lista)}</span>`);
     if(p&&p.conv)det.push(p.presumida?'<span class="ok">convocado (presumido)</span>':'<span class="ok">✓ convocado</span>');
+    // quem desistiu antes desta chamada: a vaga veio para esta pessoa
+    (x.des||[]).forEach(d=>det.push(`<span class="pill ${desistiu(d)?'p-des':'p-pd'}" title="${desistiu(d)?DES_TXT:PD_TXT}">${esc(d.ini)} ${desistiu(d)?'desistiu':'pretende desistir'} → vaga segue para esta pessoa</span>`));
+    if(pretendeDesistir(p))det.push(`<span class="pill p-pd" title="${PD_TXT}">pretende desistir</span>`);
+    if(p&&p.finalFila)det.push(`<span class="tag-ff" title="${p.ffConf?FFC_TXT:FF_TXT}">⤵ ${p.ffConf?'final da fila (reclassificado)':'pretende final da fila'+(FS.ff?' (movido para o fim da lista)':'')}</span>`);
     lis.push(`<li data-k="${x.k}"><span class="k">${x.k}ª</span><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span><span class="quem">${quem}</span>${det.length?`<span class="det">${det.join('')}</span>`:''}<span class="por">${porQue(x,!vi.PCD&&x.k===1)}</span></li>`);
   });
   document.getElementById('fila').innerHTML=lis.join('');
@@ -2608,7 +2771,7 @@ const PDF_LIBS=['https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js'
 let pdfPronto=null;
 const carregarPDF=()=>pdfPronto||(pdfPronto=PDF_LIBS.reduce((p,src)=>p.then(()=>new Promise((ok,erro)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{pdfPronto=null;erro(new Error('Não foi possível carregar o gerador de PDF. Verifique a internet e tente de novo.'))};document.head.appendChild(s)})),Promise.resolve()));
 // Texto simples a partir do HTML das células (sem símbolos que a fonte do PDF não tem)
-const textoPDF=h=>{const d=document.createElement('div');d.innerHTML=String(h??'–');return d.textContent.replace(/→/g,'->').replace(/[✓✔]/g,'').replace(/\s+/g,' ').trim()||'–'};
+const textoPDF=h=>{const d=document.createElement('div');d.innerHTML=String(h??'–');return d.textContent.replace(/→/g,'->').replace(/[✓✔⤵]/g,'').replace(/(\S)(Pretende|Final da fila|Desistente)/g,'$1 · $2').replace(/\s+/g,' ').trim()||'–'};
 const COR_MOD={AC:[37,106,191],PcD:[74,58,167],PN:[196,77,30],PI:[20,130,90],PQ:[190,70,120]};
 function descFiltros(){
   const f=[];
@@ -2658,7 +2821,7 @@ async function gerarPDF(tipo,btn){
     await carregarPDF();
     if(tipo==='tbl1'||tipo==='tbl2'){
       const t=TABS['#'+tipo];if(!t||!t.rows.length)throw new Error('Não há ninguém nesta lista com os filtros escolhidos.');
-      const sub2={sim:'Convocados',aguard:'Vaga imediata aguardando convocação',cr:'Cadastro reserva'}[S.t2];
+      const sub2={sim:'Convocados',aguard:'Vaga imediata aguardando convocação',cr:'Cadastro reserva',des:'Desistências'}[S.t2];
       const ordem=t.cols.find(c=>c.k===S[tipo==='tbl1'?'sort1':'sort2'].k);
       pdfDocumento({
         titulo:tipo==='tbl1'?'Lista de aprovados · Concurso CAIXA 2026':`Convocações · ${sub2}`,
@@ -2715,6 +2878,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-16 22:30','novo','Solicitações dos aprovados, final da fila e desistência','O botão "Informar convocação" virou "Solicitações dos aprovados": dá para marcar mais de um pedido no mesmo envio (um protocolo só) e enviar novos pedidos mesmo com outros em análise. Novas opções: pedir ou confirmar o final da fila (com a lista: polo ou macropolo) e avisar que pretende desistir. No painel, os selos separam o que é só intenção ("Pretende desistir", "Pretende final da fila") do que já aconteceu com a CAIXA ("Desistente", "Final da fila"); passe o mouse para ver a explicação. Em "Vagas e regras", a vaga de quem desistiu segue para o próximo da lista, quem foi reclassificado vai para o fim, e as intenções entram com as novas opções da simulação. Na aba Convocações há uma lista própria de desistências.'],
   ['2026-10-14 21:30','novo','"Vagas e regras" mais simples, com a sua posição na fila','A aba foi reorganizada: escolha o cargo e o estado, procure o seu nome e veja em qual chamada você seria convocado e quantas faltam. Logo abaixo ficam as próximas chamadas previstas e a fila completa. Quem está classificado em duas listas (por exemplo, AC e PN) vê também a outra possibilidade, explicada num novo item de "Situações especiais". A memória de cálculo, a conferência e o quadro de vagas ficam na "Visão detalhada".'],
   ['2026-10-14 18:30','melhoria','Cargos do painel no título','Sugestão de uma aprovada: o título agora deixa claro que o painel é dos cargos de Arquiteto e Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho), e o rodapé avisa que o cargo de Médico do Trabalho não faz parte do painel.'],
   ['2026-10-13 23:40','novo','Busca nas listas','A lista de aprovados e a lista de convocações ganharam um campo de busca. Não precisa digitar o nome exato: acentos, maiúsculas e letras dobradas não importam ("alan" encontra "Állan"), e dá para combinar nome, cargo e estado ("joao civil amapa").'],
@@ -2893,7 +3057,7 @@ const TOUR=[
   {aba:'vagas',s:['.regras-grid'],t:'Como funciona a convocação',x:['As regras do edital resumidas: quem é chamado primeiro, a proporção das cotas e para onde vai a vaga quando falta gente numa cota. Mais abaixo está o quadro de vagas do Anexo I.']},
   {aba:'docs',s:['#docPerfil'],card:1,t:'Checklist de documentos',x:['Para quem foi convocado: responda às perguntas e a lista de documentos se ajusta ao seu caso, com a explicação de cada um e PDF para imprimir.','Suas respostas ficam salvas só neste aparelho.']},
   {aba:'docs',s:['#docLista'],card:1,t:'Seu checklist',x:['A lista montada para o seu caso, com a explicação de cada documento e de onde ele vem (edital ou Relação da CAIXA). Marque o que já separou: a barra mostra quanto falta.','Use <b>PDF do checklist</b> para imprimir e <b>Desmarcar tudo</b> para recomeçar.']},
-  {s:['.acoes-topo>.acao[data-acao]','#menuBtn'],t:'Informe sua convocação',x:['Foi convocado, tomou posse ou desistiu? Avise por aqui, só com o número de inscrição. Também dá para pedir entrada no grupo de WhatsApp dos aprovados.','Nada muda no painel sem a comissão conferir com você.']},
+  {s:['.acoes-topo>.acao[data-acao]','#menuBtn'],t:'Solicitações dos aprovados',x:['Foi convocado, tomou posse ou desistiu? Pretende pedir o final da fila? Avise por aqui, só com o número de inscrição, e marque mais de uma opção se precisar. Também dá para pedir entrada no grupo de WhatsApp dos aprovados.','Nada muda no painel sem a comissão conferir com você.']},
   {s:['#ntcBtn'],t:'Notícias da comissão',x:['Avisos publicados pela comissão, como novas rodadas de convocação, com a importância e o assunto de cada um. O número vermelho mostra quantas você ainda não leu.','Os avisos importantes aparecem sozinhos no meio da tela quando você abre o painel.']},
   {s:['#novidBtn'],t:'Novidades',x:['O histórico de atualizações do painel. O ponto azul aparece quando há novidade que você ainda não viu.']},
   {s:['#tema'],t:'Modo claro e escuro',x:['Troque a aparência do painel quando quiser.']},
@@ -3093,7 +3257,7 @@ const SNAPSHOT=/*SNAPSHOT*/{"em":"2026-10-13T12:01:12.255Z","data":[{"cargo":"Ar
 const DB={
   url:'https://ssgtryzcesgyuiltovmu.supabase.co',
   chave:'sb_publishable_cTwDqwQkTA8sJsMbuAIXRA_oCKeeaLU',
-  colunas:'id,nome_publico,cargo,uf,macropolo,cota,situacao,nota,posicao_uf,class_macro,convocacao,validacao,data_convocacao,atualizado_em,listas_polo',
+  colunas:'id,nome_publico,cargo,uf,macropolo,cota,situacao,nota,posicao_uf,class_macro,convocacao,validacao,data_convocacao,atualizado_em,listas_polo,final_fila,final_fila_confirmado',
   intervalo:2*60*1000 // nova consulta a cada 2 minutos com a página aberta
 };
 const COTA_DB={AC:'AC',PcD:'PCD',PN:'PPP/PN',PI:'PI',PQ:'PQ'};
@@ -3105,7 +3269,7 @@ async function lerBanco(){
     sit:a.situacao==='Vaga imediata'?'VI':'CR',lista:COTA_DB[a.cota],listas:[COTA_DB[a.cota]],
     rankUF:a.posicao_uf,classMacro:a.class_macro,
     conv:a.convocacao==='Sem informação'?null:(a.convocacao==='Convocado'||a.convocacao==='Empossado'),
-    situacaoConv:a.convocacao,dataConv:a.data_convocacao,atualizado:a.atualizado_em,presumida:a.validacao==='Presumida',listasPolo:a.listas_polo||null
+    situacaoConv:a.convocacao,dataConv:a.data_convocacao,atualizado:a.atualizado_em,presumida:a.validacao==='Presumida',listasPolo:a.listas_polo||null,finalFila:!!a.final_fila,ffConf:!!a.final_fila_confirmado
   }));
 }
 // Muda sempre que alguém inclui, altera ou exclui um registro

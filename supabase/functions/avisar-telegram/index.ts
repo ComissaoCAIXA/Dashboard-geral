@@ -31,7 +31,7 @@ const COTA: Record<string, string> = {
 };
 const ICONE: Record<string, string> = {
   "Convocação": "📩", "Posse": "🎉", "Desistência": "🚪", "Correção de dados": "✏️",
-  "Entrada no grupo": "👥", "Horário da convocação": "🕐",
+  "Entrada no grupo": "👥", "Horário da convocação": "🕐", "Final da fila": "⤵️", "Retirar final da fila": "↩️", "Reclassificação confirmada": "⏬",
 };
 
 // Situação atual da pessoa no painel
@@ -56,12 +56,23 @@ function informado(r: R): string[] {
     case "Posse":
       return [`Data da posse: <b>${d || "não informada"}</b>`, `<i>Ao aprovar: passa a Empossado em ${d}.</i>`];
     case "Desistência":
-      return [d ? `Data informada: <b>${d}</b>` : "Sem data informada", `<i>Ao aprovar: passa a Desistente e sai da fila.</i>`];
+      return [d ? `Data informada: <b>${d}</b>` : "Sem data informada",
+        r.data_convocacao
+          ? `<i>Ao aprovar: passa a Desistente e a vaga segue para a próxima pessoa da lista.</i>`
+          : `<i>Ainda não foi convocada: ao aprovar, aparece como "Pretende desistir" (só intenção).</i>`];
     case "Horário da convocação":
       return [`Convocação em <b>${d || "–"}</b> às <b>${h || "–"}</b>`,
         `<i>Ao aprovar: o horário é gravado${r.validacao === "Presumida" ? " e a convocação presumida passa a confirmada" : ""}.</i>`];
     case "Correção de dados":
       return [`<i>A correção não é aplicada sozinha: ajuste à mão na aba Aprovados depois de conferir.</i>`];
+    case "Final da fila":
+      return [`Pretende pedir à CAIXA a reclassificação para o <b>final da fila</b>.`,
+        `<i>Ao aprovar: aparece o selo "Pretende final da fila" no painel (só intenção) e a pessoa entra no cenário da simulação.</i>`];
+    case "Reclassificação confirmada":
+      return [`Informa que a CAIXA <b>já confirmou</b> a reclassificação para o final da fila.`,
+        `<i>Ao aprovar: vai para o fim da lista${r.convocacao === "Convocado" ? " e volta a Aguardando (a data da convocação é apagada)" : ""}. Confira a confirmação com a pessoa antes.</i>`];
+    case "Retirar final da fila":
+      return [`Não vai mais pedir o final da fila.`, `<i>Ao aprovar: o selo sai do painel.</i>`];
     case "Entrada no grupo": {
       const expira = new Date(new Date(r.criado_em).getTime() + 24 * 3600 * 1000).toISOString();
       return [r.nome_whatsapp ? `Nome no WhatsApp: <b>${esc(r.nome_whatsapp)}</b>` : "Nome no WhatsApp: não informado",
@@ -76,7 +87,7 @@ function textoPedido(r: R) {
   const tipo = String(r.tipo);
   const linhas = [
     `${ICONE[tipo] ?? "📌"} <b>Novo pedido: ${esc(tipo)}</b>`,
-    `Protocolo <code>${esc(r.protocolo)}</code> · recebido em ${quandoBR(r.criado_em)}`,
+    `Protocolo <code>${esc(r.protocolo)}</code>${r.envio && r.envio !== r.protocolo ? ` (enviado junto com <code>${esc(r.envio)}</code>)` : ""} · recebido em ${quandoBR(r.criado_em)}`,
     "",
     `👤 <b>${esc(r.nome ?? "Pessoa não encontrada")}</b>`,
   ];
@@ -87,6 +98,7 @@ function textoPedido(r: R) {
       `${r.posicao_uf}º no estado${r.class_macro ? ` · ${r.class_macro}º no macropolo` : ""} · nota ${nota(r.nota)}`,
       `No painel: ${situacao(r)}`,
       `Grupo de WhatsApp: ${r.no_grupo ? "✅ verificado" : "❌ ainda não marcado"}`,
+      ...(r.final_fila ? [r.final_fila_confirmado ? `Final da fila: ⤵️ reclassificado pela CAIXA` : `Final da fila: ⤵️ já indicou que pretende pedir`] : []),
     );
   }
   linhas.push("", `📝 <b>Informado</b>`, ...informado(r));

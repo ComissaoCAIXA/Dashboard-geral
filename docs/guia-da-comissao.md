@@ -15,6 +15,25 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
 - **Pedidos pendentes:** cada pedido mostra protocolo, o que a pessoa informou, os dados completos
   dela e alertas automáticos. Confira pelo WhatsApp e clique em **Aprovar** ou **Não aprovar**
   (a resposta opcional aparece para o aprovado na consulta do protocolo).
+  - **Vários pedidos no mesmo envio:** a pessoa pode marcar mais de uma opção (ex.: correção de dados +
+    final da fila). Recebe um protocolo só, mas cada pedido aparece separado, com a etiqueta
+    "envio com N pedidos", e é aprovado ou recusado separadamente. Também pode enviar pedidos novos com
+    outros ainda em análise (só não repete um tipo que já está em análise).
+  - **Já analisados:** o botão ao lado de "Em análise" mostra os pedidos aprovados, não aprovados e
+    expirados, com quem decidiu e quando. Use para tirar dúvidas depois.
+- **Intenção × fato (desistência e final da fila):**
+  - **Pretendo desistir** (quem está Aguardando): ao aprovar, a pessoa fica como Desistente *sem* data de
+    convocação, e o painel mostra **"Pretende desistir"** (só intenção; na simulação, só conta com a opção
+    ligada). **Desisti da vaga** (quem já foi convocado): fica Desistente *com* data, o painel mostra
+    **"Desistente"** e a vaga segue para a próxima pessoa da mesma lista.
+  - **Pretendo pedir o final da fila:** só intenção, selo **"Pretende final da fila"**.
+    **Fui reclassificado(a) para o final da fila:** a CAIXA já confirmou. Confira com a pessoa antes de
+    aprovar: ela vai para o fim da lista, volta a Aguardando (a data da convocação é apagada e fica no
+    histórico) e o painel mostra **"Final da fila"** e a posição "→ fim da lista".
+  - Nos dois pedidos de final da fila a pessoa informa **em qual lista** (polo, macropolo ou não sei).
+    A simulação do painel considera só a fila do polo.
+  - Na aba **Aprovados** dá para ajustar à mão: campo **Final da fila** (Não / Pretende pedir /
+    Reclassificado pela CAIXA), também na edição em lote.
 - **Grupo de WhatsApp:** quantos aprovados já estão no grupo, quantos faltam, por cargo e por estado,
   e a lista de quem falta (com filtros). Clique em **Marcar como no grupo** para quem já é membro.
   Para informar convocação pelo site, a pessoa precisa estar marcada como membro do grupo;
