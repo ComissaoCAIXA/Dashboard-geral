@@ -582,6 +582,15 @@ body.aba-form .filters,body.aba-form .det-tgl,body.aba-form .filtbtn,body.aba-fo
 .opcao small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
 /* campos de uma opção marcada (datas, horário), logo abaixo dela */
 .sub-campos{margin:-2px 0 6px}
+/* aviso de sucesso (ex.: já está no grupo): verde, com ícone */
+.aviso-ok{display:flex;gap:12px;align-items:flex-start;margin:14px 0 4px;padding:14px 16px;border-radius:10px;border:1px solid color-mix(in srgb,var(--good) 45%,transparent);background:color-mix(in srgb,var(--good) 12%,transparent);font-size:14px;line-height:1.5}
+.aviso-ok>svg{flex:none;width:26px;height:26px;padding:4px;border-radius:50%;background:var(--good);color:#fff}
+.aviso-ok>div>b:first-child{display:block;font-size:15.5px;color:var(--good);margin-bottom:2px}
+.aviso-ok span{display:block;color:var(--ink)}
+.aviso-ok small{display:block;margin-top:8px;color:var(--muted);font-size:12.5px}
+.aviso-ok .link{background:none;border:0;padding:0;font:inherit;color:var(--s1);text-decoration:underline;cursor:pointer}
+.form-int{display:flex;flex-wrap:wrap;margin:0 0 14px;width:fit-content;max-width:100%}
+.form-int button{flex:1 1 auto}
 .sub-campos .campo:first-child{margin-top:0}
 .sub-campos select{max-width:320px}
 .opcao.ja{cursor:default;opacity:.65}
@@ -743,6 +752,34 @@ body.sobrio .tw tr{border-radius:6px}
   .msort{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);margin-bottom:8px}
   .msort select{flex:1}
   .pager{justify-content:space-between;flex-wrap:wrap}
+}
+/* Tablet (621–1099px, em pé e deitado): as listas de aprovados também viram cartões, em três colunas, para a situação
+   (convocado, desistente, final da fila) não ficar escondida no fim de uma tabela que rola para o lado */
+@media (min-width:621px) and (max-width:1099px){
+  :is(#tbl1,#tbl2) .tw table,:is(#tbl1,#tbl2) .tw tbody,:is(#tbl1,#tbl2) .tw tr,:is(#tbl1,#tbl2) .tw td{display:block;width:100%}
+  :is(#tbl1,#tbl2) .tw thead{display:none}
+  :is(#tbl1,#tbl2) .tw tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:20px;border:1px solid var(--grid);border-radius:10px;padding:8px 14px;margin-bottom:8px}
+  :is(#tbl1,#tbl2) .tw td{border:0;padding:3px 0;display:flex;flex-wrap:wrap;row-gap:3px;justify-content:space-between;align-items:center;gap:8px;white-space:normal;text-align:right;font-size:13px;min-width:0}
+  :is(#tbl1,#tbl2) .tw td::before{content:attr(data-l);color:var(--muted);font-size:12px;text-align:left;margin-right:auto}
+  :is(#tbl1,#tbl2) .tw td:first-child{grid-column:1/-1;font-weight:700;font-size:15px;border-bottom:1px solid var(--grid);padding-bottom:6px;margin-bottom:3px}
+  :is(#tbl1,#tbl2) .tw td:first-child::before{content:none}
+  :is(#tbl1,#tbl2) .tw td[data-l="Convocado"]{grid-column:span 2}
+  :is(#tbl1,#tbl2) .msort{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);margin-bottom:8px}
+  :is(#tbl1,#tbl2) .msort select{flex:0 1 260px}
+}
+/* Celular estreito (≤ 380px): as quatro abas cabem sem rolar a página */
+@media (max-width:380px){
+  #bar .tabs{gap:2px}
+  #bar .tabs button{padding-left:3px;padding-right:3px;font-size:12px;gap:4px}
+  #bar .tabs button svg{width:14px;height:14px}
+}
+/* Celular: na lista em cartões, selos que não cabem descem para a linha de baixo (alinhados à direita) */
+@media (max-width:620px){
+  .tw td{flex-wrap:wrap;row-gap:3px}
+  .tw td::before{margin-right:auto}
+  .tw td .pill{white-space:nowrap}
+  /* a situação da convocação pode ter vários selos: ocupa a largura toda do cartão */
+  .tw td[data-l="Convocado"]{grid-column:1/-1}
 }
 /* ---------- Alturas padronizadas dos controles ----------
    40px: barra do topo (abas, visão detalhada, filtros) e cabeçalho.
@@ -987,13 +1024,11 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
     </div>
     <div class="acoes-topo">
       <button class="acao" type="button" data-acao="convocacao"><span data-i="edit"></span><span>Solicitações dos aprovados</span></button>
-      <button class="acao" type="button" data-acao="grupo"><span data-i="chat"></span><span>Participar do grupo de WhatsApp</span></button>
       <!-- No celular, os botões acima viram este menu -->
       <div class="menu-acoes">
         <button class="acao" type="button" id="menuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="menuLista"><span data-i="menu"></span><span>Solicitações</span><span class="seta" data-i="chev"></span></button>
         <div class="menu-lista" id="menuLista" role="menu" hidden>
-          <button type="button" role="menuitem" data-ir="convocacao"><span data-i="edit"></span><span><b>Solicitações dos aprovados</b><small>Convocação, posse, final da fila, correções</small></span></button>
-          <button type="button" role="menuitem" data-ir="grupo"><span data-i="chat"></span><span><b>Participar do grupo de WhatsApp</b><small>Grupo exclusivo dos aprovados</small></span></button>
+          <button type="button" role="menuitem" data-ir="convocacao"><span data-i="edit"></span><span><b>Solicitações dos aprovados</b><small>Convocação, final da fila, grupo de WhatsApp, correções</small></span></button>
           <button type="button" role="menuitem" data-ir="contato"><span data-i="mail"></span><span><b>Fale com a comissão</b><small>Dúvidas, sugestões e imprensa</small></span></button>
         </div>
       </div>
@@ -1297,7 +1332,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
           <p class="note">Dúvidas, sugestões, imprensa ou qualquer outro assunto. A mensagem chega no e-mail da Comissão de Aprovados e a resposta vai para o e-mail que você informar.</p></div></div>
         <div id="contatoCorpo"></div>
       </div>
-      <p class="note privacidade">Para informar convocação, posse ou desistência, ou para entrar no grupo de WhatsApp, use os botões no topo da página: assim o pedido já chega no lugar certo.<br>
+      <p class="note privacidade">Para informar convocação, posse ou desistência, ou para entrar no grupo de WhatsApp, use o botão <b>Solicitações dos aprovados</b>, no topo da página: assim o pedido já chega no lugar certo.<br>
         Privacidade: seu nome, e-mail e mensagem ficam visíveis apenas para os membros da comissão, que os usam só para responder a você.</p>
     </div>
   </section>
@@ -1728,6 +1763,7 @@ const DES_TXT='Desistiu de fato: foi convocada pela CAIXA e informou a ela que d
 const PD_TXT='Só uma intenção: a pessoa informou à comissão que pretende desistir, mas isso ainda não aconteceu. Para a CAIXA ela continua na lista e será convocada normalmente quando chegar a vez dela.';
 const desistiu=p=>!!p&&p.situacaoConv==='Desistente'&&!!p.dataConv;      // desistência real (já convocada)
 const pretendeDesistir=p=>!!p&&p.situacaoConv==='Desistente'&&!p.dataConv; // só intenção
+const listaNomes=ps=>{const n=ps.map(p=>esc(p.ini));return n.length>1?n.slice(0,-1).join(', ')+' e '+n[n.length-1]:n[0]||''};
 const desPill=r=>desistiu(r)?`<span class="pill p-des" title="${DES_TXT}">Desistente</span>`:`<span class="pill p-pd" title="${PD_TXT}">Pretende desistir</span>`;
 const convPill=r=>(r.situacaoConv==='Desistente'?desPill(r):r.conv===null?'<span class="pill p-na">Sem informação</span>':r.conv?'<span class="pill p-ok">Convocado</span>'+(r.presumida?`<span class="pill p-pres" title="${PRESUMIDA_TXT}">presumida</span>`:''):'<span class="pill p-na">Não</span>')+ffPill(r);
 
@@ -1915,7 +1951,8 @@ function render(){
   document.body.classList.toggle('aba-vagas',S.tab==='vagas'); // a chave "Visão detalhada" também vale na aba Vagas e regras
   if(S.tab==='vagas'){hideTip();iniciarVagas();return}
   if(S.tab==='docs'){hideTip();iniciarDocs();return}
-  document.querySelectorAll('.acao[data-acao]').forEach(b=>b.setAttribute('aria-pressed',S.tab==='form'&&F.intencao===b.dataset.acao));
+  // o pedido de entrada no grupo também fica dentro de "Solicitações dos aprovados"
+  document.querySelectorAll('.acao[data-acao]').forEach(b=>b.setAttribute('aria-pressed',S.tab==='form'));
   if(S.tab==='form'||S.tab==='contato'){hideTip();return} // os formulários têm o próprio controle (não são redesenhados a cada atualização)
   const chip=d3.select('#ufChip');
   if(S.uf){const nome=(GEO.find(f=>f.properties.SIGLA===S.uf)||{properties:{}}).properties.Estado||S.uf;
@@ -2020,21 +2057,24 @@ function iniciarForm(){if(!document.getElementById('formCorpo').innerHTML)desenh
 // (61) 99999-9999 enquanto digita
 const mascaraTel=v=>{const d=v.replace(/\D/g,'').replace(/^55(?=\d{10,11}$)/,'').slice(0,11);
   return d.length<=2?d:d.length<=6?`(${d.slice(0,2)}) ${d.slice(2)}`:d.length<=10?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`};
-const TEXTO_FORM={convocacao:['Solicitações dos aprovados','Informe convocação, posse ou desistência, indique que pretende pedir o final da fila ou peça a correção de um dado. Dá para marcar mais de uma opção no mesmo envio. A comissão confirma com você antes de atualizar o painel.'],
-  grupo:['Participar do grupo de WhatsApp','O grupo é só para aprovados. Informe sua inscrição e seu WhatsApp: a comissão confere e adiciona você.']};
+const TEXTO_FORM={convocacao:['Solicitações dos aprovados','Informe convocação, posse ou desistência, indique que pretende pedir o final da fila peça a correção de um dado ou peça para entrar no grupo de WhatsApp dos aprovados. Dá para marcar mais de uma opção no mesmo envio. A comissão confirma com você antes de atualizar o painel.'],
+  grupo:['Solicitações dos aprovados','Entrar no grupo de WhatsApp dos aprovados: informe sua inscrição e seu WhatsApp, e a comissão confere e adiciona você.']};
 function desenharForm(){
   passosHTML();const el=document.getElementById('formCorpo');const p=F.pessoa;
   const [tit,desc]=TEXTO_FORM[F.intencao]||TEXTO_FORM.convocacao;
   document.getElementById('formTit').textContent=tit;document.getElementById('formDesc').textContent=desc;
   if(F.passo===1){
     el.innerHTML=`<form id="f1" autocomplete="off">
-      ${F.intencao==='grupo'?'<div class="aviso-form" style="margin:0 0 4px">Para pedir a entrada no grupo de WhatsApp dos aprovados, comece pela sua inscrição.</div>':''}
+      <div class="seg form-int" role="group" aria-label="O que você quer fazer"><button type="button" data-int="convocacao" aria-pressed="${F.intencao!=='grupo'}">Informar ou pedir algo</button><button type="button" data-int="grupo" aria-pressed="${F.intencao==='grupo'}">Entrar no grupo de WhatsApp</button></div>
+      ${F.intencao==='grupo'?'<div class="aviso-form" style="margin:0 0 4px">O grupo é só para aprovados: comece pela sua inscrição. Depois a comissão confere e adiciona você.</div>':''}
       <div class="campo"><label for="insc">Número de inscrição</label>
         <input type="text" id="insc" inputmode="numeric" placeholder="Somente números (10 dígitos)" value="${esc(F.insc)}" maxlength="14">
         <small>Está no seu cartão de confirmação e no resultado publicado no Diário Oficial.</small></div>
       ${erroHTML()}
       <div class="btns"><button class="btn" type="submit" ${F.carregando?'disabled':''}>${F.carregando?'Buscando…':'Continuar'}</button></div></form>`;
     const i=document.getElementById('insc');if(!F.carregando)i.focus();
+    el.querySelectorAll('.form-int button').forEach(b=>b.onclick=()=>{if(F.intencao===b.dataset.int)return;F.insc=i.value;F.erro='';F.intencao=b.dataset.int;
+      history.replaceState(null,'',F.intencao==='grupo'?'#grupo':'#informar');desenharForm()});
     document.getElementById('f1').onsubmit=async e=>{e.preventDefault();F.insc=i.value.trim();F.erro='';
       if(!/\d{6,}/.test(F.insc.replace(/\D/g,''))){F.erro='Digite os números da sua inscrição.';return desenharForm()}
       F.carregando=true;desenharForm();
@@ -2061,7 +2101,11 @@ function desenharForm(){
     }else if(F.intencao!=='grupo'&&p.pendente){
       aviso=`<div class="aviso-form">Você já tem pedido(s) <b>em análise</b>. Pode enviar outros normalmente: o que já está em análise aparece marcado no próximo passo.</div>`;
     }else if(jaNoGrupo){
-      aviso=`<div class="aviso-form">Pelo nosso cadastro, você <b>já está no grupo</b>. Se saiu ou não encontra o grupo, pode continuar e pedir de novo.</div>`;
+      // Destaque: a pessoa já está marcada como membro e não precisa continuar
+      aviso=`<div class="aviso-ok" role="status">${ico('check')}<div><b>Você já está no grupo de WhatsApp dos aprovados.</b>
+        <span>Pelo nosso cadastro, você já está marcado(a) como membro. <b>Não precisa fazer mais nada</b>: pode fechar este formulário.</span>
+        <small>Saiu do grupo ou não encontra a conversa? <button type="button" class="link" id="sim">Pedir a entrada de novo</button></small></div></div>`;
+      botao='<button class="btn" type="button" id="fechaOk">Voltar ao painel</button>';
     }
     el.innerHTML=`<p class="rot" style="font-weight:600;margin:0 0 10px">É você?</p>
       <dl class="pessoa"><dd class="quem">${esc(p.nome)}</dd>
@@ -2071,6 +2115,7 @@ function desenharForm(){
       ${aviso}
       <div class="btns"><button class="btn sec" type="button" id="nao">Não sou eu</button>${botao}</div>`;
     document.getElementById('nao').onclick=()=>{F.passo=1;F.pessoa=null;F.erro='';desenharForm()};
+    const fo=document.getElementById('fechaOk');if(fo)fo.onclick=voltarAoPainel;
     // Redireciona para o pedido de entrada no grupo, mantendo a inscrição já confirmada
     const g=document.getElementById('irGrupo');if(g)g.onclick=()=>{
       F.intencao='grupo';Object.assign(F,{passo:3,tipo:OP_GRUPO[0],tit:OP_GRUPO[1],data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,erro:''});
@@ -2188,7 +2233,7 @@ function desenharForm(){
       <div class="protocolo"><span id="protTxt">${esc(F.protocolo)}</span><button type="button" id="copiar">${ico('copy')}Copiar</button></div>
       ${ehGrupo()
         ?`<div class="aviso-form"><b>E agora?</b> A comissão vai conferir seus dados e chamar você no WhatsApp para adicionar ao grupo. Seu número fica guardado só até a análise, <b>no máximo 24 horas</b>, e depois é apagado automaticamente. Se o prazo passar sem contato, envie um novo pedido.</div>`
-        :`<div class="aviso-form"><b>E agora?</b> A comissão vai procurar você no grupo de WhatsApp dos aprovados para confirmar as informações. O painel só muda depois dessa confirmação${F.enviados.includes('Final da fila')?' (a partir daí o selo <b>final da fila</b> aparece ao lado do seu nome)':''}. Se você ainda não está no grupo, use o botão "Participar do grupo de WhatsApp", no topo da página.</div>`}
+        :`<div class="aviso-form"><b>E agora?</b> A comissão vai procurar você no grupo de WhatsApp dos aprovados para confirmar as informações. O painel só muda depois dessa confirmação${F.enviados.includes('Final da fila')?' (a partir daí o selo <b>final da fila</b> aparece ao lado do seu nome)':''}. Se você ainda não está no grupo, peça a entrada em "Solicitações dos aprovados", no topo da página.</div>`}
       <p class="note">Para ver o andamento, use o quadro <b>Acompanhar meu pedido</b>, logo abaixo.</p>
       <div class="btns"><button class="btn sec" type="button" id="novo">Fazer outro pedido</button></div>`;
     document.getElementById('copiar').onclick=async function(){try{await navigator.clipboard.writeText(F.protocolo);this.innerHTML=ico('check')+'Copiado'}catch(e){}};
@@ -2486,7 +2531,7 @@ function desenharNumeros(vi,totVI){
     ['Próxima chamada',prox[0]?`${prox[0].k}ª`:'–',prox[0]?`<span class="mod ${modCls(prox[0].lista||prox[0].slot)}">${modSig(prox[0].lista||prox[0].slot)}</span> ${prox[0].pessoa?esc(prox[0].pessoa.ini):'sem candidato'}`:'fila concluída']
   ].map(([l,v,s])=>`<div class="fn"><span class="fn-l">${l}</span><b class="fn-v">${v}</b><span class="fn-s">${s}</span></div>`).join('');
   const P=prox.slice(0,5);
-  elP.innerHTML=P.length?`<div class="proximas"><div class="px-tit">Próximas chamadas previstas</div><ol>${P.map(x=>`<li><span class="k">${x.k}ª</span><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span><span class="quem">${x.pessoa?esc(x.pessoa.ini):'<span class="vazia">sem candidato</span>'}</span><span class="note">${x.pessoa&&!x.pessoa.ficticio?x.pessoa.rankUF+'º no estado · ':''}${x.vi?'vaga imediata':'cadastro reserva'}${(x.des||[]).length?` · no lugar de ${x.des.map(d=>esc(d.ini)).join(', ')}, que ${x.des.length>1?'saíram':'saiu'} da fila`:''}</span>${pretendeDesistir(x.pessoa)?desPill(x.pessoa):''}${x.pessoa&&x.pessoa.finalFila?ffPill(x.pessoa):''}</li>`).join('')}</ol></div>`:'';
+  elP.innerHTML=P.length?`<div class="proximas"><div class="px-tit">Próximas chamadas previstas</div><ol>${P.map(x=>`<li><span class="k">${x.k}ª</span><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span><span class="quem">${x.pessoa?esc(x.pessoa.ini):'<span class="vazia">sem candidato</span>'}</span><span class="note">${x.pessoa&&!x.pessoa.ficticio?x.pessoa.rankUF+'º no estado · ':''}${x.vi?'vaga imediata':'cadastro reserva'}${(x.des||[]).length?` · sobe porque ${listaNomes(x.des)}, à frente na lista, ${x.des.length>1?'saíram':'saiu'} da fila`:''}</span>${pretendeDesistir(x.pessoa)?desPill(x.pessoa):''}${x.pessoa&&x.pessoa.finalFila?ffPill(x.pessoa):''}</li>`).join('')}</ol></div>`:'';
   document.getElementById('filaCompletaTit').textContent=`Ver a fila completa (${total} chamadas), com animação e o motivo de cada chamada`;
 }function desenharCenario(){
   const el=document.getElementById('filaCenario');el.hidden=FS.modo!=='livre';if(el.hidden)return;
@@ -2502,11 +2547,11 @@ function desenharFila(cenarioTambem){
   {const box=document.getElementById('filaFFBox'),cb=document.getElementById('filaFF');box.hidden=FS.modo!=='real';
     const n=FS.modo==='real'?DATA.filter(d=>d.cargo===FS.cargo&&d.uf===FS.uf&&ffPend(d)).length:0;
     if(!n&&FS.ff)FS.ff=false;cb.checked=FS.ff;cb.disabled=!n;
-    document.getElementById('filaFFConta').textContent=n?`(${n} pessoa${n>1?'s':''} neste cargo e estado ${n>1?'indicaram':'indicou'} que ${n>1?'pretendem':'pretende'} pedir; ${n>1?'elas vão':'ela vai'} para o fim da sua lista)`:'(ninguém indicou isso neste cargo e estado até agora)'}
+    document.getElementById('filaFFConta').textContent=n?`(${n} pessoa${n>1?'s':''} neste cargo e estado: ${n>1?'vão':'vai'} para o fim da lista)`:'(ninguém neste cargo e estado)'}
   {const box=document.getElementById('filaPDBox'),cb=document.getElementById('filaPD');box.hidden=FS.modo!=='real';
     const n=FS.modo==='real'?DATA.filter(d=>d.cargo===FS.cargo&&d.uf===FS.uf&&pretendeDesistir(d)).length:0;
     if(!n&&FS.pd)FS.pd=false;cb.checked=FS.pd;cb.disabled=!n;
-    document.getElementById('filaPDConta').textContent=n?`(${n} pessoa${n>1?'s':''} neste cargo e estado ${n>1?'disseram':'disse'} à comissão que ${n>1?'pretendem':'pretende'} desistir; ${n>1?'saem':'sai'} da fila e quem vem atrás sobe)`:'(ninguém indicou isso neste cargo e estado até agora)'}
+    document.getElementById('filaPDConta').textContent=n?`(${n} pessoa${n>1?'s':''} neste cargo e estado: ${n>1?'saem':'sai'} da fila e quem vem atrás sobe)`:'(ninguém neste cargo e estado)'}
   const {vi,listas}=dadosFila();filaAtual=montarFila(vi,listas);
   // Nas pistas cada pessoa aparece numa faixa só: a da lista que a chamou (no cenário "pelas duas listas")
   const listasVista=FS.modo==='real'&&FS.dupla==='duas'?vistaUnica(listas,filaAtual):listas;dadosAtuais={vi,listas:listasVista};
@@ -2528,7 +2573,7 @@ function desenharFila(cenarioTambem){
     if(p&&p.lista&&x.lista&&p.lista!==x.lista&&!x.rev)det.push(`<span class="tag-dupla">chamada pela lista ${modSig(x.lista)}</span>`);
     if(p&&p.conv)det.push(p.presumida?'<span class="ok">convocado (presumido)</span>':'<span class="ok">✓ convocado</span>');
     // quem desistiu antes desta chamada: a vaga veio para esta pessoa
-    (x.des||[]).forEach(d=>det.push(`<span class="pill ${desistiu(d)?'p-des':'p-pd'}" title="${desistiu(d)?DES_TXT:PD_TXT}">${esc(d.ini)} ${desistiu(d)?'desistiu':'pretende desistir'} → vaga segue para esta pessoa</span>`));
+    (x.des||[]).forEach(d=>det.push(`<span class="pill ${desistiu(d)?'p-des':'p-pd'}" title="${desistiu(d)?DES_TXT:PD_TXT}">${esc(d.ini)} ${desistiu(d)?'desistiu':'pretende desistir'}: esta pessoa sobe</span>`));
     if(pretendeDesistir(p))det.push(`<span class="pill p-pd" title="${PD_TXT}">pretende desistir</span>`);
     if(p&&p.finalFila)det.push(`<span class="tag-ff" title="${p.ffConf?FFC_TXT:FF_TXT}">⤵ ${p.ffConf?'final da fila (reclassificado)':'pretende final da fila'+(FS.ff?' (movido para o fim da lista)':'')}</span>`);
     lis.push(`<li data-k="${x.k}"><span class="k">${x.k}ª</span><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span><span class="quem">${quem}</span>${det.length?`<span class="det">${det.join('')}</span>`:''}<span class="por">${porQue(x,!vi.PCD&&x.k===1)}</span></li>`);
@@ -2603,7 +2648,7 @@ function preencherSlot(x,pop){
   s.textContent=x.pessoa?(x.pessoa.ficticio?x.pessoa.ini.split(' ')[0]:x.pessoa.rankUF+'º'):'–';
   s.insertAdjacentHTML('beforeend',bolinhas(x.pessoa));
   const t=textoSituacao(x.pessoa),des=(x.des||[]).map(d=>`${d.ini} ${desistiu(d)?'desistiu':'pretende desistir'}`);
-  s.title=`${x.k}ª chamada: ${x.pessoa?x.pessoa.ini:'sem candidato'} (${modSig(m)})${t?' · '+t:''}${des.length?' · vaga de '+des.join(', '):''}`;
+  s.title=`${x.k}ª chamada: ${x.pessoa?x.pessoa.ini:'sem candidato'} (${modSig(m)})${t?' · '+t:''}${des.length?' · sobe porque '+des.join(', ')+' (à frente na lista)':''}`;
 }
 // Situação da pessoa para a legenda e as bolinhas
 function statusPessoa(p){
@@ -2626,7 +2671,7 @@ function legendaPasso(x){
   const p=x.pessoa,quem=p?(p.ficticio?`${p.ini}`:`<b>${esc(p.ini)}</b> (${modSig(x.lista)}, ${p.rankUF}º no estado)`):'<b>sem candidato aprovado</b>';
   const st=statusPessoa(p),f=statusFF(p);
   const des=(x.des||[]).map(d=>`<b>${esc(d.ini)}</b> ${desistiu(d)?'desistiu':'pretende desistir'}`);
-  return `<b>${x.k}ª chamada${x.vi?' · vaga imediata':' · cadastro reserva'}:</b> ${quem}${st.k?` <span class="st ${st.k}">${st.ic}${st.txt}</span>`:''}${f?` <span class="st ${f.k}">⤵ ${f.txt}</span>`:''}<br><span class="note">${porQue(x,x.k===1&&x.slot==='AC'&&x.motivo==='inicio'&&!filaAtual.some(y=>y.slot==='PCD'))}${des.length?` ${des.join(', ')}: a vaga seguiu para a próxima pessoa da lista.`:''}</span>`;
+  return `<b>${x.k}ª chamada${x.vi?' · vaga imediata':' · cadastro reserva'}:</b> ${quem}${st.k?` <span class="st ${st.k}">${st.ic}${st.txt}</span>`:''}${f?` <span class="st ${f.k}">⤵ ${f.txt}</span>`:''}<br><span class="note">${porQue(x,x.k===1&&x.slot==='AC'&&x.motivo==='inicio'&&!filaAtual.some(y=>y.slot==='PCD'))}${des.length?` Esta pessoa sobe porque ${des.join(', ')} (à frente na lista) ${des.length>1?'saíram':'saiu'} da fila.`:''}</span>`;
 }
 function selecionarChamada(x){
   document.querySelectorAll('#pistas .sel').forEach(el=>el.classList.remove('sel'));
