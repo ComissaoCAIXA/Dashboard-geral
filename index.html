@@ -919,6 +919,14 @@ body.aba-form.aba-vagas .det-tgl{display:inline-flex!important}
 .mc-tab thead th{position:sticky;top:0;background:var(--surface);color:var(--ink2);font-weight:600;font-size:12px}
 .mc-tab thead th small{display:block;font-weight:500;color:var(--muted)}
 .mc-tab td.k{font-weight:700}
+.mc-tab td.k small{display:block;font-weight:500;font-size:11px;color:var(--muted);white-space:nowrap}
+div.mc-expl p{margin:0 0 8px}
+.mc-ex{padding:10px 12px;border-radius:8px;background:color-mix(in srgb,var(--s1) 8%,transparent);border-left:3px solid var(--s1)}
+.mc-adi{background:color-mix(in srgb,var(--g4) 9%,transparent);border-left-color:var(--g4)}
+.mc-base{margin:0 0 12px;font-size:13px;color:var(--ink2);border:1px solid var(--border);border-radius:8px;padding:8px 12px}
+.mc-base summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.mc-base ul{margin:8px 0;padding-left:18px;line-height:1.6}
+.mc-base li{margin-bottom:6px}
 .mc-tab tr.divisor td{background:var(--empty);color:var(--ink2);font-weight:600;font-size:12px;text-align:center}
 .mc-cel{position:relative;min-width:150px}
 .mc-cel .cta{color:var(--muted)}
@@ -1189,8 +1197,8 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
         <div class="fila-dupla" id="filaDuplaBox">
           <div class="fd-linha"><span class="fd-rot">Como tratar quem está em duas listas (ex.: AC e PN):</span>
             <div class="seg" id="filaDupla" role="group" aria-label="Como tratar quem está em duas listas">
-              <button data-v="homolog" aria-pressed="true" title="Cada pessoa conta só no grupo em que a homologação a colocou. Foi o que a CAIXA fez nos casos conhecidos.">Como a homologação agrupa</button>
-              <button data-v="duas" aria-pressed="false" title="A pessoa entra nas duas listas e é chamada pela que a alcançar primeiro.">Pelas duas listas</button></div>
+              <button data-v="homolog" aria-pressed="true" title="Cada pessoa é convocada pelo grupo em que a homologação a colocou. Foi o que a CAIXA fez nas convocações conhecidas de quem está nas vagas imediatas da AC.">Como a homologação agrupa (padrão)</button>
+              <button data-v="duas" aria-pressed="false" title="A pessoa entra nas duas listas e é chamada pela que a alcançar primeiro. Não foi o que aconteceu nas convocações conhecidas das vagas imediatas da AC; para quem está no cadastro reserva da AC, ainda não há caso.">Pelas duas listas</button></div>
             <a href="#vagas" class="fd-ajuda" id="fdAjuda">Entenda</a></div>
         </div>
         <div id="filaDuplos"></div>
@@ -1204,11 +1212,11 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
             <p>Quem define a ordem e o momento de cada convocação é a CAIXA. O edital estabelece o começo da fila, as proporções das cotas e para onde vão as vagas que sobram, mas não publica a sequência completa de chamadas. Por isso, parte desta fila é uma interpretação da comissão, baseada no edital e conferida com as convocações já feitas. Ela não gera direito nem garante convocação. A cada nova convocação a comissão tem mais dados para conferir a ordem (inclusive o horário de cada convocação, que os aprovados podem informar no formulário), e a regra pode ser ajustada para refletir o que a CAIXA de fato fizer.</p>
             <ol>
               <li><b>Começo da fila (item 2.13.1).</b> O edital diz: <i>"A convocação iniciar-se-á por um candidato com deficiência, se houver, seguida por um candidato da ampla concorrência e, em seguida, por um candidato aprovado nas classificações de pessoas negras, indígenas ou quilombolas, se houver."</i> Nos estados <b>com vaga PcD</b>, a simulação segue isso ao pé da letra: PcD, AC e cota racial. Nos estados <b>sem vaga PcD</b>, o edital não diz como fica o começo; a simulação entende que a posição da PcD fica com a ampla concorrência: AC, AC e cota racial. Se o estado tem só 1 vaga AC nas vagas imediatas, a cota vem logo depois dela. Foi assim que a CAIXA fez em 08/10: no CE e em PE (2 vagas AC e 1 PN) chamou AC, AC e então PN; no DF (1 AC e 1 PN), AC e PN.</li>
-              <li><b>Chamadas seguintes (itens 2.8 e 2.13.2).</b> O edital diz que a convocação ocorrerá <i>"de forma alternada, respeitando a proporção"</i> (2.8) e que <i>"as convocações seguirão conforme o número de vagas informado no Edital, em observância à reserva de vagas de 5% para PcD e 25% para pessoas negras, 3% a pessoas indígenas e 2% a pessoas quilombolas"</i> (2.13.2). Por isso a simulação usa esses <b>percentuais fixos</b>, contados sobre as chamadas de cada cargo e estado: a cada chamada, cada cota acumula o seu percentual, e ela ganha a vaga quando o acumulado passa em <b>meia vaga</b> o que ela já recebeu (arredondamento da proporção). Com a PN chamada no começo da fila (3ª), as próximas PN são a 6ª, 10ª, 14ª chamada…; a PcD, depois da 1ª, volta na 30ª. Nas demais chamadas, ampla concorrência. Foi esta regra que bateu com todos os 41 cargos e estados do relatório oficial de convocações da CAIXA de 13/10/2026; a conta de cada chamada aparece na memória de cálculo, acima. O número de vagas de cada modalidade em cada estado vem do Anexo I: as <b>vagas imediatas</b> são preenchidas primeiro, com exatamente essas quantidades (se a ampla concorrência do bloco acaba antes, seguem as vagas de cota que faltam), e depois vem o <b>cadastro reserva</b>.</li>
+              <li><b>Chamadas seguintes (itens 2.8 e 2.13.2).</b> O edital diz que a convocação ocorrerá <i>"de forma alternada, respeitando a proporção"</i> (2.8) e que <i>"as convocações seguirão conforme o número de vagas informado no Edital, em observância à reserva de vagas de 5% para PcD e 25% para pessoas negras, 3% a pessoas indígenas e 2% a pessoas quilombolas"</i> (2.13.2). Por isso a simulação usa esses <b>percentuais fixos</b>, contados sobre as chamadas de cada cargo e estado: a cada chamada, cada cota acumula o seu percentual, e ela ganha a vaga quando o acumulado passa em <b>meia vaga</b> o que ela já recebeu (arredondamento da proporção). Com a PN chamada no começo da fila (3ª), as próximas PN são a 6ª, 10ª, 14ª chamada…; a PcD, depois da 1ª, volta na 30ª. Nas demais chamadas, ampla concorrência. Foi esta regra que bateu com todos os 41 cargos e estados do relatório oficial de convocações da CAIXA de 13/10/2026; a conta de cada chamada aparece na memória de cálculo, acima. O número de vagas de cada modalidade em cada estado vem do Anexo I: as <b>vagas imediatas</b> são preenchidas primeiro, com exatamente essas quantidades (se a ampla concorrência do bloco acaba antes, seguem as vagas de cota que faltam), e depois vem o <b>cadastro reserva</b>. No cadastro reserva, a contagem dos percentuais <b>continua de onde parou</b>, como prevê a regra de alternância e proporcionalidade sobre o total de nomeações (Decreto 9.508/2018, art. 8º, § 1º, e Lei 12.990/2014, art. 4º), e o percentual vale também para o cadastro reserva (Decreto 9.508/2018, art. 1º, § 4º, II). Se o Anexo I deu ao estado mais vagas de uma cota nas imediatas do que o percentual, essa cota fica "adiantada" e as vagas dela no cadastro só aparecem mais adiante. Como ainda não houve convocação do cadastro reserva, essa parte da ordem é uma estimativa.</li>
               <li><b>Por que não usar a "fatia" de cada estado (item 2.12.2).</b> O edital explica que, para PcD e pessoas negras, <i>"a aplicação das cotas foi proporcional ao número de vagas por cargo e por polo"</i> e que, para indígenas e quilombolas, <i>"a alocação considerou o total de vagas por Macropolo e a representatividade populacional"</i>, sendo essas vagas colocadas em alguns polos. Com poucas vagas por estado, os arredondamentos distorcem a fatia local (no CE, 1 vaga PN em 3 = 33%; no AM, 1 vaga PI em 2 = 50%). Por isso a ordem segue os percentuais do edital, e não a fatia de cada estado.</li>
               <li><b>Vagas que sobram (item 2.12):</b> quando uma modalidade não tem mais aprovados, a vaga passa para a próxima da cadeia descrita no edital, na mesma posição da fila.</li>
               <li><b>Desistência e final da fila:</b> quem já desistiu de fato sai da fila e a vaga segue para a próxima pessoa da mesma lista; quem foi reclassificado pela CAIXA vai para o fim da sua lista. Essas duas coisas valem sempre. As intenções (pretende desistir, pretende final da fila) só entram quando você liga as opções acima da fila. Veja as perguntas "Alguém desistiu" e "Alguém pediu o final da fila", mais abaixo.</li>
-              <li><b>Quem está em duas listas:</b> por padrão, cada pessoa conta só no grupo em que a homologação a colocou, como a CAIXA fez nos casos conhecidos. O seletor acima mostra a outra possibilidade.</li>
+              <li><b>Quem está em duas listas:</b> por padrão, cada pessoa é convocada pelo grupo em que a homologação a colocou, como a CAIXA fez nas convocações conhecidas de quem está nas <b>vagas imediatas da AC</b>. Para quem está no <b>cadastro reserva da AC</b> e numa cota, ainda não houve nenhum caso, então o painel mostra também a chamada pelas duas listas. O seletor acima mostra a outra possibilidade.</li>
               <li><b>Conferência com a convocação real:</b> a simulação foi comparada com as convocações registradas pela comissão. <span id="filaConfere">Calculando…</span></li>
             </ol>
           </div>
@@ -1242,8 +1250,9 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
           <p>Quem concorre por cota (PcD, PN, PI ou PQ) concorre <b>também</b> na ampla concorrência (AC), e aparece na homologação com uma classificação em cada lista (por exemplo, 17ª na AC e 5ª na PN). Mas cada pessoa ocupa <b>uma vaga só</b>: a homologação colocou cada aprovado num único grupo, nesta ordem:</p>
           <ol class="faq-ol"><li><b>AC – vagas imediatas:</b> os primeiros da lista AC;</li><li><b>Cotas – vagas imediatas:</b> os primeiros de cada lista de cota que ainda não estavam na AC;</li><li><b>AC – cadastro reserva:</b> os seguintes da lista AC, <b>inclusive cotistas</b> com nota para isso;</li><li><b>Cotas – cadastro reserva:</b> quem sobrou em cada lista de cota.</li></ol>
           <p>Por isso uma pessoa pode ser, por exemplo, 5ª na lista PN e mesmo assim estar no grupo <b>AC – cadastro reserva</b>: na lista PN, as posições dela e de quem está na mesma situação "pertencem" à AC, e o cadastro reserva PN começa depois delas.</p>
-          <p><b>O que a CAIXA fez até agora:</b> nos casos conhecidos (pessoas no grupo AC de vaga imediata que eram a 1ª de uma lista de cota), a CAIXA <b>seguiu o grupo da homologação</b>: chamou a pessoa pela AC e deu a vaga da cota ao próximo da lista. Para quem está no <b>cadastro reserva da AC</b> e numa cota, <b>ainda não houve nenhum caso</b>, então não se sabe como a CAIXA vai agir.</p>
-          <p><b>No simulador:</b> o padrão é <b>Como a homologação agrupa</b>. Escolha <b>Pelas duas listas</b> para ver a outra possibilidade (a pessoa é chamada pela lista que a alcançar primeiro e é pulada na outra). A tabela abaixo da fila mostra onde cada pessoa nessa situação seria chamada nos dois cenários, e o campo "Procure seu nome nesta fila" mostra a sua posição. <small>Itens 4.1.2.4 e 4.3.4.1</small></p></details>
+          <p><b>O que a CAIXA fez até agora (vagas imediatas):</b> nos casos conhecidos (pessoas no grupo AC de vaga imediata que eram a 1ª de uma lista de cota), a CAIXA <b>seguiu o grupo da homologação</b>: chamou a pessoa pela ordem da AC e deu a vaga da cota ao próximo da lista. Pelo edital, quem é aprovado dentro das vagas da ampla concorrência não é computado nas vagas reservadas (itens 4.1.2.4 e 4.3.4.1); por isso, a convocação de alguém que está atrás na lista de cota, pela vaga reservada, não é desrespeito à ordem de classificação.</p>
+          <p><b>Ainda em aberto (cadastro reserva da AC):</b> para quem é cotista e foi homologado no <b>cadastro reserva da AC</b>, ainda não houve nenhum caso. Ali a situação é diferente: no cadastro reserva ninguém tem convocação garantida, e se a fila da AC não chegar até a pessoa, ela pode ficar de fora mesmo com nota melhor que cotistas chamados pela cota. Se ela fosse chamada pela cota, a vaga reservada continuaria indo para um cotista. Por isso o painel mostra, para essas pessoas, a chamada nos dois cenários. Se você está nessa situação, vale perguntar à CAIXA.</p>
+          <p><b>No simulador:</b> o padrão é <b>Como a homologação agrupa</b>. A opção <b>Pelas duas listas</b> (a pessoa seria chamada pela lista que a alcançasse primeiro) fica na Visão detalhada para comparação. O campo "Procure seu nome" mostra a sua posição e, quando for o caso, as duas possibilidades. <small>Itens 4.1.2.4 e 4.3.4.1</small></p></details>
         <details id="faqDesist"><summary>Alguém desistiu ou pretende desistir</summary>
           <p>A CAIXA só fica sabendo da desistência quando convoca a pessoa e ela recusa. Por isso o painel separa duas situações:</p>
           <ol class="faq-ol"><li><span class="pill p-des">Desistente</span> <b>já aconteceu:</b> a pessoa foi convocada e informou à CAIXA que desistiu. A vaga continua sendo da mesma lista (AC, PN…) e segue para a <b>próxima pessoa dessa lista</b>. Na simulação isso vale sempre: a ficha de quem desistiu aparece riscada, com a bolinha vermelha cheia.</li>
@@ -2303,7 +2312,8 @@ document.getElementById('fProt').onsubmit=async e=>{e.preventDefault();const out
 //     de chamadas do polo: uma cota é chamada quando k × percentual − chamadas dela ≥ 0,5 (arredondamento;
 //     PN na 3ª pelo início e depois 6ª, 10ª, 14ª…). Bateu com os 41 cargos/estados do relatório da CAIXA de 13/10/2026;
 //     nas demais chamadas, AC. As vagas por polo vêm do Anexo I: o bloco das vagas imediatas tem exatamente
-//     a composição do edital; se a AC do bloco acaba, seguem as cotas restantes; depois vem o cadastro reserva (3×);
+//     a composição do edital; se a AC do bloco acaba, seguem as cotas restantes; depois vem o cadastro reserva (3×),
+//     com a contagem dos percentuais continuando de onde parou;
 //  3) se a lista daquela modalidade acabou, a vaga segue a cadeia de reversão do item 2.12.
 // A conferência com os convocados registrados é feita ao vivo em conferirFila() (34 de 34 filas em 13/10/2026).
 // Os percentuais das cotas valem para o concurso todo; a divisão por polo (Anexo I) arredonda, por isso não se usa a
@@ -2324,6 +2334,9 @@ function montarFila(vi,listas,limiar=0.5,pular=pularPadrao){
     if(usado[c]<L.length){const p=L[usado[c]++];ja.add(p);return{slot:m,lista:c,pessoa:p,rev:c!==m,des}}}return{slot:m,lista:null,pessoa:null,rev:false,des}};
   const RES=['PCD','PPP/PN','PI','PQ'],out=[],semPcd=!vi.PCD;
   // Dois blocos: primeiro as vagas imediatas (composição exata do Anexo I), depois o cadastro reserva (3× cada modalidade)
+  // A contagem dos percentuais é contínua, desde a 1ª chamada do estado, como manda a regra de alternância e
+  // proporcionalidade sobre o total de nomeações (Decreto 9.508/2018, art. 8º, § 1º; Lei 12.990/2014, art. 4º).
+  // (Em 19/10/2026 a comissão testou recomeçar a contagem no cadastro reserva e voltou atrás: não há base para isso.)
   [[1,true],[3,false]].forEach(([mult,imediatas])=>{
     const cap={};MOD_F.forEach(m=>cap[m]=(vi[m]||0)*mult);const N=MOD_F.reduce((s,m)=>s+cap[m],0);
     const cot=['PPP/PN','PI','PQ'].filter(m=>cap[m]).sort((a,b)=>cap[b]-cap[a]);
@@ -2350,7 +2363,7 @@ function porQue(x,primeiraAC){
       :'Item 2.13.1: em seguida, um de cota racial')
     :x.motivo==='ac'?`Item 2.13.2: nesta chamada (${x.k}ª do estado) não é a vez de nenhuma cota pelos percentuais do edital, então é a ampla concorrência`
     :x.motivo==='sobra'?`As vagas de ampla concorrência ${x.vi?'das vagas imediatas':'do cadastro reserva'} deste estado já foram chamadas; seguem as vagas de cota que faltam nesse bloco (Anexo I)`
-    :`Item 2.13.2: vez de ${sigla(x.slot)} pelos percentuais do edital. Na ${x.k}ª chamada do estado, o acumulado de ${sigla(x.slot)} (${x.k} × ${pct(x.slot)}) passou em meia vaga o que ela já tinha recebido (veja a memória de cálculo)`;
+    :`Item 2.13.2: vez de ${sigla(x.slot)} pelos percentuais do edital. Na ${x.k}ª chamada do estado, ${sigla(x.slot)} tinha juntado ${x.k} × ${pct(x.slot)} = ${(x.k*PCT_F[x.slot]).toLocaleString('pt-BR',{maximumFractionDigits:2})} de vaga e passou em meia vaga o que já tinha recebido (veja a memória de cálculo)`;
   if(x.rev)t+=`. Sem aprovados de ${sigla(x.slot)} disponíveis, a vaga passa para ${sigla(x.lista)} (item ${ITEM_REV[x.slot]})`;
   else if(!x.pessoa)t+=`. Não há aprovados para esta vaga`;
   return t+'.';
@@ -2447,7 +2460,7 @@ function dadosFila(){
   return{vi,listas:listasDoEstado(rs,FS.dupla,FS.ff)};
 }
 // Listas de cada modalidade num cargo e estado.
-//  'homolog': cada pessoa só na lista do grupo em que a homologação a colocou (o que a CAIXA fez nos casos conhecidos);
+//  'homolog': cada pessoa só na lista do grupo em que a homologação a colocou (o que a CAIXA fez nas convocações conhecidas);
 //  'duas'   : quem está classificado em mais de uma lista entra em todas, e é chamado pela que o alcançar primeiro.
 const CHAVE_LISTA={AC:'AC',PCD:'PCD','PPP/PN':'PN',PI:'PI',PQ:'PQ'};
 function posNaLista(d,m){
@@ -2498,7 +2511,7 @@ function desenharDuplos(vi){
   if(!linhas.length){el.innerHTML='';return}
   const MAX=12,vis=linhas.slice(0,MAX);
   el.innerHTML=`<details class="duplos" ${duplosAC.length?'open':''}><summary>Quem está classificado em duas listas e o que muda entre os cenários <span class="note">(${linhas.length} pessoa(s))</span></summary>
-    <p class="note">A homologação colocou cada pessoa num só grupo (por exemplo, <b>AC – cadastro reserva</b>), mas ela continua classificada nas outras listas em que concorreu. O painel mostra por padrão o cenário <b>Como a homologação agrupa</b>, que foi o que a CAIXA fez nos casos conhecidos. Veja abaixo onde cada pessoa seria chamada nos dois cenários.</p>
+    <p class="note">A homologação colocou cada pessoa num só grupo (por exemplo, <b>AC – cadastro reserva</b>), mas ela continua classificada nas outras listas em que concorreu. Nas convocações conhecidas das vagas imediatas da AC, a CAIXA seguiu o grupo da homologação (o padrão do painel). Para quem está no cadastro reserva da AC, ainda não houve caso, então vale olhar as duas colunas.</p>
     <div class="tw"><table class="tab-duplos"><thead><tr><th>Pessoa</th><th>Grupo na homologação</th><th>Como a homologação agrupa</th><th>Pelas duas listas</th></tr></thead><tbody>
     ${vis.map(p=>{const a=A.get(p),b=B.get(p),ol=outrasListas(p);return `<tr><td data-l="Pessoa"><b>${esc(p.ini)}</b></td>
       <td data-l="Grupo"><span class="mod ${modCls(p.lista)}">${modSig(p.lista)}</span> ${p.sit==='VI'?'vaga imediata':'cadastro reserva'}${ol.length?` <span class="tag-dupla">também ${ol.join(' · ')}</span>`:''}</td>
@@ -2544,7 +2557,16 @@ function buscarNaFila(){
       corpo=`<p class="pos-res">Pela simulação, seria chamado(a) na <b class="pos-k">${x.k}ª chamada</b> <span class="note">(pela lista ${modSig(x.lista)})</span></p>
         <p class="note">${falta>0?`A comissão registrou ${feitas} convocação(ões) neste cargo e estado: faltam cerca de <b>${falta}</b> chamada(s) até a sua.`:`As chamadas registradas já passaram desta posição: confira se a sua convocação foi informada à comissão.`}</p>`}
     else corpo=`<p class="pos-res">Fica depois das ${total} chamadas previstas (vagas imediatas e cadastro reserva).</p><p class="note">Só seria chamado(a) se houver desistências, eliminações ou novas vagas.</p>`;
-    const dupla=ol.length?`<p class="pos-dupla"><b>Você também está classificado(a) em ${ol.join(' · ')}.</b> ${y&&(!x||y.k!==x.k)?`Se a CAIXA ${FS.dupla==='duas'?'seguir o grupo da homologação':'considerar as duas listas'}, seria a <b>${y.k}ª chamada</b> (pela lista ${modSig(y.lista)}).`:'Nos dois cenários a chamada é a mesma.'} <a href="#vagas" class="ver-duplo">Entenda</a></p>`:'';
+    // Vagas imediatas da AC: nas convocações conhecidas, valeu o grupo da homologação. Cadastro reserva da AC: ainda sem caso,
+    // então o cartão mostra as duas chamadas.
+    const crAC=p.lista==='AC'&&p.sit==='CR',outra=y?`a <b>${y.k}ª chamada</b> (pela lista ${modSig(y.lista)})`:'depois das chamadas previstas';
+    const dupla=ol.length?`<p class="pos-dupla"><b>Você também está classificado(a) em ${ol.join(' · ')}.</b> ${crAC
+      ?(FS.dupla==='duas'
+        ?`Este é o cenário "pelas duas listas". Pelo grupo da homologação (o padrão), você seria ${outra}. Para quem está no cadastro reserva da AC, ainda não houve caso que mostre qual vale.`
+        :`${y&&(!x||y.k!==x.k)?`Se a CAIXA considerar as duas listas, você seria ${outra}.`:'Nos dois cenários a chamada é a mesma.'} Para quem está no cadastro reserva da AC, ainda não houve caso que mostre qual vale.`)
+      :(FS.dupla==='duas'
+        ?`Atenção: este é o cenário "pelas duas listas", que não foi o que aconteceu nas convocações conhecidas das vagas imediatas da AC. Pelo grupo da homologação, você seria ${outra}.`
+        :`Nas convocações conhecidas, a CAIXA seguiu o grupo em que a homologação colocou a pessoa (${modSig(p.lista)}): a chamada acima já considera isso.`)} <a href="#vagas" class="ver-duplo">Entenda</a></p>`:'';
     return `<div class="pos-card"><div class="pos-nome"><b>${esc(p.ini)}</b><span>${esc(curto(p.cargo))} · ${esc(p.uf)} · ${grupo}${ffPill(p)}</span></div>${corpo}${ffNota(p,x)}${dupla}</div>`}).join('');
   el.querySelectorAll('.ver-duplo').forEach(a=>a.onclick=e=>{e.preventDefault();const d=document.getElementById('faqDuplo');d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})});
   const atual=princ.get(achados[0]);
@@ -2629,22 +2651,41 @@ function desenharMemoria(vi,listas){
   const pct=c=>Math.round(PCT_F[c]*100)+'%';
   const lim=fmtN(MC.limiar).replace(/,?0+$/,"");
   const MOT={inicio:'Início da fila (item 2.13.1)',ac:'Nenhuma cota chegou ao limiar: ampla concorrência',sobra:'Ampla concorrência do bloco acabou: segue a cota com mais saldo',cota:'Saldo da cota chegou ao limiar (item 2.13.2)'};
+  // vagas já recebidas por cota (a contagem é contínua, desde a 1ª chamada, como em montarFila)
   const ch={};cotas.forEach(c=>ch[c]=0);ch.AC=0;
   const totVI=MOD_F.reduce((s,m)=>s+(vi[m]||0),0);
-  const linhas=[];
+  const linhas=[];let exemplo=null;const adiantadas=[];
   fila.forEach((x,i)=>{
-    if(i===totVI&&totVI)linhas.push(`<tr class="divisor"><td colspan="${cotas.length+3}">Fim das vagas imediatas · cadastro reserva</td></tr>`);
+    if(i===totVI&&totVI){
+      // cotas que chegaram ao cadastro reserva "adiantadas" (o Anexo I deu mais vagas do que o percentual)
+      cotas.forEach(c=>{const junt=totVI*PCT_F[c];if(ch[c]-junt>=0.5){const prox=Math.ceil((ch[c]+MC.limiar)/PCT_F[c]-1e-9);adiantadas.push({c,rec:ch[c],junt,prox})}});
+      linhas.push(`<tr class="divisor"><td colspan="${cotas.length+3}">Fim das vagas imediatas · cadastro reserva (a conta continua de onde parou)</td></tr>`)}
     const cel=cotas.map(c=>{
       const ac=x.k*PCT_F[c],s=ac-ch[c],pronta=x.motivo!=="inicio"&&s>=MC.limiar-1e-9,vez=x.slot===c;
-
+      if(vez&&x.motivo==='cota'&&!exemplo)exemplo={k:x.k,c,ac,rec:ch[c],s};
       return `<td class="mc-cel ${modCls(c)}${vez?' vez':pronta?' pronta':''}"${vez?` data-m="${x.motivo}"`:''}><span class="cta">${x.k} × ${pct(c)} = ${fmtN(ac)} − ${ch[c]} =</span> <span class="sal">${fmtN(s)}</span>
         <span class="barra"><i style="width:${Math.max(0,Math.min(100,s/MC.limiar*100))}%"></i></span></td>`});
     const p=x.pessoa,quem=!p?'sem candidato':p.ficticio?esc(p.ini):`${esc(p.ini)} <small>(${p.rankUF}º)</small>`;
-    linhas.push(`<tr><td class="k">${x.k}ª</td>${cel.join('')}<td class="res"><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span>${quem}${x.rev?` <small>(vaga ${modSig(x.slot)})</small>`:''}</td><td class="mot">${MOT[x.motivo]||''}</td></tr>`);
+    linhas.push(`<tr><td class="k">${x.k}ª${x.vi?'':`<small>${x.j}ª do CR</small>`}</td>${cel.join('')}<td class="res"><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span>${quem}${x.rev?` <small>(vaga ${modSig(x.slot)})</small>`:''}</td><td class="mot">${MOT[x.motivo]||''}</td></tr>`);
     ch[x.slot]=(ch[x.slot]||0)+1;
   });
   const LIM=24,corte=!MC.todas&&linhas.length>LIM+1;
-  el.innerHTML=`<p class="mc-expl">A cada chamada, cada cota acumula o seu percentual do edital: <b>PN 25%</b>, <b>PcD 5%</b>, <b>PI 3%</b> e <b>PQ 2%</b> (item 2.13.2). O <b>saldo</b> é o acumulado menos as vagas que a cota já recebeu. Quando o saldo chega a <b>${lim}</b>, é a vez da cota (se duas chegam juntas, vai a de maior saldo). Nas demais chamadas, ampla concorrência. As três primeiras chamadas seguem o começo da fila do item 2.13.1 e já contam como vagas recebidas: por isso a cota chamada logo no início (a PcD, por exemplo) fica com saldo negativo por um tempo, até o acumulado alcançar a vaga que ela recebeu adiantada. Esta regra bateu com todos os 41 cargos e estados do relatório oficial de convocações da CAIXA de 13/10/2026.</p>
+  const ex=exemplo?`<p class="mc-expl mc-ex"><b>Exemplo deste estado:</b> na <b>${exemplo.k}ª chamada</b>, a ${sigla(exemplo.c)} tinha juntado ${exemplo.k} × ${pct(exemplo.c)} = <b>${fmtN(exemplo.ac)}</b> de vaga. Ela já tinha recebido <b>${exemplo.rec}</b> ${exemplo.rec===1?'vaga':'vagas'}, então o saldo era ${fmtN(exemplo.ac)} − ${exemplo.rec} = <b>${fmtN(exemplo.s)}</b>. Como chegou a meia vaga (${lim}), essa chamada foi da ${sigla(exemplo.c)}.</p>`:'';
+  const adi=adiantadas.map(a=>`<p class="mc-expl mc-ex mc-adi"><b>${sigla(a.c)} chega adiantada ao cadastro reserva.</b> O Anexo I deu a este estado <b>${a.rec}</b> ${a.rec===1?'vaga':'vagas'} de ${sigla(a.c)} nas ${totVI} vagas imediatas, mas pelo percentual (${pct(a.c)}) ela teria juntado só ${totVI} × ${pct(a.c)} = <b>${fmtN(a.junt)}</b>. Pela proporcionalidade, a próxima vaga de ${sigla(a.c)} só vem quando ela juntar ${fmtN(a.rec+MC.limiar)} (as ${a.rec} já recebidas + meia vaga), o que acontece na <b>${a.prox}ª chamada</b>${a.prox>fila.length?`, depois das ${fila.length} chamadas desta fila. Por isso as vagas de ${sigla(a.c)} do cadastro reserva aparecem no fim, quando a ampla concorrência do bloco acaba (composição do Anexo I)`:''}.</p>`).join('');
+  el.innerHTML=`<div class="mc-expl"><p><b>Como ler a conta.</b> Pense em cada cota como um cofrinho que junta pedaços de vaga. A cada chamada, a cota ganha o seu percentual do edital (item 2.13.2): <b>PN</b> junta 0,25 (25%), <b>PcD</b> 0,05 (5%), <b>PI</b> 0,03 (3%) e <b>PQ</b> 0,02 (2%).</p>
+      <p><b>Saldo</b> = o que a cota juntou − as vagas que ela já recebeu. Quando o saldo chega a <b>meia vaga (${lim})</b>, a cota leva a chamada. É o mesmo que arredondar: depois de 6 chamadas, a PN juntou 6 × 0,25 = 1,50, que arredonda para 2 vagas; se até ali ela só tinha recebido 1, é a vez dela. Se duas cotas chegam a meia vaga juntas, vai a de maior saldo. Nas demais chamadas, é a vez da ampla concorrência.</p>
+      <p>As três primeiras chamadas seguem o começo da fila do item 2.13.1 e já contam como vagas recebidas: por isso a cota chamada logo no início (a PcD, por exemplo) fica com saldo negativo por um tempo, até juntar o que recebeu adiantado.</p>
+      <p><b>A conta é contínua</b>: ela começa na 1ª chamada do estado e segue pelo cadastro reserva sem zerar. A regra foi conferida com o relatório oficial da CAIXA de 13/10/2026 nas vagas imediatas (41 de 41 cargos e estados); para o cadastro reserva ainda não houve convocações, então essa parte é uma estimativa.</p></div>
+    ${ex}${adi}
+    <details class="mc-base"><summary>Base legal da conta</summary>
+      <ul>
+        <li><b>Alternância e proporcionalidade.</b> A nomeação segue a ordem de classificação, alternando ampla concorrência e vagas reservadas na proporção entre o total de vagas e as vagas reservadas. Para pessoas com deficiência, Decreto nº 9.508/2018, art. 8º, § 1º; para pessoas negras, Lei nº 12.990/2014, art. 4º. No edital, itens 2.8 e 2.13.2. É por isso que a conta é feita chamada a chamada, sobre o total de convocações, e não por blocos isolados.</li>
+        <li><b>O percentual vale também para o cadastro reserva</b> e para vagas que surgirem depois (Decreto nº 9.508/2018, art. 1º, § 4º, II). Por isso a contagem continua depois das vagas imediatas.</li>
+        <li><b>Desistência:</b> quando quem ocupa uma vaga reservada desiste ou é eliminado, a vaga vai para o próximo da mesma lista de cota, inclusive do cadastro reserva (Decreto nº 9.508/2018, art. 8º, § 2º). No simulador, a vaga de quem desistiu segue para o próximo da mesma lista.</li>
+        <li><b>Cota sem candidatos:</b> se não houver aprovados de uma cota, a vaga reservada pode ser ocupada por outros candidatos (Decreto nº 9.508/2018, art. 1º, § 5º). O edital define a ordem dessa passagem no item 2.12, que o simulador segue.</li>
+        <li><b>Quem tem nota para a ampla concorrência</b> não ocupa vaga reservada (edital, itens 4.1.2.4 e 4.3.4.1).</li>
+      </ul>
+      <p class="note">O decreto e a lei dizem que deve haver alternância e proporcionalidade, mas não trazem a fórmula exata. A conta de "meia vaga" é a interpretação da comissão, conferida com as convocações reais.</p></details>
     ${cotas.length?'':'<p class="mc-expl">Este estado não tem vagas de cota: todas as chamadas são de ampla concorrência.</p>'}
     <div class="mc-scroll"><table class="mc-tab"><thead><tr><th>Chamada</th>${cotas.map(c=>`<th><span class="mod ${modCls(c)}">${modSig(c)}</span> ${pct(c)}<small>chamada × % − vagas já recebidas = saldo</small></th>`).join('')}<th>Quem é chamado</th><th>Por quê</th></tr></thead>
       <tbody>${(corte?linhas.slice(0,LIM):linhas).join('')}</tbody></table></div>
@@ -2997,6 +3038,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-19 20:00','dados','Cotistas no cadastro reserva da AC: duas possibilidades','Para quem é cotista e foi homologado no cadastro reserva da AC, ainda não houve nenhuma convocação que mostre qual lista vale. Por isso, para essas pessoas, o painel mostra a chamada nos dois cenários (pelo grupo da homologação e pelas duas listas).'],
+  ['2026-10-19 19:00','melhoria','Memória de cálculo mais clara e com a base legal','A memória de cálculo (Vagas e regras → Visão detalhada) explica a conta de um jeito mais simples, com um exemplo do próprio estado, e mostra a base legal: alternância e proporcionalidade sobre o total de convocações (Decreto 9.508/2018 e Lei 12.990/2014), valendo também para o cadastro reserva. Quando o Anexo I deu a um estado mais vagas de uma cota nas imediatas do que o percentual, a memória explica por que as próximas vagas dessa cota só aparecem mais adiante.'],
   ['2026-10-16 22:30','novo','Solicitações dos aprovados, final da fila e desistência','O botão "Informar convocação" virou "Solicitações dos aprovados": dá para marcar mais de um pedido no mesmo envio (um protocolo só) e enviar novos pedidos mesmo com outros em análise. Novas opções: pedir ou confirmar o final da fila (com a lista: polo ou macropolo) e avisar que pretende desistir. No painel, os selos separam o que é só intenção ("Pretende desistir", "Pretende final da fila") do que já aconteceu com a CAIXA ("Desistente", "Final da fila"); passe o mouse para ver a explicação. Em "Vagas e regras", a vaga de quem desistiu segue para o próximo da lista, quem foi reclassificado vai para o fim, e as intenções entram com as novas opções da simulação. Na fila, novas bolinhas: vermelha para desistência e roxa para final da fila (cheia quando já aconteceu, só o contorno quando é intenção). Na aba Convocações há uma lista própria de desistências.'],
   ['2026-10-14 21:30','novo','"Vagas e regras" mais simples, com a sua posição na fila','A aba foi reorganizada: escolha o cargo e o estado, procure o seu nome e veja em qual chamada você seria convocado e quantas faltam. Logo abaixo ficam as próximas chamadas previstas e a fila completa. Quem está classificado em duas listas (por exemplo, AC e PN) vê também a outra possibilidade, explicada num novo item de "Situações especiais". A memória de cálculo, a conferência e o quadro de vagas ficam na "Visão detalhada".'],
   ['2026-10-14 18:30','melhoria','Cargos do painel no título','Sugestão de uma aprovada: o título agora deixa claro que o painel é dos cargos de Arquiteto e Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho), e o rodapé avisa que o cargo de Médico do Trabalho não faz parte do painel.'],
