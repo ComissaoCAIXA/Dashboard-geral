@@ -610,6 +610,7 @@ body.aba-form .filters,body.aba-form .det-tgl,body.aba-form .filtbtn,body.aba-fo
 .p-ffc{background:color-mix(in srgb,var(--s4) 16%,transparent);color:color-mix(in srgb,var(--s4) 85%,var(--ink));margin-left:4px;cursor:help;white-space:nowrap}
 .check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink2);margin-top:16px;cursor:pointer}
 .check input{margin-top:3px;accent-color:var(--s1)}
+.check .uso{margin:6px 0;padding-left:18px}.check .uso li{margin-bottom:3px}
 .protocolo{display:flex;align-items:center;justify-content:center;gap:12px;font:700 34px/1 ui-monospace,Consolas,monospace;letter-spacing:.08em;padding:20px;border:1px dashed var(--s1);border-radius:8px;margin:14px 0;color:var(--ink)}
 .protocolo button{font:600 12px system-ui,sans-serif;letter-spacing:0;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--ink2);cursor:pointer}
 .protocolo button svg{width:14px;height:14px}
@@ -2089,6 +2090,19 @@ function opcoesDe(p){
 }
 // Opções que não combinam no mesmo envio: marcar uma desmarca as outras
 const NAO_COMBINA=[['Convocação','Posse','Desistência','Reclassificação confirmada'],['Convocação','Horário da convocação'],['Desistência','Final da fila'],['Final da fila','Reclassificação confirmada']];
+// Consentimento: diz, para cada pedido marcado, o que passa a aparecer no painel depois da conferência
+const USO_PEDIDO={
+  'Convocação':p=>p.convocacao==='Convocado'?'a data corrigida da minha convocação aparece no painel, ao lado do meu nome;':'a situação <b>Convocado</b> e a data da convocação aparecem no painel, ao lado do meu nome;',
+  'Horário da convocação':()=>'o horário da convocação fica registrado para a comissão entender a ordem das chamadas;',
+  'Posse':()=>'a situação <b>Empossado</b> e a data da posse aparecem no painel, ao lado do meu nome;',
+  'Desistência':p=>['Aguardando','Sem informação'].includes(p.convocacao)?'o selo <b>Pretende desistir</b> aparece no painel, ao lado do meu nome, e entra num cenário da simulação da fila;':'a situação <b>Desistente</b> aparece no painel, ao lado do meu nome, e a simulação passa a vaga ao próximo da lista;',
+  'Final da fila':()=>'o selo <b>Pretende final da fila</b> aparece no painel, ao lado do meu nome, e entra num cenário da simulação da fila;',
+  'Retirar final da fila':()=>'o selo de final da fila sai do painel e eu volto à minha posição na simulação;',
+  'Reclassificação confirmada':()=>'o selo <b>Final da fila</b> aparece no painel, ao lado do meu nome, eu volto a <b>Aguardando</b> e passo para o fim da lista na simulação;',
+  'Correção de dados':()=>'o dado corrigido aparece no painel;'};
+const consentimento=(p,sel)=>`Confirmo que as informações são verdadeiras e autorizo a comissão a usá-las no painel, depois de conferir comigo pelo WhatsApp:
+  <ul class="uso">${sel.map(t=>`<li>${USO_PEDIDO[t]?.(p)||''}</li>`).join('')}<li>a observação, se houver, fica só com a comissão.</li></ul>
+  Posso pedir para corrigir ou retirar essas informações quando quiser. <a href="privacidade.html" target="_blank" rel="noopener">Privacidade</a>`;
 const ROTULO_DATA={Convocação:'Data da convocação','Horário da convocação':'Data da convocação',Posse:'Data da posse',Desistência:'Data da desistência (opcional)'};
 const F={passo:1,insc:'',pessoa:null,tipo:null,tit:'',sel:[],campos:{},enviados:[],data:'',hora:'',obs:'',tel:'',nomeZap:'',ok:false,protocolo:'',erro:'',carregando:false,intencao:'convocacao'};
 const ehGrupo=()=>F.tipo==='Entrada no grupo';
@@ -2188,7 +2202,7 @@ function desenharForm(){
           :`<label class="opcao${tem(t)?' on':''}"><input type="checkbox" name="tipo" value="${i}" ${tem(t)?'checked':''}><span><b>${tit}</b>${sub?`<small>${sub}</small>`:''}</span></label>${tem(t)?camposDe(t):''}`).join('')}</div></div>
       ${F.sel.length?`<div class="campo"><label for="obs">${corr?'O que está errado? (e outras observações)':'Observação (opcional)'}</label>
         <textarea id="obs" maxlength="1000" placeholder="${corr?'Ex.: minha nota correta é 72,50':'Algo que a comissão deva saber'}">${esc(F.obs)}</textarea></div>
-      <label class="check"><input type="checkbox" id="conf" ${F.ok?'checked':''}><span>Confirmo que as informações são verdadeiras e sei que a comissão vai conferir comigo pelo WhatsApp antes de atualizar o painel.${ff?' Sei que, depois da confirmação, o selo <b>final da fila</b> aparece no painel público ao lado do meu nome.':''}</span></label>`:''}
+      <label class="check"><input type="checkbox" id="conf" ${F.ok?'checked':''}><span>${consentimento(p,F.sel)}</span></label>`:''}
       ${erroHTML()}
       <div class="btns"><button class="btn sec" type="button" id="volta">Voltar</button>
         <button class="btn" type="submit" ${F.carregando||!F.sel.length?'disabled':''}>${F.carregando?'Enviando…':F.sel.length>1?`Enviar ${F.sel.length} pedidos`:'Enviar'}</button></div></form>`;
@@ -2238,8 +2252,8 @@ function desenharForm(){
       ${F.tipo?`<div class="campo"><label for="obs">${F.tipo==='Correção de dados'?'O que está errado?':'Observação (opcional)'}</label>
         <textarea id="obs" maxlength="1000" placeholder="${F.tipo==='Correção de dados'?'Ex.: minha nota correta é 72,50':'Algo que a comissão deva saber'}">${esc(F.obs)}</textarea></div>
       <label class="check"><input type="checkbox" id="conf" ${F.ok?'checked':''}><span>${ehGrupo()
-        ?'Autorizo a comissão a usar meu número só para confirmar que sou aprovado(a) e me adicionar ao grupo. Sei que ele será apagado depois da análise.'
-        :'Confirmo que as informações são verdadeiras e sei que a comissão vai conferir comigo pelo WhatsApp antes de atualizar o painel.'}</span></label>`:''}
+        ?'Autorizo a comissão a usar meu número e o nome do meu WhatsApp só para confirmar que sou aprovado(a) e me adicionar ao grupo. Sei que nada disso aparece no painel e que é apagado depois da análise, ou em no máximo 24 horas. <a href="privacidade.html" target="_blank" rel="noopener">Privacidade</a>'
+        :consentimento(p,[F.tipo])}</span></label>`:''}
       ${erroHTML()}
       <div class="btns"><button class="btn sec" type="button" id="volta">Voltar</button>
         <button class="btn" type="submit" ${F.carregando||!F.tipo?'disabled':''}>${F.carregando?'Enviando…':'Enviar'}</button></div></form>`;
@@ -3042,6 +3056,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-10-26 21:00','melhoria','Autorização mais clara nos formulários','Ao enviar uma solicitação, a caixa de confirmação agora lista o que passa a aparecer no painel para cada pedido marcado (por exemplo, a data da convocação ou o selo de final da fila), depois da conferência da comissão. Os formulários do grupo de WhatsApp e do Fale com a comissão também dizem o que não aparece no painel e por quanto tempo os dados ficam guardados.'],
   ['2026-10-26 17:00','novo','Página de privacidade','Nova página Privacidade (link no rodapé e nos formulários) explica quais dados o painel usa, de onde vêm, onde ficam, por quanto tempo e como pedir correção, ocultar o nome ou retirar uma informação. O painel também passou a verificar a integridade das bibliotecas que carrega de fora.'],
   ['2026-10-19 20:00','dados','Cotistas no cadastro reserva da AC: duas possibilidades','Para quem é cotista e foi homologado no cadastro reserva da AC, ainda não houve nenhuma convocação que mostre qual lista vale. Por isso, para essas pessoas, o painel mostra a chamada nos dois cenários (pelo grupo da homologação e pelas duas listas).'],
   ['2026-10-19 19:00','melhoria','Memória de cálculo mais clara e com a base legal','A memória de cálculo (Vagas e regras → Visão detalhada) explica a conta de um jeito mais simples, com um exemplo do próprio estado, e mostra a base legal: alternância e proporcionalidade sobre o total de convocações (Decreto 9.508/2018 e Lei 12.990/2014), valendo também para o cadastro reserva. Quando o Anexo I deu a um estado mais vagas de uma cota nas imediatas do que o percentual, a memória explica por que as próximas vagas dessa cota só aparecem mais adiante.'],
@@ -3359,7 +3374,7 @@ function desenharContato(){
     <div class="campo"><label for="cAss">Assunto</label><select id="cAss"><option value="">Escolha…</option>${ASSUNTOS.map(a=>`<option ${a===C.assunto?'selected':''}>${a}</option>`).join('')}</select></div>
     <div class="campo"><label for="cMsg">Mensagem</label><textarea id="cMsg" maxlength="4000" rows="6">${esc(C.msg)}</textarea></div>
     <div class="campo" style="position:absolute;left:-9999px" aria-hidden="true"><label for="cSite">Não preencha</label><input type="text" id="cSite" tabindex="-1" autocomplete="off"></div>
-    <label class="check"><input type="checkbox" id="cOk" ${C.ok?'checked':''}><span>Autorizo a comissão a usar meu nome e e-mail apenas para responder a esta mensagem.</span></label>
+    <label class="check"><input type="checkbox" id="cOk" ${C.ok?'checked':''}><span>Autorizo a comissão a usar meu nome e e-mail apenas para responder a esta mensagem. Nada disso aparece no painel, e a mensagem é apagada depois de 6 meses. <a href="privacidade.html" target="_blank" rel="noopener">Privacidade</a></span></label>
     ${C.erro?`<div class="erro" role="alert">${ico('flag')}<span>${esc(C.erro)}</span></div>`:''}
     <div class="btns"><button class="btn" type="submit" ${C.enviando?'disabled':''}>${C.enviando?'Enviando…':'Enviar mensagem'}</button></div></form>`;
   const g=id=>document.getElementById(id);
