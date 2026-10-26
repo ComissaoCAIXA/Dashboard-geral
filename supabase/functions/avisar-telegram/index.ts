@@ -3,8 +3,11 @@
 // Quem chama é o próprio banco (gatilho com pg_net, migração 020), só com {tabela, id}.
 // A função não precisa de senha de quem chama porque só avisa registros recém-criados (10 min)
 // que ainda não foram avisados: cada registro gera no máximo uma mensagem no grupo.
-// O aviso traz o nome, a situação da pessoa no painel, o que foi informado e os alertas
-// (migração 021). Telefone e número de inscrição nunca vão para o Telegram.
+//
+// Privacidade (migração 033): o aviso diz só O QUE chegou (tipo do pedido ou assunto da mensagem), o código
+// (protocolo do pedido ou MSG-<id> da mensagem), quando chegou e os alertas sobre o pedido. Nada de quem é:
+// nome, cargo, polo, cota, nota, observação, WhatsApp, e-mail e texto ficam só na área da comissão.
+// O Telegram tem servidores fora do Brasil; por isso nenhum dado pessoal vai para lá.
 //
 // Segredo (Supabase > Edge Functions > Secrets):
 //   TELEGRAM_TOKEN  chave do bot (@BotFather)
@@ -19,65 +22,29 @@ const horaBR = (h?: string | null) => h ? String(h).slice(0, 5) : "";
 const quandoBR = (iso: string) => new Date(iso).toLocaleString("pt-BR", {
   timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit",
 });
-const nota = (v: unknown) => v == null ? "–" : Number(v).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 2 });
-const UF: Record<string, string> = {
-  AC: "Acre", AL: "Alagoas", AP: "Amapá", AM: "Amazonas", BA: "Bahia", CE: "Ceará", DF: "Distrito Federal",
-  ES: "Espírito Santo", GO: "Goiás", MA: "Maranhão", MT: "Mato Grosso", MS: "Mato Grosso do Sul", MG: "Minas Gerais",
-  PA: "Pará", PB: "Paraíba", PR: "Paraná", PE: "Pernambuco", PI: "Piauí", RJ: "Rio de Janeiro", RN: "Rio Grande do Norte",
-  RS: "Rio Grande do Sul", RO: "Rondônia", RR: "Roraima", SC: "Santa Catarina", SP: "São Paulo", SE: "Sergipe", TO: "Tocantins",
-};
-const COTA: Record<string, string> = {
-  AC: "Ampla concorrência", PcD: "Pessoa com deficiência", PN: "Pessoas negras", PI: "Pessoas indígenas", PQ: "Pessoas quilombolas",
-};
 const ICONE: Record<string, string> = {
   "Convocação": "📩", "Posse": "🎉", "Desistência": "🚪", "Correção de dados": "✏️",
   "Entrada no grupo": "👥", "Horário da convocação": "🕐", "Final da fila": "⤵️", "Retirar final da fila": "↩️", "Reclassificação confirmada": "⏬",
 };
 
-// Situação atual da pessoa no painel
-function situacao(r: R) {
-  const c = r.convocacao ?? "Sem informação";
-  let s = esc(c);
-  if (c === "Convocado" || c === "Empossado" || c === "Desistente") {
-    if (r.validacao === "Presumida") s += " (presumida)";
-    if (r.data_convocacao) s += ` em ${dataBR(r.data_convocacao)}${r.hora_convocacao ? " às " + horaBR(r.hora_convocacao) : ""}`;
-  }
-  if (r.data_posse) s += ` · posse em ${dataBR(r.data_posse)}`;
-  return s;
-}
-
-// O que a pessoa informou e o que acontece ao aprovar, por tipo de pedido
+// O que foi informado (sem dados da pessoa) e o que acontece ao aprovar
 function informado(r: R): string[] {
   const d = dataBR(r.data), h = horaBR(r.hora);
   switch (r.tipo) {
     case "Convocação":
-      return [`Data da convocação: <b>${d || "não informada"}</b>${h ? ` às <b>${h}</b>` : ""}`,
-        `<i>Ao aprovar: passa a Convocado (confirmada) em ${d}${h ? " às " + h : ""}.</i>`];
+      return [`Data informada: <b>${d || "não informada"}</b>${h ? ` às <b>${h}</b>` : ""}`];
     case "Posse":
-      return [`Data da posse: <b>${d || "não informada"}</b>`, `<i>Ao aprovar: passa a Empossado em ${d}.</i>`];
+      return [`Data da posse informada: <b>${d || "não informada"}</b>`];
     case "Desistência":
-      return [d ? `Data informada: <b>${d}</b>` : "Sem data informada",
-        r.data_convocacao
-          ? `<i>Ao aprovar: passa a Desistente e a vaga segue para a próxima pessoa da lista.</i>`
-          : `<i>Ainda não foi convocada: ao aprovar, aparece como "Pretende desistir" (só intenção).</i>`];
+      return [d ? `Data informada: <b>${d}</b>` : "Sem data informada"];
     case "Horário da convocação":
-      return [`Convocação em <b>${d || "–"}</b> às <b>${h || "–"}</b>`,
-        `<i>Ao aprovar: o horário é gravado${r.validacao === "Presumida" ? " e a convocação presumida passa a confirmada" : ""}.</i>`];
-    case "Correção de dados":
-      return [`<i>A correção não é aplicada sozinha: ajuste à mão na aba Aprovados depois de conferir.</i>`];
+      return [`Convocação em <b>${d || "–"}</b> às <b>${h || "–"}</b>`];
     case "Final da fila":
-      return [`Pretende pedir à CAIXA a reclassificação para o <b>final da fila</b>.`,
-        `<i>Ao aprovar: aparece o selo "Pretende final da fila" no painel (só intenção) e a pessoa entra no cenário da simulação.</i>`];
     case "Reclassificação confirmada":
-      return [`Informa que a CAIXA <b>já confirmou</b> a reclassificação para o final da fila.`,
-        `<i>Ao aprovar: vai para o fim da lista${r.convocacao === "Convocado" ? " e volta a Aguardando (a data da convocação é apagada)" : ""}. Confira a confirmação com a pessoa antes.</i>`];
-    case "Retirar final da fila":
-      return [`Não vai mais pedir o final da fila.`, `<i>Ao aprovar: o selo sai do painel.</i>`];
+      return r.final_fila_lista ? [`Lista indicada: <b>${esc(r.final_fila_lista)}</b>`] : [];
     case "Entrada no grupo": {
       const expira = new Date(new Date(r.criado_em).getTime() + 24 * 3600 * 1000).toISOString();
-      return [r.nome_whatsapp ? `Nome no WhatsApp: <b>${esc(r.nome_whatsapp)}</b>` : "Nome no WhatsApp: não informado",
-        `WhatsApp: veja na área da comissão (o número não vem para o Telegram).`,
-        `<i>Responda até ${quandoBR(expira)}: depois disso o pedido expira e o número é apagado.</i>`];
+      return [`<i>Responda até ${quandoBR(expira)}: depois disso o pedido expira e o número é apagado.</i>`];
     }
   }
   return [];
@@ -87,44 +54,28 @@ function textoPedido(r: R) {
   const tipo = String(r.tipo);
   const linhas = [
     `${ICONE[tipo] ?? "📌"} <b>Novo pedido: ${esc(tipo)}</b>`,
-    `Protocolo <code>${esc(r.protocolo)}</code>${r.envio && r.envio !== r.protocolo ? ` (enviado junto com <code>${esc(r.envio)}</code>)` : ""} · recebido em ${quandoBR(r.criado_em)}`,
-    "",
-    `👤 <b>${esc(r.nome ?? "Pessoa não encontrada")}</b>`,
+    `Código: <code>${esc(r.protocolo)}</code>${r.envio && r.envio !== r.protocolo ? ` (enviado junto com <code>${esc(r.envio)}</code>)` : ""}`,
+    `Recebido em ${quandoBR(r.criado_em)}`,
   ];
-  if (r.cargo) {
-    linhas.push(
-      `${esc(r.cargo)} · ${esc(UF[r.uf] ?? r.uf)} (${esc(r.uf)}) · ${esc(r.macropolo)}`,
-      `${esc(COTA[r.cota] ?? r.cota)} · ${esc(r.situacao)}`,
-      `${r.posicao_uf}º no estado${r.class_macro ? ` · ${r.class_macro}º no macropolo` : ""} · nota ${nota(r.nota)}`,
-      `No painel: ${situacao(r)}`,
-      `Grupo de WhatsApp: ${r.no_grupo ? "✅ verificado" : "❌ ainda não marcado"}`,
-      ...(r.final_fila ? [r.final_fila_confirmado ? `Final da fila: ⤵️ reclassificado pela CAIXA` : `Final da fila: ⤵️ já indicou que pretende pedir`] : []),
-    );
-  }
-  linhas.push("", `📝 <b>Informado</b>`, ...informado(r));
-  if (r.observacao) linhas.push("", `💬 <b>Observação da pessoa</b>`, `<blockquote>${esc(r.observacao)}</blockquote>`);
+  const inf = informado(r);
+  if (inf.length) linhas.push("", ...inf);
   const al: string[] = r.alertas ?? [];
   if (al.length) linhas.push("", `⚠️ <b>Atenção</b>`, ...al.map((a) => `• ${esc(a)}`));
-  linhas.push("", `Pedidos aguardando análise: <b>${r.pendentes}</b>`);
+  linhas.push("", `Quem enviou e os detalhes estão na área da comissão (procure pelo código).`,
+    `Pedidos aguardando análise: <b>${r.pendentes}</b>`);
   return linhas.join("\n");
 }
 
 function textoMensagem(r: R) {
-  const cortada = Number(r.tamanho) > String(r.mensagem ?? "").length;
   return [
     `💬 <b>Nova mensagem no Fale com a comissão</b>`,
+    `Código: <code>MSG-${esc(r.id)}</code>`,
+    `Assunto: <b>${esc(r.assunto)}</b>`,
     `Recebida em ${quandoBR(r.criado_em)}`,
     "",
-    `Assunto: <b>${esc(r.assunto)}</b>`,
-    `👤 ${esc(r.nome)}`,
-    `✉️ ${esc(r.email)}`,
-    "",
-    `<blockquote>${esc(r.mensagem)}${cortada ? "…" : ""}</blockquote>`,
-    cortada ? `<i>Texto cortado: a mensagem completa está na área da comissão e no e-mail.</i>` : "",
-    `Para responder, use o e-mail da comissão (Responder no aviso) e depois marque como respondida.`,
-    "",
+    `Quem enviou e o texto estão na área da comissão e no e-mail da comissão (procure pelo código).`,
     `Mensagens sem resposta: <b>${r.pendentes}</b>`,
-  ].filter((l, i, a) => !(l === "" && a[i - 1] === "")).join("\n");
+  ].join("\n");
 }
 
 async function enviar(token: string, chat: string, html: string, aba: string) {

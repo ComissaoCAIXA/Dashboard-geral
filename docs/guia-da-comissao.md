@@ -97,10 +97,12 @@ Authentication → Hooks → *Before User Created*) recusa qualquer outro e-mail
 
 ### Avisos no Telegram
 O bot **@ComissaoCaixa2026Bot** avisa no grupo "Comissão CAIXA - Avisos do painel" a cada **pedido novo**
-(nome completo, cargo, estado, cota, classificação, nota, situação no painel, grupo de WhatsApp, o que foi
-informado, o que acontece ao aprovar, observação e alertas) e a cada **mensagem nova** do Fale com a comissão
-(nome, e-mail, assunto e texto). O aviso nunca traz telefone nem número de inscrição; o botão abre a área da
-comissão. Lembre que o que vai para o Telegram fica no histórico do grupo: apague avisos antigos se quiser.
+e a cada **mensagem nova** do Fale com a comissão. Por privacidade (o Telegram tem servidores fora do Brasil),
+o aviso diz só **o que** chegou, **nunca de quem**:
+- pedido: tipo, **código** (protocolo), hora, data ou lista informada e alertas;
+- mensagem: assunto, **código** `MSG-<número>` e hora.
+Nome, cargo, polo, cota, nota, observação, WhatsApp, e-mail e texto ficam só na área da comissão: abra pelo
+botão do aviso e procure pelo código (a busca das abas Pedidos e Mensagens aceita o código).
 - Para alguém receber os avisos, basta entrar no grupo do Telegram.
 - A chave do bot fica só em Supabase → Edge Functions → Secrets → `TELEGRAM_TOKEN`. Se vazar: no
   @BotFather, `/revoke`, e cole a chave nova no mesmo segredo.

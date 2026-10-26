@@ -65,9 +65,9 @@ com a comissão e nunca aparecem no painel nem neste repositório.
 | Peça | Onde |
 |---|---|
 | Páginas (HTML, CSS e JavaScript, sem etapa de build) | `index.html` (painel) e `comissao.html` (área da comissão), publicadas pelo GitHub Pages |
-| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 032, aplicadas em ordem) |
+| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 033, aplicadas em ordem) |
 | Aviso por e-mail do Fale com a comissão | Função `supabase/functions/avisar-mensagem` (Supabase Edge Functions) |
-| Avisos da comissão no Telegram (pedido novo e mensagem nova) | Função `supabase/functions/avisar-telegram`, chamada pelo banco (migração 020) |
+| Avisos da comissão no Telegram (pedido novo e mensagem nova, só o tipo e o código, sem dados pessoais) | Função `supabase/functions/avisar-telegram`, chamada pelo banco (migrações 020 e 033) |
 | Modelos dos e-mails de login da comissão | `docs/emails/` |
 
 ## Segurança e privacidade

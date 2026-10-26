@@ -790,8 +790,9 @@ async function carregarMsgs(){
   if(!data.length){el.innerHTML=`<p class="vazio">${$('mFiltro').value==='Nova'?'Nenhuma mensagem esperando resposta. 🎉':'Nenhuma mensagem.'}</p>`;return}
   el.innerHTML=data.map(m=>{
     const resp=`mailto:${encodeURIComponent(m.email)}?subject=${encodeURIComponent('Re: '+m.assunto)}`;
-    return `<div class="pedido" data-id="${m.id}" data-busca="${textoBusca(m.nome,m.email,m.assunto,m.mensagem,m.status==='Nova'?'nao respondida':'respondida')}">
-    <div class="topo"><span class="tipo">${esc(m.assunto)}</span><span class="quando">recebida em ${dhBR(m.criado_em)}</span><span class="pill ${m.status==='Respondida'?'Aprovado':''}">${esc(m.status==='Nova'?'Não respondida':'Respondida')}</span></div>
+    // MSG-<id>: o mesmo código que aparece no aviso do Telegram (que não traz nome, e-mail nem texto)
+    return `<div class="pedido" data-id="${m.id}" data-busca="${textoBusca('MSG-'+m.id,m.nome,m.email,m.assunto,m.mensagem,m.status==='Nova'?'nao respondida':'respondida')}">
+    <div class="topo"><span class="prot">MSG-${m.id}</span><span class="tipo">${esc(m.assunto)}</span><span class="quando">recebida em ${dhBR(m.criado_em)}</span><span class="pill ${m.status==='Respondida'?'Aprovado':''}">${esc(m.status==='Nova'?'Não respondida':'Respondida')}</span></div>
     <div class="nome">${esc(m.nome)}</div>
     <p style="margin:0 0 6px"><a href="${resp}">${esc(m.email)}</a></p>
     <div class="obs">${esc(m.mensagem)}</div>
