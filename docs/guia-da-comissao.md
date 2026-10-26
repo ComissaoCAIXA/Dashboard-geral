@@ -113,8 +113,10 @@ botão do aviso e procure pelo código (a busca das abas Pedidos e Mensagens ace
 As mensagens do Fale com a comissão são apagadas do banco 6 meses depois de recebidas. O aviso
 que chegou no e-mail da comissão continua lá.
 
-Os pedidos já analisados e o registro de alterações (aba Histórico) são apagados 4 anos depois,
-o prazo máximo de validade do concurso. Pedidos ainda pendentes não são apagados.
+Os pedidos já analisados e o registro de alterações (aba Histórico) ficam guardados durante a validade
+do concurso e são apagados no dia seguinte ao fim dela. A data fica em `configuracao`, chave
+`fim_validade_concurso` (26/05/2030, contando a prorrogação). Se a CAIXA não prorrogar, troque para
+2028-05-26. Pedidos ainda pendentes não são apagados. As cópias de segurança ficam só 30 dias.
 
 ## Direto no Supabase (para administradores)
 
