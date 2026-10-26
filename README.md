@@ -65,7 +65,7 @@ com a comissão e nunca aparecem no painel nem neste repositório.
 | Peça | Onde |
 |---|---|
 | Páginas (HTML, CSS e JavaScript, sem etapa de build) | `index.html` (painel) e `comissao.html` (área da comissão), publicadas pelo GitHub Pages |
-| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 031, aplicadas em ordem) |
+| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 032, aplicadas em ordem) |
 | Aviso por e-mail do Fale com a comissão | Função `supabase/functions/avisar-mensagem` (Supabase Edge Functions) |
 | Avisos da comissão no Telegram (pedido novo e mensagem nova) | Função `supabase/functions/avisar-telegram`, chamada pelo banco (migração 020) |
 | Modelos dos e-mails de login da comissão | `docs/emails/` |
@@ -80,6 +80,8 @@ com a comissão e nunca aparecem no painel nem neste repositório.
 - A área da comissão exige login por e-mail e só funciona para e-mails cadastrados pela comissão.
   Toda alteração fica registrada no histórico, com quem fez.
 - O WhatsApp informado para entrar no grupo é apagado na decisão da comissão ou em no máximo 24 horas.
+- **Aviso de privacidade:** a página [`privacidade.html`](privacidade.html) explica quais dados são usados, de onde vêm, onde ficam, por quanto tempo e como pedir correção, ocultação do nome ou retirada de informações.
+- **Bibliotecas externas** carregadas com verificação de integridade (SRI) e uma política de segurança de conteúdo (CSP) nas páginas. A cópia de reserva embutida no `index.html` traz os nomes só pelas iniciais.
 - **Métricas de uso:** o painel soma, por dia, quantas vezes foi aberto (celular, tablet ou computador) e
   quais recursos foram usados (abas, buscas, PDFs, simulação). São só contadores: não há IP, cookie,
   nome nem identificador. "Visitante do dia" é decidido no próprio navegador, com uma data guardada nele.

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="robots" content="noindex">
+<title>Privacidade · Painel dos aprovados</title>
+<script>
+  // mesmo tema escolhido no painel (claro ou escuro)
+  try{const t=localStorage.getItem('tema');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}
+</script>
+<style>
+:root{--page:#f7f8fa;--surface:#fff;--ink:#14161a;--ink2:#3b3f46;--muted:#6b7079;--border:#dde1e7;--wash:#eef4fc;--s1:#2a78d6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0d0d0d;--surface:#1a1a19;--ink:#f3f3f1;--ink2:#c3c2b7;--muted:#9a9890;--border:rgba(255,255,255,.12);--wash:rgba(57,135,229,.12);--s1:#5b9cf0}}
+:root[data-theme="dark"]{--page:#0d0d0d;--surface:#1a1a19;--ink:#f3f3f1;--ink2:#c3c2b7;--muted:#9a9890;--border:rgba(255,255,255,.12);--wash:rgba(57,135,229,.12);--s1:#5b9cf0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:780px;margin:0 auto;padding:28px 16px 56px}
+a{color:var(--s1)}
+.voltar{display:inline-block;margin-bottom:18px;font-size:14px;font-weight:600;text-decoration:none}
+h1{font-size:28px;line-height:1.2;margin:0 0 6px}
+.sub{color:var(--muted);margin:0 0 24px;font-size:14px}
+.resumo{background:var(--wash);border-left:3px solid var(--s1);border-radius:8px;padding:14px 18px;margin:0 0 28px}
+.resumo p{margin:0 0 6px}.resumo ul{margin:6px 0 0;padding-left:20px}
+h2{font-size:19px;margin:32px 0 8px}
+p,li{color:var(--ink2)}
+ul{padding-left:20px}li{margin-bottom:6px}
+table{width:100%;border-collapse:collapse;margin:8px 0 4px;font-size:14.5px;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:13px;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+.nota{font-size:13.5px;color:var(--muted)}
+@media (max-width:620px){h1{font-size:24px}table,thead,tbody,tr,th,td{display:block}thead{display:none}tr{border-bottom:1px solid var(--border);padding:8px 12px}td{border:0;padding:2px 0}td:first-child{font-weight:600;color:var(--ink)}
+  .t-dados td:nth-child(2)::before{content:"De onde vem: ";color:var(--muted)}.t-dados td:nth-child(3)::before{content:"No painel: ";color:var(--muted)}}
+</style>
+</head>
+<body>
+<main>
+  <a class="voltar" href="./">← Voltar ao painel</a>
+  <h1>Privacidade</h1>
+  <p class="sub">Como o painel dos aprovados do Concurso CAIXA 2026 (Arquiteto e Engenharias) usa dados pessoais. Atualizado em 26/10/2026.</p>
+
+  <div class="resumo">
+    <p><b>Em resumo</b></p>
+    <ul>
+      <li>O painel mostra dados que já são públicos na homologação do resultado no Diário Oficial da União, mais as convocações que os próprios aprovados informam.</li>
+      <li>Número de inscrição, WhatsApp, e-mail e observações <b>nunca</b> aparecem no painel: só a comissão vê.</li>
+      <li>Você pode pedir para aparecer só pelas iniciais, corrigir um dado ou retirar uma informação que enviou, pelo <a href="./#contato">Fale com a comissão</a>.</li>
+    </ul>
+  </div>
+
+  <h2>Quem é responsável</h2>
+  <p>O painel é uma iniciativa voluntária e independente da Comissão de Aprovados do concurso, formada por aprovados que aparecem na seção "Membros da Comissão de Aprovados", no rodapé do painel. Não tem vínculo com a CAIXA nem com a banca. A comissão é responsável pelos dados tratados no painel e atende pedidos sobre eles pelo <a href="./#contato">Fale com a comissão</a>.</p>
+
+  <h2>Quais dados usamos e de onde vêm</h2>
+  <table class="t-dados">
+    <thead><tr><th>Dado</th><th>De onde vem</th><th>Aparece no painel?</th></tr></thead>
+    <tbody>
+      <tr><td>Nome, cargo, polo, modalidade de concorrência (ampla concorrência ou cota), nota e classificação</td><td>Homologação do resultado final (Edital nº 4/2025/NS, DOU de 26/05/2026)</td><td>Sim. O nome aparece completo, ou só pelas iniciais se você pedir.</td></tr>
+      <tr><td>Situação da convocação (convocado, data, posse, desistência) e indicação de final da fila</td><td>Relatórios da CAIXA e informações enviadas pelos próprios aprovados, conferidas pela comissão</td><td>Sim, depois que a comissão confere com você.</td></tr>
+      <tr><td>Número de inscrição</td><td>Homologação</td><td>Não. Serve só para localizar seus dados no formulário.</td></tr>
+      <tr><td>WhatsApp e nome no WhatsApp</td><td>Você, ao pedir entrada no grupo</td><td>Não. É apagado na análise do pedido ou em até 24 horas.</td></tr>
+      <tr><td>Observações dos pedidos</td><td>Você, no formulário de solicitações</td><td>Não. Só a comissão vê.</td></tr>
+      <tr><td>Nome, e-mail e mensagem</td><td>Você, no Fale com a comissão</td><td>Não. Só a comissão vê, para responder.</td></tr>
+      <tr><td>Contadores de uso (quantas visitas por dia, celular ou computador, abas abertas)</td><td>O próprio navegador, ao abrir o painel</td><td>Não. São só totais por dia, sem IP, cookie, nome ou qualquer identificador.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Para que usamos</h2>
+  <ul>
+    <li>Acompanhar as convocações do concurso e mostrar, de forma organizada, quem já foi chamado e quem aguarda.</li>
+    <li>Simular a ordem de convocação de cada cargo e estado, com base no edital.</li>
+    <li>Conferir pedidos dos aprovados (convocação, posse, desistência, final da fila, correções) antes de atualizar o painel.</li>
+    <li>Verificar quem é aprovado para entrar no grupo de WhatsApp dos aprovados.</li>
+    <li>Responder mensagens e acompanhar o uso do painel de forma agregada.</li>
+  </ul>
+  <p>Os dados não são vendidos, cedidos nem usados para outra finalidade.</p>
+
+  <h2>Por que podemos usar esses dados</h2>
+  <p>Os dados da homologação foram tornados públicos pela administração para dar transparência ao concurso. O painel os usa para a mesma finalidade, o acompanhamento do concurso pelos próprios aprovados, como prevê a Lei Geral de Proteção de Dados para dados de acesso público (Lei nº 13.709/2018, art. 7º, §§ 3º e 7º). O que você envia pelos formulários (convocação, desistência, final da fila, WhatsApp, mensagens) é usado com o seu consentimento, dado ao enviar, e só para o fim indicado em cada formulário. Você pode retirar o consentimento a qualquer momento.</p>
+
+  <h2>Onde os dados ficam e quem tem acesso</h2>
+  <table>
+    <thead><tr><th>Serviço</th><th>O que guarda</th></tr></thead>
+    <tbody>
+      <tr><td>Supabase (banco de dados, servidores em São Paulo)</td><td>Todos os dados acima. O público só lê o que aparece no painel; o restante só os membros da comissão, com login.</td></tr>
+      <tr><td>GitHub Pages (hospedagem do site)</td><td>O código do painel, que é público. Não guarda dados de visitantes.</td></tr>
+      <tr><td>E-mail da comissão (Gmail)</td><td>Cópia das mensagens do Fale com a comissão, para a comissão responder.</td></tr>
+      <tr><td>Telegram (grupo interno da comissão)</td><td>Avisos de pedidos e mensagens novos, para a comissão responder rápido. O Telegram tem servidores fora do Brasil.</td></tr>
+      <tr><td>GitHub (repositório privado)</td><td>Cópia de segurança diária do banco, <b>criptografada</b>. Só a comissão tem a chave para abrir.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Por quanto tempo</h2>
+  <ul>
+    <li><b>WhatsApp:</b> apagado quando a comissão analisa o pedido de entrada no grupo, ou em no máximo 24 horas.</li>
+    <li><b>Mensagens do Fale com a comissão:</b> apagadas do banco depois de 6 meses.</li>
+    <li><b>Dados do concurso, pedidos e registro de alterações:</b> enquanto a comissão acompanhar o concurso.</li>
+    <li><b>Contadores de uso:</b> não têm dados pessoais.</li>
+  </ul>
+
+  <h2>Seus direitos</h2>
+  <p>Você pode, a qualquer momento:</p>
+  <ul>
+    <li>saber quais dados seus o painel usa;</li>
+    <li>corrigir um dado errado;</li>
+    <li>pedir para aparecer no painel <b>só pelas iniciais</b>;</li>
+    <li>retirar uma informação que você enviou (por exemplo, a indicação de final da fila ou de que pretende desistir);</li>
+    <li>pedir a exclusão dos dados que você enviou pelos formulários.</li>
+  </ul>
+  <p>Basta pedir pelo <a href="./#contato">Fale com a comissão</a> ou pelo formulário de solicitações. Os dados da homologação continuam públicos no Diário Oficial da União, independentemente do painel.</p>
+
+  <h2>Segurança</h2>
+  <p>O banco só libera ao público as informações que aparecem no painel. A área da comissão exige login por e-mail e só aceita e-mails cadastrados, e toda alteração fica registrada com quem fez. Os formulários têm limite de tentativas, que não guarda o seu IP. O site só carrega código de fontes verificadas, e a cópia de segurança do banco é criptografada.</p>
+
+  <h2>Cookies e armazenamento no navegador</h2>
+  <p>O painel não usa cookies. Ele guarda no seu navegador apenas preferências e lembretes que ficam no seu aparelho: o tema claro ou escuro, as notícias e novidades já vistas, se você já fez o tour, as marcações do checklist de documentos e a data da sua última visita (usada só para contar visitantes por dia, sem identificar você). Você pode apagar isso limpando os dados do site no navegador.</p>
+
+  <h2>Mudanças</h2>
+  <p>Este aviso pode ser atualizado quando o painel mudar. A data da última atualização fica no topo da página.</p>
+
+  <p class="nota">Dúvidas sobre privacidade? Fale com a comissão pelo <a href="./#contato">formulário de contato</a>.</p>
+</main>
+</body>
+</html>
