@@ -43,6 +43,8 @@ com a comissão e nunca aparecem no painel nem neste repositório.
   fila completa animada, e (na visão detalhada) quem está em duas listas, memória de cálculo e conferência.
   Também traz o quadro de vagas do Anexo I, regras de convocação com os itens do edital e
   simulador animado da fila de convocação por cargo e estado, conferido com as convocações reais.
+- **Unidades:** mapa e lista dos municípios com unidade de governo da CAIXA (`unidades.json`: siglas e malha de
+  municípios do IBGE simplificada, baixada só quando a aba é aberta, sem dados pessoais).
 - **Documentos:** checklist personalizado dos documentos da etapa de comprovação de requisitos,
   com explicação de cada item e PDF para imprimir. As respostas ficam só no aparelho da pessoa.
 - **Notícias da comissão:** avisos publicados pela comissão, com importância e tag.
