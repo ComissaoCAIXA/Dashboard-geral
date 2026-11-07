@@ -359,6 +359,14 @@ body.sobrio header .tema .knob,header .tema .knob{background:none;width:auto;hei
 .un-leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 .un-fonte{font-size:11.5px;color:var(--muted);margin:6px 0 0}
 #unBrasil[hidden]{display:none}
+.un-reg{fill:color-mix(in srgb,var(--rc) 30%,transparent);stroke:var(--rc);stroke-width:2;stroke-linejoin:round;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .15s;pointer-events:none}
+.un-reg.on{opacity:1}
+.un-macros{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.un-macros button i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--rc);margin-right:6px;vertical-align:0}
+.un-macros button{font:inherit;font-size:12.5px;font-weight:600;color:var(--ink2);background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:5px 12px;cursor:pointer}
+.un-macros button:hover{color:var(--ink);border-color:var(--ink2)}
+.un-macros button[aria-pressed="true"]{background:var(--s1);border-color:var(--s1);color:#fff}
+body.sobrio .un-macros button{border-radius:6px}
 .un-leg{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:12px;color:var(--ink2)}
 .un-resumo{font-size:13px;color:var(--ink2);margin:0 0 10px}
 .un-busca{width:100%;max-width:none;margin-bottom:10px}
@@ -1318,7 +1326,8 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
     <div class="aviso">Estas são as <b>unidades de governo da CAIXA</b>, por município. As unidades de <b>habitação</b> e de <b>logística</b> ainda dependem de informação oficial e entrarão neste mapa quando estiverem disponíveis. A lotação de cada convocado é definida pela CAIXA e pode ser em outra unidade.</div>
     <div class="row r-map">
       <div class="card">
-        <div class="hd"><div><h2>Mapa das unidades de governo</h2><p class="note">Clique num estado para ampliar e ver todos os municípios dele.</p></div><button type="button" class="btn sec" id="unBrasil" hidden>← Brasil inteiro</button></div>
+        <div class="hd"><div><h2>Mapa das unidades de governo</h2><p class="note" id="unDica">Escolha um macropolo e depois o estado.</p></div><button type="button" class="btn sec" id="unBrasil" hidden>← Brasil inteiro</button></div>
+        <div class="un-macros" id="unMacros" role="group" aria-label="Escolher o macropolo"></div>
         <svg id="mapUn" role="img" aria-label="Mapa do Brasil com os municípios que têm unidade de governo da CAIXA. A mesma informação está na lista ao lado."></svg>
         <div class="un-leg"><span><i style="background:var(--s1)"></i>Município com unidade de governo</span><span><i style="background:var(--empty);border:1px solid var(--axis)"></i>Demais municípios</span></div>
         <p class="un-fonte">Contornos dos municípios: IBGE.</p>
@@ -3011,16 +3020,24 @@ async function iniciarUnidades(){
     // Linhas guardadas prontas: desenhar milhares de municípios um a um pesaria no celular
     UN.malha=path(topojson.mesh(topo,obj,(a,b)=>a!==b&&a.properties.uf===b.properties.uf));
     UN.divisas=path(topojson.mesh(topo,obj,(a,b)=>a===b||a.properties.uf!==b.properties.uf));
+    const macro=UN.macroDe=uf=>MACRO_GEO[GEO.find(f=>f.properties.SIGLA===uf)?.properties.FK_macro];
+    UN.regioes=new Map(MACROS.map(m=>[m,rewind({type:'Feature',properties:{m},geometry:topojson.merge(topo,geoms.filter(g=>macro(g.properties.uf)===m))})]));
     UN.mun=geoms.filter(g=>siglas.has(unChave(g.properties.n,g.properties.uf))).map(virar).map(f=>{f.busca=normBusca(`${f.n} ${f.uf} ${unNomeUF(f.uf)} ${f.siglas.join(' ')}`);f.d=path(f);f.c=path.centroid(f);return f})
       .sort((a,b)=>a.n.localeCompare(b.n,'pt-BR'));
     document.getElementById('unResumo').textContent=`${r.unidades.length} unidades em ${UN.mun.length} municípios, em todos os estados e no Distrito Federal.`;
     document.getElementById('unBusca').oninput=function(){UN.q=normBusca(this.value);desenharUnLista()};
-    document.getElementById('unBrasil').onclick=()=>unEscolher('');
+    // Voltar um nível: do estado para o macropolo, do macropolo para o Brasil
+    document.getElementById('unBrasil').onclick=()=>UN.uf?unMacro(UN.macro):unMacro('');
+    document.getElementById('unMacros').innerHTML=['',...MACROS].map(m=>`<button type="button" data-m="${m}">${m?`<i style="--rc:var(${REG_COR[m]})"></i>${cap(m)}`:'Brasil'}</button>`).join('');
+    document.querySelectorAll('#unMacros button').forEach(b=>{b.onclick=()=>unMacro(b.dataset.m);b.onmouseenter=()=>unRealce(b.dataset.m);b.onmouseleave=()=>unRealce('')});
     desenharUnidades();
   }catch(e){console.warn('Unidades indisponíveis',e);document.getElementById('unLista').innerHTML='<p class="un-vazio">Não foi possível carregar as unidades agora. Tente de novo em instantes.</p>'}
   UN.carregando=false;
 }
-function unEscolher(uf,sel=''){UN.uf=uf;UN.sel=sel;hideTip();desenharUnidades()}
+function unEscolher(uf,sel=''){UN.uf=uf;UN.sel=sel;if(uf)UN.macro=UN.macroDe(uf);hideTip();desenharUnidades()}
+function unMacro(m){UN.macro=m;UN.uf='';UN.sel='';hideTip();desenharUnidades()}
+// Pinta o macropolo sob o mouse (o que já está aberto não precisa)
+function unRealce(m){d3.selectAll('#mapUn .un-reg').classed('on',d=>!!m&&d[0]===m&&m!==UN.macro)}
 function desenharUnidades(){desenharUnMapa();desenharUnLista()}
 function unDoEstado(uf){
   if(!UN.cache.has(uf)){const path=d3.geoPath(PROJ);UN.cache.set(uf,UN.porUF.get(uf).map(UN.virar).filter(f=>!f.siglas.length).map(f=>{f.d=path(f);return f}))}
@@ -3028,33 +3045,41 @@ function unDoEstado(uf){
 }
 function desenharUnMapa(){
   const path=d3.geoPath(PROJ),svg=d3.select('#mapUn').attr('viewBox','0 0 600 600');
-  const ufF=UN.uf&&UN.estados.find(f=>f.uf===UN.uf);
+  // Três níveis: Brasil, macropolo e estado
+  const alvo=UN.uf?UN.estados.find(f=>f.uf===UN.uf):UN.macro?UN.regioes.get(UN.macro):null;
+  const fora=f=>UN.uf?UN.uf!==f.uf:UN.macro&&UN.macroDe(f.uf)!==UN.macro;
   let k=1,tx=0,ty=0;
-  if(ufF){const [[x0,y0],[x1,y1]]=path.bounds(ufF);k=Math.min(16,.9*600/Math.max(x1-x0,y1-y0));tx=300-k*(x0+x1)/2;ty=300-k*(y0+y1)/2}
+  if(alvo){const [[x0,y0],[x1,y1]]=path.bounds(alvo);k=Math.min(16,.9*600/Math.max(x1-x0,y1-y0));tx=300-k*(x0+x1)/2;ty=300-k*(y0+y1)/2}
   const tr=`translate(${tx},${ty}) scale(${k})`,dur=UN.zoom&&UN.zoom!==tr?550:0;
   const zg=svg.selectAll('g.zoom').data([0]).join('g').attr('class','zoom');
   zg.transition().duration(dur).ease(d3.easeCubicInOut).attr('transform',tr);UN.zoom=tr;
-  d3.select('#unBrasil').attr('hidden',UN.uf?null:true);
+  d3.select('#unBrasil').attr('hidden',UN.macro?null:true).text(UN.uf?`← ${cap(UN.macro)}`:'← Brasil inteiro');
+  d3.selectAll('#unMacros button').attr('aria-pressed',function(){return this.dataset.m===(UN.macro||'')});
+  d3.select('#unDica').text(UN.uf?'Passe o mouse num município para ver o nome.':UN.macro?'Clique num estado para ver todos os municípios dele.':'Escolha um macropolo e depois o estado.');
   const qtd=d3.rollup(UN.mun,v=>d3.sum(v,f=>f.siglas.length),f=>f.uf);
   const plural=n=>`${n} unidade${n>1?'s':''} de governo`;
-  // Estados: clicar amplia; clicar de novo volta ao Brasil
+  // Estados: no Brasil inteiro, o clique abre o macropolo; dentro dele, abre o estado; no estado aberto, volta ao macropolo
   zg.selectAll('g.st').data([0]).join('g').attr('class','st').selectAll('path').data(UN.estados,f=>f.uf).join('path')
-    .attr('class','un-uf-m').attr('d',path).classed('dim',f=>UN.uf&&UN.uf!==f.uf)
-    .on('mousemove',(e,f)=>showTip(e,`<b>${esc(unNomeUF(f.uf))}</b><br>${plural(qtd.get(f.uf)||0)}`))
-    .on('mouseleave',hideTip)
-    .on('click',(e,f)=>unEscolher(UN.uf===f.uf?'':f.uf));
+    .attr('class','un-uf-m').attr('d',path).classed('dim',fora)
+    .on('mousemove',(e,f)=>{showTip(e,`<b>${esc(unNomeUF(f.uf))}</b> · ${cap(UN.macroDe(f.uf))}<br>${plural(qtd.get(f.uf)||0)}`);unRealce(UN.macroDe(f.uf))})
+    .on('mouseleave',()=>{hideTip();unRealce('')})
+    .on('click',(e,f)=>{const m=UN.macroDe(f.uf);UN.uf===f.uf?unMacro(m):UN.macro===m?unEscolher(f.uf):unMacro(m)});
   // Divisas entre municípios: no Brasil inteiro é uma linha só; no estado ampliado, cada município responde ao mouse
   zg.selectAll('path.un-malha').data(UN.uf?[]:[0]).join('path').attr('class','un-malha').attr('d',UN.malha);
+  zg.selectAll('g.reg').data([0]).join('g').attr('class','reg').selectAll('path').data([...UN.regioes],d=>d[0]).join('path')
+    .attr('class','un-reg').attr('d',d=>path(d[1])).style('--rc',d=>`var(${REG_COR[d[0]]})`).classed('on',false);
   const tipMun=f=>`<b>${esc(f.n)} (${f.uf})</b><br>${f.siglas.length?f.siglas.map(esc).join(' · '):'Sem unidade de governo'}`;
   zg.selectAll('g.out').data([0]).join('g').attr('class','out').selectAll('path').data(UN.uf?unDoEstado(UN.uf):[],f=>f.k).join('path')
     .attr('class','un-out').attr('d',f=>f.d).on('mousemove',(e,f)=>showTip(e,tipMun(f))).on('mouseleave',hideTip);
   zg.selectAll('g.mun').data([0]).join('g').attr('class','mun').selectAll('path').data(UN.mun,f=>f.k).join('path')
-    .attr('class','un-mun').attr('d',f=>f.d).classed('on',f=>UN.sel===f.k).classed('dim',f=>UN.uf&&UN.uf!==f.uf)
+    .attr('class','un-mun').attr('d',f=>f.d).classed('on',f=>UN.sel===f.k).classed('dim',fora)
     .on('mousemove',(e,f)=>showTip(e,tipMun(f))).on('mouseleave',hideTip)
     .on('click',(e,f)=>{e.stopPropagation();unEscolher(f.uf,UN.sel===f.k?'':f.k)});
   zg.selectAll('path.un-div').data([0]).join('path').attr('class','un-div').attr('d',UN.divisas);
   zg.selectAll('g.lb').data([0]).join('g').attr('class','lb').selectAll('text').data(UN.uf?[]:UN.estados,f=>f.uf).join('text')
-    .attr('class','sig un-sig').attr('transform',f=>{const c=path.centroid(f);return `translate(${c[0]},${c[1]})`}).text(f=>f.uf);
+    .attr('class','sig un-sig').attr('opacity',f=>fora(f)?.4:1)
+    .transition().duration(dur).ease(d3.easeCubicInOut).attr('transform',f=>{const c=path.centroid(f);return `translate(${c[0]},${c[1]}) scale(${Math.max(1,600/(svg.node().clientWidth||600)*.75)/k})`});
+  zg.selectAll('g.lb text').text(f=>f.uf);
   // Nomes dos municípios com unidade: quando não cabem, ficam na lista e ao passar o mouse
   const nomes=[],ocupados=[],esc2=Math.max(1,600/(svg.node().clientWidth||600)*.75);
   const cabe=(x,y,w)=>{const r=[x-w/2,y-11*esc2,x+w/2,y+3*esc2];if(r[0]<2||r[2]>598||r[1]<2||r[3]>598||ocupados.some(o=>r[0]<o[2]&&r[2]>o[0]&&r[1]<o[3]&&r[3]>o[1]))return false;ocupados.push(r);return true};
@@ -3075,13 +3100,13 @@ function desenharUnMapa(){
     .attr('opacity',0).transition().delay(dur).duration(150).attr('opacity',1);
 }
 function desenharUnLista(){
-  const vis=UN.mun.filter(f=>(!UN.uf||f.uf===UN.uf)&&(!UN.q||f.busca.includes(UN.q)));
+  const vis=UN.mun.filter(f=>(UN.uf?f.uf===UN.uf:!UN.macro||UN.macroDe(f.uf)===UN.macro)&&(!UN.q||f.busca.includes(UN.q)));
   const grupos=d3.groups(vis,f=>f.uf).sort((a,b)=>unNomeUF(a[0]).localeCompare(unNomeUF(b[0]),'pt-BR'));
   const lista=document.getElementById('unLista');
   lista.innerHTML=grupos.length?grupos.map(([uf,fs])=>`<button type="button" class="un-uf" data-uf="${uf}">${esc(unNomeUF(uf))}<span>${d3.sum(fs,f=>f.siglas.length)}</span></button>
     ${fs.map(f=>`<button type="button" class="un-it${UN.sel===f.k?' on':''}" data-uf="${uf}" data-k="${esc(f.k)}">${esc(f.n)}<small>${f.siglas.map(esc).join(' · ')}</small></button>`).join('')}`).join('')
     :'<p class="un-vazio">Nenhuma unidade encontrada. Por enquanto, a lista traz só as unidades de governo.</p>';
-  lista.querySelectorAll('.un-uf').forEach(b=>b.onclick=()=>unEscolher(UN.uf===b.dataset.uf?'':b.dataset.uf));
+  lista.querySelectorAll('.un-uf').forEach(b=>b.onclick=()=>UN.uf===b.dataset.uf?unMacro(UN.macro):unEscolher(b.dataset.uf));
   lista.querySelectorAll('.un-it').forEach(b=>b.onclick=()=>{unEscolher(b.dataset.uf,UN.sel===b.dataset.k?'':b.dataset.k);if(innerWidth<=960)document.getElementById('mapUn').scrollIntoView({behavior:'smooth',block:'start'})});
 }
 
@@ -3200,6 +3225,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-11-07 12:00','melhoria','Unidades: escolha por macropolo','Na aba Unidades, agora dá para escolher primeiro o macropolo (Norte, Nordeste, Centro-Oeste, Sudeste ou Sul) e depois o estado. Ao passar o mouse num estado, o macropolo dele fica colorido.'],
   ['2026-11-06 18:00','novo','Aba Unidades: mapa das unidades de governo da CAIXA','Nova aba com o mapa dos municípios que têm unidade de governo da CAIXA, pintados de azul. Clique num estado para ampliar e ver todos os municípios dele, ou procure pela cidade na lista ao lado. As unidades de habitação e de logística ainda dependem de informação oficial e entrarão no mapa quando estiverem disponíveis.'],
   ['2026-10-28 14:00','dados','Convocações confirmadas pelo relatório nominal da CAIXA','O relatório nominal da CAIXA de 27/10/2026 confirmou as 78 convocações do painel. As 18 que estavam como presumidas passaram a confirmadas.'],
   ['2026-10-26 21:00','melhoria','Autorização mais clara nos formulários','Ao enviar uma solicitação, a caixa de confirmação agora lista o que passa a aparecer no painel para cada pedido marcado (por exemplo, a data da convocação ou o selo de final da fila), depois da conferência da comissão. Os formulários do grupo de WhatsApp e do Fale com a comissão também dizem o que não aparece no painel e por quanto tempo os dados ficam guardados.'],
@@ -3383,7 +3409,7 @@ const TOUR=[
   {aba:'vagas',s:['.fila-ctl'],t:'Quando vou ser chamado?',x:['Escolha o cargo e o estado e <b>procure o seu nome</b>: o painel mostra em qual chamada você seria convocado pela simulação e quantas chamadas faltam. Se você estiver classificado em duas listas (por exemplo, AC e PN), ele mostra também a outra possibilidade.','É uma simulação da comissão, não a lista oficial: quem define a ordem é a CAIXA.']},
   {aba:'vagas',s:['#filaNumeros','#filaProximas'],t:'A fila do estado',x:['Quantas vagas o estado tem, quantas convocações já foram registradas e quem são as <b>próximas chamadas previstas</b>. Logo abaixo, <b>Ver a fila completa</b> abre todas as chamadas, com animação e o motivo de cada uma.','Ligue a <b>Visão detalhada</b> para ver a memória de cálculo, quem está em duas listas e o quadro de vagas do edital.']},
   {aba:'vagas',s:['.regras-grid'],t:'Como funciona a convocação',x:['As regras do edital resumidas: quem é chamado primeiro, a proporção das cotas e para onde vai a vaga quando falta gente numa cota. Mais abaixo está o quadro de vagas do Anexo I.']},
-  {aba:'unidades',s:['#mapUn'],card:1,t:'Unidades de governo',x:['O mapa pinta de azul os municípios com unidade de governo da CAIXA. Clique num estado para ampliar e ver todos os municípios dele, ou procure a cidade na lista ao lado.','A lotação de cada convocado é definida pela CAIXA e pode ser em outra unidade.']},
+  {aba:'unidades',s:['#mapUn'],card:1,t:'Unidades de governo',x:['O mapa pinta de azul os municípios com unidade de governo da CAIXA. Escolha um macropolo e depois o estado para ver todos os municípios dele, ou procure a cidade na lista ao lado.','A lotação de cada convocado é definida pela CAIXA e pode ser em outra unidade.']},
   {aba:'docs',s:['#docPerfil'],card:1,t:'Checklist de documentos',x:['Para quem foi convocado: responda às perguntas e a lista de documentos se ajusta ao seu caso, com a explicação de cada um e PDF para imprimir.','Suas respostas ficam salvas só neste aparelho.']},
   {aba:'docs',s:['#docLista'],card:1,t:'Seu checklist',x:['A lista montada para o seu caso, com a explicação de cada documento e de onde ele vem (edital ou Relação da CAIXA). Marque o que já separou: a barra mostra quanto falta.','Use <b>PDF do checklist</b> para imprimir e <b>Desmarcar tudo</b> para recomeçar.']},
   {s:['.acoes-topo>.acao[data-acao]','#menuBtn'],t:'Solicitações dos aprovados',x:['Foi convocado, tomou posse ou desistiu? Pretende pedir o final da fila? Avise por aqui, só com o número de inscrição, e marque mais de uma opção se precisar. Também dá para pedir entrada no grupo de WhatsApp dos aprovados.','Nada muda no painel sem a comissão conferir com você.']},
