@@ -996,6 +996,10 @@ div.mc-expl p{margin:0 0 8px}
 .ntc-btn{position:relative}
 .ntc-n{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center;box-shadow:0 0 0 2px var(--page)}
 .fogos{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none}
+.ntc-destaque.nd-espera{opacity:0;pointer-events:none;transition:none}
+.ntc-destaque{transition:opacity .5s}
+.nd-dica{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:64;color:#fff;font-size:13px;font-weight:600;background:rgba(0,0,0,.45);padding:6px 14px;border-radius:999px;white-space:nowrap;pointer-events:none;animation:ndDica 1.6s ease-in-out infinite alternate}
+@keyframes ndDica{from{opacity:.55}to{opacity:1}}
 .ntc-fundo{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:62;backdrop-filter:blur(2px)}
 .ntc-destaque{position:fixed;z-index:63;left:50%;top:50%;transform:translate(-50%,-50%);width:min(580px,calc(100vw - 32px));max-height:calc(100vh - 48px);display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--ntc-cor,var(--s1));border-radius:12px;box-shadow:0 24px 60px rgba(0,0,0,.35);animation:ntcSurge .25s ease}
 @keyframes ntcSurge{from{opacity:0;transform:translate(-50%,-46%)}}
@@ -3412,13 +3416,21 @@ function destacarNoticia(){
     <div class="nd-corpo ntc-txt">${formatarNoticia(n.texto)}</div>
     <div class="nd-pe">${outras?`<span class="nd-outras">+${outras} notícia(s) que você ainda não viu</span>`:''}<button type="button" class="todas">Ver todas as notícias</button><button type="button" class="ok">Entendi</button></div>`;
   document.body.append(f,d);document.body.classList.add('novid-aberto');noticiaVista(n.id);
-  // Notícia marcada pela comissão: fogos entre o fundo escuro e a janela
-  const pararFogos=n.fogos?fogos({antes:f,z:62}):()=>{};
-  const fechar=(lista)=>{pararFogos();f.remove();d.remove();document.removeEventListener('keydown',tecla);document.body.classList.remove('novid-aberto');
+  // Notícia marcada pela comissão: fogos entre o fundo escuro e a janela. Em tela pequena a janela cobre quase tudo,
+  // então os fogos aparecem sozinhos primeiro e a notícia surge depois (ou num toque na tela)
+  const pararFogos=n.fogos?fogos({antes:f,z:62,toque:false}):()=>{};
+  let espera=null;
+  if(pararFogos.ativo&&(innerWidth<760||innerHeight<640)){
+    d.classList.add('nd-espera');
+    const dica=document.createElement('div');dica.className='nd-dica';dica.textContent='Toque na tela para ver a notícia';document.body.append(dica);
+    espera=()=>{if(!espera)return;espera=null;clearTimeout(tm);dica.remove();d.classList.remove('nd-espera');d.querySelector('.ok').focus({preventScroll:true})};
+    const tm=setTimeout(espera,4500);
+  }
+  const fechar=(lista)=>{if(espera){espera();return}pararFogos();f.remove();d.remove();document.removeEventListener('keydown',tecla);document.body.classList.remove('novid-aberto');
     if(lista)abrirNoticias(true);else{ntcBtn.focus({preventScroll:true});setTimeout(convidarTour,800)}};
   const tecla=e=>{if(e.key==='Escape')fechar()};
   document.addEventListener('keydown',tecla);
-  f.onclick=()=>fechar();d.querySelector('.novid-fechar').onclick=()=>fechar();d.querySelector('.ok').onclick=()=>fechar();
+  f.onclick=()=>fechar();d.onclick=()=>{if(espera)espera()};d.querySelector('.novid-fechar').onclick=()=>fechar();d.querySelector('.ok').onclick=()=>fechar();
   d.querySelector('.todas').onclick=()=>fechar(true);
   d.querySelector('.ok').focus({preventScroll:true});
   return true;
@@ -3454,7 +3466,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!ntcLista.hidden)ab
    Comemoração curta (notícia marcada com fogos e convocação de quem procura o próprio nome).
    Desenhada num canvas, sem biblioteca; não aparece para quem pediu ao aparelho para reduzir animações,
    e um clique ou uma tecla encerra na hora. */
-function fogos({dur=8000,estouros=28,antes=null,z=70}={}){
+function fogos({dur=8000,estouros=28,antes=null,z=70,toque=true}={}){
   try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return()=>{}}catch(e){}
   const cv=document.createElement('canvas');cv.className='fogos';cv.style.zIndex=z;cv.setAttribute('aria-hidden','true');
   if(antes&&antes.parentNode)antes.after(cv);else document.body.append(cv);
@@ -3466,7 +3478,8 @@ function fogos({dur=8000,estouros=28,antes=null,z=70}={}){
   for(let i=0;i<estouros;i++){const salva=i<4?0:i>=estouros-5?dur*.7:(i-4)/(estouros-9)*dur*.65;
     fog.push({quando:salva+Math.random()*300,x:W*(.05+.9*Math.random()),y:H,ay:H*(.08+.5*Math.random()),chorao:Math.random()<.3,saiu:false,cor:cores[i%cores.length],cor2:cores[(i*3+1)%cores.length],rastro:[]})}
   const parar=()=>{if(fim)return;fim=true;cancelAnimationFrame(raf);cv.remove();removeEventListener('resize',tam);document.removeEventListener('pointerdown',parar,true);document.removeEventListener('keydown',parar,true)};
-  addEventListener('resize',tam);document.addEventListener('pointerdown',parar,true);document.addEventListener('keydown',parar,true);
+  addEventListener('resize',tam);if(toque){document.addEventListener('pointerdown',parar,true);document.addEventListener('keydown',parar,true)}
+  parar.ativo=true;
   const ponto=(x,y,r,cor,a)=>{ctx.globalAlpha=a;ctx.fillStyle=cor;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fill()};
   let ult=t0;
   const passo=t=>{const dt=Math.min(40,t-ult)/16.7;ult=t;const e=t-t0;
