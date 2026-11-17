@@ -114,6 +114,11 @@ h2{font-size:15px;margin:0;font-weight:650;display:flex;align-items:center;gap:9
 .hd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:10px}
 .note{color:var(--muted);font-size:12px;margin:2px 0 0}
 .seg{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.levas{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0 0 12px}
+.levas:empty{display:none}
+.lv-tit{font-size:12px;font-weight:650;color:var(--ink2)}
+.levas .seg{flex-wrap:wrap}
+.levas small{color:var(--muted);font-weight:500}
 .seg button{font:inherit;font-size:12px;border:0;background:none;color:var(--ink2);padding:5px 10px;cursor:pointer}
 .seg button+button{border-left:1px solid var(--border)}
 .seg button[aria-pressed="true"]{background:var(--wash);color:var(--ink);font-weight:650}
@@ -1164,6 +1169,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
   <!-- ABA 2 -->
   <section id="tab-conv" hidden>
     <div class="aviso" id="avisoConv"></div>
+    <div class="levas" id="levas"></div>
     <div class="kpis" id="k2"></div>
     <div class="row r-map">
       <div class="card">
@@ -1186,8 +1192,28 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
     </div>
     <div class="card" data-det style="margin-bottom:12px"><div class="hd"><div><h2>Notas de quem já foi convocado</h2><p class="note">Cada ponto é uma pessoa · só cargos com informação de convocação</p></div></div><div id="strip2"></div>
       <div class="legend"><span><i style="background:var(--s3)"></i>Convocado</span><span><i style="background:var(--s1)"></i>Vaga imediata aguardando</span><span><i style="background:var(--neutral)"></i>Cadastro reserva</span></div></div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="hd"><div><h2>O que as convocações mostraram até agora</h2>
+        <p class="note">Observações da comissão, feitas com base no estudo dos relatórios nominais de convocação da CAIXA e das convocações de cada leva.</p></div></div>
+      <p class="aviso-curto"><span data-i="flag"></span><span><b>O instrumento principal é o edital</b> (Edital nº 01/2025/NS). Estas observações não são regra oficial: mostram o que se viu nas convocações já feitas e podem mudar a cada nova leva. Quem define a ordem e o momento de cada convocação é a CAIXA. As regras do edital estão na aba <a href="#vagas">Vagas e regras</a>.</span></p>
+      <div class="regras-grid">
+        <div class="regra"><span class="rn">1</span><h3>A CAIXA convoca em levas</h3>
+          <p>As convocações saem em lotes, cada um numa data. O relatório nominal mostra quem foi chamado, mas não a ordem interna de cada leva. Use o seletor <b>Leva de convocação</b>, no alto desta aba, para ver cada uma no mapa e na lista.</p></div>
+        <div class="regra"><span class="rn">2</span><h3>Começo da fila</h3>
+          <p>Nos estados <b>com vaga PcD</b>, os convocados coincidem com a ordem do item 2.13.1 do edital: PcD, depois AC e depois cota racial. Nos estados <b>sem vaga PcD</b>, o lugar do PcD aparece ocupado pela AC: AC, AC e então cota racial (ou AC e cota, quando o estado tem só 1 vaga AC). Foi o que se viu, por exemplo, em Eng. Civil em PE e RR.</p></div>
+        <div class="regra"><span class="rn">3</span><h3>Quem sai, abre vaga para o próximo da mesma lista</h3>
+          <p>Nos casos de quem saiu do processo depois de convocado, a pessoa chamada em seguida foi a próxima da <b>mesma lista</b> (a mesma modalidade, no mesmo cargo e estado).</p></div>
+        <div class="regra"><span class="rn">4</span><h3>Cadastro reserva já começou a ser chamado</h3>
+          <p>Onde as vagas imediatas já tinham sido chamadas, a 2ª leva alcançou pessoas do <b>cadastro reserva</b>, na mesma ordem prevista pela fila simulada do painel.</p></div>
+        <div class="regra"><span class="rn">5</span><h3>Conferência com a fila simulada</h3>
+          <p><span id="confConv">Calculando…</span></p></div>
+        <div class="regra"><span class="rn">6</span><h3>Ponto ainda em aberto</h3>
+          <p>Em Eng. Civil na BA, a CAIXA chamou a vaga de <b>indígena (PI)</b> antes do 6º da AC, um pouco antes do que a simulação previa. Pode indicar que as vagas de PI e PQ entram mais cedo na fila. É um caso só; a comissão vai conferir nas próximas levas.</p></div>
+      </div>
+      <div class="aviso" style="margin:12px 0 0"><b>O que significa "Saiu do processo"?</b> É quem foi convocado, mas aparece como <b>eliminado</b> no relatório nominal da CAIXA. O relatório não informa o motivo: pode ser desistência, perda de prazo, requisito não atendido, pendência de documentos ou inaptidão em exame admissional. A pessoa deixa de contar como convocada e a vaga segue para a próxima da mesma lista. Os nomes aparecem na lista abaixo, em <b>Saídas e desistências</b>.</div>
+    </div>
     <div class="card"><div class="hd"><h2>Quem foi e quem não foi convocado</h2>
-      <div class="seg" id="t2seg"><button data-v="sim" aria-pressed="true">Convocados</button><button data-v="aguard">Vaga imediata aguardando</button><button data-v="cr">Cadastro reserva</button><button data-v="des" id="t2des" hidden>Desistências</button></div>
+      <div class="seg" id="t2seg"><button data-v="sim" aria-pressed="true">Convocados</button><button data-v="aguard">Vaga imediata aguardando</button><button data-v="cr">Cadastro reserva</button><button data-v="des" id="t2des" hidden>Saídas e desistências</button></div>
       <input type="search" class="busca-lista" id="q2" placeholder="Buscar nome, cargo ou estado" aria-label="Buscar na lista de convocações" autocomplete="off">
       <button class="pdfbtn" type="button" data-pdf="tbl2" title="Baixar a lista em PDF (A4 paisagem), com os filtros escolhidos"><span data-i="baixar"></span>PDF</button></div>
       <div id="tbl2"></div></div>
@@ -1272,7 +1298,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
           <p>As vagas do Anexo I são por cargo e polo (estado). Para cada uma há <b>vagas imediatas</b> e um <b>cadastro reserva</b> com o triplo de vagas, sempre na mesma proporção entre as modalidades.</p></div>
         <div class="regra"><span class="rn">2</span><h3>Quem é chamado primeiro</h3>
           <p>A convocação começa por <b>1 pessoa com deficiência</b> (se houver vaga PcD), depois <b>1 da ampla concorrência</b> e depois <b>1 de cota racial</b> (negros, indígenas ou quilombolas, se houver). <small>Item 2.13.1</small></p>
-          <p>Sem vaga PcD no estado, a posição dela fica com a ampla concorrência: AC, AC e cota racial (ou AC e cota, se o estado tiver só 1 vaga AC), como a CAIXA fez na convocação de 08/10.</p></div>
+          <p>Sem vaga PcD no estado, a posição dela fica com a ampla concorrência: AC, AC e cota racial (ou AC e cota, se o estado tiver só 1 vaga AC), como se viu nas convocações de 08/10 e 16/11.</p></div>
         <div class="regra"><span class="rn">3</span><h3>Depois, alternando na proporção</h3>
           <p>Depois, as cotas seguem os percentuais fixos do edital, contados sobre as chamadas de cada cargo e estado: <b>PN 25%</b>, <b>PcD 5%</b>, <b>PI 3%</b> e <b>PQ 2%</b>. A cada chamada a cota acumula o seu percentual e ganha a vaga quando passa em meia vaga o que já recebeu (com a PN na 3ª chamada, as próximas são a 6ª, 10ª, 14ª…); nas demais, ampla concorrência. Primeiro são preenchidas as vagas imediatas, com as quantidades exatas do Anexo I, e depois o cadastro reserva. <small>Itens 2.8 e 2.13.2</small></p></div>
         <div class="regra"><span class="rn">4</span><h3>Se faltar gente numa cota, a vaga passa adiante</h3>
@@ -1638,7 +1664,7 @@ function kpis(el,list){
 const algumFiltro=()=>S.cargo||S.macro||S.lista||S.uf;
 
 /* ---------- Estado ---------- */
-const S={tab:'panorama',cargo:'',macro:'',lista:'',uf:'',m1:'n',m2:'conv',t2:'sim',sort1:{k:'nota',d:-1},sort2:{k:'nota',d:-1},p1:0,p2:0,q1:'',q2:''};
+const S={tab:'panorama',cargo:'',macro:'',lista:'',uf:'',m1:'n',m2:'conv',t2:'sim',leva:'',sort1:{k:'nota',d:-1},sort2:{k:'nota',d:-1},p1:0,p2:0,q1:'',q2:''};
 // Busca tolerante: ignora acentos, maiúsculas e pontuação; cada palavra digitada precisa aparecer (em qualquer ordem)
 const normBusca=s=>String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 // Grafias parecidas contam como iguais: letras dobradas (Állan = Alan), y = i, ph = f, th = t.
@@ -1832,11 +1858,15 @@ const posTxt=r=>r.ffConf?`<span title="${FFC_TXT}">${r.rankUF}º → fim da list
 // Desistência: com data de convocação, a pessoa já foi chamada e desistiu de fato; sem data, é só a intenção informada à comissão
 const DES_TXT='Desistiu de fato: foi convocada pela CAIXA e informou a ela que desistiu da vaga. A vaga segue para a próxima pessoa da mesma lista.';
 const PD_TXT='Só uma intenção: a pessoa informou à comissão que pretende desistir, mas isso ainda não aconteceu. Para a CAIXA ela continua na lista e será convocada normalmente quando chegar a vez dela.';
-const desistiu=p=>!!p&&p.situacaoConv==='Desistente'&&!!p.dataConv;      // desistência real (já convocada)
+// Eliminado: o relatório nominal da CAIXA marca a pessoa como eliminada, sem dizer o motivo. No painel aparece como "Saiu do processo"
+const eliminado=p=>!!p&&p.situacaoConv==='Eliminado';
+const ELI_TXT='Foi convocado(a), mas consta como eliminado(a) no relatório nominal da CAIXA. O relatório não informa o motivo: pode ser desistência, perda de prazo, requisito não atendido, pendência de documentos ou exame admissional. A vaga segue para a próxima pessoa da mesma lista.';
+const desistiu=p=>!!p&&((p.situacaoConv==='Desistente'&&!!p.dataConv)||p.situacaoConv==='Eliminado'); // saiu de fato (já convocada)
+const verboSaida=d=>eliminado(d)?'saiu do processo':desistiu(d)?'desistiu':'pretende desistir';
 const pretendeDesistir=p=>!!p&&p.situacaoConv==='Desistente'&&!p.dataConv; // só intenção
 const listaNomes=ps=>{const n=ps.map(p=>esc(p.ini));return n.length>1?n.slice(0,-1).join(', ')+' e '+n[n.length-1]:n[0]||''};
-const desPill=r=>desistiu(r)?`<span class="pill p-des" title="${DES_TXT}">Desistente</span>`:`<span class="pill p-pd" title="${PD_TXT}">Pretende desistir</span>`;
-const convPill=r=>(r.situacaoConv==='Desistente'?desPill(r):r.conv===null?'<span class="pill p-na">Sem informação</span>':r.conv?'<span class="pill p-ok">Convocado</span>'+(r.presumida?`<span class="pill p-pres" title="${PRESUMIDA_TXT}">presumida</span>`:''):'<span class="pill p-na">Não</span>')+ffPill(r);
+const desPill=r=>eliminado(r)?`<span class="pill p-des" title="${ELI_TXT}">Saiu do processo</span>`:desistiu(r)?`<span class="pill p-des" title="${DES_TXT}">Desistente</span>`:`<span class="pill p-pd" title="${PD_TXT}">Pretende desistir</span>`;
+const convPill=r=>(r.situacaoConv==='Desistente'||eliminado(r)?desPill(r):r.conv===null?'<span class="pill p-na">Sem informação</span>':r.conv?'<span class="pill p-ok">Convocado</span>'+(r.presumida?`<span class="pill p-pres" title="${PRESUMIDA_TXT}">presumida</span>`:''):'<span class="pill p-na">Não</span>')+ffPill(r);
 
 /* ---------- Ranking de estados ---------- */
 function rankEstados(el,tEl,titulo,porUF,fmtv,parts,tipFn){
@@ -1960,14 +1990,23 @@ function renderPanorama(){
 }
 
 /* ---------- Aba 2 ---------- */
+// Levas = datas de convocação, em ordem; a 1ª é a mais antiga. A contagem inclui quem foi chamado e depois saiu do processo
+const dataCurta=d=>d.slice(8,10)+'/'+d.slice(5,7);
+function levas(){return d3.rollups(DATA.filter(d=>(d.conv||eliminado(d))&&d.dataConv),v=>v.length,d=>d.dataConv).sort((a,b)=>a[0].localeCompare(b[0])).map(([data,n],i)=>({data,n,ord:i+1}))}
 function renderConv(){
   const semInfo=[...new Set(DATA.filter(d=>d.conv===null).map(d=>d.cargo))];
   d3.select('#avisoConv').html(semInfo.length?`A planilha ainda não tem a coluna “CONVOCADO” para <b>${semInfo.map(curto).join('</b> e <b>')}</b>, então esses cargos ficam de fora desta aba.`:'').attr('hidden',semInfo.length?null:true);
   const R=filt(false).filter(d=>d.conv!==null),RM=filt(true).filter(d=>d.conv!==null);
-  const conv=R.filter(d=>d.conv),vi=R.filter(d=>d.sit==='VI'),aguard=vi.filter(d=>!d.conv),convCR=conv.filter(d=>d.sit==='CR');
-  const viConv=vi.filter(d=>d.conv).length,mConv=d3.mean(conv,d=>d.nota),mGeral=d3.mean(R,d=>d.nota);
+  // Levas: cada data de convocação é uma leva (a CAIXA chama em lotes)
+  const LV=levas();if(S.leva&&!LV.some(l=>l.data===S.leva))S.leva='';
+  const lvAtual=LV.find(l=>l.data===S.leva);
+  document.getElementById('levas').innerHTML=LV.length>1?`<span class="lv-tit">Leva de convocação</span><div class="seg" role="group" aria-label="Filtrar por leva de convocação"><button type="button" data-v="" aria-pressed="${!S.leva}">Todas</button>${LV.map(l=>`<button type="button" data-v="${l.data}" aria-pressed="${S.leva===l.data}">${l.ord}ª leva <small>· ${dataCurta(l.data)} · ${l.n}</small></button>`).join('')}</div>`:'';
+  document.querySelectorAll('#levas button').forEach(b=>b.onclick=()=>{S.leva=b.dataset.v;S.p2=0;render()});
+  const convL=d=>d.conv&&(!S.leva||d.dataConv===S.leva);
+  const conv=R.filter(convL),vi=R.filter(d=>d.sit==='VI'),aguard=vi.filter(d=>!d.conv),convCR=conv.filter(d=>d.sit==='CR');
+  const viConv=vi.filter(convL).length,mConv=d3.mean(conv,d=>d.nota),mGeral=d3.mean(R,d=>d.nota);
   kpis('#k2',[
-    {tone:'--s3',icon:'userCheck',label:'Convocados',aj:'kConv',value:nf(conv.length),sub:`${new Set(conv.map(d=>d.uf)).size} estados · de ${nf(R.length)} aprovados`,bar:R.length?conv.length/R.length:0},
+    {tone:'--s3',icon:'userCheck',label:lvAtual?`Convocados na ${lvAtual.ord}ª leva`:'Convocados',aj:'kConv',value:nf(conv.length),sub:`${new Set(conv.map(d=>d.uf)).size} estados · de ${nf(R.length)} aprovados${(n=>n?` · <a href="#conv" class="lk-saidas">${n} saíram do processo</a>`:'')(R.filter(d=>eliminado(d)&&(!S.leva||d.dataConv===S.leva)).length)}`,bar:R.length?conv.length/R.length:0},
     {tone:'--s3',icon:'check',label:'Vagas imediatas chamadas',aj:'kVIConv',value:pct(vi.length?viConv/vi.length:NaN),sub:`${viConv} de ${vi.length} vagas`,ring:vi.length?viConv/vi.length:0},
     {tone:'--s1',icon:'hourglass',label:'Aguardando',aj:'kAguard',value:nf(aguard.length),unit:'vagas imediatas',sub:`${pct(vi.length?aguard.length/vi.length:NaN)} ainda sem convocação`,bar:vi.length?aguard.length/vi.length:0},
     {tone:'--s4',icon:'jump',label:'Chamados do reserva',det:1,aj:'kCRConv',value:nf(convCR.length),sub:'convocados além das vagas imediatas'},
@@ -1975,10 +2014,19 @@ function renderConv(){
     {tone:'--s2',icon:'flag',label:'Menor nota convocada',det:1,aj:'kMinConv',value:nota(d3.min(conv,d=>d.nota)),sub:(()=>{const t=d3.least(conv,d=>d.nota);return t?`${esc(t.ini)} · ${curto(t.cargo)} · ${t.uf}`:''})()}
   ]);
 
-  const porUF=d3.rollup(RM,rs=>{const vi=rs.filter(d=>d.sit==='VI');const c=rs.filter(d=>d.conv).length;
-    return{n:rs.length,conv:c,vi:vi.length,viConv:vi.filter(d=>d.conv).length,cr:rs.filter(d=>d.sit==='CR'&&!d.conv).length,aguard:vi.filter(d=>!d.conv).length,pct:vi.length?vi.filter(d=>d.conv).length/vi.length:null}},d=>d.uf);
+  // Conferência: em quantas combinações de cargo e estado os convocados são os primeiros da fila simulada
+  const cf=document.getElementById('confConv');
+  if(cf){let tot=0,ok=0;for(const v of VAGAS){const rs=DATA.filter(d=>d.cargo===v.cargo&&d.uf===v.uf),cv=rs.filter(d=>d.conv&&!d.presumida);if(!cv.length)continue;tot++;
+      const vi={};MOD_F.forEach((m,i)=>vi[m]=v.vi[[1,0,2,3,4][i]]);const ls={};MOD_F.forEach(m=>ls[m]=rs.filter(d=>d.lista===m).sort((a,b)=>a.rankUF-b.rankUF));
+      if(montarFila(vi,ls).filter(x=>!(x.pessoa&&x.pessoa.presumida)).slice(0,cv.length).every(x=>x.pessoa&&x.pessoa.conv))ok++}
+    cf.innerHTML=tot?`Em <b>${ok} de ${tot}</b> combinações de cargo e estado com convocados confirmados, as pessoas chamadas pela CAIXA são exatamente as primeiras da fila simulada pelo painel (aba Vagas). A conta é refeita a cada nova convocação registrada.`:'Ainda não há convocações confirmadas para comparar.'}
+  // "x saíram do processo" leva direto à lista de saídas
+  const lk=document.querySelector('#k2 .lk-saidas');if(lk)lk.onclick=e=>{e.preventDefault();S.t2='des';S.p2=0;render();document.getElementById('tbl2').scrollIntoView({behavior:'smooth',block:'start'})};
+  const porUF=d3.rollup(RM,rs=>{const vi=rs.filter(d=>d.sit==='VI');const c=rs.filter(convL).length;
+    return{n:rs.length,conv:c,vi:vi.length,viConv:vi.filter(convL).length,cr:rs.filter(d=>d.sit==='CR'&&!d.conv).length,aguard:vi.filter(d=>!d.conv).length,pct:vi.length?vi.filter(convL).length/vi.length:null,
+      lv:LV.map(l=>rs.filter(d=>d.conv&&d.dataConv===l.data).length)}},d=>d.uf);
   const fmtM={conv:nf,pct:pct,aguard:nf}[S.m2];
-  const tipUF=(uf,nome)=>{const s=porUF.get(uf);return `<b>${nome||uf}</b><br>`+(s?`<span class="m">Convocados:</span> ${s.conv}<br><span class="m">Vagas imediatas:</span> ${s.vi} (${pct(s.pct)} convocadas)<br><span class="m">Aguardando:</span> ${s.aguard}`:'<span class="m">Sem dados neste filtro</span>')};
+  const tipUF=(uf,nome)=>{const s=porUF.get(uf);return `<b>${nome||uf}</b><br>`+(s?`<span class="m">Convocados${lvAtual?` na ${lvAtual.ord}ª leva`:''}:</span> ${s.conv}<br>${LV.length>1&&!lvAtual?LV.map((l,i)=>`<span class="m">· ${l.ord}ª leva (${dataCurta(l.data)}):</span> ${s.lv[i]}<br>`).join(''):''}<span class="m">Vagas imediatas:</span> ${s.vi} (${pct(s.pct)} convocadas)<br><span class="m">Aguardando:</span> ${s.aguard}`:'<span class="m">Sem dados neste filtro</span>')};
   drawMap('map2','map2leg',new Map([...porUF].map(([k,v])=>[k,S.m2==='pct'?(v.pct==null?null:v.pct+1e-9):v[S.m2]])),fmtM,tipUF,pinMaior(conv,'Maior nota convocada'));
   podio('#top2',conv);
   const nomeM={conv:'convocados',pct:'% das vagas imediatas convocadas',aguard:'vagas imediatas aguardando'}[S.m2];
@@ -1987,7 +2035,7 @@ function renderConv(){
     v=>S.m2==='pct'?`${pct(v.pct)} <small>· ${v.viConv}/${v.vi}</small>`:`${v.val} <small>de ${v.n}</small>`,
     partsC,uf=>tipUF(uf));
 
-  const grp=rs=>{const vi=rs.filter(d=>d.sit==='VI');return{n:rs.length,conv:rs.filter(d=>d.conv).length,aguard:vi.filter(d=>!d.conv).length,cr:rs.filter(d=>d.sit==='CR'&&!d.conv).length,vi:vi.length,viConv:vi.filter(d=>d.conv).length}};
+  const grp=rs=>{const vi=rs.filter(d=>d.sit==='VI');return{n:rs.length,conv:rs.filter(convL).length,aguard:vi.filter(d=>!d.conv).length,cr:rs.filter(d=>d.sit==='CR'&&!d.conv).length,vi:vi.length,viConv:vi.filter(convL).length}};
   const tipG=(t,g)=>`<b>${t}</b><br><span class="m">Convocados:</span> ${g.conv}<br><span class="m">Vagas imediatas convocadas:</span> ${g.viConv} de ${g.vi}<br><span class="m">Aguardando (vaga imediata):</span> ${g.aguard}<br><span class="m">Cadastro reserva:</span> ${g.cr}`;
   const cargos=d3.groups(R,d=>d.cargo).sort((a,b)=>b[1].length-a[1].length);
   hbars('#cargo2',cargos.map(([c,rs])=>{const g=grp(rs);return{label:curto(c),parts:partsC(g),value:`${g.conv} <small>· ${pct(g.vi?g.viConv/g.vi:NaN)} das VI</small>`,sel:S.cargo===c,tip:tipG(c,g),onClick:()=>{S.cargo=S.cargo===c?'':c;sync();render()}}}));
@@ -2004,7 +2052,7 @@ function renderConv(){
     {k:'ini',t:'Nome'},{k:'cargo',t:'Cargo',f:r=>curto(r.cargo)},{k:'uf',t:'UF'},{k:'macro',t:'Macrorregião',f:r=>cap(r.macro)},
     {k:'lista',t:'Cota',f:r=>r.listas.map(sigla).join(' + ')},{k:'sit',t:'Situação',f:sitPill},{k:'nota',t:'Nota',num:1,f:r=>nota(r.nota)},
     {k:'rankUF',t:'Posição na UF',num:1,f:posTxt},{k:'conv',t:'Convocado',f:convPill},
-    {k:'dataConv',t:'Data da convocação',f:r=>r.dataConv?new Date(r.dataConv+'T12:00:00').toLocaleDateString('pt-BR'):'–'}
+    {k:'dataConv',t:'Data da convocação',f:r=>r.dataConv?new Date(r.dataConv+'T12:00:00').toLocaleDateString('pt-BR')+((l=>l&&LV.length>1?` <small class="note">· ${l.ord}ª leva</small>`:'')(LV.find(l=>l.data===r.dataConv))):'–'}
   ],'sort2','p2');
 }
 
@@ -2482,7 +2530,7 @@ function conferirFila(){
     `Em <b>${ok} de ${total}</b> combinações de cargo e estado com convocados conhecidos, as pessoas convocadas pela CAIXA são exatamente as primeiras da fila simulada. Só entram na conta as convocações confirmadas pela comissão; as presumidas ficam de fora.`+
     (difs.length?` Onde não coincide, a diferença pode ser alguém que foi convocado e não avisou a comissão, ou um ponto em que a CAIXA seguiu outra ordem:<ul class="difs">${difs.map(d=>`<li>${esc(d)}</li>`).join('')}</ul>`:'')+
     ' Esta conferência é refeita automaticamente sempre que a comissão registra novas convocações.'+
-    (exHTML?`<div class="exemplos"><b>Exemplos da convocação de 08/10/2026</b><p class="note">A CAIXA divulga quem foi convocado, não a ordem interna da rodada. Os exemplos mostram que os convocados são exatamente as primeiras posições da fila simulada (✓ = convocado).</p><ul>${exHTML}</ul></div>`:'');
+    (exHTML?`<div class="exemplos"><b>Exemplos das convocações já feitas</b><p class="note">A CAIXA divulga quem foi convocado, não a ordem interna da rodada. Os exemplos mostram que os convocados são exatamente as primeiras posições da fila simulada (✓ = convocado).</p><ul>${exHTML}</ul></div>`:'');
 }
 const FS={modo:'real',dupla:'homolog',ff:false,pd:false,vista:'pistas',cargo:'Engenheiro Civil',uf:'AM',passo:0,timer:null,cen:{vi:{PCD:1,AC:3,'PPP/PN':1,PI:0,PQ:0},ap:{PCD:0,AC:15,'PPP/PN':6,PI:0,PQ:0}}};
 let filaAtual=[],vagasPronta=false,dadosAtuais={vi:{},listas:{}};
@@ -2518,7 +2566,7 @@ function iniciarVagas(){
     else if(tk){const p=(dadosAtuais.listas[tk.dataset.m]||[])[+tk.dataset.i];x=filaAtual.find(y=>y.pessoa===p);
       if(!x){const sub=filaAtual.find(y=>(y.des||[]).includes(p)),t=textoSituacao(p);
         document.getElementById('pstLeg').innerHTML=`<b>${esc(p.ini)}</b> (${modSig(tk.dataset.m)}${p.rankUF?`, ${p.rankUF}º no estado`:''})${t?` · ${esc(t)}`:''}<br><span class="note">${sub
-          ?`${desistiu(p)?'Desistiu da vaga':'Pretende desistir (opção ligada)'}: sai da fila, e a vaga segue para a próxima pessoa da lista${sub.pessoa?`, <b>${esc(sub.pessoa.ini)}</b> (${sub.k}ª chamada)`:''}.`
+          ?`${eliminado(p)?'Saiu do processo':desistiu(p)?'Desistiu da vaga':'Pretende desistir (opção ligada)'}: sai da fila, e a vaga segue para a próxima pessoa da lista${sub.pessoa?`, <b>${esc(sub.pessoa.ini)}</b> (${sub.k}ª chamada)`:''}.`
           :'Fica fora desta fila: as vagas desta modalidade acabam antes de chegar a esta posição.'}</span>`;return}}
     if(x)selecionarChamada(x);
   });
@@ -2611,7 +2659,7 @@ function buscarNaFila(){
   const ffNota=(p,x)=>{const c=C.get(p);
     if(p.ffConf)return `<p class="pos-ff">⤵ A CAIXA confirmou a sua <b>reclassificação para o final da fila</b>: você está no fim da sua lista, e a chamada acima já considera isso.</p>`;
     if(ffPend(p))return `<p class="pos-ff">⤵ Você indicou que pretende pedir o <b>final da fila</b>. ${FS.ff?`A chamada acima já considera isso; sem esse pedido, seria ${chamadaTxt(c)}.`:`Se pedir, você vai para o fim da sua lista e seria ${chamadaTxt(c)}. Marque a opção acima para ver a fila assim.`}</p>`;
-    if(p.conv||p.situacaoConv==='Desistente')return '';
+    if(p.conv||p.situacaoConv==='Desistente'||eliminado(p))return '';
     const frente=rs.filter(d=>ffPend(d)&&d.lista===p.lista&&d.rankUF<p.rankUF).length;if(!frente)return '';
     const igual=(c&&c.k)===(x&&x.k);
     return `<p class="pos-ff">⤵ <b>${frente} pessoa(s) à sua frente</b> na sua lista ${frente>1?'pretendem':'pretende'} pedir o final da fila. ${FS.ff?(igual?'A chamada acima já considera isso, e sem esses pedidos ela seria a mesma.':`A chamada acima já considera isso; sem esses pedidos, você seria ${chamadaTxt(c)}.`):(igual?'Mesmo se pedirem, a sua chamada prevista não muda.':`Se pedirem, você seria ${chamadaTxt(c)}. Marque a opção acima para ver a fila assim.`)}</p>`};
@@ -2627,7 +2675,7 @@ function buscarNaFila(){
     const grupo=`<span class="mod ${modCls(p.lista)}">${modSig(p.lista)}</span> ${p.sit==='VI'?'vaga imediata':'cadastro reserva'} · ${p.rankUF}º no estado`;
     let corpo;
     if(desistiu(p)){const sub=filaAtual.find(z=>(z.des||[]).includes(p));
-      corpo=`<p class="pos-res">${desPill(p)} Foi convocado(a) e desistiu da vaga.</p><p class="note">A vaga segue para a próxima pessoa da mesma lista${sub&&sub.pessoa?`: <b>${esc(sub.pessoa.ini)}</b> (${sub.k}ª chamada)`:''}.</p>`}
+      corpo=`<p class="pos-res">${desPill(p)} ${eliminado(p)?'Foi convocado(a), mas consta como eliminado(a) no relatório da CAIXA (o motivo não é informado).':'Foi convocado(a) e desistiu da vaga.'}</p><p class="note">A vaga segue para a próxima pessoa da mesma lista${sub&&sub.pessoa?`: <b>${esc(sub.pessoa.ini)}</b> (${sub.k}ª chamada)`:''}.</p>`}
     else if(pretendeDesistir(p)){const z=D.get(p);
       corpo=`<p class="pos-res">${desPill(p)} Informou à comissão que pretende desistir.</p><p class="note">É só uma intenção: para a CAIXA continua na lista${z?` e, pela simulação, seria chamado(a) na <b>${z.k}ª chamada</b>`:''}. ${FS.pd?'Com a opção "Considerar quem pretende desistir" ligada, a pessoa sai da fila e quem vem atrás sobe.':'Ligue "Considerar quem pretende desistir" para ver a fila sem essa pessoa.'}</p>`}
     else if(p.conv)corpo=`<p class="pos-res ok">✓ Já ${p.presumida?'consta como convocado(a) (presumido)':'foi convocado(a)'}${p.dataConv?` em ${new Date(p.dataConv+'T12:00:00').toLocaleDateString('pt-BR')}`:''}.</p>`;
@@ -2704,7 +2752,7 @@ function desenharFila(cenarioTambem){
     if(p&&p.lista&&x.lista&&p.lista!==x.lista&&!x.rev)det.push(`<span class="tag-dupla">chamada pela lista ${modSig(x.lista)}</span>`);
     if(p&&p.conv)det.push(p.presumida?'<span class="ok">convocado (presumido)</span>':'<span class="ok">✓ convocado</span>');
     // quem desistiu antes desta chamada: a vaga veio para esta pessoa
-    (x.des||[]).forEach(d=>det.push(`<span class="pill ${desistiu(d)?'p-des':'p-pd'}" title="${desistiu(d)?DES_TXT:PD_TXT}">${esc(d.ini)} ${desistiu(d)?'desistiu':'pretende desistir'}: esta pessoa sobe</span>`));
+    (x.des||[]).forEach(d=>det.push(`<span class="pill ${desistiu(d)?'p-des':'p-pd'}" title="${eliminado(d)?ELI_TXT:desistiu(d)?DES_TXT:PD_TXT}">${esc(d.ini)} ${verboSaida(d)}: esta pessoa sobe</span>`));
     if(pretendeDesistir(p))det.push(`<span class="pill p-pd" title="${PD_TXT}">pretende desistir</span>`);
     if(p&&p.finalFila)det.push(`<span class="tag-ff" title="${p.ffConf?FFC_TXT:FF_TXT}">⤵ ${p.ffConf?'final da fila (reclassificado)':'pretende final da fila'+(FS.ff?' (movido para o fim da lista)':'')}</span>`);
     lis.push(`<li data-k="${x.k}"><span class="k">${x.k}ª</span><span class="mod ${modCls(x.lista||x.slot)}">${modSig(x.lista||x.slot)}</span><span class="quem">${quem}</span>${det.length?`<span class="det">${det.join('')}</span>`:''}<span class="por">${porQue(x,!vi.PCD&&x.k===1)}</span></li>`);
@@ -2797,14 +2845,14 @@ function preencherSlot(x,pop){
   const m=x.lista||x.slot;s.className=s.className.replace(/ ?(cheio|AC|PCD|PN|PI|PQ|rv|pop)\b/g,'')+` cheio ${modCls(m)}${x.rev?' rv':''}${pop?' pop':''}`;
   s.textContent=x.pessoa?(x.pessoa.ficticio?x.pessoa.ini.split(' ')[0]:x.pessoa.rankUF+'º'):'–';
   s.insertAdjacentHTML('beforeend',bolinhas(x.pessoa));
-  const t=textoSituacao(x.pessoa),des=(x.des||[]).map(d=>`${d.ini} ${desistiu(d)?'desistiu':'pretende desistir'}`);
+  const t=textoSituacao(x.pessoa),des=(x.des||[]).map(d=>`${d.ini} ${verboSaida(d)}`);
   s.title=`${x.k}ª chamada: ${x.pessoa?x.pessoa.ini:'sem candidato'} (${modSig(m)})${t?' · '+t:''}${des.length?' · sobe porque '+des.join(', ')+' (à frente na lista)':''}`;
 }
 // Situação da pessoa para a legenda e as bolinhas
 function statusPessoa(p){
   if(!p||p.ficticio)return{k:'',txt:''};
   if(p.situacaoConv==='Empossado')return{k:'conv',txt:'Empossado',ic:'✓ '};
-  if(desistiu(p))return{k:'des',txt:'Desistente',ic:''};
+  if(desistiu(p))return{k:'des',txt:eliminado(p)?'Saiu do processo':'Desistente',ic:''};
   if(pretendeDesistir(p))return{k:'pdes',txt:'Pretende desistir',ic:''};
   if(p.conv)return p.presumida?{k:'pres',txt:'Convocado (presumido)',ic:''}:{k:'conv',txt:'Convocado',ic:'✓ '};
   return{k:'agu',txt:p.situacaoConv==='Sem informação'?'Sem informação':'Aguardando',ic:''};
@@ -2820,7 +2868,7 @@ function bolinhas(p){
 function legendaPasso(x){
   const p=x.pessoa,quem=p?(p.ficticio?`${p.ini}`:`<b>${esc(p.ini)}</b> (${modSig(x.lista)}, ${p.rankUF}º no estado)`):'<b>sem candidato aprovado</b>';
   const st=statusPessoa(p),f=statusFF(p);
-  const des=(x.des||[]).map(d=>`<b>${esc(d.ini)}</b> ${desistiu(d)?'desistiu':'pretende desistir'}`);
+  const des=(x.des||[]).map(d=>`<b>${esc(d.ini)}</b> ${verboSaida(d)}`);
   return `<b>${x.k}ª chamada${x.vi?' · vaga imediata':' · cadastro reserva'}:</b> ${quem}${st.k?` <span class="st ${st.k}">${st.ic}${st.txt}</span>`:''}${f?` <span class="st ${f.k}">⤵ ${f.txt}</span>`:''}<br><span class="note">${porQue(x,x.k===1&&x.slot==='AC'&&x.motivo==='inicio'&&!filaAtual.some(y=>y.slot==='PCD'))}${des.length?` Esta pessoa sobe porque ${des.join(', ')} (à frente na lista) ${des.length>1?'saíram':'saiu'} da fila.`:''}</span>`;
 }
 function selecionarChamada(x){
@@ -3225,6 +3273,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-11-17 18:00','novo','Convocações: levas, "Saiu do processo" e o que as convocações mostraram','A aba Convocações agora separa os convocados por leva (1ª leva em 08/10, 2ª leva em 16/11): escolha a leva para ver no mapa, nos números e na lista só quem foi chamado nela. Quem foi convocado e aparece como eliminado no relatório nominal da CAIXA passa a constar como "Saiu do processo" (o relatório não informa o motivo), e a vaga segue para a próxima pessoa da mesma lista. Há também um quadro com o que as convocações mostraram até agora sobre a ordem da fila, com base no estudo dos relatórios nominais; o instrumento principal continua sendo o edital.'],
   ['2026-11-07 12:00','melhoria','Unidades: escolha por macropolo','Na aba Unidades, agora dá para escolher primeiro o macropolo (Norte, Nordeste, Centro-Oeste, Sudeste ou Sul) e depois o estado. Ao passar o mouse num estado, o macropolo dele fica colorido.'],
   ['2026-11-06 18:00','novo','Aba Unidades: mapa das unidades de governo da CAIXA','Nova aba com o mapa dos municípios que têm unidade de governo da CAIXA, pintados de azul. Clique num estado para ampliar e ver todos os municípios dele, ou procure pela cidade na lista ao lado. As unidades de habitação e de logística ainda dependem de informação oficial e entrarão no mapa quando estiverem disponíveis.'],
   ['2026-10-28 14:00','dados','Convocações confirmadas pelo relatório nominal da CAIXA','O relatório nominal da CAIXA de 27/10/2026 confirmou as 78 convocações do painel. As 18 que estavam como presumidas passaram a confirmadas.'],

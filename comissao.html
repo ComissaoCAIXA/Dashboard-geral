@@ -994,7 +994,7 @@ function abrirEdicao(id){
   if(!ed.hidden){ed.hidden=true;return}ed.hidden=false;const r=A.find(x=>x.id===id);
   {
     ed.firstElementChild.innerHTML=`<div class="edit"><div class="g2">
-      <div><label class="rot">Situação da convocação</label><select class="e-conv">${['Aguardando','Convocado','Empossado','Desistente','Sem informação'].map(o=>`<option ${o===r.convocacao?'selected':''}>${o}</option>`).join('')}</select></div>
+      <div><label class="rot">Situação da convocação</label><select class="e-conv">${['Aguardando','Convocado','Empossado','Desistente','Eliminado','Sem informação'].map(o=>`<option ${o===r.convocacao?'selected':''}>${o}</option>`).join('')}</select></div>
       <div><label class="rot">Data da convocação</label><input type="date" class="e-dc" value="${r.data_convocacao||''}"></div>
       <div><label class="rot">Horário da convocação</label><input type="time" class="e-hr" value="${hBR(r.hora_convocacao)}"></div>
       <div><label class="rot">Data da posse</label><input type="date" class="e-dp" value="${r.data_posse||''}"></div>
