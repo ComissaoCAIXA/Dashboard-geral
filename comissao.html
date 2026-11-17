@@ -1057,7 +1057,7 @@ function desenharGrupo(){
   const tot=G.length,dentro=G.filter(r=>r.no_grupo).length,fora=tot-dentro;
   const vi=G.filter(r=>r.situacao==='Vaga imediata'),viDentro=vi.filter(r=>r.no_grupo).length;
   const conv=G.filter(r=>r.convocacao==='Convocado'||r.convocacao==='Empossado'),convFora=conv.filter(r=>!r.no_grupo).length;
-  $('gKpis').innerHTML=[['Aprovados',tot,'base completa (sem Médico do Trabalho)'],['No grupo',dentro,pctTxt(dentro,tot)+' do total'],
+  $('gKpis').innerHTML=[['Aprovados',tot,'base completa'],['No grupo',dentro,pctTxt(dentro,tot)+' do total'],
     ['Faltam encontrar',fora,'ainda fora do grupo'],['Vaga imediata no grupo',`${viDentro}/${vi.length}`,pctTxt(viDentro,vi.length)+(convFora?` · ${convFora} convocado(s) fora`:'')]]
     .map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join('');
   $('gBarra').style.width=(tot?dentro/tot*100:0)+'%';$('gNota').textContent=`${dentro} de ${tot} no grupo (${pctTxt(dentro,tot)})`;

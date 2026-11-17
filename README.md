@@ -67,7 +67,7 @@ com a comissão e nunca aparecem no painel nem neste repositório.
 | Peça | Onde |
 |---|---|
 | Páginas (HTML, CSS e JavaScript, sem etapa de build) | `index.html` (painel) e `comissao.html` (área da comissão), publicadas pelo GitHub Pages |
-| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 036, aplicadas em ordem) |
+| Banco de dados, regras de acesso e automações | Supabase (Postgres). Estrutura em `supabase/migrations/` (001 a 037, aplicadas em ordem) |
 | Aviso por e-mail do Fale com a comissão | Função `supabase/functions/avisar-mensagem` (Supabase Edge Functions) |
 | Avisos da comissão no Telegram (pedido novo e mensagem nova, só o tipo e o código, sem dados pessoais) | Função `supabase/functions/avisar-telegram`, chamada pelo banco (migrações 020 e 033) |
 | Modelos dos e-mails de login da comissão | `docs/emails/` |
@@ -95,7 +95,7 @@ com a comissão e nunca aparecem no painel nem neste repositório.
   homologação. Quem preferir aparece só pelas iniciais: basta pedir à comissão.
 - Encontrou um problema de segurança ou um dado pessoal exposto? Veja [`SECURITY.md`](SECURITY.md).
 
-Médico do Trabalho não faz parte do painel por decisão da comissão.
+Médico do Trabalho faz parte do painel desde 17/11/2026, por decisão da comissão (migration 037). Até então ficava de fora.
 
 ## Manutenção
 

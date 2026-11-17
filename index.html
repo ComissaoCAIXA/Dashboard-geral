@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Política de segurança: só carrega código dos CDNs usados e só conversa com o banco do painel e o mapa dos estados -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://ssgtryzcesgyuiltovmu.supabase.co https://raw.githubusercontent.com; object-src 'none'; base-uri 'self'; form-action 'self'">
-<title>Aprovados Caixa 2026 · Arquiteto e Engenharias</title>
+<title>Aprovados Caixa 2026 · Arquiteto, Engenharias e Medicina do Trabalho</title>
 <meta name="robots" content="noindex">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" integrity="sha384-su5kReKyYlIFrI62mbQRKXHzFobMa7BHp1cK6julLPbnYcCW9NIZKJiTODjLPeDh" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-server@3.0.1/dist/topojson-server.min.js" integrity="sha384-EGGi0ZOg8HVoOnwRqLjbGP5qq9Y86E3NN32QmSuisc1rfmvrk+LflAvcgIJU4j5P" crossorigin="anonymous"></script>
@@ -1072,8 +1072,8 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
   <header>
     <div class="logo" data-i="award"></div>
     <div class="tt">
-      <h1>Concurso Caixa 2026 · Arquiteto e Engenharias</h1>
-      <p>Aprovados de Arquiteto e Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho): ranking por cargo, estado e macrorregião, com a situação de cada convocação.</p>
+      <h1>Concurso Caixa 2026 · Arquiteto, Engenharias e Medicina do Trabalho</h1>
+      <p>Aprovados de Arquiteto, Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho) e Médico do Trabalho: ranking por cargo, estado e macrorregião, com a situação de cada convocação.</p>
     </div>
     <div class="acoes-topo">
       <button class="acao" type="button" data-acao="convocacao"><span data-i="edit"></span><span>Solicitações dos aprovados</span></button>
@@ -1458,7 +1458,7 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
     <div class="autor"><span class="ic" data-i="users"></span><div><b>Elaborado pela Comissão do Concurso <em class="autor-nome">· Felipe Almeida (Arquiteto · AP)</em></b><span>Painel de acompanhamento dos aprovados e das convocações do concurso CAIXA 2026.</span></div></div>
     <div class="rodape-acoes"><a class="rbtn principal ir-contato" href="#contato"><span data-i="mail"></span>Fale com a comissão</a><a class="rbtn" href="comissao.html"><span data-i="cadeado"></span>Acesso da comissão</a></div>
     <div id="foot"></div>
-    <p class="aviso-legal"><b>Iniciativa independente, sem caráter oficial.</b> Este painel é organizado voluntariamente pela Comissão de Aprovados e não tem vínculo com a CAIXA nem com a banca do concurso. Os dados vêm de fontes públicas (o Edital nº 01/2025/NS, a homologação do resultado no Diário Oficial da União e os relatórios de convocação da CAIXA) e de informações dos próprios aprovados, reunidas no grupo de WhatsApp e conferidas pela comissão. Podem conter erros ou atrasos, e as simulações e os materiais de apoio são interpretações da comissão. Nada aqui substitui as publicações oficiais nem gera direito a convocação, e a comissão não se responsabiliza por decisões tomadas com base no painel. Confira sempre os documentos oficiais da CAIXA. Veja como o painel usa os dados pessoais em <a href="privacidade.html">Privacidade</a>.<br><b>Cargos abrangidos:</b> Arquiteto e Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho). O cargo de <b>Médico do Trabalho</b>, também do Edital nº 01/2025/NS, não faz parte deste painel.</p>
+    <p class="aviso-legal"><b>Iniciativa independente, sem caráter oficial.</b> Este painel é organizado voluntariamente pela Comissão de Aprovados e não tem vínculo com a CAIXA nem com a banca do concurso. Os dados vêm de fontes públicas (o Edital nº 01/2025/NS, a homologação do resultado no Diário Oficial da União e os relatórios de convocação da CAIXA) e de informações dos próprios aprovados, reunidas no grupo de WhatsApp e conferidas pela comissão. Podem conter erros ou atrasos, e as simulações e os materiais de apoio são interpretações da comissão. Nada aqui substitui as publicações oficiais nem gera direito a convocação, e a comissão não se responsabiliza por decisões tomadas com base no painel. Confira sempre os documentos oficiais da CAIXA. Veja como o painel usa os dados pessoais em <a href="privacidade.html">Privacidade</a>.<br><b>Cargos abrangidos:</b> Arquiteto, Engenheiro (Civil, Eletricista, Mecânico e de Segurança do Trabalho) e Médico do Trabalho, todos do Edital nº 01/2025/NS.</p>
     <section class="membros" aria-labelledby="membrosTit">
       <h3 id="membrosTit">Membros da Comissão de Aprovados</h3>
       <ul>
@@ -1491,8 +1491,8 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
 
 <script>
 /* ---------- Configuração ----------
-   Os dados vêm do banco (ver "Carga", no fim do arquivo). Médico do Trabalho fica fora
-   do painel por decisão da comissão. */
+   Os dados vêm do banco (ver "Carga", no fim do arquivo). Médico do Trabalho entrou no painel
+   em 17/11/2026, por decisão da comissão. */
 const CFG={
   geo:'https://raw.githubusercontent.com/giuliano-macedo/geodata-br-states/main/geojson/br_states.json'
 };
@@ -1515,7 +1515,8 @@ const ANEXO={
   'Engenheiro Civil':'DF10000 GO10000 MS00110 BA61311 CE20100 MA51200 PB30100 PE20100 PI40100 SE10000 RN30100 AP41100 RO10100 RR30100 AC30100 TO10100 AM10010 PA20201 MG81301 RJ41200 SP61210 PR10100 SC10000 RS10000',
   'Engenheiro Eletricista':'DF41300 GO10000 BA10000 RJ10000 SP10000 RS10000',
   'Engenheiro Mecânico':'DF10100 MG10000 RJ10000 SP10000',
-  'Engenheiro de Segurança do Trabalho':'BA00100 PA10000 PR10000'
+  'Engenheiro de Segurança do Trabalho':'BA00100 PA10000 PR10000',
+  'Médico do Trabalho':'DF11200 GO10000 AL10000 BA10010 CE10100 MA10000 PE10000 PI10000 AM10000 PA10100 ES10000 MG10000 RJ10100 SP10100 PR10000 SC10000'
 };
 const VAGAS=Object.entries(ANEXO).flatMap(([cargo,s])=>s.split(' ').map(t=>({cargo,uf:t.slice(0,2),vi:[...t.slice(2)].map(Number)})));
 const cotaOk=d=>!S.lista||(S.lista==='COTAS'?d.lista!=='AC':d.listas.includes(S.lista));
@@ -1524,7 +1525,7 @@ const nf=v=>v==null||isNaN(v)?'–':v.toLocaleString('pt-BR');
 const nota=v=>v==null||isNaN(v)?'–':v.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:2});
 const pct=v=>v==null||isNaN(v)?'–':(v*100).toLocaleString('pt-BR',{maximumFractionDigits:0})+'%';
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const curto=c=>c.replace('Engenheiro de Segurança do Trabalho','Eng. Seg. Trabalho').replace('Engenheiro','Eng.');
+const curto=c=>c.replace('Engenheiro de Segurança do Trabalho','Eng. Seg. Trabalho').replace('Médico do Trabalho','Méd. Trabalho').replace('Engenheiro','Eng.');
 
 /* ---------- Ícones (traço, 24×24) ---------- */
 const ICONS={
@@ -2971,10 +2972,11 @@ function itensDocs(){
     'Engenheiro Civil':[['i12-dip','Diploma de Engenharia Civil registrado','12.4','<p>Diploma devidamente registrado de graduação em Engenharia, na área do cargo.</p>'],['i12-reg','Registro no CREA','12.4','<p>Comprovante de registro ativo no Conselho Regional de Engenharia e Agronomia (CREA). Pode ser a carteira profissional ou a certidão emitida no site do CREA do seu estado.</p>']],
     'Engenheiro de Segurança do Trabalho':[['i12-dip','Diploma de Engenharia ou Arquitetura registrado','12.2','<p>Diploma devidamente registrado de graduação em Engenharia (com registro no CREA) ou em Arquitetura (com registro no CAU).</p>'],['i12-reg','Registro no CREA ou no CAU','12.2','<p>Comprovante de registro ativo no conselho da sua graduação.</p>'],['i12-pos','Especialização em Engenharia de Segurança do Trabalho','12.2','<p>Certificado de pós-graduação (especialização) em Engenharia de Segurança do Trabalho, reconhecida pelo MEC.</p>'],['i12-anot','Anotação de Engenheiro de Segurança do Trabalho no conselho','12.2','<p>Comprovante de que o seu registro no conselho tem a anotação como Engenheiro(a) de Segurança do Trabalho.</p>']]
   };
+  reg['Médico do Trabalho']=[['i12-dip','Diploma de Medicina','12.1','<p>Diploma de conclusão de graduação em Medicina, de instituição reconhecida pelo MEC.</p>'],['i12-reg','Registro no CRM','12.1','<p>Comprovante de registro ativo no Conselho Regional de Medicina (CRM). Pode ser a carteira profissional ou a certidão emitida no site do CRM do seu estado.</p>'],['i12-pos','Especialização em Medicina do Trabalho','12.1','<p>Certificado de conclusão de curso de especialização em Medicina do Trabalho.</p>'],['i12-rqe','RQE em Medicina do Trabalho','12.1','<p>Registro de Qualificação de Especialista (RQE) em Medicina do Trabalho, emitido pelo CRM.</p>']];
   reg['Engenheiro Eletricista']=reg['Engenheiro Civil'].map(([i,t,n,d])=>[i,t.replace('Civil','Elétrica'),n,d]);
   reg['Engenheiro Mecânico']=reg['Engenheiro Civil'].map(([i,t,n,d])=>[i,t.replace('Civil','Mecânica'),n,d]);
   if(cargo&&reg[cargo])reg[cargo].forEach(a=>g3.push(it(...a)));
-  else g3.push(it('i12','Registro no conselho de classe','12','<p>Comprovante de registro no órgão de classe da sua profissão (CAU para Arquitetura; CREA para as Engenharias), além do diploma registrado. <b>Escolha o seu cargo acima</b> para ver exatamente o que é pedido.</p>',[{c:'cond',t:'Depende do cargo'}]));
+  else g3.push(it('i12','Registro no conselho de classe','12','<p>Comprovante de registro no órgão de classe da sua profissão (CAU para Arquitetura; CREA para as Engenharias; CRM para Medicina do Trabalho), além do diploma registrado. <b>Escolha o seu cargo acima</b> para ver exatamente o que é pedido.</p>',[{c:'cond',t:'Depende do cargo'}]));
   G.push({t:'Formação e registro profissional',itens:g3});
   // 4. Antecedentes criminais (um conjunto por estado onde morou nos últimos 5 anos)
   const g4=[it('i13','Antecedentes da Polícia Federal','13','<p>Folha (certidão) de antecedentes criminais da Polícia Federal, emitida gratuitamente pela internet nos serviços da Polícia Federal / gov.br.</p>',[{c:'val',t:VAL6}])];
@@ -3273,6 +3275,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-11-17 21:00','novo','Médico do Trabalho entrou no painel','A pedido do grupo, o painel agora inclui os 95 aprovados de Médico do Trabalho, com as vagas do Anexo I, as convocações das duas levas (inclusive as feitas pela classificação do macropolo Sul), a fila simulada e o checklist de documentos com os requisitos do cargo (diploma de Medicina, CRM, especialização e RQE em Medicina do Trabalho).'],
   ['2026-11-17 18:00','novo','Convocações: levas, "Saiu do processo" e o que as convocações mostraram','A aba Convocações agora separa os convocados por leva (1ª leva em 08/10, 2ª leva em 16/11): escolha a leva para ver no mapa, nos números e na lista só quem foi chamado nela. Quem foi convocado e aparece como eliminado no relatório nominal da CAIXA passa a constar como "Saiu do processo" (o relatório não informa o motivo), e a vaga segue para a próxima pessoa da mesma lista. Há também um quadro com o que as convocações mostraram até agora sobre a ordem da fila, com base no estudo dos relatórios nominais; o instrumento principal continua sendo o edital.'],
   ['2026-11-07 12:00','melhoria','Unidades: escolha por macropolo','Na aba Unidades, agora dá para escolher primeiro o macropolo (Norte, Nordeste, Centro-Oeste, Sudeste ou Sul) e depois o estado. Ao passar o mouse num estado, o macropolo dele fica colorido.'],
   ['2026-11-06 18:00','novo','Aba Unidades: mapa das unidades de governo da CAIXA','Nova aba com o mapa dos municípios que têm unidade de governo da CAIXA, pintados de azul. Clique num estado para ampliar e ver todos os municípios dele, ou procure pela cidade na lista ao lado. As unidades de habitação e de logística ainda dependem de informação oficial e entrarão no mapa quando estiverem disponíveis.'],
