@@ -366,6 +366,7 @@ tr.marcado{background:var(--wash)}
             <div class="acoes" style="justify-content:flex-start"><button class="btn sec" type="button" id="nCopiarPrompt">Copiar prompt</button><span class="note" id="nCopiado" style="align-self:center"></span></div>
           </details>
           <label class="check" style="align-items:flex-start"><input type="checkbox" id="nDestaque" checked style="margin-top:3px"><span><b>Mostrar em destaque ao abrir o painel</b><br><small class="note">Quem ainda não viu esta notícia vai vê-la numa janela no meio da tela ao entrar. Só a mais recente em destaque aparece.</small></span></label>
+          <label class="check" style="align-items:flex-start"><input type="checkbox" id="nFogos" style="margin-top:3px"><span><b>Comemorar com fogos 🎆</b><br><small class="note">Quando a notícia abrir em destaque, fogos de artifício estouram por uns 10 segundos atrás da janela, só na primeira vez de cada pessoa. Use para boas notícias, como uma nova leva de convocações. Quem pediu ao aparelho para reduzir animações não vê os fogos.</small></span></label>
           <div id="nRet"></div>
           <div class="acoes" style="justify-content:flex-start">
             <button class="btn" type="button" id="nPublicar">Publicar</button>
@@ -626,7 +627,7 @@ function nPrever(){
   $('nConta').textContent=$('nTexto').value.length+' / 4000';
 }
 ['nTitulo','nTexto'].forEach(id=>$(id).addEventListener('input',nPrever));$('nCat').onchange=nPrever;
-function nLimpar(){nEditando=null;$('nTitulo').value='';$('nTexto').value='';$('nImp').value='Aviso';$('nCat').value='Geral';$('nDestaque').checked=true;
+function nLimpar(){nEditando=null;$('nTitulo').value='';$('nTexto').value='';$('nImp').value='Aviso';$('nCat').value='Geral';$('nDestaque').checked=true;$('nFogos').checked=false;
   $('nEdTit').textContent='Nova notícia';$('nCancelar').hidden=true;$('nPublicar').textContent='Publicar';$('nRascunho').hidden=false;nPrever()}
 async function nGravar(publicar){
   const titulo=$('nTitulo').value.trim(),texto=$('nTexto').value.trim();
@@ -636,7 +637,7 @@ async function nGravar(publicar){
   if(publicar&&!jaPub&&!confirm(`Publicar "${titulo}"?\n\nEla aparece no painel na hora${$('nDestaque').checked?' e em destaque para quem ainda não viu':''}.`))return;
   $('nPublicar').disabled=$('nRascunho').disabled=true;
   const {data,error}=await SB.rpc('comissao_noticia_salvar',{p_id:nEditando?nEditando.id:null,p_titulo:titulo,p_texto:texto,
-    p_importancia:$('nImp').value,p_categoria:$('nCat').value,p_destaque:$('nDestaque').checked,p_publicar:!!publicar});
+    p_importancia:$('nImp').value,p_categoria:$('nCat').value,p_destaque:$('nDestaque').checked,p_publicar:!!publicar,p_fogos:$('nFogos').checked});
   $('nPublicar').disabled=$('nRascunho').disabled=false;
   if(error||!data.ok){msg($('nRet'),'erro',error?error.message:data.erro);return}
   msg($('nRet'),'ok',publicar?(jaPub?'Alterações salvas: já aparecem no painel.':'Notícia publicada no painel.'):'Rascunho salvo. Ele não aparece no painel até ser publicado.');
@@ -653,14 +654,14 @@ async function carregarNtc(){
   const topo=data.find(n=>n.publicada&&n.destaque);
   el.innerHTML=`<div class="tw"><table><thead><tr><th>Título</th><th>Situação</th><th>Publicada em</th><th>Visualizações</th><th></th></tr></thead><tbody>${data.map(n=>`<tr data-busca="${textoBusca(n.titulo,n.texto,n.importancia,n.categoria,n.publicada?'publicada':'rascunho')}">
     <td><div class="n-tags" style="margin-bottom:4px">${tagsNtc(n.importancia,n.categoria)}${n===topo?' <span class="pill pres">em destaque agora</span>':''}</div><b>${esc(n.titulo)}</b>
-      <div class="note">${n.destaque?'Abre em destaque':'Só na lista'} · por ${esc(n.atualizado_por||n.criado_por||'–')}</div></td>
+      <div class="note">${n.destaque?'Abre em destaque':'Só na lista'}${n.fogos?' · com fogos 🎆':''} · por ${esc(n.atualizado_por||n.criado_por||'–')}</div></td>
     <td>${n.publicada?'<span class="pill Aprovado">Publicada</span>':'<span class="pill">Rascunho</span>'}</td>
     <td class="num">${n.publicado_em?dhBR(n.publicado_em):'–'}</td><td class="num">${n.publicada||n.visualizacoes?n.visualizacoes:'–'}</td>
     <td><div class="n-mini"><button type="button" data-a="ed" data-id="${n.id}">Editar</button><button type="button" data-a="${n.publicada?'despublicar':'publicar'}" data-id="${n.id}">${n.publicada?'Despublicar':'Publicar'}</button><button type="button" class="apagar" data-a="apagar" data-id="${n.id}">Apagar</button></div></td></tr>`).join('')}</tbody></table></div>`;
 }
 $('nLista').onclick=async e=>{
   const b=e.target.closest('button[data-a]');if(!b)return;const n=NTC.find(x=>x.id===+b.dataset.id);if(!n)return;
-  if(b.dataset.a==='ed'){nEditando=n;$('nTitulo').value=n.titulo;$('nTexto').value=n.texto;$('nImp').value=n.importancia;$('nCat').value=n.categoria;$('nDestaque').checked=n.destaque;
+  if(b.dataset.a==='ed'){nEditando=n;$('nTitulo').value=n.titulo;$('nTexto').value=n.texto;$('nImp').value=n.importancia;$('nCat').value=n.categoria;$('nDestaque').checked=n.destaque;$('nFogos').checked=!!n.fogos;
     $('nEdTit').textContent='Editando notícia';$('nCancelar').hidden=false;$('nPublicar').textContent=n.publicada?'Salvar alterações':'Publicar';$('nRascunho').hidden=n.publicada;
     $('nRet').innerHTML='';nPrever();scrollTo({top:0,behavior:'smooth'});return}
   const txt={publicar:`Publicar "${n.titulo}" agora? Ela passa a ser a mais recente.`,despublicar:`Tirar "${n.titulo}" do painel? Ela volta a ser rascunho.`,apagar:`Apagar "${n.titulo}"? Não dá para desfazer (fica registrado no Histórico).`}[b.dataset.a];

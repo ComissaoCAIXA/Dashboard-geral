@@ -75,6 +75,9 @@ Endereço: `https://comissaocaixa.github.io/Dashboard-geral/comissao.html`
   - **Mostrar em destaque ao abrir o painel:** quem ainda não viu a notícia a vê numa janela no meio da tela
     ao entrar. Só a notícia em destaque mais recente aparece assim; as outras ficam na lista. Ao escolher
     *Informativo*, essa opção é desmarcada (dá para marcar de novo).
+  - **Comemorar com fogos 🎆:** quando a notícia abre em destaque, fogos de artifício estouram por uns 10 segundos
+    atrás da janela, só na primeira vez de cada pessoa. Use para boas notícias (ex.: nova leva de convocações).
+    Quem pediu ao aparelho para reduzir animações não vê os fogos; um clique encerra na hora.
   - **Escrever com IA:** abra "✨ Escrever com IA" embaixo do texto, copie o prompt, cole na IA (ChatGPT,
     Claude, Gemini…) com as informações da notícia no fim e cole a resposta inteira no campo Texto: título,
     importância e tag são preenchidos sozinhos. Resposta em HTML também é convertida. Revise sempre.
