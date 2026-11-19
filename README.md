@@ -2,7 +2,8 @@
 
 Painel **independente e voluntário** para acompanhar os aprovados e as convocações do concurso
 público da CAIXA de 2025/2026 (Edital nº 01/2025/NS, cargos de nível superior). É organizado e
-mantido pela **Comissão de Aprovados**, formada por aprovados no próprio concurso.
+mantido pela **Comissão de Aprovados**, formada por aprovados no próprio concurso. Criado e mantido por
+[Felipe Almeida (@Feliperbl)](https://github.com/Feliperbl), integrante da comissão.
 
 **Acesse:** https://comissaocaixa.github.io/Dashboard-geral/
 
@@ -106,5 +107,7 @@ Médico do Trabalho faz parte do painel desde 17/11/2026, por decisão da comiss
 
 ## Créditos
 
-Elaborado pela Comissão de Aprovados do Concurso CAIXA 2026 · Felipe Almeida.
+Criado e mantido por **Felipe Almeida** ([@Feliperbl](https://github.com/Feliperbl)), arquiteto aprovado
+no concurso (polo AP) e integrante da Comissão de Aprovados do Concurso CAIXA 2026.
+Contornos dos municípios (aba Unidades): [tbrugz/geodata-br](https://github.com/tbrugz/geodata-br), a partir do IBGE.
 Mapa dos estados: [giuliano-macedo/geodata-br-states](https://github.com/giuliano-macedo/geodata-br-states).
