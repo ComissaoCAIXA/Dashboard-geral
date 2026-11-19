@@ -847,6 +847,22 @@ body.sobrio .tw tr{border-radius:6px}
   #bar .tabs button,#bar .cotas button,#bar .det-tgl span{white-space:nowrap}
 }
 @media (min-width:621px) and (max-width:1500px){#bar .tabs .lg{display:none}}
+/* Filtros num menu só (botão "Filtros" abre um painel), para a barra caber numa linha */
+.f-rot,.f-pe{display:none}
+@media (min-width:621px){
+  #bar .filtbtn{display:inline-flex;margin-left:auto;flex-shrink:0}
+  #bar .filtbtn[aria-expanded="true"]{border-color:var(--s1);background:var(--wash)}
+  #bar .filters{display:none;position:absolute;right:16px;top:calc(100% - 4px);z-index:20;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:6px;
+    margin:0;padding:14px;width:min(380px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.2)}
+  #bar.open .filters{display:flex}
+  #bar .filters select{width:100%;max-width:none;min-width:0;flex:none}
+  #bar .filters .cotas{flex-wrap:wrap;height:auto}
+  #bar .filters .cotas button{flex:1 1 auto;min-height:34px}
+  .f-rot{display:block;font-size:12px;font-weight:650;color:var(--ink2);margin-top:4px}
+  .f-pe{display:flex;justify-content:space-between;gap:8px;margin-top:8px;padding-top:10px;border-top:1px solid var(--border)}
+  .f-pe button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--ink2);border-radius:8px;padding:6px 12px;cursor:pointer}
+  .f-pe button:hover{color:var(--ink)}
+}
 main .card .seg{height:var(--ctl-sm);display:inline-flex;align-items:stretch}
 main .card .seg button{padding-top:0;padding-bottom:0;display:inline-flex;align-items:center;justify-content:center}
 .pdfbtn{height:var(--ctl-sm);padding:0 12px}
@@ -1107,10 +1123,14 @@ header .tema.rot-btn:hover,header .tema.tour-btn:hover{border-color:var(--s1);co
     </div>
     <label class="tgl det-tgl" title="Mostra todas as análises: notas, cotas, regiões e destaques"><input type="checkbox" id="detalhe"><span class="trk"></span><span class="ti" data-i="layers"></span><span>Visão detalhada</span></label>
     <button class="filtbtn" id="filtbtn" type="button" aria-expanded="false"><span data-i="filter"></span>Filtros</button>
-    <div class="filters">
+    <div class="filters" id="filtros">
+      <span class="f-rot">Cota</span>
       <div class="cotas" id="fCota" role="group" aria-label="Filtrar por cota"></div>
+      <span class="f-rot">Cargo</span>
       <select id="fCargo" aria-label="Cargo"><option value="">Todos os cargos</option></select>
+      <span class="f-rot">Macrorregião</span>
       <select id="fMacro" aria-label="Macrorregião"><option value="">Todas as macrorregiões</option></select>
+      <div class="f-pe"><button type="button" id="fLimpar">Limpar filtros</button><button type="button" id="fFechar">Fechar</button></div>
     </div>
   </div>
   <!-- Estado escolhido no mapa: fica fora da barra para não deslocar os botões -->
@@ -2135,6 +2155,12 @@ d3.selectAll('#m1seg button').on('click',function(){S.m1=this.dataset.v;render()
 d3.selectAll('#m2seg button').on('click',function(){S.m2=this.dataset.v;render()});
 d3.selectAll('#t2seg button').on('click',function(){S.t2=this.dataset.v;S.p2=0;render()});
 filtbtn.onclick=()=>{const o=bar.classList.toggle('open');filtbtn.setAttribute('aria-expanded',o)};
+// Fecha o painel de filtros ao clicar fora ou apertar Esc (no computador ele fica por cima da página)
+const fecharFiltros=()=>{if(bar.classList.contains('open')){bar.classList.remove('open');filtbtn.setAttribute('aria-expanded',false)}};
+document.addEventListener('pointerdown',e=>{if(innerWidth>620&&bar.classList.contains('open')&&!e.target.closest('#filtros,#filtbtn'))fecharFiltros()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&bar.classList.contains('open')){fecharFiltros();filtbtn.focus()}});
+document.getElementById('fFechar').onclick=()=>{fecharFiltros();filtbtn.focus()};
+document.getElementById('fLimpar').onclick=()=>{S.cargo=S.macro=S.lista='';S.uf='';S.p1=S.p2=0;sync();render()};
 fCargo.onchange=()=>{S.cargo=fCargo.value;S.p1=S.p2=0;render()};
 fMacro.onchange=()=>{S.macro=fMacro.value;S.uf='';S.p1=S.p2=0;render()};
 // Redesenha só quando a largura muda (no celular a barra do navegador muda a altura ao rolar)
@@ -3282,6 +3308,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.pdfbtn');if(b)g
 // Sem horário exato, use o período no lugar da hora: madrugada, manha, tarde ou noite.
 // Tipos: novo, melhoria, correcao, dados. Só o que interessa ao público (nada interno da comissão).
 const NOVIDADES=[
+  ['2026-11-19 12:00','melhoria','Filtros num botão só','No computador, a cota, o cargo e a macrorregião ficam agora no botão "Filtros", à direita da barra. A barra cabe numa linha, os menus mostram o nome inteiro e o botão indica quantos filtros estão ativos. Há também um botão para limpar os filtros.'],
   ['2026-11-17 22:30','melhoria','Comemoração das convocações 🎆','Quem procura o próprio nome em "Quando vou ser chamado?" e já foi convocado(a), ou envia o pedido "Fui convocado(a)", ganha uns fogos de artifício na tela. Algumas notícias da comissão também podem abrir com fogos. Quem pediu ao aparelho para reduzir animações não vê a animação, e um clique encerra na hora.'],
   ['2026-11-17 21:00','novo','Médico do Trabalho entrou no painel','A pedido do grupo, o painel agora inclui os 95 aprovados de Médico do Trabalho, com as vagas do Anexo I, as convocações das duas levas (inclusive as feitas pela classificação do macropolo Sul), a fila simulada e o checklist de documentos com os requisitos do cargo (diploma de Medicina, CRM, especialização e RQE em Medicina do Trabalho).'],
   ['2026-11-17 18:00','novo','Convocações: levas, "Saiu do processo" e o que as convocações mostraram','A aba Convocações agora separa os convocados por leva (1ª leva em 08/10, 2ª leva em 16/11): escolha a leva para ver no mapa, nos números e na lista só quem foi chamado nela. Quem foi convocado e aparece como eliminado no relatório nominal da CAIXA passa a constar como "Saiu do processo" (o relatório não informa o motivo), e a vaga segue para a próxima pessoa da mesma lista. Há também um quadro com o que as convocações mostraram até agora sobre a ordem da fila, com base no estudo dos relatórios nominais; o instrumento principal continua sendo o edital.'],
